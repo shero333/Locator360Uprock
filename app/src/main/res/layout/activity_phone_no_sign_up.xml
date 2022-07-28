@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".SignUp.PhoneNoSignUpActivity"
+    android:background="@color/orange">
+
+    <TextView
+        android:id="@+id/txt_1_phone_sign_up"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="@dimen/_16ssp"
+        android:textStyle="bold"
+        android:text="Let's get started.\nWhat's your number?"
+        android:gravity="center"
+        android:textColor="@color/white"
+        android:layout_marginTop="@dimen/_40sdp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
+
+
+    <com.hbb20.CountryCodePicker
+        android:id="@+id/country_code_picker"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:ccp_showFlag="true"
+        app:ccp_arrowColor="@color/white"
+        app:ccp_arrowSize="@dimen/_22sdp"
+        app:ccp_autoFormatNumber="true"
+        app:ccp_contentColor="@color/white"
+        app:ccp_autoDetectCountry="true"
+        app:ccpDialog_showFastScroller="true"
+        app:ccpDialog_cornerRadius="@dimen/_20sdp"
+        app:ccpDialog_showPhoneCode="true"
+        app:ccpDialog_showFlag="true"
+        app:ccpDialog_showCloseIcon="true"
+        app:ccpDialog_searchEditTextTint="@color/orange"
+        app:ccpDialog_fastScroller_handleColor="@color/orange"
+        app:ccp_areaCodeDetectedCountry="true"
+        android:layout_marginTop="@dimen/_35sdp"
+        app:layout_constraintHorizontal_bias="0.18"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/txt_1_phone_sign_up"/>
+
+    <EditText
+        android:id="@+id/edt_phone_sign_up"
+        android:layout_width="@dimen/_150sdp"
+        android:layout_height="0dp"
+        android:backgroundTint="@color/orange"
+        android:hint="Enter Number"
+        android:imeOptions="actionDone"
+        android:inputType="number"
+        android:cursorVisible="true"
+        android:textCursorDrawable="@color/white"
+        android:layout_marginStart="@dimen/_5sdp"
+        android:textColorHint="@color/white"
+        android:textColor="@color/white"
+        android:textSize="@dimen/_14ssp"
+        app:layout_constraintStart_toEndOf="@id/country_code_picker"
+        app:layout_constraintTop_toTopOf="@id/country_code_picker"
+        app:layout_constraintBottom_toBottomOf="@id/country_code_picker"/>
+
+    <TextView
+        android:id="@+id/txt_privacy_policy"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="By signing up you accept our terms of service\n and privacy policy"
+        android:textSize="@dimen/_10ssp"
+        android:textColor="@color/white"
+        android:gravity="center"
+        android:layout_marginBottom="@dimen/_15sdp"
+        app:layout_constraintBottom_toTopOf="@id/btn_cont_phone_sign_up"
+        app:layout_constraintStart_toStartOf="@id/btn_cont_phone_sign_up"
+        app:layout_constraintEnd_toEndOf="@id/btn_cont_phone_sign_up"/>
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btn_cont_phone_sign_up"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintWidth_percent="0.8"
+        android:text="Continue"
+        android:textColor="@color/orange"
+        android:background="@drawable/white_rounded_button"
+        app:layout_constraintVertical_bias="0.8"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
