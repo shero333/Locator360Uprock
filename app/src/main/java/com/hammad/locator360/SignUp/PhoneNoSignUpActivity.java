@@ -4,15 +4,15 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Handler;
+import android.text.Editable;
 import android.text.SpannableString;
 import android.text.Spanned;
+import android.text.TextWatcher;
 import android.text.method.LinkMovementMethod;
 import android.text.style.ClickableSpan;
 import android.text.style.ForegroundColorSpan;
 import android.util.Log;
 import android.view.View;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -20,6 +20,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.google.i18n.phonenumbers.NumberParseException;
 import com.google.i18n.phonenumbers.PhoneNumberUtil;
 import com.google.i18n.phonenumbers.Phonenumber;
+import com.hammad.locator360.R;
+import com.hammad.locator360.SharedPreference.SharedPreference;
 import com.hammad.locator360.databinding.ActivityPhoneNoSignUpBinding;
 
 public class PhoneNoSignUpActivity extends AppCompatActivity {
@@ -30,6 +32,10 @@ public class PhoneNoSignUpActivity extends AppCompatActivity {
 
     private String countryCode;
 
+    //variables for for verifying whether entered number is valid or not
+    private PhoneNumberUtil.PhoneNumberType isMobile = null;
+    private boolean isPhoneNoValid = false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -39,22 +45,28 @@ public class PhoneNoSignUpActivity extends AppCompatActivity {
         View view=binding.getRoot();
         setContentView(view);
 
-        //country code picker
-        binding.countryCodePicker.setOnCountryChangeListener(() -> {
-            countryCode = binding.countryCodePicker.getSelectedCountryCode();
-        });
+        //picks the default and new selected country code
+        pickCountryCode();
 
-        countryCode = binding.countryCodePicker.getSelectedCountryCode();
+        //phone number text watcher
+        binding.edtPhoneSignUp.addTextChangedListener(numberTextWatcher);
 
         //privacy policy and terms of services click listeners
         setHyperLink();
 
-        binding.btnContPhoneSignUp.setOnClickListener(view1 -> {
+        binding.btnContPhoneSignUp.setOnClickListener(v -> buttonClickListener());
 
-            validatePhoneNumber(binding.edtPhoneSignUp.getText().toString(),countryCode);
+    }
 
+    private void pickCountryCode() {
+
+        //selects the default country code
+        countryCode = binding.countryCodePicker.getSelectedCountryCodeWithPlus();
+
+        //country code picker
+        binding.countryCodePicker.setOnCountryChangeListener(() -> {
+            countryCode = binding.countryCodePicker.getSelectedCountryCode();
         });
-
     }
 
     private void setHyperLink(){
@@ -102,32 +114,83 @@ public class PhoneNoSignUpActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
+    private TextWatcher numberTextWatcher = new TextWatcher() {
+        @Override
+        public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
+
+        @Override
+        public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            String s=charSequence.toString().trim();
+
+            //verifying whether entered number is valid and is a mobile phone number or not
+            validatePhoneNumber(s,countryCode);
+
+            //if number is valid, then enables the continue. Else continue button is disabled.
+            if(isPhoneNoValid && (isMobile.equals(PhoneNumberUtil.PhoneNumberType.MOBILE) || isMobile.equals(PhoneNumberUtil.PhoneNumberType.FIXED_LINE_OR_MOBILE))){
+
+                //enabling the continue button
+
+                binding.btnContPhoneSignUp.setEnabled(true);
+                binding.btnContPhoneSignUp.setBackgroundResource(R.drawable.white_rounded_button);
+            }
+            else {
+
+                binding.btnContPhoneSignUp.setEnabled(false);
+                binding.btnContPhoneSignUp.setBackgroundResource(R.drawable.disabled_round_button);
+            }
+        }
+
+        @Override
+        public void afterTextChanged(Editable editable) {}
+    };
+
     private void validatePhoneNumber(String number, String code) {
 
         PhoneNumberUtil numberUtil=PhoneNumberUtil.getInstance();
 
         String isoCode=numberUtil.getRegionCodeForCountryCode(Integer.valueOf(code));
-        Log.i("HELLO_123", "iso code: "+isoCode);
-
-        PhoneNumberUtil.PhoneNumberType isMobile = null;
-        boolean isValid = false;
 
         try {
             Phonenumber.PhoneNumber phoneNumber=numberUtil.parse(number,isoCode);
 
-            isValid= numberUtil.isValidNumber(phoneNumber);
+            isPhoneNoValid = numberUtil.isValidNumber(phoneNumber);
             isMobile = numberUtil.getNumberType(phoneNumber);
 
-            Log.i("HELLO_123", "origional format: "+numberUtil.formatInOriginalFormat(phoneNumber,isoCode));
+            Log.i("HELLO_123", "international format: "+numberUtil.format(phoneNumber, PhoneNumberUtil.PhoneNumberFormat.NATIONAL));
 
         } catch (NumberParseException e) {
             e.printStackTrace();
-            Toast.makeText(this, "Number Parse Exception", Toast.LENGTH_SHORT).show();
-            Log.i("HELLO_123", "number parse: "+e.getMessage());
+            Log.e("ERROR_PHONE_SIGN_UP", "NumberParseException: " + e.getMessage());
+        }
+    }
+
+    private void buttonClickListener(){
+
+        String tempNumber = binding.edtPhoneSignUp.getText().toString().trim();
+        String phoneNo = "";
+
+        if(tempNumber.startsWith("0"))
+        {
+            StringBuilder sb=new StringBuilder(tempNumber);
+            sb.deleteCharAt(0);
+
+            //concatenating entered number with country code
+            phoneNo = countryCode;
+            phoneNo = phoneNo.concat(sb.toString());
+        }
+        else {
+            //concatenating entered number with country code
+            phoneNo = countryCode;
+            phoneNo = phoneNo.concat(tempNumber);
         }
 
-        Log.i("HELLO_123", "isValid: "+isValid);
-        Log.i("HELLO_123", "num type: "+isMobile);
+
+        //saving the entered phone number in preference
+        SharedPreference.setPhoneNoPref(phoneNo);
+
+        //navigates to the next activity
+        startActivity(new Intent(this,NameSignUpActivity.class));
 
     }
 }
