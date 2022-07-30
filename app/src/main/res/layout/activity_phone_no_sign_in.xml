@@ -1,9 +1,93 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".SignIn.PhoneNoSignInActivity">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".SignIn.PhoneNoSignInActivity"
+    android:background="@color/orange">
+
+    <TextView
+        android:id="@+id/txt_phone_sign_in"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Welcome back!\nEnter you Number"
+        android:gravity="center"
+        android:textSize="@dimen/_16ssp"
+        android:textStyle="bold"
+        android:textColor="@color/white"
+        android:layout_marginTop="@dimen/_40sdp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
+
+    <com.hbb20.CountryCodePicker
+        android:id="@+id/country_code_picker_sign_in"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:ccp_showFlag="true"
+        app:ccp_arrowColor="@color/white"
+        app:ccp_arrowSize="@dimen/_22sdp"
+        app:ccp_autoFormatNumber="true"
+        app:ccp_contentColor="@color/white"
+        app:ccp_autoDetectCountry="true"
+        app:ccpDialog_showFastScroller="true"
+        app:ccpDialog_cornerRadius="@dimen/_20sdp"
+        app:ccpDialog_showPhoneCode="true"
+        app:ccpDialog_showFlag="true"
+        app:ccpDialog_showCloseIcon="true"
+        app:ccpDialog_searchEditTextTint="@color/orange"
+        app:ccpDialog_fastScroller_handleColor="@color/orange"
+        app:ccp_areaCodeDetectedCountry="true"
+        android:layout_marginTop="@dimen/_35sdp"
+        app:layout_constraintHorizontal_bias="0.18"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/txt_phone_sign_in"/>
+
+    <EditText
+        android:id="@+id/edt_phone_sign_in"
+        android:layout_width="@dimen/_150sdp"
+        android:layout_height="0dp"
+        android:backgroundTint="@color/orange"
+        android:hint="Enter Number"
+        android:imeOptions="actionDone"
+        android:inputType="phone"
+        android:cursorVisible="true"
+        android:textCursorDrawable="@color/white"
+        android:layout_marginStart="@dimen/_5sdp"
+        android:textColorHint="@color/white"
+        android:textColor="@color/white"
+        android:textSize="@dimen/_14ssp"
+        app:layout_constraintStart_toEndOf="@id/country_code_picker_sign_in"
+        app:layout_constraintTop_toTopOf="@id/country_code_picker_sign_in"
+        app:layout_constraintBottom_toBottomOf="@id/country_code_picker_sign_in"/>
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btn_cont_phone_sign_in"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintWidth_percent="0.8"
+        android:text="Continue"
+        android:textColor="@color/orange"
+        android:background="@drawable/disabled_round_button"
+        android:enabled="false"
+        app:layout_constraintVertical_bias="0.8"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"/>
+
+    <TextView
+        android:id="@+id/txt_sign_in_with_email"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Sign in with Email"
+        android:textColor="@color/white"
+        android:textSize="@dimen/_12ssp"
+        android:layout_marginTop="@dimen/_15sdp"
+        app:layout_constraintStart_toStartOf="@id/btn_cont_phone_sign_in"
+        app:layout_constraintEnd_toEndOf="@id/btn_cont_phone_sign_in"
+        app:layout_constraintTop_toBottomOf="@id/btn_cont_phone_sign_in"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

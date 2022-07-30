@@ -1,0 +1,76 @@
+{
+  "project_info": {
+    "project_number": "630439436291",
+    "project_id": "location-sharing-357405",
+    "storage_bucket": "location-sharing-357405.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:630439436291:android:d5c5333be0e6bd718d6e36",
+        "android_client_info": {
+          "package_name": "com.hammad.locationsharing"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "630439436291-0rgqjsr1lvg68kcqkmbdlfdq5p49eqat.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.hammad.locationsharing",
+            "certificate_hash": "c72d2a7d1b5a7618e69f3f9c7e2f801ea9e0379a"
+          }
+        },
+        {
+          "client_id": "630439436291-g6rojjm80jicgdg4dbbh8p1rridliele.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCYytemnUgGDJT1Tff6_jxVeV8hE4ReBRk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "630439436291-g6rojjm80jicgdg4dbbh8p1rridliele.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:630439436291:android:4de3f830e6e5450e8d6e36",
+        "android_client_info": {
+          "package_name": "com.hammad.locator360"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "630439436291-g6rojjm80jicgdg4dbbh8p1rridliele.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCYytemnUgGDJT1Tff6_jxVeV8hE4ReBRk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "630439436291-g6rojjm80jicgdg4dbbh8p1rridliele.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

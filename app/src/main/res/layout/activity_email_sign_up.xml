@@ -21,6 +21,7 @@
         app:layout_constraintTop_toTopOf="parent"/>
 
     <EditText
+        android:id="@+id/edt_email_sign_up"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         app:layout_constraintWidth_percent="0.6"
@@ -44,8 +45,9 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         app:layout_constraintWidth_percent="0.8"
-        android:background="@drawable/white_rounded_button"
+        android:background="@drawable/disabled_round_button"
         android:text="Continue"
+        android:enabled="false"
         android:textColor="@color/orange"
         app:layout_constraintVertical_bias="0.8"
         app:layout_constraintStart_toStartOf="parent"

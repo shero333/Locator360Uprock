@@ -8,6 +8,7 @@
 
 
     <TextView
+        android:id="@+id/text_1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Logged In"
@@ -18,5 +19,15 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"/>
+
+    <Button
+        android:id="@+id/btn_sign_out"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Sign Out"
+        android:layout_marginTop="@dimen/_15sdp"
+        app:layout_constraintTop_toBottomOf="@id/text_1"
+        app:layout_constraintStart_toStartOf="@id/text_1"
+        app:layout_constraintEnd_toEndOf="@id/text_1"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
