@@ -22,8 +22,8 @@ import com.google.i18n.phonenumbers.PhoneNumberUtil;
 import com.google.i18n.phonenumbers.Phonenumber;
 import com.hammad.locator360.R;
 import com.hammad.locator360.SharedPreference.SharedPreference;
-import com.hammad.locator360.SignUp.PhoneNoSignUpActivity;
 import com.hammad.locator360.SignIn.model.User;
+import com.hammad.locator360.SignUp.PhoneNoSignUpActivity;
 import com.hammad.locator360.databinding.ActivityPhoneNoSignInBinding;
 
 import java.util.ArrayList;
@@ -137,7 +137,6 @@ public class PhoneNoSignInActivity extends AppCompatActivity {
     }
 
     private void buttonCLickListener(){
-
         String tempNumber = binding.edtPhoneSignIn.getText().toString().trim();
         String phoneNo = "";
 
@@ -170,12 +169,11 @@ public class PhoneNoSignInActivity extends AppCompatActivity {
         if(userInfoIndex < 0){
             startActivity(new Intent(this, PhoneNoSignUpActivity.class));
         }
-        else if(userInfoIndex > 0){
+        else if(userInfoIndex >= 0){
 
             //saving the values of Email, FirstName, and Password to preference
             SharedPreference.setEmailPref(registeredUserList.get(userInfoIndex).getEmail());
             SharedPreference.setFirstNamePref(registeredUserList.get(userInfoIndex).getFirstName());
-            SharedPreference.setPasswordPref(registeredUserList.get(userInfoIndex).getPassword());
 
             // Navigating to next activity
             startActivity(new Intent(this,EnterPasswordSignInActivity.class));
