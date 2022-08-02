@@ -4,30 +4,162 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".JoinCircleFirstScreenActivity">
+    tools:context=".OneTimeScreens.JoinCircleFirstScreenActivity">
 
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/cons_1"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintHeight_percent="0.7"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <TextView
+            android:id="@+id/txt_1_cons_1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Perfect! You're about to join\nyour Family"
+            android:textStyle="bold"
+            android:textSize="@dimen/_14ssp"
+            android:gravity="center"
+            android:textColor="@color/black"
+            app:layout_constraintVertical_bias="0.12"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"/>
+
+        <!--<com.chaos.view.PinView
+            android:id="@+id/pin_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:lineColor="@color/light_orange"
+            app:lineWidth="@dimen/_1sdp"
+            app:itemRadius="@dimen/_5sdp"
+            app:itemSpacing="@dimen/_10sdp"
+            app:itemWidth="@dimen/_30sdp"
+            app:itemHeight="@dimen/_50sdp"
+            app:cursorWidth="@dimen/_5sdp"
+            app:itemCount="6"
+            android:inputType="text"
+            android:textColor="@color/orange"
+            android:textStyle="bold"
+            android:textSize="@dimen/_14ssp"
+            android:textAllCaps="true"
+            android:cursorVisible="true"
+            app:viewType="rectangle"
+            app:cursorColor="@color/orange"
+            android:imeOptions="actionDone"
+            android:padding="@dimen/_5sdp"
+            app:layout_constraintVertical_bias="0.35"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"/>-->
+
+        <com.goodiebag.pinview.Pinview
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:pinLength="6"/>
+
+        <TextView
+            android:id="@+id/txt_msg_cons_1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="You may need to ask circle to send code"
+            android:textColor="@color/orange"
+            android:textSize="@dimen/_12ssp"
+            app:layout_constraintVertical_bias="0.55"
+            app:layout_constraintStart_toStartOf="@id/pin_view"
+            app:layout_constraintEnd_toEndOf="@id/pin_view"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"/>
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_submit"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintWidth_percent="0.8"
+            android:text="Submit"
+            android:textAllCaps="false"
+            android:background="@drawable/orange_rounded_button"
+            app:layout_constraintVertical_bias="0.8"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
     <TextView
-        android:id="@+id/text_1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Logged In"
+        android:layout_width="@dimen/_50sdp"
+        android:layout_height="@dimen/_50sdp"
+        android:text="OR"
+        android:gravity="center_vertical|center_horizontal"
         android:textColor="@color/orange"
+        android:textSize="@dimen/_14ssp"
         android:textStyle="bold"
-        android:textSize="@dimen/_18ssp"
+        android:background="@drawable/circle_drawable_white_with_orange_stroke"
+        app:layout_constraintHorizontal_bias="0.1"
+        android:translationZ="@dimen/_100sdp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"/>
+        app:layout_constraintTop_toBottomOf="@id/cons_1"
+        app:layout_constraintBottom_toTopOf="@id/cons_2"/>
 
-    <Button
-        android:id="@+id/btn_sign_out"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Sign Out"
-        android:layout_marginTop="@dimen/_15sdp"
-        app:layout_constraintTop_toBottomOf="@id/text_1"
-        app:layout_constraintStart_toStartOf="@id/text_1"
-        app:layout_constraintEnd_toEndOf="@id/text_1"/>
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/cons_2"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintHeight_percent="0.3"
+        android:background="@color/orange"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent">
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/mat_txt_1_cons_2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Don't have a Code?"
+            android:textColor="@color/white"
+            android:textStyle="bold"
+            android:textSize="@dimen/_16ssp"
+            android:layout_marginTop="@dimen/_40sdp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/mat_txt_2_cons_2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="We'll give you code to share"
+            android:textColor="#80FFFFFF"
+            android:textSize="@dimen/_12ssp"
+            android:layout_marginTop="@dimen/_5sdp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/mat_txt_1_cons_2"/>
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_create_circle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintWidth_percent="0.8"
+            android:text="Create Circle"
+            android:textColor="@color/orange"
+            android:textAllCaps="false"
+            android:background="@drawable/white_rounded_button"
+            app:backgroundTint="@color/white"
+            app:layout_constraintVertical_bias="0.8"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"/>
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

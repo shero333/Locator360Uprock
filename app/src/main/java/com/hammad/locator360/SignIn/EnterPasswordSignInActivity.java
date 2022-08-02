@@ -8,21 +8,14 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
-import com.hammad.locator360.JoinCircleFirstScreenActivity;
+import com.hammad.locator360.OneTimeScreens.JoinCircleFirstScreenActivity;
 import com.hammad.locator360.R;
 import com.hammad.locator360.SharedPreference.SharedPreference;
+import com.hammad.locator360.Util.Commons;
 import com.hammad.locator360.databinding.ActivityEnterPasswordSignInBinding;
-
-import java.io.UnsupportedEncodingException;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 
 public class EnterPasswordSignInActivity extends AppCompatActivity {
 
@@ -81,7 +74,7 @@ public class EnterPasswordSignInActivity extends AppCompatActivity {
                 binding.btnContPhoneSignIn.setBackgroundResource(R.drawable.white_rounded_button);
 
                 //encrypting the password
-                encryptedPassword = encryptedText(s);
+                encryptedPassword = Commons.encryptedText(s);
             }
 
         }
@@ -89,43 +82,6 @@ public class EnterPasswordSignInActivity extends AppCompatActivity {
         @Override
         public void afterTextChanged(Editable editable) {}
     };
-
-    /*
-        These two function for encrypting SHA-256 hash code. If remain same for a particular group of text.
-        We will save this encrypted text in firebase, and when user enters password, we will convert it into Hex and then compare with the firebase password.
-    */
-    private String encryptedText(String text) {
-        MessageDigest digest;
-        String encryptedText= "";
-        try {
-            digest = MessageDigest.getInstance("SHA-256");
-            byte[] hash = digest.digest(text.getBytes("UTF-8"));
-
-            encryptedText = bytesToHex(hash);
-
-        } catch (NoSuchAlgorithmException e) {
-            Log.e("ERROR_CREATE_PSS_ACT", "NoSuchAlgorithmException " + e.getMessage());
-            e.printStackTrace();
-        } catch (UnsupportedEncodingException e) {
-            Log.e("ERROR_CREATE_PSS_ACT", "UnsupportedEncodingException " + e.getMessage());
-            e.printStackTrace();
-
-        }
-
-        return encryptedText;
-    }
-
-    private static String bytesToHex(byte[] hash) {
-        StringBuilder hexString = new StringBuilder(2 * hash.length);
-        for (int i = 0; i < hash.length; i++) {
-            String hex = Integer.toHexString(0xff & hash[i]);
-            if(hex.length() == 1) {
-                hexString.append('0');
-            }
-            hexString.append(hex);
-        }
-        return hexString.toString();
-    }
 
     private void buttonClickListener(){
 

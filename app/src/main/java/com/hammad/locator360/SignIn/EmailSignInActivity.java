@@ -4,13 +4,13 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Patterns;
 import android.view.View;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.hammad.locator360.R;
 import com.hammad.locator360.SharedPreference.SharedPreference;
+import com.hammad.locator360.Util.Commons;
 import com.hammad.locator360.databinding.ActivityEmailSignInBinding;
 
 public class EmailSignInActivity extends AppCompatActivity {
@@ -49,7 +49,7 @@ public class EmailSignInActivity extends AppCompatActivity {
             String s = charSequence.toString();
 
             //validating the email
-            if(validateEmailAddress(s)){
+            if(Commons.validateEmailAddress(s)){
 
                 //enabling the 'continue' button
                 binding.btnContEmailSignIn.setEnabled(true);
@@ -67,16 +67,6 @@ public class EmailSignInActivity extends AppCompatActivity {
         @Override
         public void afterTextChanged(Editable editable) {}
     };
-
-    private boolean validateEmailAddress(String input) {
-        if (!input.isEmpty() && Patterns.EMAIL_ADDRESS.matcher(input).matches()) {
-            //enable the continue button
-            return true;
-        } else {
-            //disables the continue button
-            return false;
-        }
-    }
 
     private void buttonClickListener(){
         //saving email in preference

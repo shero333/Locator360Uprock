@@ -11,4 +11,6 @@
     <!-- App Colors -->
     <color name="orange">#F96137</color>
     <color name="grey">#E3E1E1</color>
+
+    <color name="light_orange">#66F96137</color>
 </resources>

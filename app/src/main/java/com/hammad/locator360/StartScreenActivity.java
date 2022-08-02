@@ -11,13 +11,14 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.hammad.locator360.OneTimeScreens.JoinCircleFirstScreenActivity;
 import com.hammad.locator360.SignIn.PhoneNoSignInActivity;
 import com.hammad.locator360.SignUp.PhoneNoSignUpActivity;
-import com.hammad.locator360.databinding.ActivityWelcomeScreenBinding;
+import com.hammad.locator360.databinding.ActivityStartScreenBinding;
 
-public class WelcomeScreenActivity extends AppCompatActivity {
+public class StartScreenActivity extends AppCompatActivity {
 
-    private ActivityWelcomeScreenBinding binding;
+    private ActivityStartScreenBinding binding;
 
     private FirebaseFirestore fStore;
 
@@ -26,7 +27,7 @@ public class WelcomeScreenActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         //initializing binding
-        binding = ActivityWelcomeScreenBinding.inflate(getLayoutInflater());
+        binding = ActivityStartScreenBinding.inflate(getLayoutInflater());
         View view = binding.getRoot();
         setContentView(view);
 
@@ -34,10 +35,10 @@ public class WelcomeScreenActivity extends AppCompatActivity {
         fStore=FirebaseFirestore.getInstance();
 
         // Button sign up click listener
-        binding.btnSignUp.setOnClickListener(v -> startActivity(new Intent(WelcomeScreenActivity.this, PhoneNoSignUpActivity.class)));
+        binding.btnSignUp.setOnClickListener(v -> startActivity(new Intent(StartScreenActivity.this, PhoneNoSignUpActivity.class)));
 
         // Textview sign in click listener
-        binding.txtSignIn.setOnClickListener(v -> startActivity(new Intent(WelcomeScreenActivity.this, PhoneNoSignInActivity.class)));
+        binding.txtSignIn.setOnClickListener(v -> startActivity(new Intent(StartScreenActivity.this, PhoneNoSignInActivity.class)));
 
     }
 
@@ -56,7 +57,7 @@ public class WelcomeScreenActivity extends AppCompatActivity {
 
         documentReference.get().addOnSuccessListener(documentSnapshot -> {
 
-           startActivity(new Intent(WelcomeScreenActivity.this,JoinCircleFirstScreenActivity.class));
+           startActivity(new Intent(StartScreenActivity.this, JoinCircleFirstScreenActivity.class));
            finish();
         });
     }

@@ -196,7 +196,7 @@ public class PhoneNoSignInActivity extends AppCompatActivity {
 
                   for(DocumentSnapshot doc: queryDocumentSnapshots) {
 
-                      registeredUserList.add(new User(doc.getString(FIRST_NAME), doc.getString(PHONE_NO), doc.getString(EMAIL), doc.getString(PASSWORD)));
+                      registeredUserList.add(new User(doc.getString(FIRST_NAME), doc.getString(PHONE_NO), doc.getString(EMAIL)));
                   }
                 });
     }

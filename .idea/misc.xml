@@ -3,19 +3,22 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Hammad/Locator360/app/src/main/res/drawable/circle_drawable_white_with_orange_stroke.xml" value="0.155" />
         <entry key="..\:/Hammad/Locator360/app/src/main/res/drawable/disabled_round_button.xml" value="0.155" />
         <entry key="..\:/Hammad/Locator360/app/src/main/res/drawable/orange_rounded_button.xml" value="0.155" />
+        <entry key="..\:/Hammad/Locator360/app/src/main/res/drawable/pin_view_selector.xml" value="0.155" />
         <entry key="..\:/Hammad/Locator360/app/src/main/res/drawable/white_rounded_button.xml" value="0.155" />
-        <entry key="..\:/Hammad/Locator360/app/src/main/res/layout/activity_create_password.xml" value="0.2046875" />
+        <entry key="..\:/Hammad/Locator360/app/src/main/res/layout/activity_create_password.xml" value="0.2" />
         <entry key="..\:/Hammad/Locator360/app/src/main/res/layout/activity_email_sign_in.xml" value="0.18" />
         <entry key="..\:/Hammad/Locator360/app/src/main/res/layout/activity_email_sign_up.xml" value="0.2046875" />
-        <entry key="..\:/Hammad/Locator360/app/src/main/res/layout/activity_enter_password_sign_in.xml" value="0.2" />
+        <entry key="..\:/Hammad/Locator360/app/src/main/res/layout/activity_enter_password_sign_in.xml" value="0.16" />
         <entry key="..\:/Hammad/Locator360/app/src/main/res/layout/activity_forget_password.xml" value="0.2046875" />
-        <entry key="..\:/Hammad/Locator360/app/src/main/res/layout/activity_join_circle_first_screen.xml" value="0.2046875" />
+        <entry key="..\:/Hammad/Locator360/app/src/main/res/layout/activity_join_circle_first_screen.xml" value="0.2" />
         <entry key="..\:/Hammad/Locator360/app/src/main/res/layout/activity_main.xml" value="0.27291666666666664" />
         <entry key="..\:/Hammad/Locator360/app/src/main/res/layout/activity_password_sign_in.xml" value="0.2046875" />
         <entry key="..\:/Hammad/Locator360/app/src/main/res/layout/activity_phone_no_sign_in.xml" value="0.194140625" />
         <entry key="..\:/Hammad/Locator360/app/src/main/res/layout/activity_phone_no_sign_up.xml" value="0.2" />
+        <entry key="..\:/Hammad/Locator360/app/src/main/res/layout/activity_start_screen.xml" value="0.2046875" />
         <entry key="..\:/Hammad/Locator360/app/src/main/res/layout/activity_welcome_screen.xml" value="0.2046875" />
         <entry key="..\:/Hammad/Locator360/app/src/main/res/layout/screen_welcome.xml" value="0.18333333333333332" />
       </map>

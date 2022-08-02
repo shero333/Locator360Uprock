@@ -4,13 +4,13 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Patterns;
 import android.view.View;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.hammad.locator360.R;
 import com.hammad.locator360.SharedPreference.SharedPreference;
+import com.hammad.locator360.Util.Commons;
 import com.hammad.locator360.databinding.ActivityEmailSignUpBinding;
 
 public class EmailSignUpActivity extends AppCompatActivity {
@@ -34,16 +34,6 @@ public class EmailSignUpActivity extends AppCompatActivity {
 
     }
 
-    private boolean validateEmailAddress(String input) {
-        if (!input.isEmpty() && Patterns.EMAIL_ADDRESS.matcher(input).matches()) {
-            //enable the continue button
-            return true;
-        } else {
-            //disables the continue button
-            return false;
-        }
-    }
-
     private TextWatcher emailTextWatcher = new TextWatcher() {
         @Override
         public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
@@ -53,13 +43,13 @@ public class EmailSignUpActivity extends AppCompatActivity {
 
             String s = charSequence.toString().trim();
 
-            if(validateEmailAddress(s)){
+            if(Commons.validateEmailAddress(s)){
 
                 binding.btnContEmailSignUp.setEnabled(true);
                 binding.btnContEmailSignUp.setBackgroundResource(R.drawable.white_rounded_button);
             }
 
-            else if(!validateEmailAddress(s)){
+            else if(!Commons.validateEmailAddress(s)){
                 binding.btnContEmailSignUp.setEnabled(false);
                 binding.btnContEmailSignUp.setBackgroundResource(R.drawable.disabled_round_button);
             }
