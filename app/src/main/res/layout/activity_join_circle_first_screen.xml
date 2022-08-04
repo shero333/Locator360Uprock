@@ -30,38 +30,102 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"/>
 
-        <!--<com.chaos.view.PinView
-            android:id="@+id/pin_view"
+        <androidx.constraintlayout.helper.widget.Flow
+            android:id="@+id/flow_pin_view"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:lineColor="@color/light_orange"
-            app:lineWidth="@dimen/_1sdp"
-            app:itemRadius="@dimen/_5sdp"
-            app:itemSpacing="@dimen/_10sdp"
-            app:itemWidth="@dimen/_30sdp"
-            app:itemHeight="@dimen/_50sdp"
-            app:cursorWidth="@dimen/_5sdp"
-            app:itemCount="6"
-            android:inputType="text"
-            android:textColor="@color/orange"
-            android:textStyle="bold"
-            android:textSize="@dimen/_14ssp"
-            android:textAllCaps="true"
-            android:cursorVisible="true"
-            app:viewType="rectangle"
-            app:cursorColor="@color/orange"
-            android:imeOptions="actionDone"
             android:padding="@dimen/_5sdp"
             app:layout_constraintVertical_bias="0.35"
+            app:constraint_referenced_ids="edt_input_1,edt_input_2,edt_input_3,edt_input_4,edt_input_5,edt_input_6"
+            app:flow_horizontalGap="@dimen/_10sdp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"/>-->
+            app:layout_constraintBottom_toBottomOf="parent"/>
 
-        <com.goodiebag.pinview.Pinview
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:pinLength="6"/>
+        <EditText
+            android:id="@+id/edt_input_1"
+            android:layout_width="@dimen/_30sdp"
+            android:layout_height="@dimen/_50sdp"
+            android:background="@drawable/pin_view_state_list"
+            android:cursorVisible="true"
+            android:textSize="@dimen/_14ssp"
+            android:textColor="@color/orange"
+            android:textStyle="bold"
+            android:inputType="textCapCharacters"
+            android:padding="@dimen/_5sdp"
+            android:maxLength="1"
+            android:gravity="center"/>
+
+        <EditText
+            android:id="@+id/edt_input_2"
+            android:layout_width="@dimen/_30sdp"
+            android:layout_height="@dimen/_50sdp"
+            android:background="@drawable/pin_view_state_list"
+            android:cursorVisible="true"
+            android:textSize="@dimen/_14ssp"
+            android:textColor="@color/orange"
+            android:textStyle="bold"
+            android:inputType="textCapCharacters"
+            android:padding="@dimen/_5sdp"
+            android:maxLength="1"
+            android:gravity="center"/>
+
+        <EditText
+            android:id="@+id/edt_input_3"
+            android:layout_width="@dimen/_30sdp"
+            android:layout_height="@dimen/_50sdp"
+            android:background="@drawable/pin_view_state_list"
+            android:cursorVisible="true"
+            android:textSize="@dimen/_14ssp"
+            android:textColor="@color/orange"
+            android:textStyle="bold"
+            android:inputType="textCapCharacters"
+            android:padding="@dimen/_5sdp"
+            android:maxLength="1"
+            android:gravity="center"/>
+
+        <EditText
+            android:id="@+id/edt_input_4"
+            android:layout_width="@dimen/_30sdp"
+            android:layout_height="@dimen/_50sdp"
+            android:background="@drawable/pin_view_state_list"
+            android:cursorVisible="true"
+            android:textSize="@dimen/_14ssp"
+            android:textColor="@color/orange"
+            android:textStyle="bold"
+            android:inputType="textCapCharacters"
+            android:padding="@dimen/_5sdp"
+            android:maxLength="1"
+            android:gravity="center"/>
+
+        <EditText
+            android:id="@+id/edt_input_5"
+            android:layout_width="@dimen/_30sdp"
+            android:layout_height="@dimen/_50sdp"
+            android:background="@drawable/pin_view_state_list"
+            android:cursorVisible="true"
+            android:textSize="@dimen/_14ssp"
+            android:textColor="@color/orange"
+            android:textStyle="bold"
+            android:inputType="textCapCharacters"
+            android:padding="@dimen/_5sdp"
+            android:maxLength="1"
+            android:gravity="center"/>
+
+        <EditText
+            android:id="@+id/edt_input_6"
+            android:layout_width="@dimen/_30sdp"
+            android:layout_height="@dimen/_50sdp"
+            android:background="@drawable/pin_view_state_list"
+            android:cursorVisible="true"
+            android:textSize="@dimen/_14ssp"
+            android:textColor="@color/orange"
+            android:textStyle="bold"
+            android:inputType="textCapCharacters"
+            android:padding="@dimen/_5sdp"
+            android:maxLength="1"
+            android:gravity="center"/>
 
         <TextView
             android:id="@+id/txt_msg_cons_1"
@@ -71,8 +135,8 @@
             android:textColor="@color/orange"
             android:textSize="@dimen/_12ssp"
             app:layout_constraintVertical_bias="0.55"
-            app:layout_constraintStart_toStartOf="@id/pin_view"
-            app:layout_constraintEnd_toEndOf="@id/pin_view"
+            app:layout_constraintStart_toStartOf="@id/flow_pin_view"
+            app:layout_constraintEnd_toEndOf="@id/flow_pin_view"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"/>
 
@@ -83,7 +147,8 @@
             app:layout_constraintWidth_percent="0.8"
             android:text="Submit"
             android:textAllCaps="false"
-            android:background="@drawable/orange_rounded_button"
+            android:enabled="false"
+            android:background="@drawable/disabled_round_button"
             app:layout_constraintVertical_bias="0.8"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -136,7 +201,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="We'll give you code to share"
-            android:textColor="#80FFFFFF"
+            android:textColor="@color/white_with_opacity"
             android:textSize="@dimen/_12ssp"
             android:layout_marginTop="@dimen/_5sdp"
             app:layout_constraintStart_toStartOf="parent"

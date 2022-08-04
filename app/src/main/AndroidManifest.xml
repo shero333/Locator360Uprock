@@ -16,20 +16,22 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Locator360"
         tools:targetApi="31">
-
+        <activity
+            android:name=".OneTimeScreens.JoinGroupActivity"
+            android:exported="false" />
         <activity
             android:name=".SignIn.EnterPasswordSignInActivity"
             android:exported="false"
-            android:windowSoftInputMode="adjustResize"/>
+            android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".SignIn.EmailSignInActivity"
+            android:clearTaskOnLaunch="true"
             android:exported="false"
-            android:windowSoftInputMode="adjustResize"
-            android:clearTaskOnLaunch="true"/>
+            android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".SignIn.ForgetPasswordActivity"
             android:exported="false"
-            android:windowSoftInputMode="adjustResize"/>
+            android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".OneTimeScreens.JoinCircleFirstScreenActivity"
             android:exported="false" />
@@ -48,7 +50,7 @@
         <activity
             android:name=".SignIn.PhoneNoSignInActivity"
             android:exported="false"
-            android:launchMode="singleTop"/>
+            android:launchMode="singleTop" />
         <activity
             android:name=".SignUp.PhoneNoSignUpActivity"
             android:exported="false"

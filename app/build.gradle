@@ -62,8 +62,4 @@ dependencies {
 
     //for phone number verification
     implementation 'com.googlecode.libphonenumber:libphonenumber:8.12.45'
-
-    //library for OTP pin
-    //implementation 'io.github.chaosleung:pinview:1.4.4'
-    implementation 'com.github.GoodieBag:Pinview:v1.4'
 }
