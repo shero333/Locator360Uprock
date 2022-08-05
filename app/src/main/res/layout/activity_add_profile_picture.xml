@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".OneTimeScreens.AddProfilePictureActivity"
+    android:background="@color/orange">
+
+    <TextView
+        android:id="@+id/txt_title_add_profile_pic"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Add your Photo"
+        android:textSize="@dimen/_16ssp"
+        android:textStyle="bold"
+        android:textColor="@color/white"
+        android:layout_marginTop="@dimen/_40sdp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
+
+    <TextView
+        android:id="@+id/txt_sub_title_add_profile_pic"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/white_with_opacity"
+        android:textSize="@dimen/_14ssp"
+        android:textStyle="bold"
+        android:text="This makes it easy for your\nfamily to find you on map"
+        android:gravity="center"
+        android:layout_marginTop="@dimen/_15sdp"
+        app:layout_constraintStart_toStartOf="@id/txt_title_add_profile_pic"
+        app:layout_constraintEnd_toEndOf="@id/txt_title_add_profile_pic"
+        app:layout_constraintTop_toBottomOf="@id/txt_title_add_profile_pic"/>
+    
+    <ImageView
+        android:id="@+id/img_profile"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/_100sdp"
+        app:layout_constraintWidth_percent="0.8"
+        android:background="@drawable/ic_launcher_background"
+        app:layout_constraintVertical_bias="0.32"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"/>
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btn_upload_img"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintWidth_percent="0.8"
+        android:text="Upload photo"
+        android:textColor="@color/orange"
+        app:icon="@drawable/ic_launcher_background"
+        app:iconSize="@dimen/_24sdp"
+        android:textStyle="bold"
+        app:iconGravity="textStart"
+        app:iconTint="@color/orange"
+        app:iconPadding="@dimen/_20sdp"
+        android:background="@drawable/drawable_square_button"
+        app:backgroundTint="@color/white"
+        android:layout_marginTop="@dimen/_20sdp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/img_profile"/>
+
+    <TextView
+        android:id="@+id/txt_footer_add_profile_pic"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintWidth_percent="0.7"
+        android:text="Location sharing is possible only with mutual consent of all family members."
+        android:gravity="center"
+        android:textSize="@dimen/_12ssp"
+        android:textColor="@color/white_with_opacity"
+        android:layout_marginBottom="@dimen/_15sdp"
+        app:layout_constraintBottom_toTopOf="@id/btn_cont_add_profile_pic"
+        app:layout_constraintStart_toStartOf="@id/btn_cont_add_profile_pic"
+        app:layout_constraintEnd_toEndOf="@id/btn_cont_add_profile_pic"/>
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btn_cont_add_profile_pic"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintWidth_percent="0.8"
+        android:text="Continue"
+        android:textColor="@color/orange"
+        android:background="@drawable/disabled_round_button"
+        app:layout_constraintVertical_bias="0.8"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

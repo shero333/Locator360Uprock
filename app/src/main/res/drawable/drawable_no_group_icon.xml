@@ -4,7 +4,12 @@
 
     <size android:width="@dimen/_100sdp"
         android:height="@dimen/_100sdp"/>
-    <stroke android:width="@dimen/_2sdp"
-        android:color="@color/white"/>
+
+    <gradient
+        android:centerColor="#A8D2DF"
+        android:startColor="#93A6CF"
+        android:type="radial"
+        android:gradientRadius="@dimen/_80sdp"/>
 
 </shape>
+

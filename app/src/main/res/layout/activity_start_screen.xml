@@ -11,7 +11,7 @@
         android:id="@+id/app_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Locator 360"
+        android:text="Find My Family"
         android:textStyle="bold"
         android:textColor="@color/orange"
         android:textSize="@dimen/_20ssp"

@@ -17,6 +17,18 @@
         android:theme="@style/Theme.Locator360"
         tools:targetApi="31">
         <activity
+            android:name=".OneTimeScreens.GeneralScreenTwoActivity"
+            android:exported="false" />
+        <activity
+            android:name=".OneTimeScreens.GeneralScreenOneActivity"
+            android:exported="false" />
+        <activity
+            android:name=".OneTimeScreens.RequestPermissionActivity"
+            android:exported="false" />
+        <activity
+            android:name=".OneTimeScreens.AddProfilePictureActivity"
+            android:exported="false" />
+        <activity
             android:name=".OneTimeScreens.JoinGroupActivity"
             android:exported="false" />
         <activity

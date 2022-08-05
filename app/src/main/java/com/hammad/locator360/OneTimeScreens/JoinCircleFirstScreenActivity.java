@@ -1,5 +1,6 @@
 package com.hammad.locator360.OneTimeScreens;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -137,6 +138,9 @@ public class JoinCircleFirstScreenActivity extends AppCompatActivity {
                             .concat(getEditTextData(binding.edtInput5).concat(getEditTextData(binding.edtInput6)))));
 
         Toast.makeText(this, enteredInviteCode, Toast.LENGTH_SHORT).show();
+
+        //navigating to next activity
+        startActivity(new Intent(this,JoinGroupActivity.class));
     }
 
     //function for returning the edit text values
