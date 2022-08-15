@@ -62,4 +62,8 @@ dependencies {
 
     //for phone number verification
     implementation 'com.googlecode.libphonenumber:libphonenumber:8.12.45'
+
+    //glide
+    implementation 'com.github.bumptech.glide:glide:4.13.2'
+    annotationProcessor 'com.github.bumptech.glide:compiler:4.13.2'
 }

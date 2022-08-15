@@ -33,18 +33,53 @@
         app:layout_constraintStart_toStartOf="@id/txt_title_add_profile_pic"
         app:layout_constraintEnd_toEndOf="@id/txt_title_add_profile_pic"
         app:layout_constraintTop_toBottomOf="@id/txt_title_add_profile_pic"/>
-    
-    <ImageView
-        android:id="@+id/img_profile"
+
+    <androidx.constraintlayout.utils.widget.ImageFilterView
+        android:id="@+id/img_profile_background_layer"
         android:layout_width="0dp"
         android:layout_height="@dimen/_100sdp"
-        app:layout_constraintWidth_percent="0.8"
-        android:background="@drawable/ic_launcher_background"
-        app:layout_constraintVertical_bias="0.32"
-        app:layout_constraintStart_toStartOf="parent"
+        android:scaleType="fitXY"
+        app:srcCompat="@drawable/ic_launcher_background"
+        app:round="@dimen/_10sdp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"/>
+        app:layout_constraintVertical_bias="0.364"
+        app:layout_constraintWidth_percent="0.8" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="0dp"
+        android:layout_height="@dimen/_100sdp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.364"
+        app:layout_constraintWidth_percent="0.8"
+        android:background="@drawable/white_rectangle_outline"/>
+
+    <androidx.constraintlayout.utils.widget.ImageFilterView
+        android:id="@+id/img_profile"
+        android:layout_width="@dimen/_80sdp"
+        android:layout_height="@dimen/_80sdp"
+        android:src="@drawable/ic_launcher_background"
+        android:scaleType="fitXY"
+        app:layout_constraintStart_toStartOf="@id/img_profile_background_layer"
+        app:layout_constraintEnd_toEndOf="@id/img_profile_background_layer"
+        app:layout_constraintBottom_toTopOf="@id/img_profile_background_layer"
+        app:layout_constraintTop_toTopOf="@id/img_profile_background_layer"
+        app:roundPercent="1"/>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="@dimen/_80sdp"
+        android:layout_height="@dimen/_80sdp"
+        android:background="@drawable/white_circle_outline"
+        app:layout_constraintStart_toStartOf="@id/img_profile_background_layer"
+        app:layout_constraintEnd_toEndOf="@id/img_profile_background_layer"
+        app:layout_constraintBottom_toTopOf="@id/img_profile_background_layer"
+        app:layout_constraintTop_toTopOf="@id/img_profile_background_layer"/>
+
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btn_upload_img"
@@ -61,10 +96,10 @@
         app:iconPadding="@dimen/_20sdp"
         android:background="@drawable/drawable_square_button"
         app:backgroundTint="@color/white"
-        android:layout_marginTop="@dimen/_20sdp"
+        android:layout_marginTop="@dimen/_30sdp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/img_profile"/>
+        app:layout_constraintTop_toBottomOf="@id/img_profile_background_layer"/>
 
     <TextView
         android:id="@+id/txt_footer_add_profile_pic"
@@ -86,7 +121,7 @@
         android:layout_height="wrap_content"
         app:layout_constraintWidth_percent="0.8"
         android:text="Continue"
-        android:textColor="@color/orange"
+        android:enabled="false"
         android:background="@drawable/disabled_round_button"
         app:layout_constraintVertical_bias="0.8"
         app:layout_constraintStart_toStartOf="parent"

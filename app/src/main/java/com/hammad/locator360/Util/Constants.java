@@ -12,5 +12,10 @@ public class Constants {
 
     public static final String NULL = "null";
 
+    public static final int REQUEST_CODE_CAMERA = 1;
+    public static final int REQUEST_CODE_FINE_LOCATION = 2;
+    /*public static final int REQUEST_CODE_COARSE_LOCATION = 3;*/
+    public static final int REQUEST_CODE_STORAGE = 3;
+    /*public static final int REQUEST_CODE_WRITE_STORAGE = 5;*/
 
 }
