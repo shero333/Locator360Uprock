@@ -1,18 +1,22 @@
 package com.hammad.locator360.OneTimeScreens;
 
+import static com.hammad.locator360.Util.Constants.NULL;
 import static com.hammad.locator360.Util.Constants.REQUEST_CODE_CAMERA;
 import static com.hammad.locator360.Util.Constants.REQUEST_CODE_STORAGE;
 
 import android.app.Activity;
 import android.content.ContentResolver;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
-import android.graphics.Color;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.view.View;
 import android.webkit.MimeTypeMap;
 import android.widget.Toast;
@@ -26,10 +30,15 @@ import androidx.core.content.FileProvider;
 import com.bumptech.glide.Glide;
 import com.hammad.locator360.Permission.Permissions;
 import com.hammad.locator360.R;
+import com.hammad.locator360.SharedPreference.SharedPreference;
 import com.hammad.locator360.databinding.ActivityAddProfilePictureBinding;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -38,7 +47,7 @@ public class AddProfilePictureActivity extends AppCompatActivity {
     private ActivityAddProfilePictureBinding binding;
 
     // saving the current path of image
-    private String currentPicturePath = "";
+    private static String currentPicturePath = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,8 +61,11 @@ public class AddProfilePictureActivity extends AppCompatActivity {
         //upload picture click listener
         binding.btnUploadImg.setOnClickListener(v -> uploadProfileImage());
 
+        //skip to next activity
+        binding.txtSkip.setOnClickListener(v -> skipProfileImage());
+
         //button continue click listener
-        binding.btnContAddProfilePic.setOnClickListener(v -> Toast.makeText(this, "Clicked", Toast.LENGTH_SHORT).show());
+        binding.btnContAddProfilePic.setOnClickListener(v -> saveImagePathToPref());
     }
 
     private void uploadProfileImage() {
@@ -236,19 +248,60 @@ public class AddProfilePictureActivity extends AppCompatActivity {
         //selecting image from gallery
         if (requestCode == REQUEST_CODE_STORAGE) {
             if (resultCode == Activity.RESULT_OK) {
+                //used for getting the file type
                 Uri contentUri = data.getData();
-
-                String imageFileName = getFileExtension(contentUri);
 
                 currentPicturePath = getPathFromUri(contentUri);
 
                 File file=new File(currentPicturePath);
+
 
                 //Glide library used here to image loading etc smooth & fast
                 Glide
                         .with(this)
                         .load(file)
                         .into(binding.imgProfile);
+
+                float fileSize = (file.length()/1024);
+
+
+
+                Log.i("IMAGE_FILE", "gallery file size: "+ fileSize + " KB");
+                /*Bitmap bitmap = BitmapFactory.decodeFile(currentPicturePath);*/
+               /* Bitmap bitmap1 = Bitmap.createScaledBitmap(bitmap,104,104,false);*/
+
+                File compressedFile = null;
+
+                if(fileSize > 500)
+                {
+                    //Log.i("IMAGE_FILE", "gallery reduced file size: "+ (bitmapToFile(this,bitmap,"hammad_profile",(int) (fileSize/900)).length()/1024));
+                    compressedFile = bitmapToFile(/*bitmap,*/"hammad_profile_1");
+                    //Log.i("IMAGE_FILE", "gallery reduced file size: "+(getBitmapFromPath(currentPicturePath, (int) (fileSize/900)).length()/1024));
+                }
+
+                if(compressedFile != null){
+                    Log.i("IMAGE_FILE", "gallery reduced file size: "+ compressedFile.length()/1024 + " KB");
+                    Glide
+                            .with(this)
+                            .load(compressedFile)
+                            .into(binding.imgProfile);
+
+                    compressedFile = null;
+                }
+
+
+
+                /*(getBitmapFromPath(currentPicturePath, (int) (fileSize/900)).length()/1024)*/
+
+
+
+                //Log.i("IMAGE_FILE", "gallery reduced file size: "+(getBitmapFromPath(currentPicturePath, (int) (fileSize/900),file).length()/1024));
+
+                /*while (fileSize > 900)
+                {
+                    ByteArrayOutputStream bos = new ByteArrayOutputStream(currentPicturePath);
+
+                }*/
 
                 //setting the CONTINUE status (enabled/disabled)
                 continueButtonStatus();
@@ -262,10 +315,74 @@ public class AddProfilePictureActivity extends AppCompatActivity {
             binding.btnContAddProfilePic.setBackgroundResource(R.drawable.white_rounded_button);
             binding.btnContAddProfilePic.setTextColor(getResources().getColor(R.color.orange));
         }
-        /*else {
-            binding.btnContAddProfilePic.setEnabled(false);
-            binding.btnContAddProfilePic.setBackgroundResource(R.drawable.disabled_round_button);
-            binding.btnContAddProfilePic.setTextColor(Color.TRANSPARENT);
-        }*/
+
     }
+
+    private void skipProfileImage(){
+
+        //setting the null value in image path preference
+        SharedPreference.setImagePath(NULL);
+
+        //navigating to next activity
+        startActivity(new Intent(this,RequestPermissionActivity.class));
+    }
+
+    private void saveImagePathToPref(){
+
+        //saving the selected image path to preference
+        SharedPreference.setImagePath(currentPicturePath);
+
+        //navigating to next activity
+        startActivity(new Intent(this,RequestPermissionActivity.class));
+    }
+
+    public static File bitmapToFile(/*Bitmap bitmap, */String fileNameToSave) { // File name like "image.png"
+        //create a file to write bitmap data
+        File file = null;
+        try {
+            file = new File(Environment.getExternalStorageDirectory() + File.separator + fileNameToSave);
+            file.createNewFile();
+
+//Convert bitmap to byte array
+            ByteArrayOutputStream bos = new ByteArrayOutputStream();
+            Bitmap bitmap = BitmapFactory.decodeFile(currentPicturePath);
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 50 , bos); // YOU can also save it in JPEG
+            byte[] bitmapdata = bos.toByteArray();
+
+//write the bytes in file
+            FileOutputStream fos = new FileOutputStream(file);
+            fos.write(bitmapdata);
+            fos.flush();
+            fos.close();
+            return file;
+        }catch (Exception e){
+            e.printStackTrace();
+            return file; // it will return null
+        }
+    }
+
+    public File getBitmapFromPath(String filePath, int compressionRatio) {
+
+        File compressedFile = new File(filePath);
+        OutputStream fos ;
+
+        try {
+            fos = new FileOutputStream(compressedFile);
+            Bitmap bitmap= BitmapFactory.decodeFile(filePath);
+            bitmap.compress(Bitmap.CompressFormat.JPEG, compressionRatio, fos);
+            fos.flush();
+            fos.close();
+
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+            Log.i("IMAGE_FILE", "file not found: "+e.getMessage());
+        } catch (IOException e) {
+            e.printStackTrace();
+            Log.i("IMAGE_FILE", "IO exception "+e.getMessage());
+        }
+
+
+        return compressedFile;
+    }
+
 }

@@ -9,6 +9,7 @@ public class Constants {
     public static final String LAST_NAME = "lastName";
     public static final String EMAIL = "email";
     public static final String PASSWORD = "password";
+    public static final String IMAGE_PATH = "imagePath";
 
     public static final String NULL = "null";
 
@@ -17,5 +18,6 @@ public class Constants {
     /*public static final int REQUEST_CODE_COARSE_LOCATION = 3;*/
     public static final int REQUEST_CODE_STORAGE = 3;
     /*public static final int REQUEST_CODE_WRITE_STORAGE = 5;*/
+    public static final int REQUEST_CODE_BACKGROUND_LOCATION = 4;
 
 }

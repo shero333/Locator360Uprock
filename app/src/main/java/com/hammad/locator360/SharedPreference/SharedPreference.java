@@ -2,6 +2,7 @@ package com.hammad.locator360.SharedPreference;
 
 import static com.hammad.locator360.Util.Constants.EMAIL;
 import static com.hammad.locator360.Util.Constants.FIRST_NAME;
+import static com.hammad.locator360.Util.Constants.IMAGE_PATH;
 import static com.hammad.locator360.Util.Constants.LAST_NAME;
 import static com.hammad.locator360.Util.Constants.NULL;
 import static com.hammad.locator360.Util.Constants.PASSWORD;
@@ -54,5 +55,13 @@ public class SharedPreference {
 
     public static String getPasswordPref(){
         return sharedPreference.getString(PASSWORD,NULL);
+    }
+
+    public static void setImagePath(String imagePath){
+        sharedPreference.edit().putString(IMAGE_PATH,imagePath).apply();
+    }
+
+    public static String getImagePath(){
+        return sharedPreference.getString(IMAGE_PATH,NULL);
     }
 }
