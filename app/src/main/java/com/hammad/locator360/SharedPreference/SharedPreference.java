@@ -12,13 +12,14 @@ import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
 import com.hammad.locator360.Application.App;
+import com.hammad.locator360.Util.Constants;
 
 public class SharedPreference {
 
     private static SharedPreferences sharedPreference = PreferenceManager.getDefaultSharedPreferences(App.getAppContext());
 
     public static void setPhoneNoPref(String phoneNo) {
-        sharedPreference.edit().putString(PHONE_NO, phoneNo).apply();
+        sharedPreference.edit().putString(Constants.PHONE_NO, phoneNo).apply();
     }
 
     public static String getPhoneNoPref(){
@@ -26,7 +27,7 @@ public class SharedPreference {
     }
 
     public static void setFirstNamePref(String firstName){
-        sharedPreference.edit().putString(FIRST_NAME,firstName).apply();
+        sharedPreference.edit().putString(Constants.FIRST_NAME,firstName).apply();
     }
 
     public static String getFirstNamePref(){
@@ -34,7 +35,7 @@ public class SharedPreference {
     }
 
     public static void setLastNamePref(String lastName){
-        sharedPreference.edit().putString(LAST_NAME,lastName).apply();
+        sharedPreference.edit().putString(Constants.LAST_NAME,lastName).apply();
     }
 
     public static String getLastNamePref(){
@@ -42,7 +43,7 @@ public class SharedPreference {
     }
 
     public static void setEmailPref(String email){
-        sharedPreference.edit().putString(EMAIL,email).apply();
+        sharedPreference.edit().putString(Constants.EMAIL,email).apply();
     }
 
     public static String getEmailPref(){
@@ -50,7 +51,7 @@ public class SharedPreference {
     }
 
     public static void setPasswordPref(String password){
-        sharedPreference.edit().putString(PASSWORD,password).apply();
+        sharedPreference.edit().putString(Constants.PASSWORD,password).apply();
     }
 
     public static String getPasswordPref(){
@@ -58,7 +59,7 @@ public class SharedPreference {
     }
 
     public static void setImagePath(String imagePath){
-        sharedPreference.edit().putString(IMAGE_PATH,imagePath).apply();
+        sharedPreference.edit().putString(Constants.IMAGE_PATH,imagePath).apply();
     }
 
     public static String getImagePath(){

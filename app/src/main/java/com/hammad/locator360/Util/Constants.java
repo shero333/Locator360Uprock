@@ -1,23 +1,23 @@
 package com.hammad.locator360.Util;
 
-public class Constants {
+public interface Constants {
 
-    public static final String USERS = "users";
+     String USERS = "users";
 
-    public static final String PHONE_NO = "phoneNo";
-    public static final String FIRST_NAME = "firstName";
-    public static final String LAST_NAME = "lastName";
-    public static final String EMAIL = "email";
-    public static final String PASSWORD = "password";
-    public static final String IMAGE_PATH = "imagePath";
+     String PHONE_NO = "phoneNo";
+     String FIRST_NAME = "firstName";
+     String LAST_NAME = "lastName";
+     String EMAIL = "email";
+     String PASSWORD = "password";
+     String IMAGE_PATH = "imagePath";
 
-    public static final String NULL = "null";
+     String NULL = "null";
 
-    public static final int REQUEST_CODE_CAMERA = 1;
-    public static final int REQUEST_CODE_FINE_LOCATION = 2;
-    /*public static final int REQUEST_CODE_COARSE_LOCATION = 3;*/
-    public static final int REQUEST_CODE_STORAGE = 3;
-    /*public static final int REQUEST_CODE_WRITE_STORAGE = 5;*/
-    public static final int REQUEST_CODE_BACKGROUND_LOCATION = 4;
+     int REQUEST_CODE_CAMERA = 1;
+     int REQUEST_CODE_FINE_LOCATION = 2;
+    /* int REQUEST_CODE_COARSE_LOCATION = 3;*/
+     int REQUEST_CODE_STORAGE = 3;
+    /* int REQUEST_CODE_WRITE_STORAGE = 5;*/
+     int REQUEST_CODE_BACKGROUND_LOCATION = 4;
 
 }
