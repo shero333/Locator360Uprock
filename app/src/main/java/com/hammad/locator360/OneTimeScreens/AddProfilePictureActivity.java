@@ -44,7 +44,6 @@ public class AddProfilePictureActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-
         //initialize view binding
         binding = ActivityAddProfilePictureBinding.inflate(getLayoutInflater());
         View view = binding.getRoot();

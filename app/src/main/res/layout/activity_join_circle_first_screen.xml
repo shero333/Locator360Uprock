@@ -23,7 +23,7 @@
             android:textStyle="bold"
             android:textSize="@dimen/_14ssp"
             android:gravity="center"
-            android:textColor="@color/black"
+            android:textColor="?android:attr/textColorPrimary"
             app:layout_constraintVertical_bias="0.12"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"

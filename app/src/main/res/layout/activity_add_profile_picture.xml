@@ -38,15 +38,15 @@
         android:id="@+id/img_profile_background_layer"
         android:layout_width="0dp"
         android:layout_height="@dimen/_100sdp"
-        android:scaleType="fitXY"
-        app:srcCompat="@drawable/ic_launcher_background"
+        app:layout_constraintWidth_percent="0.8"
+        android:scaleType="center"
+        app:srcCompat="@drawable/add_profile_screen_background_placeholder"
         app:round="@dimen/_10sdp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.364"
-        app:layout_constraintWidth_percent="0.8" />
+        app:layout_constraintVertical_bias="0.364" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="0dp"
@@ -63,7 +63,7 @@
         android:id="@+id/img_profile"
         android:layout_width="@dimen/_80sdp"
         android:layout_height="@dimen/_80sdp"
-        android:src="@drawable/ic_launcher_background"
+        android:src="@drawable/add_profile_img_placeholder"
         android:scaleType="fitXY"
         app:layout_constraintStart_toStartOf="@id/img_profile_background_layer"
         app:layout_constraintEnd_toEndOf="@id/img_profile_background_layer"

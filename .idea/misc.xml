@@ -22,12 +22,13 @@
         <entry key="..\:/Hammad/Locator360/app/src/main/res/drawable/white_rounded_button.xml" value="0.155" />
         <entry key="..\:/Hammad/Locator360/app/src/main/res/layout/activity_add_group_icon.xml" value="0.2" />
         <entry key="..\:/Hammad/Locator360/app/src/main/res/layout/activity_add_profile_picture.xml" value="0.18" />
+        <entry key="..\:/Hammad/Locator360/app/src/main/res/layout/activity_create_circle.xml" value="0.18" />
         <entry key="..\:/Hammad/Locator360/app/src/main/res/layout/activity_create_password.xml" value="0.2" />
         <entry key="..\:/Hammad/Locator360/app/src/main/res/layout/activity_email_sign_in.xml" value="0.18" />
-        <entry key="..\:/Hammad/Locator360/app/src/main/res/layout/activity_email_sign_up.xml" value="0.2046875" />
+        <entry key="..\:/Hammad/Locator360/app/src/main/res/layout/activity_email_sign_up.xml" value="0.18" />
         <entry key="..\:/Hammad/Locator360/app/src/main/res/layout/activity_enter_password_sign_in.xml" value="0.16" />
         <entry key="..\:/Hammad/Locator360/app/src/main/res/layout/activity_forget_password.xml" value="0.2046875" />
-        <entry key="..\:/Hammad/Locator360/app/src/main/res/layout/activity_general_screen_one.xml" value="0.18" />
+        <entry key="..\:/Hammad/Locator360/app/src/main/res/layout/activity_general_screen_one.xml" value="0.2" />
         <entry key="..\:/Hammad/Locator360/app/src/main/res/layout/activity_general_screen_two.xml" value="0.18" />
         <entry key="..\:/Hammad/Locator360/app/src/main/res/layout/activity_join_circle_first_screen.xml" value="0.18" />
         <entry key="..\:/Hammad/Locator360/app/src/main/res/layout/activity_join_group.xml" value="0.18" />
@@ -36,8 +37,8 @@
         <entry key="..\:/Hammad/Locator360/app/src/main/res/layout/activity_password_sign_in.xml" value="0.2046875" />
         <entry key="..\:/Hammad/Locator360/app/src/main/res/layout/activity_phone_no_sign_in.xml" value="0.194140625" />
         <entry key="..\:/Hammad/Locator360/app/src/main/res/layout/activity_phone_no_sign_up.xml" value="0.2" />
-        <entry key="..\:/Hammad/Locator360/app/src/main/res/layout/activity_request_permission.xml" value="0.18" />
-        <entry key="..\:/Hammad/Locator360/app/src/main/res/layout/activity_start_screen.xml" value="0.2046875" />
+        <entry key="..\:/Hammad/Locator360/app/src/main/res/layout/activity_request_permission.xml" value="0.2" />
+        <entry key="..\:/Hammad/Locator360/app/src/main/res/layout/activity_start_screen.xml" value="0.18" />
         <entry key="..\:/Hammad/Locator360/app/src/main/res/layout/activity_welcome_screen.xml" value="0.2046875" />
         <entry key="..\:/Hammad/Locator360/app/src/main/res/layout/layout_pin_item.xml" value="0.2" />
         <entry key="..\:/Hammad/Locator360/app/src/main/res/layout/sample.xml" value="0.2046875" />

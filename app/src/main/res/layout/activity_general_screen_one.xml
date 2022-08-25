@@ -35,6 +35,18 @@
         app:layout_constraintStart_toStartOf="@id/btn_cont_screen_one"
         app:layout_constraintEnd_toEndOf="@id/btn_cont_screen_one"/>
 
+    <ImageView
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintWidth_percent="0.8"
+        app:layout_constraintHeight_percent="0.4"
+        app:layout_constraintVertical_bias="0.5"
+        android:src="@drawable/general_screen_one_img"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/txt_title_screen_one"
+        app:layout_constraintBottom_toTopOf="@id/txt_footer_screen_one"/>
+
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btn_cont_screen_one"
         android:layout_width="0dp"
