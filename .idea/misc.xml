@@ -4,12 +4,15 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="..\:/Hammad/Locator360/app/src/main/res/drawable/circle_drawable_white_with_orange_stroke.xml" value="0.155" />
+        <entry key="..\:/Hammad/Locator360/app/src/main/res/drawable/circle_name_drawable.xml" value="0.154" />
+        <entry key="..\:/Hammad/Locator360/app/src/main/res/drawable/circle_name_drawable_round.xml" value="0.154" />
         <entry key="..\:/Hammad/Locator360/app/src/main/res/drawable/disabled_round_button.xml" value="0.155" />
         <entry key="..\:/Hammad/Locator360/app/src/main/res/drawable/dotted_line.xml" value="0.22" />
         <entry key="..\:/Hammad/Locator360/app/src/main/res/drawable/drawable_circle_iamge.xml" value="0.1535" />
         <entry key="..\:/Hammad/Locator360/app/src/main/res/drawable/drawable_no_pin.xml" value="0.1535" />
         <entry key="..\:/Hammad/Locator360/app/src/main/res/drawable/drawable_pin.xml" value="0.1655" />
         <entry key="..\:/Hammad/Locator360/app/src/main/res/drawable/drawable_pin_entered.xml" value="0.1535" />
+        <entry key="..\:/Hammad/Locator360/app/src/main/res/drawable/drawable_rectangle_black.xml" value="0.154" />
         <entry key="..\:/Hammad/Locator360/app/src/main/res/drawable/drawable_square_button.xml" value="0.1535" />
         <entry key="..\:/Hammad/Locator360/app/src/main/res/drawable/orange_border_pin.xml" value="0.1655" />
         <entry key="..\:/Hammad/Locator360/app/src/main/res/drawable/orange_rounded_button.xml" value="0.155" />
@@ -38,6 +41,7 @@
         <entry key="..\:/Hammad/Locator360/app/src/main/res/layout/activity_phone_no_sign_in.xml" value="0.194140625" />
         <entry key="..\:/Hammad/Locator360/app/src/main/res/layout/activity_phone_no_sign_up.xml" value="0.2" />
         <entry key="..\:/Hammad/Locator360/app/src/main/res/layout/activity_request_permission.xml" value="0.2" />
+        <entry key="..\:/Hammad/Locator360/app/src/main/res/layout/activity_share_circle_code.xml" value="0.18" />
         <entry key="..\:/Hammad/Locator360/app/src/main/res/layout/activity_start_screen.xml" value="0.18" />
         <entry key="..\:/Hammad/Locator360/app/src/main/res/layout/activity_welcome_screen.xml" value="0.2046875" />
         <entry key="..\:/Hammad/Locator360/app/src/main/res/layout/layout_pin_item.xml" value="0.2" />

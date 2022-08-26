@@ -1,4 +1,4 @@
-package com.hammad.locator360;
+package com.hammad.locator360.StartScreen;
 
 import static com.hammad.locator360.Util.Constants.USERS;
 

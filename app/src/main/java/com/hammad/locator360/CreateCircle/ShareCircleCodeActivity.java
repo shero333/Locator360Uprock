@@ -1,4 +1,4 @@
-package com.hammad.locator360.OneTimeScreens;
+package com.hammad.locator360.CreateCircle;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -10,29 +10,26 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.hammad.locator360.CreateCircle.CreateCircleActivity;
+import com.hammad.locator360.OneTimeScreens.AddProfilePictureActivity;
 import com.hammad.locator360.R;
-import com.hammad.locator360.databinding.ActivityJoinCircleFirstScreenBinding;
+import com.hammad.locator360.databinding.ActivityShareCircleCodeBinding;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class JoinCircleFirstScreenActivity extends AppCompatActivity {
+public class ShareCircleCodeActivity extends AppCompatActivity {
 
-    private ActivityJoinCircleFirstScreenBinding binding;
+    private ActivityShareCircleCodeBinding binding;
 
     //List of all edit texts (6 here)
     List<EditText> editTextList = new ArrayList<>();
-
-    //variable for saving the entered code
-    private String enteredInviteCode;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        //initialize binding
-        binding = ActivityJoinCircleFirstScreenBinding.inflate(getLayoutInflater());
+        //initializing binding
+        binding = ActivityShareCircleCodeBinding.inflate(getLayoutInflater());
         View view = binding.getRoot();
         setContentView(view);
 
@@ -42,24 +39,26 @@ public class JoinCircleFirstScreenActivity extends AppCompatActivity {
         //populating the edit texts as invite code view
         populateInviteCodeView();
 
-        binding.btnSubmit.setOnClickListener(v -> buttonSubmitClickListener());
+        //button share code click listener
+        binding.btnShareCode.setOnClickListener(v -> Toast.makeText(this, "Share Code", Toast.LENGTH_SHORT).show());
 
-        binding.btnCreateCircle.setOnClickListener(v -> startActivity(new Intent(this, CreateCircleActivity.class)));
+        //text close click listener
+        binding.txtClose.setOnClickListener(v -> startActivity(new Intent(this, AddProfilePictureActivity.class)));
     }
 
     private void addEditTextViews(){
-        editTextList.add(binding.edtInput1);
-        editTextList.add(binding.edtInput2);
-        editTextList.add(binding.edtInput3);
-        editTextList.add(binding.edtInput4);
-        editTextList.add(binding.edtInput5);
-        editTextList.add(binding.edtInput6);
+        editTextList.add(binding.edtInputCircle1);
+        editTextList.add(binding.edtInputCircle2);
+        editTextList.add(binding.edtInputCircle3);
+        editTextList.add(binding.edtInputCircle4);
+        editTextList.add(binding.edtInputCircle5);
+        editTextList.add(binding.edtInputCircle6);
     }
 
     private void populateInviteCodeView(){
 
         //requesting the focus at 1st edit text (as default)
-        binding.edtInput1.requestFocus();
+        binding.edtInputCircle1.requestFocus();
 
         for (int j = 0; j < 6; j++)
         {
@@ -104,6 +103,25 @@ public class JoinCircleFirstScreenActivity extends AppCompatActivity {
         }
     }
 
+    //checking the status (enabled/disabled) of submit button
+    private void submitButtonStatus(){
+
+        //checking if all Edit texts length are equal to 1
+        if(isEditTextLengthZero(binding.edtInputCircle1) && isEditTextLengthZero(binding.edtInputCircle2) &&
+                isEditTextLengthZero(binding.edtInputCircle3) && isEditTextLengthZero(binding.edtInputCircle4) &&
+                isEditTextLengthZero(binding.edtInputCircle5) && isEditTextLengthZero(binding.edtInputCircle6))
+        {
+            //setting the submit button to enabled
+            binding.btnShareCode.setEnabled(true);
+            binding.btnShareCode.setBackgroundResource(R.drawable.white_rounded_button);
+        }
+        else{
+            //setting the submit button to disabled
+            binding.btnShareCode.setEnabled(false);
+            binding.btnShareCode.setBackgroundResource(R.drawable.disabled_round_button);
+        }
+    }
+
     private boolean isEditTextLengthZero(EditText editText){
 
         if(editText.getText().toString().trim().length() == 1){
@@ -112,40 +130,5 @@ public class JoinCircleFirstScreenActivity extends AppCompatActivity {
         else {
             return false;
         }
-    }
-
-    //checking the status (enabled/disabled) of submit button
-    private void submitButtonStatus(){
-
-        //checking if all Edit texts length are equal to 1
-        if(isEditTextLengthZero(binding.edtInput1) && isEditTextLengthZero(binding.edtInput2) &&
-                isEditTextLengthZero(binding.edtInput3) && isEditTextLengthZero(binding.edtInput4) &&
-                isEditTextLengthZero(binding.edtInput5) && isEditTextLengthZero(binding.edtInput6))
-        {
-            //setting the submit button to enabled
-            binding.btnSubmit.setEnabled(true);
-            binding.btnSubmit.setBackgroundResource(R.drawable.orange_rounded_button);
-        }
-        else{
-            //setting the submit button to disabled
-            binding.btnSubmit.setEnabled(false);
-            binding.btnSubmit.setBackgroundResource(R.drawable.disabled_round_button);
-        }
-    }
-
-    private void buttonSubmitClickListener(){
-        enteredInviteCode = getEditTextData(binding.edtInput1).concat(getEditTextData(binding.edtInput2))
-                            .concat(getEditTextData(binding.edtInput3).concat(getEditTextData(binding.edtInput4)
-                            .concat(getEditTextData(binding.edtInput5).concat(getEditTextData(binding.edtInput6)))));
-
-        Toast.makeText(this, enteredInviteCode, Toast.LENGTH_SHORT).show();
-
-        //navigating to next activity
-        startActivity(new Intent(this,JoinGroupActivity.class));
-    }
-
-    //function for returning the edit text values
-    private String getEditTextData(EditText editText){
-        return editText.getText().toString().trim();
     }
 }

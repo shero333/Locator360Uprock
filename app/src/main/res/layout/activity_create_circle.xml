@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".CreateCircleActivity"
+    tools:context=".CreateCircle.CreateCircleActivity"
     android:background="@color/orange">
 
     <TextView
@@ -19,5 +19,52 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"/>
+
+    <EditText
+        android:id="@+id/edt_txt_circle_name"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintWidth_percent="0.8"
+        android:background="@drawable/drawable_square_button"
+        android:textSize="@dimen/_14ssp"
+        android:inputType="text"
+        android:imeOptions="actionDone"
+        android:cursorVisible="true"
+        android:textCursorDrawable="@color/orange"
+        android:padding="@dimen/_10sdp"
+        android:paddingStart="@dimen/_15sdp"
+        android:hint="Enter circle name"
+        android:textColor="@color/orange"
+        android:layout_marginTop="@dimen/_50sdp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/txt_header_create_circle"/>
+    
+    <TextView
+        android:id="@+id/txt_footer_create_circle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="You can create Circle for every group."
+        android:textColor="@color/white_with_opacity"
+        android:textSize="@dimen/_12ssp"
+        android:layout_marginBottom="@dimen/_15sdp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/btn_cont_create_circle"/>
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btn_cont_create_circle"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintWidth_percent="0.8"
+        android:background="@drawable/disabled_round_button"
+        android:text="Continue"
+        android:enabled="false"
+        android:textColor="@color/orange"
+        app:layout_constraintVertical_bias="0.8"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

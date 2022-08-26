@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".CreateCircle.ShareCircleCodeActivity"
+    android:background="@color/orange">
+
+    <TextView
+        android:id="@+id/txt_header_share_circle_code"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Share this Invite code with\nyour Family"
+        android:textSize="@dimen/_16ssp"
+        android:textColor="@color/white"
+        android:textStyle="bold"
+        android:textAlignment="center"
+        app:layout_constraintVertical_bias="0.1"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"/>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="0dp"
+        android:layout_height="@dimen/_150sdp"
+        app:layout_constraintWidth_percent="0.85"
+        android:background="@drawable/circle_name_drawable_round"
+        app:layout_constraintVertical_bias="0.2"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/txt_header_share_circle_code"
+        app:layout_constraintBottom_toBottomOf="@id/txt_footer_screen_one">
+
+        <androidx.constraintlayout.helper.widget.Flow
+            android:id="@+id/flow_pin_view_share_circle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/_5sdp"
+            app:layout_constraintVertical_bias="0.3"
+            app:constraint_referenced_ids="edt_input_circle_1,edt_input_circle_2,edt_input_circle_3,txt_dash,edt_input_circle_4,edt_input_circle_5,edt_input_circle_6"
+            app:flow_horizontalGap="@dimen/_10sdp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"/>
+
+        <EditText
+            android:id="@+id/edt_input_circle_1"
+            android:layout_width="@dimen/_30sdp"
+            android:layout_height="@dimen/_50sdp"
+            android:cursorVisible="true"
+            android:textSize="@dimen/_14ssp"
+            android:textColor="@color/orange"
+            android:textStyle="bold"
+            android:inputType="textCapCharacters"
+            android:padding="@dimen/_5sdp"
+            android:maxLength="1"
+            android:gravity="center"
+            android:background="@drawable/pin_view_state_list"/>
+
+        <EditText
+            android:id="@+id/edt_input_circle_2"
+            android:layout_width="@dimen/_30sdp"
+            android:layout_height="@dimen/_50sdp"
+            android:cursorVisible="true"
+            android:textSize="@dimen/_14ssp"
+            android:textColor="@color/orange"
+            android:textStyle="bold"
+            android:inputType="textCapCharacters"
+            android:padding="@dimen/_5sdp"
+            android:maxLength="1"
+            android:gravity="center"
+            android:background="@drawable/pin_view_state_list"/>
+
+        <EditText
+            android:id="@+id/edt_input_circle_3"
+            android:layout_width="@dimen/_30sdp"
+            android:layout_height="@dimen/_50sdp"
+            android:cursorVisible="true"
+            android:textSize="@dimen/_14ssp"
+            android:textColor="@color/orange"
+            android:textStyle="bold"
+            android:inputType="textCapCharacters"
+            android:padding="@dimen/_5sdp"
+            android:maxLength="1"
+            android:gravity="center"
+            android:background="@drawable/pin_view_state_list"/>
+
+        <TextView
+            android:id="@+id/txt_dash"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:textSize="@dimen/_22ssp"
+            android:text="-"
+            android:textStyle="bold"/>
+
+        <EditText
+            android:id="@+id/edt_input_circle_4"
+            android:layout_width="@dimen/_30sdp"
+            android:layout_height="@dimen/_50sdp"
+            android:cursorVisible="true"
+            android:textSize="@dimen/_14ssp"
+            android:textColor="@color/orange"
+            android:textStyle="bold"
+            android:inputType="textCapCharacters"
+            android:padding="@dimen/_5sdp"
+            android:maxLength="1"
+            android:gravity="center"
+            android:background="@drawable/pin_view_state_list"/>
+
+        <EditText
+            android:id="@+id/edt_input_circle_5"
+            android:layout_width="@dimen/_30sdp"
+            android:layout_height="@dimen/_50sdp"
+            android:cursorVisible="true"
+            android:textSize="@dimen/_14ssp"
+            android:textColor="@color/orange"
+            android:textStyle="bold"
+            android:inputType="textCapCharacters"
+            android:padding="@dimen/_5sdp"
+            android:maxLength="1"
+            android:gravity="center"
+            android:background="@drawable/pin_view_state_list"/>
+
+        <EditText
+            android:id="@+id/edt_input_circle_6"
+            android:layout_width="@dimen/_30sdp"
+            android:layout_height="@dimen/_50sdp"
+            android:cursorVisible="true"
+            android:textSize="@dimen/_14ssp"
+            android:textColor="@color/orange"
+            android:textStyle="bold"
+            android:inputType="textCapCharacters"
+            android:padding="@dimen/_5sdp"
+            android:maxLength="1"
+            android:gravity="center"
+            android:background="@drawable/pin_view_state_list"/>
+
+        <TextView
+            android:id="@+id/txt_footer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="This code will be active for 3 days"
+            android:textSize="@dimen/_12ssp"
+            android:textColor="@color/black"
+            android:layout_marginTop="@dimen/_15sdp"
+            app:layout_constraintStart_toStartOf="@id/flow_pin_view_share_circle"
+            app:layout_constraintEnd_toEndOf="@id/flow_pin_view_share_circle"
+            app:layout_constraintTop_toBottomOf="@id/flow_pin_view_share_circle" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <TextView
+        android:id="@+id/txt_footer_screen_one"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintWidth_percent="0.7"
+        android:text="Location sharing is possible only with mutual consent of all family members."
+        android:gravity="center"
+        android:textSize="@dimen/_12ssp"
+        android:textColor="@color/white_with_opacity"
+        android:layout_marginBottom="@dimen/_15sdp"
+        app:layout_constraintBottom_toTopOf="@id/btn_share_code"
+        app:layout_constraintStart_toStartOf="@id/btn_share_code"
+        app:layout_constraintEnd_toEndOf="@id/btn_share_code"/>
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btn_share_code"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintWidth_percent="0.8"
+        android:text="Share code"
+        android:enabled="false"
+        android:textColor="@color/orange"
+        android:background="@drawable/disabled_round_button"
+        app:layout_constraintVertical_bias="0.8"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"/>
+
+    <TextView
+        android:id="@+id/txt_close"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Close"
+        android:textColor="@color/white"
+        android:textSize="@dimen/_12ssp"
+        android:textStyle="bold"
+        android:padding="@dimen/_10sdp"
+        android:layout_marginTop="@dimen/_10sdp"
+        app:layout_constraintStart_toStartOf="@id/btn_share_code"
+        app:layout_constraintEnd_toEndOf="@id/btn_share_code"
+        app:layout_constraintTop_toBottomOf="@id/btn_share_code"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
