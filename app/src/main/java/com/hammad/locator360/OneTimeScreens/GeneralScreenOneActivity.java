@@ -2,6 +2,7 @@ package com.hammad.locator360.OneTimeScreens;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 
@@ -19,5 +20,8 @@ public class GeneralScreenOneActivity extends AppCompatActivity {
         binding = ActivityGeneralScreenOneBinding.inflate(getLayoutInflater());
         View view = binding.getRoot();
         setContentView(view);
+
+        //button continue click listener
+        binding.btnContScreenOne.setOnClickListener(v -> startActivity(new Intent(this,GeneralScreenTwoActivity.class)));
     }
 }

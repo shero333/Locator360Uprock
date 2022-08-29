@@ -47,7 +47,7 @@ public class EnterPasswordSignInActivity extends AppCompatActivity {
         binding.btnContPhoneSignIn.setOnClickListener(v -> buttonClickListener());
 
         //forget password
-        binding.txtForgetPassword.setOnClickListener(v -> startActivity(new Intent(this,ForgetPasswordActivity.class)));
+        binding.txtForgetPassword.setOnClickListener(v -> startActivity(new Intent(this, ResetPasswordActivity.class)));
 
         //if the first name retrieved against phone number is incorrect, then moves onto the account verification activity
         binding.txtUsername.setOnClickListener(v -> Toast.makeText(this, "Verifying Account Details", Toast.LENGTH_SHORT).show());

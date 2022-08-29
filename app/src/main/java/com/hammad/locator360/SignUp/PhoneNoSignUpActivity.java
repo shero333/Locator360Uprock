@@ -28,7 +28,7 @@ public class PhoneNoSignUpActivity extends AppCompatActivity {
 
     private ActivityPhoneNoSignUpBinding binding;
 
-    private String privacyPolicyText="By signing up you accept our terms of service\n and privacy policy";
+    private String privacyPolicyText=getString(R.string.privacy_policy_phone_sign_up);
 
     private String countryCode;
 
