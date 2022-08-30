@@ -50,4 +50,12 @@
     <string name="title_screen_two">Hello Jon! Join your\ncircle and group now</string>
     <string name="title_reset_password">Reset password</string>
     <string name="next">Next</string>
+    <string name="sub_title_reset_password">Enter the phone number associated\nwith your account and we\'ll send an\nOTP to reset your password</string>
+    <string name="title_otp">Code Verification</string>
+    <string name="sub_title_otp">We have sent an OTP to\n</string>
+    <string name="title_create_new_pass">Create new password</string>
+    <string name="sub_title_create_new_pass">Your new password must be different\nfrom previous used passwords.</string>
+    <string name="confirm_password">Confirm Password</string>
+    <string name="password_should_be_at_least_8_characters">Password should be at least 8 characters</string>
+    <string name="reset_password">reset Password</string>
 </resources>

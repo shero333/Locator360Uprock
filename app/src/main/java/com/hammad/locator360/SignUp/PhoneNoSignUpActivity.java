@@ -3,6 +3,7 @@ package com.hammad.locator360.SignUp;
 import android.content.Intent;
 import android.graphics.Color;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.SpannableString;
@@ -15,6 +16,7 @@ import android.util.Log;
 import android.view.View;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.i18n.phonenumbers.NumberParseException;
@@ -28,13 +30,14 @@ public class PhoneNoSignUpActivity extends AppCompatActivity {
 
     private ActivityPhoneNoSignUpBinding binding;
 
-    private String privacyPolicyText=getString(R.string.privacy_policy_phone_sign_up);
+    private String privacyPolicyText;
 
     private String countryCode;
 
     //variables for for verifying whether entered number is valid or not
     private PhoneNumberUtil.PhoneNumberType isMobile = null;
     private boolean isPhoneNoValid = false;
+    
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,6 +47,9 @@ public class PhoneNoSignUpActivity extends AppCompatActivity {
         binding = ActivityPhoneNoSignUpBinding.inflate(getLayoutInflater());
         View view=binding.getRoot();
         setContentView(view);
+
+        //getting the privacy policy text from string resource
+        privacyPolicyText=getString(R.string.privacy_policy_phone_sign_up);
 
         //picks the default and new selected country code
         pickCountryCode();
@@ -55,7 +61,7 @@ public class PhoneNoSignUpActivity extends AppCompatActivity {
         setHyperLink();
 
         binding.btnContPhoneSignUp.setOnClickListener(v -> buttonClickListener());
-
+        Log.i("HELLO_123", "onCreate: "+Color.parseColor(String.valueOf(Color.TRANSPARENT)));
     }
 
     private void pickCountryCode() {
@@ -92,11 +98,11 @@ public class PhoneNoSignUpActivity extends AppCompatActivity {
 
         //for making it clickable
         spannableString.setSpan(clickableSpanTermsOfService,29,45, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-        spannableString.setSpan(clickableSpanPrivacyPolicy,51,65,Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        spannableString.setSpan(clickableSpanPrivacyPolicy,51,66,Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
 
         //for changing the text color to blue
         spannableString.setSpan(fcsTermsOfServices,29,45,Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-        spannableString.setSpan(fcsPrivacyPolicy,51,65,Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        spannableString.setSpan(fcsPrivacyPolicy,51,66,Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
 
         binding.txtPrivacyPolicy.setText(spannableString);
         binding.txtPrivacyPolicy.setMovementMethod(LinkMovementMethod.getInstance());
@@ -157,7 +163,8 @@ public class PhoneNoSignUpActivity extends AppCompatActivity {
             isPhoneNoValid = numberUtil.isValidNumber(phoneNumber);
             isMobile = numberUtil.getNumberType(phoneNumber);
 
-            Log.i("HELLO_123", "international format: "+numberUtil.format(phoneNumber, PhoneNumberUtil.PhoneNumberFormat.NATIONAL));
+            //for formatting the phone number in international format
+            //numberUtil.format(phoneNumber, PhoneNumberUtil.PhoneNumberFormat.NATIONAL);
 
         } catch (NumberParseException e) {
             e.printStackTrace();

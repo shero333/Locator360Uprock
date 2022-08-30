@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="AutoFillHintStyle">
+        <item name="android:autofilledHighlight">@color/white</item>
+    </style>
+</resources>

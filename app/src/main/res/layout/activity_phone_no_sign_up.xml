@@ -41,14 +41,14 @@
         app:ccpDialog_fastScroller_handleColor="@color/orange"
         app:ccp_areaCodeDetectedCountry="true"
         android:layout_marginTop="@dimen/_35sdp"
-        app:layout_constraintHorizontal_bias="0.18"
+        app:layout_constraintHorizontal_bias="0.1"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/txt_1_phone_sign_up"/>
 
     <EditText
         android:id="@+id/edt_phone_sign_up"
-        android:layout_width="@dimen/_150sdp"
+        android:layout_width="@dimen/_180sdp"
         android:layout_height="0dp"
         android:backgroundTint="@color/orange"
         android:hint="@string/enter_number"
@@ -60,6 +60,7 @@
         android:textColorHint="@color/white"
         android:textColor="@color/white"
         android:textSize="@dimen/_14ssp"
+        style="@style/AutoFillHintStyle"
         app:layout_constraintStart_toEndOf="@id/country_code_picker"
         app:layout_constraintTop_toTopOf="@id/country_code_picker"
         app:layout_constraintBottom_toBottomOf="@id/country_code_picker"/>

@@ -22,7 +22,7 @@
         android:id="@+id/txt_title_otp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Code Verification"
+        android:text="@string/title_otp"
         android:textSize="@dimen/_18ssp"
         android:textStyle="bold"
         android:textColor="@color/black"
@@ -35,12 +35,122 @@
         android:id="@+id/txt_sub_title_otp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="We have sent an OTP to"
+        android:text="@string/sub_title_otp"
         android:textColor="@color/darkGrey"
         android:textStyle="bold"
         android:layout_marginTop="@dimen/_10sdp"
         app:layout_constraintTop_toBottomOf="@id/txt_title_otp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"/>
+
+    <androidx.constraintlayout.helper.widget.Flow
+        android:id="@+id/flow_pin_view_otp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/_5sdp"
+        app:flow_horizontalGap="@dimen/_10sdp"
+        android:layout_marginTop="@dimen/_30sdp"
+        app:constraint_referenced_ids="edit_input_1,edit_input_2,edit_input_3,edit_input_4,edit_input_5,edit_input_6"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/txt_sub_title_otp"/>
+
+    <EditText
+        android:id="@+id/edit_input_1"
+        android:layout_width="@dimen/_30sdp"
+        android:layout_height="@dimen/_50sdp"
+        android:background="@drawable/pin_view_state_list"
+        android:cursorVisible="true"
+        android:textSize="@dimen/_14ssp"
+        android:textColor="@color/orange"
+        android:textStyle="bold"
+        android:inputType="number"
+        android:padding="@dimen/_5sdp"
+        android:maxLength="1"
+        android:gravity="center"/>
+
+    <EditText
+        android:id="@+id/edit_input_2"
+        android:layout_width="@dimen/_30sdp"
+        android:layout_height="@dimen/_50sdp"
+        android:background="@drawable/pin_view_state_list"
+        android:cursorVisible="true"
+        android:textSize="@dimen/_14ssp"
+        android:textColor="@color/orange"
+        android:textStyle="bold"
+        android:inputType="number"
+        android:padding="@dimen/_5sdp"
+        android:maxLength="1"
+        android:gravity="center" />
+
+    <EditText
+        android:id="@+id/edit_input_3"
+        android:layout_width="@dimen/_30sdp"
+        android:layout_height="@dimen/_50sdp"
+        android:background="@drawable/pin_view_state_list"
+        android:cursorVisible="true"
+        android:textSize="@dimen/_14ssp"
+        android:textColor="@color/orange"
+        android:textStyle="bold"
+        android:inputType="number"
+        android:padding="@dimen/_5sdp"
+        android:maxLength="1"
+        android:gravity="center"/>
+
+    <EditText
+        android:id="@+id/edit_input_4"
+        android:layout_width="@dimen/_30sdp"
+        android:layout_height="@dimen/_50sdp"
+        android:background="@drawable/pin_view_state_list"
+        android:cursorVisible="true"
+        android:textSize="@dimen/_14ssp"
+        android:textColor="@color/orange"
+        android:textStyle="bold"
+        android:inputType="number"
+        android:padding="@dimen/_5sdp"
+        android:maxLength="1"
+        android:gravity="center"/>
+
+    <EditText
+        android:id="@+id/edit_input_5"
+        android:layout_width="@dimen/_30sdp"
+        android:layout_height="@dimen/_50sdp"
+        android:background="@drawable/pin_view_state_list"
+        android:cursorVisible="true"
+        android:textSize="@dimen/_14ssp"
+        android:textColor="@color/orange"
+        android:textStyle="bold"
+        android:inputType="number"
+        android:padding="@dimen/_5sdp"
+        android:maxLength="1"
+        android:gravity="center"/>
+
+    <EditText
+        android:id="@+id/edit_input_6"
+        android:layout_width="@dimen/_30sdp"
+        android:layout_height="@dimen/_50sdp"
+        android:background="@drawable/pin_view_state_list"
+        android:cursorVisible="true"
+        android:textSize="@dimen/_14ssp"
+        android:textColor="@color/orange"
+        android:textStyle="bold"
+        android:inputType="number"
+        android:padding="@dimen/_5sdp"
+        android:maxLength="1"
+        android:gravity="center"/>
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btn_next_reset_password"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintWidth_percent="0.8"
+        android:background="@drawable/disabled_square_button"
+        android:enabled="false"
+        android:text="Verify OTP"
+        android:textColor="@color/orange"
+        android:layout_marginTop="@dimen/_30sdp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/flow_pin_view_otp"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

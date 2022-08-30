@@ -32,6 +32,7 @@
         <entry key="..\:/Hammad/Locator360/app/src/main/res/layout/activity_add_group_icon.xml" value="0.2" />
         <entry key="..\:/Hammad/Locator360/app/src/main/res/layout/activity_add_profile_picture.xml" value="0.18" />
         <entry key="..\:/Hammad/Locator360/app/src/main/res/layout/activity_create_circle.xml" value="0.18" />
+        <entry key="..\:/Hammad/Locator360/app/src/main/res/layout/activity_create_new_password.xml" value="0.194140625" />
         <entry key="..\:/Hammad/Locator360/app/src/main/res/layout/activity_create_password.xml" value="0.2" />
         <entry key="..\:/Hammad/Locator360/app/src/main/res/layout/activity_email_sign_in.xml" value="0.18" />
         <entry key="..\:/Hammad/Locator360/app/src/main/res/layout/activity_email_sign_up.xml" value="0.18" />
@@ -44,7 +45,7 @@
         <entry key="..\:/Hammad/Locator360/app/src/main/res/layout/activity_join_group.xml" value="0.18" />
         <entry key="..\:/Hammad/Locator360/app/src/main/res/layout/activity_main.xml" value="0.27291666666666664" />
         <entry key="..\:/Hammad/Locator360/app/src/main/res/layout/activity_name_sign_up.xml" value="0.2046875" />
-        <entry key="..\:/Hammad/Locator360/app/src/main/res/layout/activity_otp.xml" value="0.2046875" />
+        <entry key="..\:/Hammad/Locator360/app/src/main/res/layout/activity_otp.xml" value="0.2" />
         <entry key="..\:/Hammad/Locator360/app/src/main/res/layout/activity_password_sign_in.xml" value="0.2046875" />
         <entry key="..\:/Hammad/Locator360/app/src/main/res/layout/activity_phone_no_sign_in.xml" value="0.194140625" />
         <entry key="..\:/Hammad/Locator360/app/src/main/res/layout/activity_phone_no_sign_up.xml" value="0.2" />
@@ -65,5 +66,12 @@
   </component>
   <component name="ProjectType">
     <option name="id" value="Android" />
+  </component>
+  <component name="SuppressABINotification">
+    <option name="modulesWithSuppressedNotConfigured">
+      <set>
+        <option value="Locator_360.app" />
+      </set>
+    </option>
   </component>
 </project>
