@@ -39,105 +39,84 @@
             android:layout_height="wrap_content"
             android:padding="@dimen/_5sdp"
             app:layout_constraintVertical_bias="0.3"
-            app:constraint_referenced_ids="edt_input_circle_1,edt_input_circle_2,edt_input_circle_3,txt_dash,edt_input_circle_4,edt_input_circle_5,edt_input_circle_6"
+            app:constraint_referenced_ids="text_view_circle_1,text_view_circle_2,text_view_circle_3,text_view_circle_4,text_view_circle_5,text_view_circle_6"
             app:flow_horizontalGap="@dimen/_10sdp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"/>
 
-        <EditText
-            android:id="@+id/edt_input_circle_1"
+        <TextView
+            android:id="@+id/text_view_circle_1"
             android:layout_width="@dimen/_30sdp"
             android:layout_height="@dimen/_50sdp"
-            android:cursorVisible="true"
             android:textSize="@dimen/_14ssp"
             android:textColor="@color/orange"
             android:textStyle="bold"
-            android:inputType="textCapCharacters"
             android:padding="@dimen/_5sdp"
             android:maxLength="1"
             android:gravity="center"
-            android:background="@drawable/pin_view_state_list"/>
-
-        <EditText
-            android:id="@+id/edt_input_circle_2"
-            android:layout_width="@dimen/_30sdp"
-            android:layout_height="@dimen/_50sdp"
-            android:cursorVisible="true"
-            android:textSize="@dimen/_14ssp"
-            android:textColor="@color/orange"
-            android:textStyle="bold"
-            android:inputType="textCapCharacters"
-            android:padding="@dimen/_5sdp"
-            android:maxLength="1"
-            android:gravity="center"
-            android:background="@drawable/pin_view_state_list"/>
-
-        <EditText
-            android:id="@+id/edt_input_circle_3"
-            android:layout_width="@dimen/_30sdp"
-            android:layout_height="@dimen/_50sdp"
-            android:cursorVisible="true"
-            android:textSize="@dimen/_14ssp"
-            android:textColor="@color/orange"
-            android:textStyle="bold"
-            android:inputType="textCapCharacters"
-            android:padding="@dimen/_5sdp"
-            android:maxLength="1"
-            android:gravity="center"
-            android:background="@drawable/pin_view_state_list"/>
+            android:background="@drawable/pin_view_orange_outline"/>
 
         <TextView
-            android:id="@+id/txt_dash"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:textSize="@dimen/_22ssp"
-            android:text="-"
-            android:textStyle="bold"/>
-
-        <EditText
-            android:id="@+id/edt_input_circle_4"
+            android:id="@+id/text_view_circle_2"
             android:layout_width="@dimen/_30sdp"
             android:layout_height="@dimen/_50sdp"
-            android:cursorVisible="true"
             android:textSize="@dimen/_14ssp"
             android:textColor="@color/orange"
             android:textStyle="bold"
-            android:inputType="textCapCharacters"
             android:padding="@dimen/_5sdp"
             android:maxLength="1"
             android:gravity="center"
-            android:background="@drawable/pin_view_state_list"/>
+            android:background="@drawable/pin_view_orange_outline"/>
 
-        <EditText
-            android:id="@+id/edt_input_circle_5"
+        <TextView
+            android:id="@+id/text_view_circle_3"
             android:layout_width="@dimen/_30sdp"
             android:layout_height="@dimen/_50sdp"
-            android:cursorVisible="true"
             android:textSize="@dimen/_14ssp"
             android:textColor="@color/orange"
             android:textStyle="bold"
-            android:inputType="textCapCharacters"
             android:padding="@dimen/_5sdp"
             android:maxLength="1"
             android:gravity="center"
-            android:background="@drawable/pin_view_state_list"/>
+            android:background="@drawable/pin_view_orange_outline"/>
 
-        <EditText
-            android:id="@+id/edt_input_circle_6"
+        <TextView
+            android:id="@+id/text_view_circle_4"
             android:layout_width="@dimen/_30sdp"
             android:layout_height="@dimen/_50sdp"
-            android:cursorVisible="true"
             android:textSize="@dimen/_14ssp"
             android:textColor="@color/orange"
             android:textStyle="bold"
-            android:inputType="textCapCharacters"
             android:padding="@dimen/_5sdp"
             android:maxLength="1"
             android:gravity="center"
-            android:background="@drawable/pin_view_state_list"/>
+            android:background="@drawable/pin_view_orange_outline"/>
+
+        <TextView
+            android:id="@+id/text_view_circle_5"
+            android:layout_width="@dimen/_30sdp"
+            android:layout_height="@dimen/_50sdp"
+            android:textSize="@dimen/_14ssp"
+            android:textColor="@color/orange"
+            android:textStyle="bold"
+            android:padding="@dimen/_5sdp"
+            android:maxLength="1"
+            android:gravity="center"
+            android:background="@drawable/pin_view_orange_outline"/>
+
+        <TextView
+            android:id="@+id/text_view_circle_6"
+            android:layout_width="@dimen/_30sdp"
+            android:layout_height="@dimen/_50sdp"
+            android:textSize="@dimen/_14ssp"
+            android:textColor="@color/orange"
+            android:textStyle="bold"
+            android:padding="@dimen/_5sdp"
+            android:maxLength="1"
+            android:gravity="center"
+            android:background="@drawable/pin_view_orange_outline"/>
 
         <TextView
             android:id="@+id/txt_footer"
@@ -150,7 +129,6 @@
             app:layout_constraintStart_toStartOf="@id/flow_pin_view_share_circle"
             app:layout_constraintEnd_toEndOf="@id/flow_pin_view_share_circle"
             app:layout_constraintTop_toBottomOf="@id/flow_pin_view_share_circle" />
-
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -174,9 +152,8 @@
         android:layout_height="wrap_content"
         app:layout_constraintWidth_percent="0.8"
         android:text="@string/share_code"
-        android:enabled="false"
         android:textColor="@color/orange"
-        android:background="@drawable/disabled_round_button"
+        android:background="@drawable/white_rounded_button"
         app:layout_constraintVertical_bias="0.8"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

@@ -14,7 +14,7 @@
         android:textSize="@dimen/_16ssp"
         android:textColor="@color/white"
         android:textStyle="bold"
-        android:text="@string/title_screen_two"
+        android:text="@string/title_screen_two_1"
         android:gravity="center"
         android:layout_marginTop="@dimen/_40sdp"
         app:layout_constraintStart_toStartOf="parent"

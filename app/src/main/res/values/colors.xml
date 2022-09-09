@@ -11,6 +11,7 @@
     <!-- App Colors -->
     <color name="orange">#F96137</color>
     <color name="grey">#E3E1E1</color>
+    <color name="grey_bottom">#E4E4E4</color>
     <color name="light_orange">#66F96137</color>
     <color name="color_pin_background_orange">#F9F0F3</color>
     <color name="white_with_opacity">#80FFFFFF</color>

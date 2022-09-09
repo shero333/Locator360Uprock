@@ -9,7 +9,7 @@ android {
     compileSdk 32
 
     defaultConfig {
-        applicationId "com.hammad.locator360"
+        applicationId "com.hammad.findmyfamily"
         minSdk 23
         targetSdk 32
         versionCode 1
@@ -66,4 +66,8 @@ dependencies {
     //glide
     implementation 'com.github.bumptech.glide:glide:4.13.2'
     annotationProcessor 'com.github.bumptech.glide:compiler:4.13.2'
+
+    //RX Java
+    implementation 'io.reactivex.rxjava2:rxjava:2.1.1'
+    implementation 'io.reactivex.rxjava2:rxandroid:2.1.1'
 }
