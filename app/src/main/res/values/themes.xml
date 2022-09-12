@@ -21,8 +21,4 @@
 
     </style>
 
-    <style name="AutoFillHintStyle" >
-        <item name="android:autofilledHighlight" ></item>
-    </style>
-
 </resources>
