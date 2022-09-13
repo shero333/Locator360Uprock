@@ -1,31 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/cons_toolbar"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:padding="@dimen/_10sdp">
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/cons_circle"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginStart="@dimen/_5sdp"
         android:layout_marginEnd="@dimen/_5sdp"
         android:background="@drawable/white_rounded_button"
         app:layout_constraintStart_toEndOf="@id/cons_setting_toolbar"
-        app:layout_constraintEnd_toStartOf="@id/cons_setting_messaging"
-        app:layout_constraintTop_toTopOf="@id/cons_setting_messaging"
-        app:layout_constraintBottom_toBottomOf="@id/cons_setting_messaging">
+        app:layout_constraintEnd_toStartOf="@id/cons_messaging_toolbar"
+        app:layout_constraintTop_toTopOf="@id/cons_messaging_toolbar"
+        app:layout_constraintBottom_toBottomOf="@id/cons_messaging_toolbar">
 
         <TextView
             android:id="@+id/text_view_circle_name"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="Circle Name"
+            android:text="@string/circle_name"
             android:textSize="@dimen/_14ssp"
             android:textColor="@color/black"
             android:layout_marginStart="@dimen/_15sdp"
+            android:layout_marginEnd="@dimen/_5sdp"
             app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/img_view_circle_arrow_down"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"/>
 
@@ -43,6 +47,52 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recycler_view_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:maxHeight="@dimen/_150sdp"
+        android:layout_marginTop="@dimen/_5sdp"
+        tools:listitem="@layout/toolbar_list_item"
+        tools:itemCount="3"
+        app:layout_constraintTop_toBottomOf="@id/cons_circle"/>
+
+    <TextView
+        android:id="@+id/text_view_border_line"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/_2sdp"
+        android:background="@color/grey_bottom"
+        android:layout_marginTop="@dimen/_2sdp"
+        app:layout_constraintTop_toBottomOf="@id/recycler_view_toolbar"/>
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btn_create_circle_toolbar"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintWidth_percent="0.4"
+        android:text="@string/create_circle"
+        android:textSize="@dimen/_10sdp"
+        android:textColor="@color/white"
+        android:background="@drawable/white_rounded_button"
+        android:layout_marginTop="@dimen/_10sdp"
+        android:layout_marginStart="@dimen/_10sdp"
+        app:layout_constraintTop_toBottomOf="@id/text_view_border_line"
+        app:layout_constraintStart_toStartOf="parent"/>
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btn_join_circle_toolbar"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintWidth_percent="0.4"
+        android:text="@string/join_circle"
+        android:textSize="@dimen/_10sdp"
+        android:textColor="@color/white"
+        android:background="@drawable/white_rounded_button"
+        android:layout_marginTop="@dimen/_10sdp"
+        android:layout_marginEnd="@dimen/_10sdp"
+        app:layout_constraintTop_toBottomOf="@id/text_view_border_line"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/cons_setting_toolbar"
         android:layout_width="@dimen/_35sdp"
@@ -52,6 +102,7 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/img_view_setting_toolbar"
             android:layout_width="@dimen/_25sdp"
             android:layout_height="@dimen/_25sdp"
             android:src="@drawable/ic_settings"
@@ -63,7 +114,7 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/cons_setting_messaging"
+        android:id="@+id/cons_messaging_toolbar"
         android:layout_width="@dimen/_35sdp"
         android:layout_height="@dimen/_35sdp"
         android:background="@drawable/drawable_white_toolbar"
@@ -71,6 +122,7 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/img_view_messaging_toolbar"
             android:layout_width="@dimen/_25sdp"
             android:layout_height="@dimen/_25sdp"
             android:src="@drawable/ic_messaging"
@@ -80,5 +132,6 @@
             app:layout_constraintBottom_toBottomOf="parent"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

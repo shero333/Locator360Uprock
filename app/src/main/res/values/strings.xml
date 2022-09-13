@@ -61,4 +61,6 @@
     <string name="reset_password">reset Password</string>
     <string name="safety">Safety</string>
     <string name="location">Location</string>
+    <string name="join_circle">join circle</string>
+    <string name="circle_name">Circle Name</string>
 </resources>

@@ -9,7 +9,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
+import com.hammad.findmyfamily.HomeScreen.CustomToolbar.CircleAdapterToolbar;
 import com.hammad.findmyfamily.HomeScreen.FragmentLocation.LocationFragment;
 import com.hammad.findmyfamily.HomeScreen.FragmentSafety.FragmentSafety;
 import com.hammad.findmyfamily.R;
@@ -18,6 +21,9 @@ import com.hammad.findmyfamily.databinding.ActivityHomeBinding;
 public class HomeActivity extends AppCompatActivity {
 
     private ActivityHomeBinding binding;
+
+    //for toolbar recyclerview
+    private RecyclerView toolbarRecyclerview;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,11 +34,17 @@ public class HomeActivity extends AppCompatActivity {
         View view = binding.getRoot();
         setContentView(view);
 
+        //setting the value
+        toolbarRecyclerview = binding.toolbar.recyclerViewToolbar;
+
         //setting the location fragment as default
         replaceFragment(new LocationFragment());
 
         //items click listener
         clickListeners();
+
+        //setting the toolbar circle recyclerview
+        setToolbarRecyclerview();
     }
 
     private void clickListeners(){
@@ -47,7 +59,7 @@ public class HomeActivity extends AppCompatActivity {
         binding.toolbar.consSettingToolbar.setOnClickListener(v -> toolbarSettings());
 
         //toolbar messages click listener
-        binding.toolbar.consSettingMessaging.setOnClickListener(v -> toolbarMessages());
+        binding.toolbar.consSettingToolbar.setOnClickListener(v -> toolbarMessages());
 
         //toolbar circle name click listener
         binding.toolbar.textViewCircleName.setOnClickListener(v -> toolbarCircleName());
@@ -117,6 +129,14 @@ public class HomeActivity extends AppCompatActivity {
 
     public void toolbarCircleName(){
         Toast.makeText(this, "Circle is Clicked", Toast.LENGTH_SHORT).show();
+    }
+
+    private void setToolbarRecyclerview(){
+        LinearLayoutManager layoutManager = new LinearLayoutManager(this,LinearLayoutManager.VERTICAL,false);
+        toolbarRecyclerview.setLayoutManager(layoutManager);
+
+        CircleAdapterToolbar adapterToolbar= new CircleAdapterToolbar(this);
+        toolbarRecyclerview.setAdapter(adapterToolbar);
     }
 
 }
