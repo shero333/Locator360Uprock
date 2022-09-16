@@ -12,6 +12,7 @@
         android:layout_height="wrap_content"
         android:text="Fragment Safety"
         android:textSize="@dimen/_20sdp"
+        app:layout_constraintVertical_bias="0.6"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"

@@ -10,14 +10,22 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.hammad.findmyfamily.databinding.ToolbarListItemBinding;
 
+import java.util.List;
+
 public class CircleAdapterToolbar extends RecyclerView.Adapter<CircleAdapterToolbar.ViewHolder> {
 
-    Context context;
+    private Context context;
+
+    private List<String> stringList;
 
     private ToolbarListItemBinding binding;
 
-    public CircleAdapterToolbar(Context context) {
+    private OnToolbarCircleClickListener mOnCircleClickListener;
+
+    public CircleAdapterToolbar(Context context,List<String> list,OnToolbarCircleClickListener onToolbarCircleClickListener) {
         this.context = context;
+        this.stringList = list;
+        this.mOnCircleClickListener = onToolbarCircleClickListener;
     }
 
     @NonNull
@@ -30,16 +38,19 @@ public class CircleAdapterToolbar extends RecyclerView.Adapter<CircleAdapterTool
     @Override
     public void onBindViewHolder(@NonNull CircleAdapterToolbar.ViewHolder holder, int position) {
 
-        binding.txtCircleName.setText("Circle ".concat(String.valueOf((position+1))));
-        binding.txtCircleNameFirstChar.setText(""+(position+1));
+        //setting the details to view
+        binding.txtCircleName.setText(stringList.get(position));
 
-        binding.txtCircleName.setOnClickListener(v -> Toast.makeText(context, ""+(position+1), Toast.LENGTH_SHORT).show());
+        binding.txtCircleNameFirstChar.setText(String.valueOf(stringList.get(position).charAt(7)));
+
+        // circle name click listener
+        binding.txtCircleName.setOnClickListener(v -> mOnCircleClickListener.onCircleSelected(position));
 
     }
 
     @Override
     public int getItemCount() {
-        return 3;
+        return stringList.size();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder{
@@ -49,4 +60,9 @@ public class CircleAdapterToolbar extends RecyclerView.Adapter<CircleAdapterTool
             CircleAdapterToolbar.this.binding = binding;
         }
     }
+
+    public interface OnToolbarCircleClickListener{
+        void onCircleSelected(int position);
+    }
+
 }
