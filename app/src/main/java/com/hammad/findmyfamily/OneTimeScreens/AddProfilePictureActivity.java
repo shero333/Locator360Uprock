@@ -320,6 +320,8 @@ public class AddProfilePictureActivity extends AppCompatActivity {
         startActivity(new Intent(this, RequestPermissionActivity.class));
     }
 
+
+
     /*private void rxJavaProfilePictureCompression(File file){
 
 

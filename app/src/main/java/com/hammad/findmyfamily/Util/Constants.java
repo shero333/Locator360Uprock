@@ -16,9 +16,9 @@ public interface Constants {
 
      //request codes
      int REQUEST_CODE_CAMERA = 1;
-     int REQUEST_CODE_FINE_LOCATION = 2;
+     int REQUEST_CODE_LOCATION = 2;
      int REQUEST_CODE_STORAGE = 3;
-     int REQUEST_CODE_BACKGROUND_LOCATION = 4;
+     int GPS_REQUEST_CODE = 4;
 
      //for circle
      String CIRCLE_COLLECTION = "Circle";

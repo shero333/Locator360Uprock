@@ -1,10 +1,13 @@
 package com.hammad.findmyfamily.HomeScreen;
 
+import android.content.pm.PackageManager;
 import android.content.res.ColorStateList;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
@@ -16,6 +19,7 @@ import com.hammad.findmyfamily.HomeScreen.CustomToolbar.CircleAdapterToolbar;
 import com.hammad.findmyfamily.HomeScreen.FragmentLocation.LocationFragment;
 import com.hammad.findmyfamily.HomeScreen.FragmentSafety.FragmentSafety;
 import com.hammad.findmyfamily.R;
+import com.hammad.findmyfamily.Util.Constants;
 import com.hammad.findmyfamily.databinding.ActivityHomeBinding;
 
 import java.util.ArrayList;
@@ -200,6 +204,22 @@ public class HomeActivity extends AppCompatActivity implements CircleAdapterTool
     public void onCircleSelected(int position) {
 
         Toast.makeText(this, circleStringList.get(position), Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+
+        Log.i("HELLO_123", "onRequestPermissionsResult: Activity");
+
+        if(requestCode == Constants.REQUEST_CODE_LOCATION && grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED)
+        {
+            Log.i("HELLO_123", "onRequestPermissionsResult: if called Activity");
+        }
+        else
+        {
+            Toast.makeText(this, "Location Permission Denied Activity", Toast.LENGTH_SHORT).show();
+        }
     }
 
 }

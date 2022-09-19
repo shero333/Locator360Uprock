@@ -61,7 +61,7 @@
             android:exported="false" />
         <activity
             android:name="com.hammad.findmyfamily.OneTimeScreens.AddProfilePictureActivity"
-            android:exported="false" />
+            android:exported="false"/>
         <activity
             android:name="com.hammad.findmyfamily.OneTimeScreens.JoinGroupActivity"
             android:exported="false" />

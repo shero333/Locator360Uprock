@@ -1,15 +1,16 @@
 package com.hammad.findmyfamily.Permission;
 
-import static com.hammad.findmyfamily.Util.Constants.REQUEST_CODE_BACKGROUND_LOCATION;
 import static com.hammad.findmyfamily.Util.Constants.REQUEST_CODE_CAMERA;
-import static com.hammad.findmyfamily.Util.Constants.REQUEST_CODE_FINE_LOCATION;
 import static com.hammad.findmyfamily.Util.Constants.REQUEST_CODE_STORAGE;
 
 import android.Manifest;
 import android.app.Activity;
 import android.content.Context;
 import android.content.pm.PackageManager;
-import android.os.Build;
+
+import androidx.fragment.app.Fragment;
+
+import com.hammad.findmyfamily.Util.Constants;
 
 public class Permissions {
 
@@ -38,27 +39,25 @@ public class Permissions {
         activity.requestPermissions(permissions,REQUEST_CODE_STORAGE);
     }
 
-    public static boolean hasLocationPermission(Context context){
-        String[] permissions = {Manifest.permission.ACCESS_COARSE_LOCATION,Manifest.permission.ACCESS_FINE_LOCATION};
+    public static boolean hasLocationPermission(Context context) {
+        String[] permissions = {Manifest.permission.ACCESS_COARSE_LOCATION,Manifest.permission.ACCESS_FINE_LOCATION,Manifest.permission.ACCESS_BACKGROUND_LOCATION};
 
         return context.checkCallingOrSelfPermission(permissions[0]) == PackageManager.PERMISSION_GRANTED &&
-                context.checkCallingOrSelfPermission(permissions[1]) == PackageManager.PERMISSION_GRANTED;
+                context.checkCallingOrSelfPermission(permissions[1]) == PackageManager.PERMISSION_GRANTED &&
+                context.checkCallingOrSelfPermission(permissions[2]) == PackageManager.PERMISSION_GRANTED ;
     }
 
     public static void getLocationPermission(Activity activity){
-        String[] permissions = {Manifest.permission.ACCESS_COARSE_LOCATION,Manifest.permission.ACCESS_FINE_LOCATION};
+        String[] permissions = {Manifest.permission.ACCESS_COARSE_LOCATION,Manifest.permission.ACCESS_FINE_LOCATION,Manifest.permission.ACCESS_BACKGROUND_LOCATION};
 
-        activity.requestPermissions(permissions,REQUEST_CODE_FINE_LOCATION);
+        activity.requestPermissions(permissions, Constants.REQUEST_CODE_LOCATION);
     }
 
-    public static boolean hasBackgroundLocationPermission(Context context){
-        String permission = "Manifest.permission.ACCESS_BACKGROUND_LOCATION";
-        return context.checkCallingOrSelfPermission(permission) == PackageManager.PERMISSION_GRANTED;
+    public static void getLocationPermission(Activity activity, Fragment fragment){
+        String[] permissions = {Manifest.permission.ACCESS_COARSE_LOCATION,Manifest.permission.ACCESS_FINE_LOCATION,Manifest.permission.ACCESS_BACKGROUND_LOCATION};
+
+        fragment.requestPermissions(permissions, Constants.REQUEST_CODE_LOCATION);
     }
 
-    public static void getBackgroundLocationPermission(Activity activity){
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-            activity.requestPermissions(new String[]{Manifest.permission.ACCESS_BACKGROUND_LOCATION}, REQUEST_CODE_BACKGROUND_LOCATION);
-        }
-    }
+
 }

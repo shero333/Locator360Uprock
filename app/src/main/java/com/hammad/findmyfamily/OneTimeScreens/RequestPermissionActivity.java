@@ -41,7 +41,7 @@ public class RequestPermissionActivity extends AppCompatActivity {
 
     private void requestLocationPermission() {
 
-        if(Permissions.hasLocationPermission(this) && Permissions.hasBackgroundLocationPermission(this)){
+        if(Permissions.hasLocationPermission(this)) {
 
             //setting the continue button to enabled
             setContinueButtonStatus();
@@ -51,7 +51,6 @@ public class RequestPermissionActivity extends AppCompatActivity {
         }
         else {
             Permissions.getLocationPermission(this);
-            Permissions.getBackgroundLocationPermission(this);
         }
     }
 
@@ -59,7 +58,7 @@ public class RequestPermissionActivity extends AppCompatActivity {
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
 
-        if(requestCode == Constants.REQUEST_CODE_FINE_LOCATION && grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED){
+        if(requestCode == Constants.REQUEST_CODE_LOCATION && grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED){
 
             //setting the button status to enabled
             setContinueButtonStatus();
