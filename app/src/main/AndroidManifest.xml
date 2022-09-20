@@ -11,6 +11,12 @@
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
+    <uses-feature android:name="android.hardware.location.gps"
+        android:required="true"/>
+
+    <uses-feature android:name="android.hardware.location.network"
+        android:required="true"/>
+
     <application
         android:name="com.hammad.findmyfamily.Application.App"
         android:allowBackup="true"
@@ -104,7 +110,7 @@
             android:name="com.hammad.findmyfamily.StartScreen.StartScreenActivity"
             android:exported="true"
             android:launchMode="singleTask">
-            <!--<intent-filter>
+           <!-- <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />

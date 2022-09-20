@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<set xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!--
+         fromXDelta: Change in X coordinate to apply at the start of the animation
+         toXDelta: Change in X coordinate to apply at the end of the animation
+         fromYDelta: Change in Y coordinate to apply at the start of the animation
+         toYDelta: Change in Y coordinate to apply at the end of the animation
+     -->
+
+    <translate
+        android:fromXDelta="0%"
+        android:fromYDelta="-50%"
+        android:toYDelta="0%"
+        android:duration="300"/>
+
+    <!-- alpha is used for fading effect like fade in or fade out. Value represents opacity. 0.0 means transparent. 1.0 means opaque-->
+    <alpha
+        android:fromAlpha="0.2"
+        android:toAlpha="1.0"
+        android:duration="300"/>
+</set>

@@ -25,11 +25,15 @@ public interface Constants {
      String CIRCLE_NAME = "circle_name";
      String CIRCLE_CODE = "circle_code";
      String CIRCLE_CODE_EXPIRY_DATE = "code_expiry_date";
+     String CIRCLE_MEMBERS = "circle_members";
+     String CIRCLE_ADMIN = "circle_admin";
 
      //for location
      String LOCATION_COLLECTION = "Location";
      String LAT = "lat";
      String LNG = "lng";
      String LOC_DATE = "loc_date";
+     String LAST_KNOWN_LOCATION = "last_known_location";
+     String BATTERY_STATUS = "battery_status";
 
 }

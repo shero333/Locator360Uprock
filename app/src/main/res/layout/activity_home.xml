@@ -10,24 +10,9 @@
         android:id="@+id/frame_layout_home_screen"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_marginBottom="@dimen/_5sdp"
+        android:layout_marginBottom="@dimen/_3sdp"
         app:layout_constraintBottom_toTopOf="@id/bottom_constraint_home_screen"
         app:layout_constraintTop_toTopOf="parent" />
-
-    <include
-        android:id="@+id/toolbar"
-        layout="@layout/layout_toolbar"
-        android:visibility="visible" />
-
-    <include
-        android:id="@+id/toolbar_extended_view"
-        layout="@layout/layout_circle_selection"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:visibility="gone"
-        android:layout_marginBottom="@dimen/_5sdp"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toTopOf="@+id/bottom_constraint_home_screen" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/bottom_constraint_home_screen"

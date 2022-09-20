@@ -63,4 +63,7 @@
     <string name="location">Location</string>
     <string name="join_circle">join circle</string>
     <string name="circle_name">Circle Name</string>
+    <string name="title_gps_dialog">Turn on GPS</string>
+    <string name="sub_title_gps_dialog">Your GPS setting must be turned on for Find my Family to work. Please turn on your GPS from settings</string>
+    <string name="go_to_settings">Go to Settings</string>
 </resources>

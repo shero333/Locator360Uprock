@@ -4,24 +4,32 @@ import static android.content.Context.LOCATION_SERVICE;
 import static com.hammad.findmyfamily.Util.Constants.USERS_COLLECTION;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.graphics.Matrix;
+import android.graphics.drawable.ColorDrawable;
 import android.location.LocationManager;
 import android.media.ExifInterface;
 import android.provider.Settings;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.util.Patterns;
 import android.widget.Toast;
 
-import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.widget.AppCompatButton;
+import androidx.constraintlayout.utils.widget.ImageFilterView;
+import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.hammad.findmyfamily.R;
 import com.hammad.findmyfamily.SharedPreference.SharedPreference;
 
 import java.io.ByteArrayOutputStream;
@@ -80,8 +88,7 @@ public class Commons {
         if (!input.isEmpty() && Patterns.EMAIL_ADDRESS.matcher(input).matches()) {
             //enable the continue button
             return true;
-        }
-        else {
+        } else {
             //disables the continue button
             return false;
         }
@@ -111,8 +118,7 @@ public class Commons {
             fos.flush();
             fos.close();
             return file;
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
             Log.e("COMP_IMG", "exception: ", e);
             return file;
@@ -217,33 +223,55 @@ public class Commons {
     }
 
     @SuppressLint("MissingPermission")
-    public static boolean isGpsEnabled(Context context, GetGPSListener gpsListener) {
+    public static boolean isGpsEnabled(Activity activity, GetGPSListener gpsListener) {
 
-        LocationManager locationManager = (LocationManager) context.getSystemService(LOCATION_SERVICE);
+        LocationManager locationManager = (LocationManager) activity.getSystemService(LOCATION_SERVICE);
 
-        boolean isProviderEnabled = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
+        boolean isGpsProviderEnabled = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
 
-        if (isProviderEnabled) {
+        if (isGpsProviderEnabled) {
             return true;
-        } else {
-
-            AlertDialog.Builder builder = new AlertDialog.Builder(context);
-            builder.setTitle("GPS Permission")
-                    .setMessage("To get current Location, GPS is required. Enable GPS?")
-                    .setPositiveButton("Enable GPS", (dialogInterface, i) -> {
-
-                        Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
-                        gpsListener.getGPSIntent(intent);
-                    })
-                    .setCancelable(true)
-                    .show();
         }
+        else {
+            Dialog dialog = new Dialog(activity);
+            dialog.setContentView(R.layout.layout_gps_dialog);
 
-        return false;
+            //setting the transparent background
+            dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+
+            //this sets the width of dialog to 90%
+            DisplayMetrics displayMetrics = new DisplayMetrics();
+            activity.getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+            int width = (int) (displayMetrics.widthPixels * 0.9);
+
+            //setting the width and height of alert dialog
+            dialog.getWindow().setLayout(width, ConstraintLayout.LayoutParams.WRAP_CONTENT);
+
+            //click listener initialization
+            ImageFilterView filterViewExitDialog = dialog.findViewById(R.id.img_cancel_dialog);
+            AppCompatButton buttonSettings = dialog.findViewById(R.id.btn_settings);
+
+            //exit dialog click listener
+            filterViewExitDialog.setOnClickListener(v -> dialog.dismiss());
+
+            //go to settings click listener
+            buttonSettings.setOnClickListener(v -> {
+                Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+                gpsListener.getGPSIntent(intent);
+
+                //dismissing the dialog
+                dialog.dismiss();
+            });
+
+            dialog.setCancelable(true);
+            dialog.show();
+
+            return false;
+        }
     }
 
-   public interface GetGPSListener {
+    public interface GetGPSListener {
         void getGPSIntent(Intent intent);
-   }
+    }
 
 }
