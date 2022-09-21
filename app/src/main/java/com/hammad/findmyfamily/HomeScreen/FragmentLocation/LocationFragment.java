@@ -1,8 +1,10 @@
 package com.hammad.findmyfamily.HomeScreen.FragmentLocation;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
@@ -39,10 +41,12 @@ import com.hammad.findmyfamily.HomeScreen.CustomToolbar.CircleAdapterToolbar;
 import com.hammad.findmyfamily.Permission.Permissions;
 import com.hammad.findmyfamily.R;
 import com.hammad.findmyfamily.Util.Commons;
+import com.hammad.findmyfamily.Util.Constants;
 import com.hammad.findmyfamily.databinding.FragmentLocationBinding;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
 
@@ -62,6 +66,7 @@ public class LocationFragment extends Fragment implements OnMapReadyCallback, Ci
 
     //recyclerview of extended toolbar
     private RecyclerView circleSelectionRecyclerView;
+
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -106,13 +111,12 @@ public class LocationFragment extends Fragment implements OnMapReadyCallback, Ci
             if (Commons.isGpsEnabled(requireActivity(), intent -> gpsActivityResultLauncher.launch(intent))) {
                 //get current location
                 getCurrentLocation();
-            }
-            else {
-                Log.i("HELLO_123", "else called: ");
+            } else {
+                Log.i("HELLO_123", "Location Frag: has location permission but no GPS");
             }
 
         } else {
-            Permissions.getLocationPermission(requireActivity());
+            requestPermissions(new String[]{Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_BACKGROUND_LOCATION}, Constants.REQUEST_CODE_LOCATION);
         }
     }
 
@@ -127,6 +131,41 @@ public class LocationFragment extends Fragment implements OnMapReadyCallback, Ci
                     }
                 }
             });
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+
+        if(requestCode == Constants.REQUEST_CODE_LOCATION)
+        {
+            if(grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED)
+            {
+                Log.i("HELLO_123", "Location Frag: location permissions allowed");
+                //getting the current location
+                checkLocationPermission();
+            }
+            else {
+                Log.i("HELLO_123", "Location Frag: location permission ");
+
+                //navigate to app settings screen
+                Commons.navigateToAppSettings(requireContext());
+            }
+            /*else if(shouldShowRequestPermissionRationale(Manifest.permission_group.LOCATION))
+            {
+                Toast.makeText(requireContext(), "Location Permission Denied!", Toast.LENGTH_SHORT).show();
+                Log.i("HELLO_123", "Location Frag: location permission denied");
+            }
+            else if(!shouldShowRequestPermissionRationale(Manifest.permission_group.LOCATION))
+            {
+                Log.i("HELLO_123", "Location Frag: location permission denied and don't show again");
+
+                //navigate to app settings screen
+                Commons.navigateToAppSettings(requireContext());
+            }*/
+        }
+
+    }
+
 
     @SuppressLint("MissingPermission")
     private void getCurrentLocation() {
@@ -295,6 +334,6 @@ public class LocationFragment extends Fragment implements OnMapReadyCallback, Ci
 
     @Override
     public void onLocationChanged(@NonNull Location location) {
-
+        Log.i("HELLO_123", "onLocationChanged: ");
     }
 }

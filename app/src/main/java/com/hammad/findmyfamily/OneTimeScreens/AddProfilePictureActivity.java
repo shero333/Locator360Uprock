@@ -4,6 +4,7 @@ import static com.hammad.findmyfamily.Util.Constants.NULL;
 import static com.hammad.findmyfamily.Util.Constants.REQUEST_CODE_CAMERA;
 import static com.hammad.findmyfamily.Util.Constants.REQUEST_CODE_STORAGE;
 
+import android.Manifest;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -115,10 +116,21 @@ public class AddProfilePictureActivity extends AppCompatActivity {
 
             case REQUEST_CODE_CAMERA: {
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    Log.i("HELLO_123", "Add Profile Act: camera permission allowed");
                     //opening the camera
                     openCamera();
-                } else {
+                }
+                else if(shouldShowRequestPermissionRationale(Manifest.permission.CAMERA))
+                {
                     Toast.makeText(this, "Camera Permission Denied!", Toast.LENGTH_SHORT).show();
+                    Log.i("HELLO_123", "Add Profile Act: camera permission denied");
+                }
+                else if(!shouldShowRequestPermissionRationale(Manifest.permission.CAMERA))
+                {
+                    Log.i("HELLO_123", "Add Profile Act: camera denied and don't show again");
+
+                    //navigate user to app settings page
+                    Commons.navigateToAppSettings(this);
                 }
 
                 break;
@@ -126,10 +138,22 @@ public class AddProfilePictureActivity extends AppCompatActivity {
 
             case REQUEST_CODE_STORAGE: {
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    Log.i("HELLO_123", "Add Profile Act: gallery permission allowed");
                     //opening the gallery
                     openGallery();
-                } else {
+                }
+                else if(shouldShowRequestPermissionRationale(Manifest.permission.READ_EXTERNAL_STORAGE))
+                {
                     Toast.makeText(this, "Gallery Permission Denied!", Toast.LENGTH_SHORT).show();
+                    Log.i("HELLO_123", "Add Profile Act: gallery permission denied");
+
+                }
+                else if(!shouldShowRequestPermissionRationale(Manifest.permission.READ_EXTERNAL_STORAGE))
+                {
+                    Log.i("HELLO_123", "Add Profile Act: gallery denied and don't show again");
+
+                    //navigate user to app settings page
+                    Commons.navigateToAppSettings(this);
                 }
 
                 break;
@@ -228,7 +252,8 @@ public class AddProfilePictureActivity extends AppCompatActivity {
                         SharedPreference.setImageName(compressedFile.getName());
                     }
                 }
-                else {
+                else
+                {
                     Glide
                             .with(this)
                             .load(file)
@@ -307,7 +332,6 @@ public class AddProfilePictureActivity extends AppCompatActivity {
             binding.btnContAddProfilePic.setBackgroundResource(R.drawable.white_rounded_button);
             binding.btnContAddProfilePic.setTextColor(getResources().getColor(R.color.orange));
         }
-
     }
 
     private void skipProfileImage() {
@@ -319,8 +343,6 @@ public class AddProfilePictureActivity extends AppCompatActivity {
         //navigating to next activity
         startActivity(new Intent(this, RequestPermissionActivity.class));
     }
-
-
 
     /*private void rxJavaProfilePictureCompression(File file){
 

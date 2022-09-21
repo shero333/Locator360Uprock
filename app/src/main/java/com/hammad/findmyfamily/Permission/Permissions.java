@@ -8,8 +8,6 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.pm.PackageManager;
 
-import androidx.fragment.app.Fragment;
-
 import com.hammad.findmyfamily.Util.Constants;
 
 public class Permissions {
@@ -26,15 +24,14 @@ public class Permissions {
 
     public static boolean hasStoragePermission(Context context){
 
-        String[] permissions = {Manifest.permission.READ_EXTERNAL_STORAGE,Manifest.permission.WRITE_EXTERNAL_STORAGE,Manifest.permission.MANAGE_EXTERNAL_STORAGE};
+        String[] permissions = {Manifest.permission.READ_EXTERNAL_STORAGE,Manifest.permission.WRITE_EXTERNAL_STORAGE};
 
         return context.checkCallingOrSelfPermission(permissions[0]) == PackageManager.PERMISSION_GRANTED &&
-                context.checkCallingOrSelfPermission(permissions[1]) == PackageManager.PERMISSION_GRANTED &&
-                context.checkCallingOrSelfPermission(permissions[2]) == PackageManager.PERMISSION_GRANTED;
+                context.checkCallingOrSelfPermission(permissions[1]) == PackageManager.PERMISSION_GRANTED ;
     }
 
     public static void getStoragePermission(Activity activity){
-        String[] permissions = {Manifest.permission.READ_EXTERNAL_STORAGE,Manifest.permission.WRITE_EXTERNAL_STORAGE,Manifest.permission.MANAGE_EXTERNAL_STORAGE};
+        String[] permissions = {Manifest.permission.READ_EXTERNAL_STORAGE,Manifest.permission.WRITE_EXTERNAL_STORAGE};
 
         activity.requestPermissions(permissions,REQUEST_CODE_STORAGE);
     }
@@ -42,22 +39,14 @@ public class Permissions {
     public static boolean hasLocationPermission(Context context) {
         String[] permissions = {Manifest.permission.ACCESS_COARSE_LOCATION,Manifest.permission.ACCESS_FINE_LOCATION,Manifest.permission.ACCESS_BACKGROUND_LOCATION};
 
-        return context.checkCallingOrSelfPermission(permissions[0]) == PackageManager.PERMISSION_GRANTED &&
+        return  context.checkCallingOrSelfPermission(permissions[0]) == PackageManager.PERMISSION_GRANTED &&
                 context.checkCallingOrSelfPermission(permissions[1]) == PackageManager.PERMISSION_GRANTED &&
                 context.checkCallingOrSelfPermission(permissions[2]) == PackageManager.PERMISSION_GRANTED ;
     }
 
     public static void getLocationPermission(Activity activity){
         String[] permissions = {Manifest.permission.ACCESS_COARSE_LOCATION,Manifest.permission.ACCESS_FINE_LOCATION,Manifest.permission.ACCESS_BACKGROUND_LOCATION};
-
         activity.requestPermissions(permissions, Constants.REQUEST_CODE_LOCATION);
     }
-
-    public static void getLocationPermission(Activity activity, Fragment fragment){
-        String[] permissions = {Manifest.permission.ACCESS_COARSE_LOCATION,Manifest.permission.ACCESS_FINE_LOCATION,Manifest.permission.ACCESS_BACKGROUND_LOCATION};
-
-        fragment.requestPermissions(permissions, Constants.REQUEST_CODE_LOCATION);
-    }
-
 
 }

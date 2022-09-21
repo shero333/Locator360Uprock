@@ -15,6 +15,7 @@ import android.graphics.Matrix;
 import android.graphics.drawable.ColorDrawable;
 import android.location.LocationManager;
 import android.media.ExifInterface;
+import android.net.Uri;
 import android.provider.Settings;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -29,6 +30,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.hammad.findmyfamily.BuildConfig;
 import com.hammad.findmyfamily.R;
 import com.hammad.findmyfamily.SharedPreference.SharedPreference;
 
@@ -272,6 +274,10 @@ public class Commons {
 
     public interface GetGPSListener {
         void getGPSIntent(Intent intent);
+    }
+
+    public static void navigateToAppSettings(Context context) {
+        context.startActivity(new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS, Uri.parse("package:" + BuildConfig.APPLICATION_ID)));
     }
 
 }

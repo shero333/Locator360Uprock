@@ -93,5 +93,4 @@ public class HomeActivity extends AppCompatActivity {
         replaceFragment(new FragmentSafety());
 
     }
-
 }

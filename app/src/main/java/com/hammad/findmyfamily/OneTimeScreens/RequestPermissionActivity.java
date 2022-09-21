@@ -1,9 +1,11 @@
 package com.hammad.findmyfamily.OneTimeScreens;
 
+import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.ColorStateList;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
@@ -12,6 +14,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.hammad.findmyfamily.Permission.Permissions;
 import com.hammad.findmyfamily.R;
+import com.hammad.findmyfamily.Util.Commons;
 import com.hammad.findmyfamily.Util.Constants;
 import com.hammad.findmyfamily.databinding.ActivityRequestPermissionBinding;
 
@@ -29,25 +32,18 @@ public class RequestPermissionActivity extends AppCompatActivity {
         View view = binding.getRoot();
         setContentView(view);
 
-        //requesting the location permission
-        requestLocationPermission();
-
         //button continue click listener
-        binding.btnContReqPermission.setOnClickListener(v -> startActivity(new Intent(this,GeneralScreenOneActivity.class)));
+        binding.btnContReqPermission.setOnClickListener(v -> requestLocationPermission());
 
         //remind me later click listener
-        binding.txtRemindMeLater.setOnClickListener(v -> startActivity(new Intent(this,GeneralScreenOneActivity.class)));
+        binding.txtRemindMeLater.setOnClickListener(v -> navigateToNextActivity());
     }
 
     private void requestLocationPermission() {
 
-        if(Permissions.hasLocationPermission(this)) {
-
-            //setting the continue button to enabled
-            setContinueButtonStatus();
-        }
-        else if(shouldShowRequestPermissionRationale("Manifest.permission.ACCESS_FINE_LOCATION")){
-            Toast.makeText(this, "Location Rationale", Toast.LENGTH_SHORT).show();
+        if(Permissions.hasLocationPermission(this))
+        {
+            navigateToNextActivity();
         }
         else {
             Permissions.getLocationPermission(this);
@@ -58,17 +54,36 @@ public class RequestPermissionActivity extends AppCompatActivity {
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
 
-        if(requestCode == Constants.REQUEST_CODE_LOCATION && grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED){
+        if(requestCode == Constants.REQUEST_CODE_LOCATION) {
 
-            //setting the button status to enabled
-            setContinueButtonStatus();
+            if(grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                Log.i("HELLO_123", "PR Screen: permissions allowed");
+                //if permissions allowed, navigate to next activity
+                navigateToNextActivity();
+            }
+            else {
+                Log.i("HELLO_123", "PR Screen: location denied");
+
+                //navigate to app settings screen
+                Commons.navigateToAppSettings(this);
+            }
+            /*else if(shouldShowRequestPermissionRationale(Manifest.permission_group.LOCATION)) {
+                Toast.makeText(this, "Location Permission Denied!", Toast.LENGTH_SHORT).show();
+                Log.i("HELLO_123", "PR Screen: permission deny");
+            }
+            else if(!shouldShowRequestPermissionRationale(Manifest.permission_group.LOCATION)){
+                Log.i("HELLO_123", "PR Screen: location denied and don't show again");
+
+                //navigate to app settings screen
+                Commons.navigateToAppSettings(this);
+            }*/
         }
+
     }
 
-    private void setContinueButtonStatus(){
-        binding.btnContReqPermission.setEnabled(true);
-        binding.btnContReqPermission.setBackgroundResource(R.drawable.white_rounded_button);
-        binding.btnContReqPermission.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.white)));
+    private void navigateToNextActivity() {
+        startActivity(new Intent(this,GeneralScreenOneActivity.class));
     }
+
 
 }
