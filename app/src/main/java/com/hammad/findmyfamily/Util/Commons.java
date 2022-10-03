@@ -20,6 +20,7 @@ import android.provider.Settings;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.util.Patterns;
+import android.view.LayoutInflater;
 import android.widget.Toast;
 
 import androidx.appcompat.widget.AppCompatButton;
@@ -33,6 +34,8 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.hammad.findmyfamily.BuildConfig;
 import com.hammad.findmyfamily.R;
 import com.hammad.findmyfamily.SharedPreference.SharedPreference;
+import com.hammad.findmyfamily.databinding.LayoutCameraDialogBinding;
+import com.hammad.findmyfamily.databinding.LayoutGalleryDialogBinding;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -233,8 +236,7 @@ public class Commons {
 
         if (isGpsProviderEnabled) {
             return true;
-        }
-        else {
+        } else {
             Dialog dialog = new Dialog(activity);
             dialog.setContentView(R.layout.layout_gps_dialog);
 
@@ -272,12 +274,87 @@ public class Commons {
         }
     }
 
+    public static void navigateToAppSettings(Context context) {
+        context.startActivity(new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS, Uri.parse("package:" + BuildConfig.APPLICATION_ID)));
+    }
+
     public interface GetGPSListener {
         void getGPSIntent(Intent intent);
     }
 
-    public static void navigateToAppSettings(Context context) {
-        context.startActivity(new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS, Uri.parse("package:" + BuildConfig.APPLICATION_ID)));
+    public static void locationPermissionDialog(Activity activity) {
+
+        Dialog dialog=new Dialog(activity);
+        dialog.setContentView(R.layout.layout_location_dialog);
+
+        //setting the transparent background
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+
+        //this sets the width of dialog to 90%
+        DisplayMetrics displayMetrics = new DisplayMetrics();
+        activity.getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+        int width = (int) (displayMetrics.widthPixels * 0.9);
+
+        //setting the width and height of alert dialog
+        dialog.getWindow().setLayout(width, ConstraintLayout.LayoutParams.WRAP_CONTENT);
+
+        AppCompatButton buttonSettings = dialog.findViewById(R.id.btn_settings_loc_dialog);
+
+        buttonSettings.setOnClickListener(v -> {
+            navigateToAppSettings(activity);
+            dialog.dismiss();
+        });
+
+        dialog.show();
+    }
+
+    public static void cameraAndGalleryPermissionDialog(Activity activity,boolean isCameraDialog) {
+
+        Dialog dialog = new Dialog(activity);
+
+        //setting the transparent background
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+
+        //this sets the width of dialog to 90%
+        DisplayMetrics displayMetrics = new DisplayMetrics();
+        activity.getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+        int width = (int) (displayMetrics.widthPixels * 0.9);
+
+        //setting the width and height of alert dialog
+        dialog.getWindow().setLayout(width, ConstraintLayout.LayoutParams.WRAP_CONTENT);
+
+        if(isCameraDialog) {
+
+            LayoutCameraDialogBinding cameraDialogBinding = LayoutCameraDialogBinding.inflate(LayoutInflater.from(activity));
+            dialog.setContentView(cameraDialogBinding.getRoot());
+
+            //button continue
+            cameraDialogBinding.btnSettings.setOnClickListener(v -> {
+                navigateToAppSettings(activity);
+                dialog.dismiss();
+            });
+
+            //img view cancel dialog
+            cameraDialogBinding.imgCancelDialog.setOnClickListener(v -> dialog.dismiss());
+
+        }
+        else {
+
+            LayoutGalleryDialogBinding galleryDialogBinding = LayoutGalleryDialogBinding.inflate(LayoutInflater.from(activity));
+            dialog.setContentView(galleryDialogBinding.getRoot());
+
+            //button continue
+            galleryDialogBinding.btnSettings.setOnClickListener(v -> {
+                navigateToAppSettings(activity);
+                dialog.dismiss();
+            });
+
+            //img view cancel dialog
+            galleryDialogBinding.imgCancelDialog.setOnClickListener(v -> dialog.dismiss());
+
+        }
+
+        dialog.show();
     }
 
 }

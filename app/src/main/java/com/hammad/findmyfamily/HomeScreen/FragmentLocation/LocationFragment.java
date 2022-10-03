@@ -24,10 +24,13 @@ import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -46,16 +49,13 @@ import com.hammad.findmyfamily.databinding.FragmentLocationBinding;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
 
-public class LocationFragment extends Fragment implements OnMapReadyCallback, CircleAdapterToolbar.OnToolbarCircleClickListener, LocationListener {
+public class LocationFragment extends Fragment implements OnMapReadyCallback, GoogleApiClient.ConnectionCallbacks,GoogleApiClient.OnConnectionFailedListener, CircleAdapterToolbar.OnToolbarCircleClickListener, LocationListener {
 
-    //circle list
-    private final List<String> circleStringList = new ArrayList<>();
-    //show and hide extended toolbar view animations
-    Animation showToolbarExtAnim, hideToolbarExtAnim;
+    private static final String TAG = "FRAG_LOCATION";
+
     private FragmentLocationBinding binding;
     private FusedLocationProviderClient mLocationClient;
     private GoogleMap mGoogleMap;
@@ -67,6 +67,11 @@ public class LocationFragment extends Fragment implements OnMapReadyCallback, Ci
     //recyclerview of extended toolbar
     private RecyclerView circleSelectionRecyclerView;
 
+    //circle list
+    private final List<String> circleStringList = new ArrayList<>();
+
+    //show and hide extended toolbar view animations
+    Animation showToolbarExtAnim, hideToolbarExtAnim;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -95,10 +100,7 @@ public class LocationFragment extends Fragment implements OnMapReadyCallback, Ci
 
     private void initializeMap() {
         SupportMapFragment mapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(binding.map.getId());
-
-        if (mapFragment != null) {
-            mapFragment.getMapAsync(this);
-        }
+        mapFragment.getMapAsync(this);
 
         mLocationClient = new FusedLocationProviderClient(requireContext());
     }
@@ -112,7 +114,7 @@ public class LocationFragment extends Fragment implements OnMapReadyCallback, Ci
                 //get current location
                 getCurrentLocation();
             } else {
-                Log.i("HELLO_123", "Location Frag: has location permission but no GPS");
+                Log.i(TAG, "Location Frag: has location permission but no GPS");
             }
 
         } else {
@@ -140,32 +142,20 @@ public class LocationFragment extends Fragment implements OnMapReadyCallback, Ci
         {
             if(grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED)
             {
-                Log.i("HELLO_123", "Location Frag: location permissions allowed");
+                Log.i(TAG, "location permissions allowed");
+
                 //getting the current location
                 checkLocationPermission();
             }
             else {
-                Log.i("HELLO_123", "Location Frag: location permission ");
+                Log.i(TAG, "location permission denied");
 
                 //navigate to app settings screen
-                Commons.navigateToAppSettings(requireContext());
+                Commons.locationPermissionDialog(requireActivity());
             }
-            /*else if(shouldShowRequestPermissionRationale(Manifest.permission_group.LOCATION))
-            {
-                Toast.makeText(requireContext(), "Location Permission Denied!", Toast.LENGTH_SHORT).show();
-                Log.i("HELLO_123", "Location Frag: location permission denied");
-            }
-            else if(!shouldShowRequestPermissionRationale(Manifest.permission_group.LOCATION))
-            {
-                Log.i("HELLO_123", "Location Frag: location permission denied and don't show again");
-
-                //navigate to app settings screen
-                Commons.navigateToAppSettings(requireContext());
-            }*/
         }
 
     }
-
 
     @SuppressLint("MissingPermission")
     private void getCurrentLocation() {
@@ -176,40 +166,40 @@ public class LocationFragment extends Fragment implements OnMapReadyCallback, Ci
 
                 location = task.getResult();
 
-                LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
+                if(location != null) {
 
-                CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(latLng, 14);
-                mGoogleMap.moveCamera(cameraUpdate);
-                mGoogleMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
+                    Log.i(TAG, "getCurrentLocation: if called");
 
-                mGoogleMap.addMarker(new MarkerOptions()
-                        .position(latLng)
-                        .icon(BitmapDescriptorFactory.defaultMarker()));
+                    LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
 
-                //getting the address of current location
-                Geocoder geocoder = new Geocoder(requireContext(), Locale.getDefault());
+                    CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(latLng, 14);
+                    mGoogleMap.moveCamera(cameraUpdate);
+                    mGoogleMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
 
-                List<Address> addresses = null;
-                try {
-                    addresses = geocoder.getFromLocation(location.getLatitude(), location.getLongitude(), 1);
-                } catch (IOException e) {
-                    e.printStackTrace();
+                    mGoogleMap.addMarker(new MarkerOptions()
+                            .position(latLng)
+                            .icon(BitmapDescriptorFactory.defaultMarker()));
+
+                    //getting the address of current location
+                    Geocoder geocoder = new Geocoder(requireContext(), Locale.getDefault());
+
+                    List<Address> addresses = null;
+                    try {
+                        addresses = geocoder.getFromLocation(location.getLatitude(), location.getLongitude(), 1);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+
+                    //assert is used to check expected boolean condition
+                    assert addresses != null;
+                    locationAddress = addresses.get(0).getAddressLine(0);
+
+                    Toast.makeText(requireContext(), locationAddress, Toast.LENGTH_LONG).show();
+
                 }
-
-                //assert is used to check expected boolean condition
-                assert addresses != null;
-                locationAddress = addresses.get(0).getAddressLine(0);
-
-                Toast.makeText(requireContext(), locationAddress, Toast.LENGTH_LONG).show();
             }
 
         });
-
-    }
-
-    @Override
-    public void onMapReady(@NonNull GoogleMap googleMap) {
-        mGoogleMap = googleMap;
     }
 
     private void loadAnimations() {
@@ -334,6 +324,26 @@ public class LocationFragment extends Fragment implements OnMapReadyCallback, Ci
 
     @Override
     public void onLocationChanged(@NonNull Location location) {
-        Log.i("HELLO_123", "onLocationChanged: ");
+        Log.i(TAG, "onLocationChanged: ");
+    }
+
+    @Override
+    public void onMapReady(@NonNull GoogleMap googleMap) {
+        mGoogleMap = googleMap;
+    }
+
+    @Override
+    public void onConnected(@Nullable Bundle bundle) {
+
+    }
+
+    @Override
+    public void onConnectionSuspended(int i) {
+
+    }
+
+    @Override
+    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+
     }
 }

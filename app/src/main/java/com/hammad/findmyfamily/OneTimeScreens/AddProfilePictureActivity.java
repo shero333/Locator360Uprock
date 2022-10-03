@@ -40,6 +40,8 @@ public class AddProfilePictureActivity extends AppCompatActivity {
     private static String currentPicturePath = "";
     private ActivityAddProfilePictureBinding binding;
 
+    private static final String TAG = "ACT_ADD_PROF";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -116,21 +118,21 @@ public class AddProfilePictureActivity extends AppCompatActivity {
 
             case REQUEST_CODE_CAMERA: {
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    Log.i("HELLO_123", "Add Profile Act: camera permission allowed");
+                    Log.i(TAG, "camera permission allowed");
                     //opening the camera
                     openCamera();
                 }
                 else if(shouldShowRequestPermissionRationale(Manifest.permission.CAMERA))
                 {
                     Toast.makeText(this, "Camera Permission Denied!", Toast.LENGTH_SHORT).show();
-                    Log.i("HELLO_123", "Add Profile Act: camera permission denied");
+                    Log.i(TAG, "camera permission denied");
                 }
                 else if(!shouldShowRequestPermissionRationale(Manifest.permission.CAMERA))
                 {
-                    Log.i("HELLO_123", "Add Profile Act: camera denied and don't show again");
+                    Log.i(TAG, "camera denied and don't show again");
 
                     //navigate user to app settings page
-                    Commons.navigateToAppSettings(this);
+                    Commons.cameraAndGalleryPermissionDialog(this,true);
                 }
 
                 break;
@@ -138,22 +140,22 @@ public class AddProfilePictureActivity extends AppCompatActivity {
 
             case REQUEST_CODE_STORAGE: {
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    Log.i("HELLO_123", "Add Profile Act: gallery permission allowed");
+                    Log.i(TAG, "gallery permission allowed");
                     //opening the gallery
                     openGallery();
                 }
                 else if(shouldShowRequestPermissionRationale(Manifest.permission.READ_EXTERNAL_STORAGE))
                 {
                     Toast.makeText(this, "Gallery Permission Denied!", Toast.LENGTH_SHORT).show();
-                    Log.i("HELLO_123", "Add Profile Act: gallery permission denied");
+                    Log.i(TAG, "gallery permission denied");
 
                 }
                 else if(!shouldShowRequestPermissionRationale(Manifest.permission.READ_EXTERNAL_STORAGE))
                 {
-                    Log.i("HELLO_123", "Add Profile Act: gallery denied and don't show again");
+                    Log.i(TAG, "gallery denied and don't show again");
 
                     //navigate user to app settings page
-                    Commons.navigateToAppSettings(this);
+                    Commons.cameraAndGalleryPermissionDialog(this,false);
                 }
 
                 break;

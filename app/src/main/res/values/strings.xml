@@ -66,4 +66,11 @@
     <string name="title_gps_dialog">Turn on GPS</string>
     <string name="sub_title_gps_dialog">Your GPS setting must be turned on for Find my Family to work. Please turn on your GPS from settings</string>
     <string name="go_to_settings">Go to Settings</string>
+    <string name="title_location_dialog">Find my Family only works correctly if it\n access location \'\'All the time\'\'</string>
+    <string name="str_1">1. In Find My Family info, click <b>Permissions</b></string>
+    <string name="str_2">2. Click on <b>Location permission</b></string>
+    <string name="str_3">3. Select <b>Allow all the time</b></string>
+    <string name="str_2_camera">2. Click on <b>Camera permission</b></string>
+    <string name="str_2_gallery">2. Click on <b>Storage permission</b></string>
+    <string name="str_3_camera_gallery">3. Select <b>Allow</b></string>
 </resources>
