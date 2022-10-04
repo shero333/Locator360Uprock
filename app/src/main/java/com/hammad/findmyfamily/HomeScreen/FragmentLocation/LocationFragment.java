@@ -57,6 +57,7 @@ public class LocationFragment extends Fragment implements OnMapReadyCallback, Go
     private static final String TAG = "FRAG_LOCATION";
 
     private FragmentLocationBinding binding;
+
     private FusedLocationProviderClient mLocationClient;
     private GoogleMap mGoogleMap;
     private Location location;
@@ -222,8 +223,12 @@ public class LocationFragment extends Fragment implements OnMapReadyCallback, Go
         //toolbar circle name click listener
         binding.toolbar.consCircle.setOnClickListener(v -> circleExtendedView());
 
+
         //click listener of the extended toolbar view (circle selection view)
         extendedToolbarViewClickListeners();
+
+        //bottom sheet
+        bottomSheet();
     }
 
     private void toolbarSettings() {
@@ -315,6 +320,25 @@ public class LocationFragment extends Fragment implements OnMapReadyCallback, Go
         Toast.makeText(requireContext(), circleStringList.get(position), Toast.LENGTH_SHORT).show();
     }
 
+    private void bottomSheet() {
+
+        setBottomSheetRecyclerView();
+
+        binding.bottomSheet.consPlaces.setOnClickListener(v -> Toast.makeText(getContext(), "Places", Toast.LENGTH_SHORT).show());
+
+        binding.bottomSheet.consAddNewMember.setOnClickListener(v -> Toast.makeText(getContext(), "Add New Member", Toast.LENGTH_SHORT).show());
+
+        binding.bottomSheet.recyclerViewBottomSheet.setOnClickListener(v -> Toast.makeText(getContext(), "Recyclerview", Toast.LENGTH_SHORT).show());
+    }
+
+    private void setBottomSheetRecyclerView() {
+
+        LinearLayoutManager layoutManager = new LinearLayoutManager(requireContext(),LinearLayoutManager.VERTICAL,false);
+
+        binding.bottomSheet.recyclerViewBottomSheet.setLayoutManager(layoutManager);
+        binding.bottomSheet.recyclerViewBottomSheet.setAdapter(new BottomSheetAdapter(requireContext()));
+    }
+
     //nullifying binding object
     @Override
     public void onDestroyView() {
@@ -346,4 +370,5 @@ public class LocationFragment extends Fragment implements OnMapReadyCallback, Go
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
 
     }
+
 }

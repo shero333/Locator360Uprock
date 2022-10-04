@@ -74,4 +74,7 @@ dependencies {
     //google maps
     implementation 'com.google.android.gms:play-services-maps:18.1.0'
     implementation 'com.google.android.gms:play-services-location:20.0.0'
+
+    //for bottom sheet
+    //implementation 'com.android.support:design:28.0.0'
 }

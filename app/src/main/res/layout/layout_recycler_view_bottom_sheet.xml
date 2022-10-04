@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <androidx.constraintlayout.utils.widget.ImageFilterView
+        android:id="@+id/img_view_member_profile"
+        android:layout_width="@dimen/_70sdp"
+        android:layout_height="@dimen/_70sdp"
+        android:src="@drawable/drawable_no_member_profile"
+        app:roundPercent="1"
+        android:layout_marginStart="@dimen/_10sdp"
+        android:layout_marginTop="@dimen/_10sdp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/txt_view_member_first_char"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAllCaps="true"
+        android:textStyle="bold"
+        android:textAlignment="center"
+        android:text="J"
+        android:textColor="@color/white"
+        android:textSize="@dimen/_18ssp"
+        app:layout_constraintStart_toStartOf="@id/img_view_member_profile"
+        app:layout_constraintEnd_toEndOf="@id/img_view_member_profile"
+        app:layout_constraintTop_toTopOf="@id/img_view_member_profile"
+        app:layout_constraintBottom_toBottomOf="@id/img_view_member_profile"/>
+
+    <TextView
+        android:id="@+id/txt_view_member_name"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:textSize="@dimen/_16ssp"
+        android:textStyle="bold"
+        android:textColor="@color/black"
+        android:text="Jhonny Depp"
+        android:layout_marginStart="@dimen/_10sdp"
+        android:layout_marginEnd="@dimen/_10sdp"
+        app:layout_constraintStart_toEndOf="@id/img_view_member_profile"
+        app:layout_constraintEnd_toStartOf="@id/cons_battery"
+        app:layout_constraintTop_toTopOf="@id/img_view_member_profile"/>
+    
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/cons_battery"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/drawable_round_outline"
+        android:layout_marginEnd="@dimen/_10sdp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/img_view_member_profile"
+        app:layout_constraintBottom_toBottomOf="@id/txt_view_member_name">
+        
+        <ImageView
+            android:id="@+id/img_view_battery_status"
+            android:layout_width="@dimen/_30sdp"
+            android:layout_height="@dimen/_10sdp"
+            android:src="@drawable/ic_battery_good"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_marginStart="@dimen/_5sdp"
+            android:layout_marginTop="@dimen/_5sdp"
+            android:layout_marginBottom="@dimen/_5sdp"/>
+
+        <TextView
+            android:id="@+id/txt_view_battery_percentage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textStyle="bold"
+            android:textSize="@dimen/_9ssp"
+            android:textColor="@color/darkGrey"
+            android:text="70%"
+            android:layout_marginStart="@dimen/_5sdp"
+            android:layout_marginTop="@dimen/_5sdp"
+            android:layout_marginBottom="@dimen/_5sdp"
+            android:layout_marginEnd="@dimen/_10sdp"
+            app:layout_constraintStart_toEndOf="@id/img_view_battery_status"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"/>
+        
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <TextView
+        android:id="@+id/txt_view_last_known_address"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:textSize="@dimen/_13ssp"
+        android:textColor="#A6000000"
+
+        android:text="Sector E, DHA Rawalpindi, Pakistan"
+        android:layout_marginTop="@dimen/_5sdp"
+        app:layout_constraintStart_toStartOf="@id/txt_view_member_name"
+        app:layout_constraintEnd_toEndOf="@id/cons_battery"
+        app:layout_constraintTop_toBottomOf="@id/txt_view_member_name"/>
+
+    <TextView
+        android:id="@+id/txt_view_timestamp"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/_5sdp"
+        app:layout_constraintStart_toStartOf="@id/txt_view_last_known_address"
+        app:layout_constraintEnd_toEndOf="@id/txt_view_last_known_address"
+        app:layout_constraintTop_toBottomOf="@id/txt_view_last_known_address"
+        android:textStyle="bold"
+        android:textColor="@color/orange"
+        android:text="Last seen: 12:42 PM"
+        android:textSize="@dimen/_12ssp"/>
+
+    <TextView
+        android:id="@+id/txt_view_bottom_line"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/_1sdp"
+        android:layout_marginTop="@dimen/_10sdp"
+        android:layout_marginBottom="@dimen/_5sdp"
+        android:background="@drawable/drawable_line_bottom_sheet"
+        app:layout_constraintTop_toBottomOf="@id/txt_view_timestamp"
+        app:layout_constraintBottom_toBottomOf="parent"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

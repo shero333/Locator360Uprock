@@ -73,4 +73,8 @@
     <string name="str_2_camera">2. Click on <b>Camera permission</b></string>
     <string name="str_2_gallery">2. Click on <b>Storage permission</b></string>
     <string name="str_3_camera_gallery">3. Select <b>Allow</b></string>
+    <string name="places">Places</string>
+    <string name="people">People</string>
+    <string name="add_new_member">Add new member</string>
+    <string name="check_in">Check In</string>
 </resources>
