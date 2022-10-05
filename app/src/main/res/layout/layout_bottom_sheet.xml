@@ -1,122 +1,90 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:background="@drawable/drawable_top_radius">
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/drawable_top_radius"
+    app:behavior_hideable="false"
+    app:behavior_peekHeight="@dimen/_60sdp"
+    app:layout_behavior="@string/bottom_sheet_behavior">
 
     <TextView
         android:id="@+id/txt_view_top_line"
         android:layout_width="0dp"
-        app:layout_constraintWidth_percent="0.1"
         android:layout_height="@dimen/_3sdp"
-        android:background="@drawable/drawable_line_bottom_sheet"
         android:layout_marginTop="@dimen/_5sdp"
-        app:layout_constraintTop_toTopOf="parent"
+        android:background="@drawable/drawable_line_bottom_sheet"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintWidth_percent="0.1" />
 
     <TextView
         android:id="@+id/txt_view_people"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:text="@string/people"
         android:textAlignment="center"
         android:textColor="#B3000000"
-        android:textStyle="bold"
         android:textSize="@dimen/_16ssp"
-        android:text="@string/people"
-        app:layout_constraintHorizontal_bias="0.1"
-        app:layout_constraintTop_toTopOf="@id/cons_places"
+        android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="@id/cons_places"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.1"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintTop_toTopOf="@id/cons_places" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/cons_places"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/_15sdp"
+        android:background="@drawable/orange_rounded_button"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.9"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/txt_view_top_line"
-        android:background="@drawable/orange_rounded_button">
+        app:layout_constraintTop_toBottomOf="@id/txt_view_top_line">
 
         <ImageView
             android:id="@+id/img_places"
             android:layout_width="@dimen/_20sdp"
             android:layout_height="@dimen/_20sdp"
-            android:src="@drawable/ic_places"
-            android:contentDescription="@null"
             android:layout_marginStart="@dimen/_10sdp"
             android:layout_marginTop="@dimen/_5sdp"
             android:layout_marginBottom="@dimen/_5sdp"
+            android:contentDescription="@null"
+            android:src="@drawable/ic_places"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"/>
+            app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="@color/white"
-            android:textStyle="bold"
-            android:textAlignment="center"
-            android:textSize="@dimen/_13ssp"
-            android:text="@string/places"
             android:layout_marginStart="@dimen/_5sdp"
             android:layout_marginEnd="@dimen/_10sdp"
-            app:layout_constraintStart_toEndOf="@id/img_places"
+            android:text="@string/places"
+            android:textAlignment="center"
+            android:textColor="@color/white"
+            android:textSize="@dimen/_13ssp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="@id/img_places"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@id/img_places"
-            app:layout_constraintBottom_toBottomOf="@id/img_places"/>
+            app:layout_constraintStart_toEndOf="@id/img_places"
+            app:layout_constraintTop_toTopOf="@id/img_places" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
-    
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recycler_view_bottom_sheet"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_marginTop="@dimen/_10sdp"
-        app:layout_constraintTop_toBottomOf="@id/cons_places"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        tools:listitem="@layout/layout_recycler_view_bottom_sheet"
-        tools:itemCount="3"/>
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/cons_add_new_member"
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recycler_bottom_sheet_member"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/_10sdp"
-        android:layout_marginBottom="@dimen/_5sdp"
-        app:layout_constraintTop_toBottomOf="@id/recycler_view_bottom_sheet"
-        app:layout_constraintBottom_toBottomOf="parent">
-
-        <ImageView
-            android:id="@+id/img_view_add_member"
-            android:layout_width="@dimen/_40sdp"
-            android:layout_height="@dimen/_40sdp"
-            android:src="@drawable/ic_add_members"
-            app:tint="@color/orange"
-            android:contentDescription="@null"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            android:layout_marginStart="@dimen/_10sdp"/>
-
-        <TextView
-            android:id="@+id/txt_add_new_member"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/_10sdp"
-            android:textSize="@dimen/_14ssp"
-            android:textStyle="bold"
-            android:textColor="@color/black"
-            android:text="@string/add_new_member"
-            app:layout_constraintStart_toEndOf="@id/img_view_add_member"
-            app:layout_constraintTop_toTopOf="@id/img_view_add_member"
-            app:layout_constraintBottom_toBottomOf="@id/img_view_add_member"/>
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
+        android:overScrollMode="never"
+        android:paddingBottom="@dimen/_70sdp"
+        app:layout_constraintTop_toBottomOf="@id/cons_places"
+        tools:itemCount="3"
+        tools:listitem="@layout/layout_recycler_view_bottom_sheet" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

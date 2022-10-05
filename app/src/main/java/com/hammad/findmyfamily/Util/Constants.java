@@ -36,4 +36,8 @@ public interface Constants {
      String LAST_KNOWN_LOCATION = "last_known_location";
      String BATTERY_STATUS = "battery_status";
 
+     //variables for inflating different view types in members bottom sheet
+     int VIEW_TYPE_BUTTON = 1;
+     int VIEW_TYPE_ITEM = 0;
+
 }

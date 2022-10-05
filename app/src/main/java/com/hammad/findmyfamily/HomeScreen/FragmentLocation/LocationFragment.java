@@ -24,13 +24,10 @@ import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -52,7 +49,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
-public class LocationFragment extends Fragment implements OnMapReadyCallback, GoogleApiClient.ConnectionCallbacks,GoogleApiClient.OnConnectionFailedListener, CircleAdapterToolbar.OnToolbarCircleClickListener, LocationListener {
+public class LocationFragment extends Fragment implements OnMapReadyCallback, CircleAdapterToolbar.OnToolbarCircleClickListener, LocationListener, BottomSheetMemberAdapter.OnAddedMemberClickInterface, BottomSheetMemberAdapter.OnAddNewMemberInterface {
 
     private static final String TAG = "FRAG_LOCATION";
 
@@ -223,12 +220,20 @@ public class LocationFragment extends Fragment implements OnMapReadyCallback, Go
         //toolbar circle name click listener
         binding.toolbar.consCircle.setOnClickListener(v -> circleExtendedView());
 
+        //check-in click listener
+        binding.consCheckIn.setOnClickListener(v -> Toast.makeText(getContext(), "Check In", Toast.LENGTH_SHORT).show());
+
+        //map type click listener
+        binding.consMapType.setOnClickListener(v -> Toast.makeText(getContext(), "Map-Type", Toast.LENGTH_SHORT).show());
+
+        //navigate to live location
+        binding.consLiveLoc.setOnClickListener(v -> Toast.makeText(getContext(), "Live Location", Toast.LENGTH_SHORT).show());
 
         //click listener of the extended toolbar view (circle selection view)
         extendedToolbarViewClickListeners();
 
         //bottom sheet
-        bottomSheet();
+        bottomSheetMembers();
     }
 
     private void toolbarSettings() {
@@ -320,23 +325,30 @@ public class LocationFragment extends Fragment implements OnMapReadyCallback, Go
         Toast.makeText(requireContext(), circleStringList.get(position), Toast.LENGTH_SHORT).show();
     }
 
-    private void bottomSheet() {
+    private void bottomSheetMembers() {
 
         setBottomSheetRecyclerView();
 
-        binding.bottomSheet.consPlaces.setOnClickListener(v -> Toast.makeText(getContext(), "Places", Toast.LENGTH_SHORT).show());
-
-        binding.bottomSheet.consAddNewMember.setOnClickListener(v -> Toast.makeText(getContext(), "Add New Member", Toast.LENGTH_SHORT).show());
-
-        binding.bottomSheet.recyclerViewBottomSheet.setOnClickListener(v -> Toast.makeText(getContext(), "Recyclerview", Toast.LENGTH_SHORT).show());
+        binding.bottomSheetMembers.consPlaces.setOnClickListener(v -> Toast.makeText(getContext(), "Places", Toast.LENGTH_SHORT).show());
     }
 
     private void setBottomSheetRecyclerView() {
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(requireContext(),LinearLayoutManager.VERTICAL,false);
+        binding.bottomSheetMembers.recyclerBottomSheetMember.setLayoutManager(layoutManager);
+        binding.bottomSheetMembers.recyclerBottomSheetMember.setAdapter(new BottomSheetMemberAdapter(requireContext(),5, this, this));
+    }
 
-        binding.bottomSheet.recyclerViewBottomSheet.setLayoutManager(layoutManager);
-        binding.bottomSheet.recyclerViewBottomSheet.setAdapter(new BottomSheetAdapter(requireContext()));
+    // recyclerview bottom sheet member 'Add new member' click listener
+    @Override
+    public void onAddNewMemberClicked() {
+        Toast.makeText(requireContext(), "Add new member", Toast.LENGTH_SHORT).show();
+    }
+
+    // recyclerview bottom sheet member click listener
+    @Override
+    public void onAddedMemberClicked(int position) {
+        Toast.makeText(requireContext(), "Member: " + position, Toast.LENGTH_SHORT).show();
     }
 
     //nullifying binding object
@@ -354,21 +366,6 @@ public class LocationFragment extends Fragment implements OnMapReadyCallback, Go
     @Override
     public void onMapReady(@NonNull GoogleMap googleMap) {
         mGoogleMap = googleMap;
-    }
-
-    @Override
-    public void onConnected(@Nullable Bundle bundle) {
-
-    }
-
-    @Override
-    public void onConnectionSuspended(int i) {
-
-    }
-
-    @Override
-    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-
     }
 
 }
