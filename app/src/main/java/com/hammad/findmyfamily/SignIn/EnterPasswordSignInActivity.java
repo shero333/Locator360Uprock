@@ -38,7 +38,7 @@ public class EnterPasswordSignInActivity extends AppCompatActivity {
         fAuth = FirebaseAuth.getInstance();
 
         //setting the user's first name saved in preference from list
-        binding.txtUsername.append(SharedPreference.getFirstNamePref() + "?");
+        binding.txtUsername.append(" " + SharedPreference.getFirstNamePref() + "?");
 
         //TextWatcher
         binding.edtPasswordSignIn.addTextChangedListener(passwordTextWatcher);

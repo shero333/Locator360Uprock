@@ -17,4 +17,8 @@
     <color name="white_with_opacity">#80FFFFFF</color>
     <color name="darkGrey">#F2687384</color>
 
+    <color name="holo_red_dark">#FFCC0000</color>
+    <color name="holo_green_dark">#FF669900</color>
+
+
 </resources>

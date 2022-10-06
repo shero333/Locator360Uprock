@@ -46,7 +46,10 @@ public class CreatePasswordActivity extends AppCompatActivity {
 
             String s=charSequence.toString().trim();
 
-            if(s.length() >= 8){
+            if(s.length() >= 8) {
+
+                //if password length is correct, then removes the helper text
+                binding.layoutPasswordSignUp.setHelperText(" ");
 
                 binding.btnContPasswordSignUp.setEnabled(true);
                 binding.btnContPasswordSignUp.setBackgroundResource(R.drawable.white_rounded_button);
@@ -55,7 +58,10 @@ public class CreatePasswordActivity extends AppCompatActivity {
                 encryptedPassword = Commons.encryptedText(s);
 
             }
-            else if(s.length() < 8){
+            else if(s.length() < 8) {
+
+                //if password length is incorrect, then sets the helper text
+                binding.layoutPasswordSignUp.setHelperText(getString(R.string.minimum_8_character_password));
 
                 binding.btnContPasswordSignUp.setEnabled(false);
                 binding.btnContPasswordSignUp.setBackgroundResource(R.drawable.disabled_round_button);

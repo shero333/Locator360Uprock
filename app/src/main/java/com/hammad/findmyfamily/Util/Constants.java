@@ -40,4 +40,6 @@ public interface Constants {
      int VIEW_TYPE_BUTTON = 1;
      int VIEW_TYPE_ITEM = 0;
 
+     String OTP_ACT_KEY = "otp_act_key";
+
 }

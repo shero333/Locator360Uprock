@@ -53,11 +53,10 @@
     <string name="next">Next</string>
     <string name="sub_title_reset_password">Enter the phone number associated\nwith your account and we\'ll send an\nOTP to reset your password</string>
     <string name="title_otp">Code Verification</string>
-    <string name="sub_title_otp">We have sent an OTP to\n</string>
+    <string name="sub_title_otp">We have sent an OTP to</string>
     <string name="title_create_new_pass">Create new password</string>
     <string name="sub_title_create_new_pass">Your new password must be different\nfrom previous used passwords.</string>
     <string name="confirm_password">Confirm Password</string>
-    <string name="password_should_be_at_least_8_characters">Password should be at least 8 characters</string>
     <string name="reset_password">reset Password</string>
     <string name="safety">Safety</string>
     <string name="location">Location</string>
@@ -77,4 +76,10 @@
     <string name="people">People</string>
     <string name="add_new_member">Add new member</string>
     <string name="check_in">Check In</string>
+    <string name="didn_t_receive_otp_code">Didn\'t receive OTP code?</string>
+    <string name="resend_code_in">Resend Code</string>
+    <string name="verify_otp">Verify OTP</string>
+    <string name="minimum_8_character_password">Minimum 8 character Password</string>
+    <string name="passwords_matched">Passwords Matched</string>
+    <string name="passwords_does_not_match">Passwords does not match</string>
 </resources>

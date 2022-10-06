@@ -22,6 +22,8 @@ import com.google.i18n.phonenumbers.PhoneNumberUtil;
 import com.google.i18n.phonenumbers.Phonenumber;
 import com.hammad.findmyfamily.R;
 import com.hammad.findmyfamily.SharedPreference.SharedPreference;
+import com.hammad.findmyfamily.SignIn.ResetPassword.OTPActivity;
+import com.hammad.findmyfamily.Util.Constants;
 import com.hammad.findmyfamily.databinding.ActivityPhoneNoSignUpBinding;
 
 public class PhoneNoSignUpActivity extends AppCompatActivity {
@@ -174,8 +176,7 @@ public class PhoneNoSignUpActivity extends AppCompatActivity {
         String tempNumber = binding.edtPhoneSignUp.getText().toString().trim();
         String phoneNo = "";
 
-        if(tempNumber.startsWith("0"))
-        {
+        if(tempNumber.startsWith("0")) {
             StringBuilder sb=new StringBuilder(tempNumber);
             sb.deleteCharAt(0);
 
@@ -189,12 +190,12 @@ public class PhoneNoSignUpActivity extends AppCompatActivity {
             phoneNo = phoneNo.concat(tempNumber);
         }
 
-
         //saving the entered phone number in preference
         SharedPreference.setPhoneNoPref(phoneNo);
 
-        //navigates to the next activity
-        startActivity(new Intent(this,NameSignUpActivity.class));
-
+        //navigates to the OTP activity
+        Intent intent = new Intent(this, OTPActivity.class);
+        intent.putExtra(Constants.OTP_ACT_KEY,true);
+        startActivity(intent);
     }
 }

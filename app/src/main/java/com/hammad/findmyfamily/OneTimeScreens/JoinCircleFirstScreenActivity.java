@@ -47,7 +47,7 @@ public class JoinCircleFirstScreenActivity extends AppCompatActivity {
         binding.btnCreateCircle.setOnClickListener(v -> startActivity(new Intent(this, CreateCircleActivity.class)));
     }
 
-    private void addEditTextViews(){
+    private void addEditTextViews() {
         editTextList.add(binding.edtInput1);
         editTextList.add(binding.edtInput2);
         editTextList.add(binding.edtInput3);
@@ -56,7 +56,7 @@ public class JoinCircleFirstScreenActivity extends AppCompatActivity {
         editTextList.add(binding.edtInput6);
     }
 
-    private void populateInviteCodeView(){
+    private void populateInviteCodeView() {
 
         //requesting the focus at 1st edit text (as default)
         binding.edtInput1.requestFocus();

@@ -15,7 +15,10 @@ import com.google.i18n.phonenumbers.NumberParseException;
 import com.google.i18n.phonenumbers.PhoneNumberUtil;
 import com.google.i18n.phonenumbers.Phonenumber;
 import com.hammad.findmyfamily.R;
+import com.hammad.findmyfamily.SharedPreference.SharedPreference;
+import com.hammad.findmyfamily.SignIn.ResetPassword.OTPActivity;
 import com.hammad.findmyfamily.SignUp.NameSignUpActivity;
+import com.hammad.findmyfamily.Util.Constants;
 import com.hammad.findmyfamily.databinding.ActivityResetPasswordBinding;
 
 public class ResetPasswordActivity extends AppCompatActivity {
@@ -132,8 +135,12 @@ public class ResetPasswordActivity extends AppCompatActivity {
             phoneNo = phoneNo.concat(tempNumber);
         }
 
-        //navigates to the next activity
-        startActivity(new Intent(this, NameSignUpActivity.class));
+        //saving the entered phone number in preference
+        SharedPreference.setPhoneNoPref(phoneNo);
 
+        //navigates to the OTP activity
+        Intent intent = new Intent(this, OTPActivity.class);
+        intent.putExtra(Constants.OTP_ACT_KEY,false);
+        startActivity(intent);
     }
 }

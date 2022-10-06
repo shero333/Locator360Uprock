@@ -33,7 +33,16 @@
         tools:targetApi="31">
         <activity
             android:name="com.hammad.findmyfamily.SignIn.ResetPassword.CreateNewPasswordActivity"
-            android:exported="false" />
+            android:exported="true"
+            android:windowSoftInputMode="adjustResize">
+
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+
+        </activity>
         <activity
             android:name="com.hammad.findmyfamily.SignIn.ResetPasswordActivity"
             android:exported="false" />
@@ -42,11 +51,11 @@
             android:exported="true"
             android:launchMode="singleTask" >
 
-            <intent-filter>
+            <!--<intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
+            </intent-filter>-->
 
         </activity>
         <activity
@@ -84,14 +93,14 @@
         <activity
             android:name="com.hammad.findmyfamily.SignIn.ResetPassword.OTPActivity"
             android:exported="false"
-            android:windowSoftInputMode="adjustResize" />
+            android:windowSoftInputMode="adjustResize"/>
         <activity
             android:name="com.hammad.findmyfamily.OneTimeScreens.JoinCircleFirstScreenActivity"
             android:exported="false" />
         <activity
             android:name="com.hammad.findmyfamily.SignUp.CreatePasswordActivity"
             android:exported="false"
-            android:windowSoftInputMode="adjustResize" />
+            android:windowSoftInputMode="adjustResize"/>
         <activity
             android:name="com.hammad.findmyfamily.SignUp.EmailSignUpActivity"
             android:exported="false"
