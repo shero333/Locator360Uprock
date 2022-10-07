@@ -3,12 +3,15 @@ package com.hammad.findmyfamily.HomeScreen.FragmentLocation;
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationListener;
+import android.location.LocationManager;
+import android.location.LocationProvider;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
@@ -29,6 +32,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -49,7 +53,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
-public class LocationFragment extends Fragment implements OnMapReadyCallback, CircleAdapterToolbar.OnToolbarCircleClickListener, LocationListener, BottomSheetMemberAdapter.OnAddedMemberClickInterface, BottomSheetMemberAdapter.OnAddNewMemberInterface {
+public class LocationFragment extends Fragment implements OnMapReadyCallback, CircleAdapterToolbar.OnToolbarCircleClickListener/*, LocationListener*/, BottomSheetMemberAdapter.OnAddedMemberClickInterface, BottomSheetMemberAdapter.OnAddNewMemberInterface {
 
     private static final String TAG = "FRAG_LOCATION";
 
@@ -70,6 +74,9 @@ public class LocationFragment extends Fragment implements OnMapReadyCallback, Ci
 
     //show and hide extended toolbar view animations
     Animation showToolbarExtAnim, hideToolbarExtAnim;
+
+    //for location updates
+    LocationRequest locationRequest;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -98,6 +105,9 @@ public class LocationFragment extends Fragment implements OnMapReadyCallback, Ci
 
     private void initializeMap() {
         SupportMapFragment mapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(binding.map.getId());
+
+        //assert keyword is used like 'if'. Like if(mapFragment != null){ mapFragment.getMapAsync(this); }
+        assert mapFragment != null;
         mapFragment.getMapAsync(this);
 
         mLocationClient = new FusedLocationProviderClient(requireContext());
@@ -109,10 +119,12 @@ public class LocationFragment extends Fragment implements OnMapReadyCallback, Ci
         if (Permissions.hasLocationPermission(requireContext())) {
 
             if (Commons.isGpsEnabled(requireActivity(), intent -> gpsActivityResultLauncher.launch(intent))) {
+                Log.i(TAG, "checkLocationPermission: gps enabled");
                 //get current location
                 getCurrentLocation();
             } else {
                 Log.i(TAG, "Location Frag: has location permission but no GPS");
+                startLocationUpdates();
             }
 
         } else {
@@ -126,8 +138,11 @@ public class LocationFragment extends Fragment implements OnMapReadyCallback, Ci
                 public void onActivityResult(ActivityResult result) {
                     if (result.getResultCode() == Activity.RESULT_OK) {
 
+                        Log.i(TAG, "gpsActivityResultLauncher called: ");
+
                         //get current location
-                        getCurrentLocation();
+                        startLocationUpdates();
+                        //getCurrentLocation();
                     }
                 }
             });
@@ -166,7 +181,7 @@ public class LocationFragment extends Fragment implements OnMapReadyCallback, Ci
 
                 if(location != null) {
 
-                    Log.i(TAG, "getCurrentLocation: if called");
+                    Log.i(TAG, "getCurrentLocation: if called 'location not null'");
 
                     LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
 
@@ -195,9 +210,58 @@ public class LocationFragment extends Fragment implements OnMapReadyCallback, Ci
                     Toast.makeText(requireContext(), locationAddress, Toast.LENGTH_LONG).show();
 
                 }
+                else {
+                    Log.i(TAG, "getCurrentLocation: else called 'location is null'");
+                }
             }
 
         });
+    }
+
+    @SuppressLint("MissingPermission")
+    private void startLocationUpdates() {
+
+        /*Log.i(TAG, "startLocationUpdates: ");
+
+        locationRequest = LocationRequest.create();
+        locationRequest.setPriority(Priority.PRIORITY_BALANCED_POWER_ACCURACY);
+        locationRequest.setInterval(5000);
+        locationRequest.setFastestInterval(3000);
+
+        LocationCallback locationCallback = new LocationCallback() {
+
+            @Override
+            public void onLocationResult(@NonNull LocationResult locationResult) {
+                super.onLocationResult(locationResult);
+
+                for(Location loc : locationResult.getLocations()) {
+                    location = loc;
+                    Log.i(TAG, "lat: "+location.getLatitude());
+                    Log.i(TAG, "lng: "+location.getLongitude());
+                }
+            }
+        };
+
+        mLocationClient.requestLocationUpdates(locationRequest,locationCallback, Looper.getMainLooper());*/
+
+        Log.i(TAG, "startLocationUpdates: ");
+
+        //location manager method
+        LocationManager locationManager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
+
+        LocationProvider locationProvider = locationManager.getProvider(LocationManager.PASSIVE_PROVIDER);
+
+        LocationListener locationListener = location -> {
+
+            location = location;
+
+            Log.i(TAG, "location listener: lat = "+location.getLatitude());
+            Log.i(TAG, "location listener: lng = "+location.getLongitude());
+
+        };
+
+        locationManager.requestLocationUpdates(LocationManager.PASSIVE_PROVIDER,5000,500,locationListener);
+
     }
 
     private void loadAnimations() {
@@ -358,10 +422,10 @@ public class LocationFragment extends Fragment implements OnMapReadyCallback, Ci
         binding = null;
     }
 
-    @Override
+    /*@Override
     public void onLocationChanged(@NonNull Location location) {
         Log.i(TAG, "onLocationChanged: ");
-    }
+    }*/
 
     @Override
     public void onMapReady(@NonNull GoogleMap googleMap) {

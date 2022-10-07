@@ -1,15 +1,18 @@
 package com.hammad.findmyfamily.SignIn.ResetPassword;
 
+import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.hammad.findmyfamily.R;
+import com.hammad.findmyfamily.StartScreen.StartScreenActivity;
 import com.hammad.findmyfamily.Util.Commons;
 import com.hammad.findmyfamily.databinding.ActivityCreateNewPasswordBinding;
 
@@ -18,7 +21,7 @@ public class CreateNewPasswordActivity extends AppCompatActivity {
     private ActivityCreateNewPasswordBinding binding;
 
     //string for saving the entered passwords
-    private String strPassword, strConfirmPassword;
+    private String strPassword = "", strConfirmPassword = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,6 +34,7 @@ public class CreateNewPasswordActivity extends AppCompatActivity {
 
         //adding text watchers
         binding.edtPassword.addTextChangedListener(passwordTextWatcher);
+
         binding.edtConfirmPassword.addTextChangedListener(confirmPasswordTextWatcher);
 
         // button reset password click listener
@@ -47,34 +51,42 @@ public class CreateNewPasswordActivity extends AppCompatActivity {
 
             String s = charSequence.toString().trim();
 
-            if (s.length() >= 8) {
+            strPassword = Commons.encryptedText(s);
 
-                //setting empty helper text
+            if(s.length() >= 8) {
+
+                //setting the helper text
                 binding.layoutPassword.setHelperText(" ");
 
-                strPassword = Commons.encryptedText(s);
-
-                //if both passwords match
-                if (strPassword.equals(strConfirmPassword)) {
-
-                    //setting the matched passwords helper text
-                    binding.layoutConfirmPassword.setHelperText(getString(R.string.passwords_matched));
-                    binding.layoutConfirmPassword.setHelperTextColor(ColorStateList.valueOf(getColor(R.color.holo_green_dark)));
-
-                    //setting the reset button state to enabled
-                    setResetPasswordButtonStatus(true, R.drawable.orange_rounded_button, getColor(R.color.white));
-                } else if (!strPassword.equals(strConfirmPassword)) {
-
-                    //setting the mis-match passwords helper text
-                    binding.layoutConfirmPassword.setHelperText(getString(R.string.passwords_does_not_match));
-                    binding.layoutConfirmPassword.setHelperTextColor(ColorStateList.valueOf(getColor(R.color.holo_red_dark)));
-
-                    //setting the reset button state to disable
-                    setResetPasswordButtonStatus(false, R.drawable.disabled_round_button, getColor(R.color.orange));
+                if(strPassword.equals(strConfirmPassword)) {
+                    passwordsMatchScenario();
                 }
-            } else if (s.length() < 8) {
+                else if(!strPassword.equals(strConfirmPassword)) {
+
+                    if(binding.edtConfirmPassword.length() == 0) {
+
+                        binding.layoutConfirmPassword.setHelperText(" ");
+
+                        //setting the reset button state to disable
+                        setResetPasswordButtonStatus(false, R.drawable.disabled_round_button, getColor(R.color.orange));
+                    }
+                    else {
+                        passwordsMismatchScenario();
+                    }
+
+                }
+
+            }
+            else if(s.length() < 8) {
+
                 //setting the helper text
                 binding.layoutPassword.setHelperText(getString(R.string.minimum_8_character_password));
+
+                //setting the helper text of confirm password to empty
+                binding.layoutConfirmPassword.setHelperText(" ");
+
+                //setting the reset button status to disabled
+                setResetPasswordButtonStatus(false,R.drawable.disabled_round_button,getColor(R.color.orange));
             }
 
         }
@@ -82,6 +94,7 @@ public class CreateNewPasswordActivity extends AppCompatActivity {
         @Override
         public void afterTextChanged(Editable editable) {
         }
+
     };
 
     private final TextWatcher confirmPasswordTextWatcher = new TextWatcher() {
@@ -94,40 +107,32 @@ public class CreateNewPasswordActivity extends AppCompatActivity {
 
             String s = charSequence.toString().trim();
 
-            if (s.length() >= 8) {
+            strConfirmPassword = Commons.encryptedText(s);
 
-                strConfirmPassword = Commons.encryptedText(s);
+            if(strConfirmPassword.equals(strPassword)) {
 
+                if(binding.edtConfirmPassword.length() == 0 && binding.edtPassword.length() == 0) {
 
-                //if both passwords match
-                if (strConfirmPassword.equals(strPassword)) {
-
-                    //setting the matched passwords helper text
-                    binding.layoutConfirmPassword.setHelperText(getString(R.string.passwords_matched));
-                    binding.layoutConfirmPassword.setHelperTextColor(ColorStateList.valueOf(getColor(R.color.holo_green_dark)));
-
-                    //setting the reset button state to enabled
-                    setResetPasswordButtonStatus(true, R.drawable.orange_rounded_button, getColor(R.color.white));
-                } else if (!strConfirmPassword.equals(strPassword)) {
-
-                    //setting the mis-match passwords helper text
-                    binding.layoutConfirmPassword.setHelperText(getString(R.string.passwords_does_not_match));
-                    binding.layoutConfirmPassword.setHelperTextColor(ColorStateList.valueOf(getColor(R.color.holo_red_dark)));
+                    binding.layoutConfirmPassword.setHelperText(" ");
 
                     //setting the reset button state to disable
                     setResetPasswordButtonStatus(false, R.drawable.disabled_round_button, getColor(R.color.orange));
-                }
-            } else if (s.length() < 8) {
-                binding.layoutConfirmPassword.setHelperText(getString(R.string.passwords_does_not_match));
-                binding.layoutConfirmPassword.setHelperTextColor(ColorStateList.valueOf(getColor(R.color.holo_red_dark)));
-            }
 
+                }
+                else {
+                    passwordsMatchScenario();
+                }
+
+            }
+            else if(!strConfirmPassword.equals(strPassword)) {
+
+                passwordsMismatchScenario();
+            }
 
         }
 
         @Override
-        public void afterTextChanged(Editable editable) {
-        }
+        public void afterTextChanged(Editable editable) {}
     };
 
     private void setResetPasswordButtonStatus(boolean status, int layout, int color) {
@@ -136,9 +141,33 @@ public class CreateNewPasswordActivity extends AppCompatActivity {
         binding.btnResetPassword.setTextColor(color);
     }
 
+    private void passwordsMatchScenario() {
+
+        //setting the matched passwords helper text
+        binding.layoutConfirmPassword.setHelperText(getString(R.string.passwords_matched));
+        binding.layoutConfirmPassword.setHelperTextColor(ColorStateList.valueOf(getColor(R.color.holo_green_dark)));
+
+        //setting the reset button state to enabled
+        setResetPasswordButtonStatus(true, R.drawable.orange_rounded_button, getColor(R.color.white));
+    }
+
+    private void passwordsMismatchScenario() {
+
+        //setting the mis-match passwords helper text
+        binding.layoutConfirmPassword.setHelperText(getString(R.string.passwords_does_not_match));
+        binding.layoutConfirmPassword.setHelperTextColor(ColorStateList.valueOf(getColor(R.color.holo_red_dark)));
+
+        //setting the reset button state to disable
+        setResetPasswordButtonStatus(false, R.drawable.disabled_round_button, getColor(R.color.orange));
+    }
+
     private void resetPasswordClickListener() {
 
+        //update password in firebase
+
         Toast.makeText(this, "Password reset successful", Toast.LENGTH_SHORT).show();
+        startActivity(new Intent(this, StartScreenActivity.class));
+        finish();
     }
 
 }
