@@ -102,7 +102,8 @@
             android:background="@drawable/drawable_white_toolbar"
             android:translationY="-10dp"
             app:layout_anchor="@id/cons_map_type"
-            app:layout_anchorGravity="top|end">
+            app:layout_anchorGravity="top|end"
+            android:visibility="gone">
 
             <com.google.android.material.imageview.ShapeableImageView
                 android:layout_width="@dimen/_20sdp"

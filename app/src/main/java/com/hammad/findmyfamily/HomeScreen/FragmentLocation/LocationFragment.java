@@ -9,9 +9,7 @@ import android.content.pm.PackageManager;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
-import android.location.LocationListener;
 import android.location.LocationManager;
-import android.location.LocationProvider;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
@@ -31,8 +29,9 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.gms.location.CurrentLocationRequest;
 import com.google.android.gms.location.FusedLocationProviderClient;
-import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -41,23 +40,33 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.tasks.CancellationToken;
+import com.google.android.gms.tasks.OnTokenCanceledListener;
+import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.hammad.findmyfamily.HomeScreen.CustomToolbar.CircleAdapterToolbar;
 import com.hammad.findmyfamily.Permission.Permissions;
 import com.hammad.findmyfamily.R;
 import com.hammad.findmyfamily.Util.Commons;
 import com.hammad.findmyfamily.Util.Constants;
 import com.hammad.findmyfamily.databinding.FragmentLocationBinding;
+import com.hammad.findmyfamily.databinding.LayoutBottomSheetMapTypeBinding;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
-public class LocationFragment extends Fragment implements OnMapReadyCallback, CircleAdapterToolbar.OnToolbarCircleClickListener/*, LocationListener*/, BottomSheetMemberAdapter.OnAddedMemberClickInterface, BottomSheetMemberAdapter.OnAddNewMemberInterface {
+public class LocationFragment extends Fragment implements OnMapReadyCallback, CircleAdapterToolbar.OnToolbarCircleClickListener, LocationListener, BottomSheetMemberAdapter.OnAddedMemberClickInterface, BottomSheetMemberAdapter.OnAddNewMemberInterface {
 
     private static final String TAG = "FRAG_LOCATION";
 
     private FragmentLocationBinding binding;
+
+    //circle list
+    private final List<String> circleStringList = new ArrayList<>();
+
+    //show and hide extended toolbar view animations
+    Animation showToolbarExtAnim, hideToolbarExtAnim;
 
     private FusedLocationProviderClient mLocationClient;
     private GoogleMap mGoogleMap;
@@ -68,15 +77,6 @@ public class LocationFragment extends Fragment implements OnMapReadyCallback, Ci
 
     //recyclerview of extended toolbar
     private RecyclerView circleSelectionRecyclerView;
-
-    //circle list
-    private final List<String> circleStringList = new ArrayList<>();
-
-    //show and hide extended toolbar view animations
-    Animation showToolbarExtAnim, hideToolbarExtAnim;
-
-    //for location updates
-    LocationRequest locationRequest;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -113,18 +113,26 @@ public class LocationFragment extends Fragment implements OnMapReadyCallback, Ci
         mLocationClient = new FusedLocationProviderClient(requireContext());
     }
 
+    @Override
+    public void onMapReady(@NonNull GoogleMap googleMap) {
+        mGoogleMap = googleMap;
+
+        //when this listener is called, the live location icon visibility will be set to VISIBLE
+        mGoogleMap.setOnCameraMoveListener(() -> binding.consLiveLoc.setVisibility(View.VISIBLE));
+    }
+
     @SuppressLint("MissingPermission")
     private void checkLocationPermission() {
 
         if (Permissions.hasLocationPermission(requireContext())) {
 
             if (Commons.isGpsEnabled(requireActivity(), intent -> gpsActivityResultLauncher.launch(intent))) {
-                Log.i(TAG, "checkLocationPermission: gps enabled");
+
                 //get current location
-                getCurrentLocation();
+                getLocationThroughLastKnownApproach();
+
             } else {
                 Log.i(TAG, "Location Frag: has location permission but no GPS");
-                startLocationUpdates();
             }
 
         } else {
@@ -132,17 +140,13 @@ public class LocationFragment extends Fragment implements OnMapReadyCallback, Ci
         }
     }
 
-    ActivityResultLauncher<Intent> gpsActivityResultLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(),
-            new ActivityResultCallback<ActivityResult>() {
+    ActivityResultLauncher<Intent> gpsActivityResultLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
                 @Override
                 public void onActivityResult(ActivityResult result) {
                     if (result.getResultCode() == Activity.RESULT_OK) {
 
-                        Log.i(TAG, "gpsActivityResultLauncher called: ");
-
-                        //get current location
-                        startLocationUpdates();
-                        //getCurrentLocation();
+                        //get location
+                        getLocationThroughLastKnownApproach();
                     }
                 }
             });
@@ -151,17 +155,13 @@ public class LocationFragment extends Fragment implements OnMapReadyCallback, Ci
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
 
-        if(requestCode == Constants.REQUEST_CODE_LOCATION)
-        {
-            if(grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED)
-            {
-                Log.i(TAG, "location permissions allowed");
+        if (requestCode == Constants.REQUEST_CODE_LOCATION) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
 
                 //getting the current location
                 checkLocationPermission();
-            }
-            else {
-                Log.i(TAG, "location permission denied");
+
+            } else {
 
                 //navigate to app settings screen
                 Commons.locationPermissionDialog(requireActivity());
@@ -171,7 +171,10 @@ public class LocationFragment extends Fragment implements OnMapReadyCallback, Ci
     }
 
     @SuppressLint("MissingPermission")
-    private void getCurrentLocation() {
+    private void getLocationThroughLastKnownApproach() {
+
+        // this function will call LocationListener overridden method when location changes
+        startLocationUpdates();
 
         mLocationClient.getLastLocation().addOnCompleteListener(task -> {
 
@@ -179,39 +182,17 @@ public class LocationFragment extends Fragment implements OnMapReadyCallback, Ci
 
                 location = task.getResult();
 
-                if(location != null) {
+                if (location != null) {
 
-                    Log.i(TAG, "getCurrentLocation: if called 'location not null'");
-
-                    LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
-
-                    CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(latLng, 14);
-                    mGoogleMap.moveCamera(cameraUpdate);
-                    mGoogleMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
-
-                    mGoogleMap.addMarker(new MarkerOptions()
-                            .position(latLng)
-                            .icon(BitmapDescriptorFactory.defaultMarker()));
-
-                    //getting the address of current location
-                    Geocoder geocoder = new Geocoder(requireContext(), Locale.getDefault());
-
-                    List<Address> addresses = null;
-                    try {
-                        addresses = geocoder.getFromLocation(location.getLatitude(), location.getLongitude(), 1);
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-
-                    //assert is used to check expected boolean condition
-                    assert addresses != null;
-                    locationAddress = addresses.get(0).getAddressLine(0);
-
-                    Toast.makeText(requireContext(), locationAddress, Toast.LENGTH_LONG).show();
-
+                    updateMapMarker(new LatLng(location.getLatitude(), location.getLongitude()));
                 }
                 else {
-                    Log.i(TAG, "getCurrentLocation: else called 'location is null'");
+
+                    /*
+                        if task result returned has null location (case like when gps is turned on, it will first return null and after sometime location won't be null)
+                        if that's the case, then will get location through mLocationClient.getCurrentLocation (currentLocationRequest, cancellationToken)
+                    */
+                    getLocationThroughCurrentLocationApproach();
                 }
             }
 
@@ -221,47 +202,80 @@ public class LocationFragment extends Fragment implements OnMapReadyCallback, Ci
     @SuppressLint("MissingPermission")
     private void startLocationUpdates() {
 
-        /*Log.i(TAG, "startLocationUpdates: ");
+        //location manager method
+        LocationManager locationManager = (LocationManager) requireActivity().getSystemService(Context.LOCATION_SERVICE);
 
-        locationRequest = LocationRequest.create();
-        locationRequest.setPriority(Priority.PRIORITY_BALANCED_POWER_ACCURACY);
-        locationRequest.setInterval(5000);
-        locationRequest.setFastestInterval(3000);
+        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,0,0,this::onLocationChanged);
+    }
 
-        LocationCallback locationCallback = new LocationCallback() {
+    //function for updating the the map marker to new position when location is changed
+    private void updateMapMarker(LatLng latLng) {
+
+        CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(latLng, 14);
+        mGoogleMap.moveCamera(cameraUpdate);
+        mGoogleMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
+
+        mGoogleMap.addMarker(new MarkerOptions()
+                .position(latLng)
+                .icon(BitmapDescriptorFactory.defaultMarker()));
+
+        //getting the address of current location
+        Geocoder geocoder = new Geocoder(requireContext(), Locale.getDefault());
+
+        List<Address> addresses = null;
+        try {
+            addresses = geocoder.getFromLocation(location.getLatitude(), location.getLongitude(), 1);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        //assert is used to check expected boolean condition
+        assert addresses != null;
+        locationAddress = addresses.get(0).getAddressLine(0);
+
+        Toast.makeText(requireContext(), locationAddress, Toast.LENGTH_LONG).show();
+    }
+
+    @SuppressLint("MissingPermission")
+    private void getLocationThroughCurrentLocationApproach() {
+
+        CurrentLocationRequest currentLocationRequest = new CurrentLocationRequest.Builder().build();
+
+        CancellationToken cancellationToken = new CancellationToken() {
+            @NonNull
+            @Override
+            public CancellationToken onCanceledRequested(@NonNull OnTokenCanceledListener onTokenCanceledListener) {
+                return null;
+            }
 
             @Override
-            public void onLocationResult(@NonNull LocationResult locationResult) {
-                super.onLocationResult(locationResult);
-
-                for(Location loc : locationResult.getLocations()) {
-                    location = loc;
-                    Log.i(TAG, "lat: "+location.getLatitude());
-                    Log.i(TAG, "lng: "+location.getLongitude());
-                }
+            public boolean isCancellationRequested() {
+                return false;
             }
         };
 
-        mLocationClient.requestLocationUpdates(locationRequest,locationCallback, Looper.getMainLooper());*/
+        mLocationClient.getCurrentLocation(currentLocationRequest,cancellationToken).addOnCompleteListener(task -> {
 
-        Log.i(TAG, "startLocationUpdates: ");
+                    if(task.isSuccessful()) {
 
-        //location manager method
-        LocationManager locationManager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
+                        location = task.getResult();
 
-        LocationProvider locationProvider = locationManager.getProvider(LocationManager.PASSIVE_PROVIDER);
+                        if(location !=  null) {
 
-        LocationListener locationListener = location -> {
+                            // moves marker to the location
+                            updateMapMarker(new LatLng(location.getLatitude(),location.getLongitude()));
+                        }
+                    }
+                });
 
-            location = location;
+    }
 
-            Log.i(TAG, "location listener: lat = "+location.getLatitude());
-            Log.i(TAG, "location listener: lng = "+location.getLongitude());
+    // LocationListener overridden method
+    @Override
+    public void onLocationChanged(@NonNull Location location) {
 
-        };
-
-        locationManager.requestLocationUpdates(LocationManager.PASSIVE_PROVIDER,5000,500,locationListener);
-
+        //update the location on map
+        updateMapMarker(new LatLng(location.getLatitude(),location.getLongitude()));
     }
 
     private void loadAnimations() {
@@ -288,15 +302,22 @@ public class LocationFragment extends Fragment implements OnMapReadyCallback, Ci
         binding.consCheckIn.setOnClickListener(v -> Toast.makeText(getContext(), "Check In", Toast.LENGTH_SHORT).show());
 
         //map type click listener
-        binding.consMapType.setOnClickListener(v -> Toast.makeText(getContext(), "Map-Type", Toast.LENGTH_SHORT).show());
+        binding.consMapType.setOnClickListener(v -> bottomSheetMapType());
 
         //navigate to live location
-        binding.consLiveLoc.setOnClickListener(v -> Toast.makeText(getContext(), "Live Location", Toast.LENGTH_SHORT).show());
+        binding.consLiveLoc.setOnClickListener(v -> {
+
+            //moves to current location
+            checkLocationPermission();
+
+            //after clicking and moving to current location, hides the live location view
+            binding.consLiveLoc.setVisibility(View.GONE);
+        });
 
         //click listener of the extended toolbar view (circle selection view)
         extendedToolbarViewClickListeners();
 
-        //bottom sheet
+        //bottom sheet containing info about the current circle members
         bottomSheetMembers();
     }
 
@@ -398,9 +419,9 @@ public class LocationFragment extends Fragment implements OnMapReadyCallback, Ci
 
     private void setBottomSheetRecyclerView() {
 
-        LinearLayoutManager layoutManager = new LinearLayoutManager(requireContext(),LinearLayoutManager.VERTICAL,false);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false);
         binding.bottomSheetMembers.recyclerBottomSheetMember.setLayoutManager(layoutManager);
-        binding.bottomSheetMembers.recyclerBottomSheetMember.setAdapter(new BottomSheetMemberAdapter(requireContext(),5, this, this));
+        binding.bottomSheetMembers.recyclerBottomSheetMember.setAdapter(new BottomSheetMemberAdapter(requireContext(), 5, this, this));
     }
 
     // recyclerview bottom sheet member 'Add new member' click listener
@@ -415,21 +436,30 @@ public class LocationFragment extends Fragment implements OnMapReadyCallback, Ci
         Toast.makeText(requireContext(), "Member: " + position, Toast.LENGTH_SHORT).show();
     }
 
+    private void bottomSheetMapType() {
+
+        BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(requireContext(), com.google.android.material.R.style.Theme_Design_BottomSheetDialog);
+
+        LayoutBottomSheetMapTypeBinding sheetMapTypeBinding = LayoutBottomSheetMapTypeBinding.inflate(LayoutInflater.from(getContext()));
+
+        bottomSheetDialog.setContentView(sheetMapTypeBinding.getRoot());
+
+        bottomSheetDialog.show();
+
+        sheetMapTypeBinding.consMapDefault.setOnClickListener(view -> {
+            sheetMapTypeBinding.cardDefault.setCardBackgroundColor(requireContext().getColor(R.color.orange));
+            Toast.makeText(requireContext(), "Default", Toast.LENGTH_SHORT).show();
+        });
+
+        sheetMapTypeBinding.imgViewCancel.setOnClickListener(v -> bottomSheetDialog.dismiss());
+
+    }
+
     //nullifying binding object
     @Override
     public void onDestroyView() {
         super.onDestroyView();
         binding = null;
-    }
-
-    /*@Override
-    public void onLocationChanged(@NonNull Location location) {
-        Log.i(TAG, "onLocationChanged: ");
-    }*/
-
-    @Override
-    public void onMapReady(@NonNull GoogleMap googleMap) {
-        mGoogleMap = googleMap;
     }
 
 }
