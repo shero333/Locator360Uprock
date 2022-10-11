@@ -18,7 +18,6 @@ public interface Constants {
      int REQUEST_CODE_CAMERA = 1;
      int REQUEST_CODE_LOCATION = 2;
      int REQUEST_CODE_STORAGE = 3;
-     int GPS_REQUEST_CODE = 4;
 
      //for circle
      String CIRCLE_COLLECTION = "Circle";
@@ -40,6 +39,9 @@ public interface Constants {
      int VIEW_TYPE_BUTTON = 1;
      int VIEW_TYPE_ITEM = 0;
 
+     // string for navigating to OTP either from Sign Up or Reset Password scenario
      String OTP_ACT_KEY = "otp_act_key";
+
+     String MAP_TYPE = "map_type";
 
 }

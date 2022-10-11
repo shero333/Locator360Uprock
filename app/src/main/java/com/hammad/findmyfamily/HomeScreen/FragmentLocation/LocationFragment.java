@@ -46,6 +46,7 @@ import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.hammad.findmyfamily.HomeScreen.CustomToolbar.CircleAdapterToolbar;
 import com.hammad.findmyfamily.Permission.Permissions;
 import com.hammad.findmyfamily.R;
+import com.hammad.findmyfamily.SharedPreference.SharedPreference;
 import com.hammad.findmyfamily.Util.Commons;
 import com.hammad.findmyfamily.Util.Constants;
 import com.hammad.findmyfamily.databinding.FragmentLocationBinding;
@@ -60,14 +61,13 @@ public class LocationFragment extends Fragment implements OnMapReadyCallback, Ci
 
     private static final String TAG = "FRAG_LOCATION";
 
-    private FragmentLocationBinding binding;
-
     //circle list
     private final List<String> circleStringList = new ArrayList<>();
 
     //show and hide extended toolbar view animations
     Animation showToolbarExtAnim, hideToolbarExtAnim;
 
+    private FragmentLocationBinding binding;
     private FusedLocationProviderClient mLocationClient;
     private GoogleMap mGoogleMap;
     private Location location;
@@ -80,6 +80,8 @@ public class LocationFragment extends Fragment implements OnMapReadyCallback, Ci
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+
+        Log.i(TAG, "onCreateView: ");
 
         //initializing view binding
         binding = FragmentLocationBinding.inflate(inflater, container, false);
@@ -107,8 +109,10 @@ public class LocationFragment extends Fragment implements OnMapReadyCallback, Ci
         SupportMapFragment mapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(binding.map.getId());
 
         //assert keyword is used like 'if'. Like if(mapFragment != null){ mapFragment.getMapAsync(this); }
-        assert mapFragment != null;
-        mapFragment.getMapAsync(this);
+        //assert mapFragment != null;
+        if(mapFragment != null){
+            mapFragment.getMapAsync(this);
+        }
 
         mLocationClient = new FusedLocationProviderClient(requireContext());
     }
@@ -124,9 +128,13 @@ public class LocationFragment extends Fragment implements OnMapReadyCallback, Ci
     @SuppressLint("MissingPermission")
     private void checkLocationPermission() {
 
+        Log.i(TAG, "checkLocationPermission: ");
+
         if (Permissions.hasLocationPermission(requireContext())) {
 
             if (Commons.isGpsEnabled(requireActivity(), intent -> gpsActivityResultLauncher.launch(intent))) {
+
+                Log.i(TAG, "gps permission allowed: ");
 
                 //get current location
                 getLocationThroughLastKnownApproach();
@@ -141,15 +149,15 @@ public class LocationFragment extends Fragment implements OnMapReadyCallback, Ci
     }
 
     ActivityResultLauncher<Intent> gpsActivityResultLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
-                @Override
-                public void onActivityResult(ActivityResult result) {
-                    if (result.getResultCode() == Activity.RESULT_OK) {
+        @Override
+        public void onActivityResult(ActivityResult result) {
+            if (result.getResultCode() == Activity.RESULT_OK) {
 
-                        //get location
-                        getLocationThroughLastKnownApproach();
-                    }
-                }
-            });
+                //get location
+                getLocationThroughLastKnownApproach();
+            }
+        }
+    });
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
@@ -173,6 +181,8 @@ public class LocationFragment extends Fragment implements OnMapReadyCallback, Ci
     @SuppressLint("MissingPermission")
     private void getLocationThroughLastKnownApproach() {
 
+        Log.i(TAG, "getLocationThroughLastKnownApproach: ");
+
         // this function will call LocationListener overridden method when location changes
         startLocationUpdates();
 
@@ -180,14 +190,17 @@ public class LocationFragment extends Fragment implements OnMapReadyCallback, Ci
 
             if (task.isSuccessful()) {
 
+                Log.i(TAG, "task successful: ");
+
                 location = task.getResult();
 
                 if (location != null) {
 
-                    updateMapMarker(new LatLng(location.getLatitude(), location.getLongitude()));
-                }
-                else {
+                    Log.i(TAG, "location != null");
 
+                    updateMapMarker(new LatLng(location.getLatitude(), location.getLongitude()));
+                } else {
+                    Log.i(TAG, "location == null");
                     /*
                         if task result returned has null location (case like when gps is turned on, it will first return null and after sometime location won't be null)
                         if that's the case, then will get location through mLocationClient.getCurrentLocation (currentLocationRequest, cancellationToken)
@@ -205,39 +218,82 @@ public class LocationFragment extends Fragment implements OnMapReadyCallback, Ci
         //location manager method
         LocationManager locationManager = (LocationManager) requireActivity().getSystemService(Context.LOCATION_SERVICE);
 
-        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,0,0,this::onLocationChanged);
+        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, this::onLocationChanged);
     }
 
     //function for updating the the map marker to new position when location is changed
     private void updateMapMarker(LatLng latLng) {
+        Log.i(TAG, "updateMapMarker: ");
 
-        CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(latLng, 14);
-        mGoogleMap.moveCamera(cameraUpdate);
-        mGoogleMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
+        if (mGoogleMap != null) {
+            Log.i(TAG, "updateMapMarker: if");
+            CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(latLng, 14);
+            mGoogleMap.moveCamera(cameraUpdate);
 
-        mGoogleMap.addMarker(new MarkerOptions()
-                .position(latLng)
-                .icon(BitmapDescriptorFactory.defaultMarker()));
+            //setting the map type from preference
+            int mapTypePreference = SharedPreference.getMapType();
 
-        //getting the address of current location
-        Geocoder geocoder = new Geocoder(requireContext(), Locale.getDefault());
+            Log.i(TAG, "updateMapMarker: type: "+mapTypePreference);
 
-        List<Address> addresses = null;
-        try {
-            addresses = geocoder.getFromLocation(location.getLatitude(), location.getLongitude(), 1);
-        } catch (IOException e) {
-            e.printStackTrace();
+            switch (mapTypePreference) {
+
+                case 0:
+                    //map type is default/normal
+                    if (mGoogleMap != null) mGoogleMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
+                    break;
+
+                case 1:
+                    //map type is satellite
+                    if (mGoogleMap != null) mGoogleMap.setMapType(GoogleMap.MAP_TYPE_SATELLITE);
+                    break;
+
+                case 2:
+                    //map type is hybrid
+                    if (mGoogleMap != null) mGoogleMap.setMapType(GoogleMap.MAP_TYPE_HYBRID);
+                    break;
+
+                case 3:
+                    //map type is terrain
+                    if (mGoogleMap != null) mGoogleMap.setMapType(GoogleMap.MAP_TYPE_TERRAIN);
+                    break;
+            }
+
+            //assert mGoogleMap != null;
+            if(mGoogleMap != null) {
+                mGoogleMap.addMarker(new MarkerOptions()
+                        .position(latLng)
+                        .icon(BitmapDescriptorFactory.defaultMarker()));
+            }
+
+
+            //getting the address of current location
+            Geocoder geocoder = new Geocoder(requireContext(), Locale.getDefault());
+
+            List<Address> addresses = null;
+            try {
+                addresses = geocoder.getFromLocation(location.getLatitude(), location.getLongitude(), 1);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            //assert is used to check expected boolean condition
+            //assert addresses != null;
+            if(addresses != null) {
+                locationAddress = addresses.get(0).getAddressLine(0);
+            }
+
+            Toast.makeText(requireContext(), locationAddress, Toast.LENGTH_LONG).show();
+
         }
-
-        //assert is used to check expected boolean condition
-        assert addresses != null;
-        locationAddress = addresses.get(0).getAddressLine(0);
-
-        Toast.makeText(requireContext(), locationAddress, Toast.LENGTH_LONG).show();
+        else {
+            Log.i(TAG, "updateMapMarker: else called");
+        }
     }
 
     @SuppressLint("MissingPermission")
     private void getLocationThroughCurrentLocationApproach() {
+
+        Log.i(TAG, "getLocationThroughCurrentLocationApproach: ");
 
         CurrentLocationRequest currentLocationRequest = new CurrentLocationRequest.Builder().build();
 
@@ -254,19 +310,24 @@ public class LocationFragment extends Fragment implements OnMapReadyCallback, Ci
             }
         };
 
-        mLocationClient.getCurrentLocation(currentLocationRequest,cancellationToken).addOnCompleteListener(task -> {
+        mLocationClient.getCurrentLocation(currentLocationRequest, cancellationToken).addOnCompleteListener(task -> {
 
-                    if(task.isSuccessful()) {
+            if (task.isSuccessful()) {
+                Log.i(TAG, "task successful 2: ");
 
-                        location = task.getResult();
+                location = task.getResult();
 
-                        if(location !=  null) {
+                if (location != null) {
+                    Log.i(TAG, "location != null : 2nd");
 
-                            // moves marker to the location
-                            updateMapMarker(new LatLng(location.getLatitude(),location.getLongitude()));
-                        }
-                    }
-                });
+                    // moves marker to the location
+                    updateMapMarker(new LatLng(location.getLatitude(), location.getLongitude()));
+                }
+                else {
+                    Log.i(TAG, "location == null : 2nd");
+                }
+            }
+        });
 
     }
 
@@ -275,7 +336,7 @@ public class LocationFragment extends Fragment implements OnMapReadyCallback, Ci
     public void onLocationChanged(@NonNull Location location) {
 
         //update the location on map
-        updateMapMarker(new LatLng(location.getLatitude(),location.getLongitude()));
+        updateMapMarker(new LatLng(location.getLatitude(), location.getLongitude()));
     }
 
     private void loadAnimations() {
@@ -440,18 +501,150 @@ public class LocationFragment extends Fragment implements OnMapReadyCallback, Ci
 
         BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(requireContext(), com.google.android.material.R.style.Theme_Design_BottomSheetDialog);
 
-        LayoutBottomSheetMapTypeBinding sheetMapTypeBinding = LayoutBottomSheetMapTypeBinding.inflate(LayoutInflater.from(getContext()));
+        LayoutBottomSheetMapTypeBinding mapTypeBinding = LayoutBottomSheetMapTypeBinding.inflate(LayoutInflater.from(getContext()));
 
-        bottomSheetDialog.setContentView(sheetMapTypeBinding.getRoot());
+        bottomSheetDialog.setContentView(mapTypeBinding.getRoot());
 
         bottomSheetDialog.show();
 
-        sheetMapTypeBinding.consMapDefault.setOnClickListener(view -> {
-            sheetMapTypeBinding.cardDefault.setCardBackgroundColor(requireContext().getColor(R.color.orange));
-            Toast.makeText(requireContext(), "Default", Toast.LENGTH_SHORT).show();
-        });
+        mapTypeBinding.consMapDefault.setOnClickListener(v -> setDefaultMapType(mapTypeBinding));
 
-        sheetMapTypeBinding.imgViewCancel.setOnClickListener(v -> bottomSheetDialog.dismiss());
+        mapTypeBinding.consMapSatellite.setOnClickListener(v -> setSatelliteMapType(mapTypeBinding));
+
+        mapTypeBinding.consMapHybrid.setOnClickListener(v -> setHybridMapType(mapTypeBinding));
+
+        mapTypeBinding.consMapTerrain.setOnClickListener(v -> setTerrainMapType(mapTypeBinding));
+
+        // cancel click listener
+        mapTypeBinding.imgViewCancel.setOnClickListener(v -> bottomSheetDialog.dismiss());
+
+        // getting the preference value and setting value to map type
+        int mapTypePref = SharedPreference.getMapType();
+
+        switch (mapTypePref) {
+
+            case 0:
+                //map type is default/normal
+                setDefaultMapType(mapTypeBinding);
+                break;
+
+            case 1:
+                //map type is satellite
+                setSatelliteMapType(mapTypeBinding);
+                break;
+
+            case 2:
+                //map type is hybrid
+                setHybridMapType(mapTypeBinding);
+                break;
+
+            case 3:
+                //map type is terrain
+                setTerrainMapType(mapTypeBinding);
+                break;
+        }
+
+    }
+
+    private void setDefaultMapType(LayoutBottomSheetMapTypeBinding mapTypeBinding) {
+
+        //highlight the selected view
+        mapTypeBinding.cardDefault.setCardBackgroundColor(requireContext().getColor(R.color.orange));
+        mapTypeBinding.txtDefault.setTextColor(requireContext().getColor(R.color.orange));
+
+        //setting the value in preference
+        SharedPreference.setMapType(0);
+
+        //change the map type
+        if (mGoogleMap != null) mGoogleMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
+
+        //change the rest of views
+        mapTypeBinding.cardSatellite.setCardBackgroundColor(requireContext().getColor(R.color.white));
+        mapTypeBinding.cardTerrain.setCardBackgroundColor(requireContext().getColor(R.color.white));
+        mapTypeBinding.cardHybrid.setCardBackgroundColor(requireContext().getColor(R.color.white));
+
+        //changing text color of rest of text views
+        mapTypeBinding.txtSatellite.setTextColor(requireContext().getColor(R.color.black));
+        mapTypeBinding.txtTerrain.setTextColor(requireContext().getColor(R.color.black));
+        mapTypeBinding.txtHybrid.setTextColor(requireContext().getColor(R.color.black));
+
+    }
+
+    private void setSatelliteMapType(LayoutBottomSheetMapTypeBinding mapTypeBinding) {
+
+        //highlight the selected view
+        mapTypeBinding.cardSatellite.setCardBackgroundColor(requireContext().getColor(R.color.orange));
+        mapTypeBinding.txtSatellite.setTextColor(requireContext().getColor(R.color.orange));
+
+        //setting the value in preference
+        SharedPreference.setMapType(1);
+
+        //change the map type
+        if (mGoogleMap != null) {
+            mGoogleMap.setMapType(GoogleMap.MAP_TYPE_SATELLITE);
+        }
+
+        //change the rest of views
+        mapTypeBinding.cardDefault.setCardBackgroundColor(requireContext().getColor(R.color.white));
+        mapTypeBinding.cardTerrain.setCardBackgroundColor(requireContext().getColor(R.color.white));
+        mapTypeBinding.cardHybrid.setCardBackgroundColor(requireContext().getColor(R.color.white));
+
+        //changing text color of rest of text views
+        mapTypeBinding.txtDefault.setTextColor(requireContext().getColor(R.color.black));
+        mapTypeBinding.txtTerrain.setTextColor(requireContext().getColor(R.color.black));
+        mapTypeBinding.txtHybrid.setTextColor(requireContext().getColor(R.color.black));
+
+    }
+
+    private void setHybridMapType(LayoutBottomSheetMapTypeBinding mapTypeBinding) {
+
+        //highlight the selected view
+        mapTypeBinding.cardHybrid.setCardBackgroundColor(requireContext().getColor(R.color.orange));
+        mapTypeBinding.txtHybrid.setTextColor(requireContext().getColor(R.color.orange));
+
+        //setting the value in preference
+        SharedPreference.setMapType(2);
+
+        //change the map type
+        if (mGoogleMap != null) {
+            mGoogleMap.setMapType(GoogleMap.MAP_TYPE_HYBRID);
+        }
+
+        //change the rest of views
+        mapTypeBinding.cardSatellite.setCardBackgroundColor(requireContext().getColor(R.color.white));
+        mapTypeBinding.cardTerrain.setCardBackgroundColor(requireContext().getColor(R.color.white));
+        mapTypeBinding.cardDefault.setCardBackgroundColor(requireContext().getColor(R.color.white));
+
+        //changing text color of rest of text views
+        mapTypeBinding.txtSatellite.setTextColor(requireContext().getColor(R.color.black));
+        mapTypeBinding.txtTerrain.setTextColor(requireContext().getColor(R.color.black));
+        mapTypeBinding.txtDefault.setTextColor(requireContext().getColor(R.color.black));
+
+    }
+
+    private void setTerrainMapType(LayoutBottomSheetMapTypeBinding mapTypeBinding) {
+
+        //highlight the selected view
+        mapTypeBinding.cardTerrain.setCardBackgroundColor(requireContext().getColor(R.color.orange));
+        mapTypeBinding.txtTerrain.setTextColor(requireContext().getColor(R.color.orange));
+
+        //setting the value in preference
+        SharedPreference.setMapType(3);
+
+        //change the map type
+        if (mGoogleMap != null) {
+            mGoogleMap.setMapType(GoogleMap.MAP_TYPE_TERRAIN);
+        }
+
+        //change the rest of views
+        mapTypeBinding.cardSatellite.setCardBackgroundColor(requireContext().getColor(R.color.white));
+        mapTypeBinding.cardDefault.setCardBackgroundColor(requireContext().getColor(R.color.white));
+        mapTypeBinding.cardHybrid.setCardBackgroundColor(requireContext().getColor(R.color.white));
+
+        //changing text color of rest of text views
+        mapTypeBinding.txtSatellite.setTextColor(requireContext().getColor(R.color.black));
+        mapTypeBinding.txtDefault.setTextColor(requireContext().getColor(R.color.black));
+        mapTypeBinding.txtHybrid.setTextColor(requireContext().getColor(R.color.black));
 
     }
 

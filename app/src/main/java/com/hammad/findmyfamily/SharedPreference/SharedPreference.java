@@ -89,4 +89,12 @@ public class SharedPreference {
     public static String getCircleCode(){
         return sharedPreference.getString(Constants.CIRCLE_CODE, Constants.NULL);
     }
+
+    public static void setMapType(int type) {
+        sharedPreference.edit().putInt(Constants.MAP_TYPE,type).apply();
+    }
+
+    public static int getMapType() {
+        return sharedPreference.getInt(Constants.MAP_TYPE,0);
+    }
 }
