@@ -1,8 +1,5 @@
 package com.hammad.findmyfamily.SignIn.ResetPassword;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -19,15 +16,18 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.arch.core.executor.TaskExecutor;
+
+import com.google.android.gms.tasks.TaskExecutors;
 import com.google.firebase.FirebaseException;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseAuthSettings;
 import com.google.firebase.auth.PhoneAuthCredential;
 import com.google.firebase.auth.PhoneAuthOptions;
 import com.google.firebase.auth.PhoneAuthProvider;
 import com.hammad.findmyfamily.R;
 import com.hammad.findmyfamily.SharedPreference.SharedPreference;
-import com.hammad.findmyfamily.SignUp.NameSignUpActivity;
 import com.hammad.findmyfamily.Util.Constants;
 import com.hammad.findmyfamily.databinding.ActivityOtpBinding;
 
@@ -78,7 +78,7 @@ public class OTPActivity extends AppCompatActivity {
         //populating the edit texts as invite code view
         populateOptCodeView();
 
-        //binding.btnVerifyOtp.setOnClickListener(v -> buttonSubmitClickListener());
+        binding.btnVerifyOtp.setOnClickListener(v -> buttonSubmitClickListener());
 
         //function for sending the OTP
         sendOTP();
@@ -176,6 +176,7 @@ public class OTPActivity extends AppCompatActivity {
             binding.btnVerifyOtp.setEnabled(true);
             binding.btnVerifyOtp.setBackgroundResource(R.drawable.orange_rounded_button);
             binding.btnVerifyOtp.setTextColor(Color.WHITE);
+
         }
         else {
             //setting the verify otp button to disabled
@@ -261,59 +262,65 @@ public class OTPActivity extends AppCompatActivity {
 
     private void sendOTP() {
 
+        //FirebaseAuth.getInstance().getFirebaseAuthSettings().setAutoRetrievedSmsCodeForPhoneNumber(SharedPreference.getPhoneNoPref(),"555111");
+
         PhoneAuthOptions options = PhoneAuthOptions.newBuilder(mAuth)
-                        .setPhoneNumber(SharedPreference.getPhoneNoPref())       // Phone number to verify
-                        .setTimeout(60L, TimeUnit.SECONDS) // Timeout and unit
-                        .setActivity(this)                 // Activity (for callback binding)
-                        .setCallbacks(mCallbacks)          // OnVerificationStateChangedCallbacks
+                        .setPhoneNumber(SharedPreference.getPhoneNoPref())
+                        .setTimeout(60L, TimeUnit.SECONDS)
+                        .setActivity(this)
+                        .setCallbacks(mCallbacks)
                         .build();
         PhoneAuthProvider.verifyPhoneNumber(options);
 
     }
-
-    private PhoneAuthProvider.OnVerificationStateChangedCallbacks mCallbacks = new PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
-
-        @Override
-        public void onCodeSent(@NonNull String s, @NonNull PhoneAuthProvider.ForceResendingToken forceResendingToken) {
-            super.onCodeSent(s, forceResendingToken);
-            verificationId = s;
-            Log.i(TAG, "onCodeSent: ");
-            Log.i(TAG, "s: "+s);
-
-            binding.btnVerifyOtp.setOnClickListener(v -> buttonSubmitClickListener());
-        }
-
+    
+    private final PhoneAuthProvider.OnVerificationStateChangedCallbacks mCallbacks = new PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
         @Override
         public void onVerificationCompleted(@NonNull PhoneAuthCredential phoneAuthCredential) {
+            Log.i(TAG, "onVerificationCompleted: ");
+            String ac = phoneAuthCredential.getSmsCode();
 
-            code = phoneAuthCredential.getSmsCode();
-            Log.i(TAG, "onVerificationCompleted: "+code);
-
-            Log.i(TAG, "code: "+code);
-
-            binding.btnVerifyOtp.setOnClickListener(v -> buttonSubmitClickListener());
-
-            //setting the auto-retrieval sms method
-            /*FirebaseAuthSettings firebaseAuthSettings = mAuth.getFirebaseAuthSettings();
-
-            firebaseAuthSettings.setAutoRetrievedSmsCodeForPhoneNumber(SharedPreference.getPhoneNoPref(),code);*/
-
+            if(ac != null) {
+                for(int i=0; i<ac.length() ; i++) {
+                    editTextList.get(i).setText(String.valueOf(ac.charAt(i)));
+                }
+            }
+            else {
+                Log.i(TAG, "ac == null ");
+            }
         }
 
         @Override
         public void onVerificationFailed(@NonNull FirebaseException e) {
+            Log.e(TAG, "onVerificationFailed: " + e.getMessage());
             Toast.makeText(OTPActivity.this, "Verification Failed", Toast.LENGTH_SHORT).show();
-            Log.i(TAG, "onVerificationFailed: " + e.getMessage());
+
+        }
+
+        @Override
+        public void onCodeSent(@NonNull String s, @NonNull PhoneAuthProvider.ForceResendingToken forceResendingToken) {
+            super.onCodeSent(s, forceResendingToken);
+            Log.i(TAG, "onCodeSent: "+s);
+            /*verificationId = s;*/
         }
     };
 
     private void verifyOTP() {
 
+        Log.i(TAG, "verifyOTP: ");
+
+        /*PhoneAuthCredential credential = PhoneAuthProvider.getCredential(verificationId,enteredOtpCode);
+        code = credential.getSmsCode();*/
+
+        Log.i(TAG, "code: "+code);
+
         if(enteredOtpCode.equals(code)) {
-            Toast.makeText(this, "Phone verified", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, "Verified", Toast.LENGTH_SHORT).show();
+            Log.i(TAG, "verifyOTP: if called");
         }
         else if(!enteredOtpCode.equals(code)) {
-            Toast.makeText(this, "Phone Not verified", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, "Not Verified", Toast.LENGTH_SHORT).show();
+            Log.i(TAG, "verifyOTP: else if called");
         }
 
     }
