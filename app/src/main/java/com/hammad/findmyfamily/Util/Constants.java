@@ -44,4 +44,6 @@ public interface Constants {
 
      String MAP_TYPE = "map_type";
 
+     String CURRENT_CIRCLE = "current_circle";
+
 }

@@ -57,6 +57,9 @@ dependencies {
     //firestore
     implementation 'com.google.firebase:firebase-firestore'
 
+    //dynamic link
+    implementation 'com.google.firebase:firebase-dynamic-links'
+
     //country code picker
     implementation 'com.hbb20:ccp:2.5.0'
 

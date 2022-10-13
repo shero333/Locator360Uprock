@@ -6,18 +6,18 @@ import android.view.View;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.hammad.findmyfamily.databinding.ActivityJoinGroupBinding;
+import com.hammad.findmyfamily.databinding.ActivityJoinCircleBinding;
 
-public class JoinGroupActivity extends AppCompatActivity {
+public class JoinCircleActivity extends AppCompatActivity {
 
-    private ActivityJoinGroupBinding binding;
+    private ActivityJoinCircleBinding binding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         //view binding initialization
-        binding = ActivityJoinGroupBinding.inflate(getLayoutInflater());
+        binding = ActivityJoinCircleBinding.inflate(getLayoutInflater());
         View view = binding.getRoot();
         setContentView(view);
 

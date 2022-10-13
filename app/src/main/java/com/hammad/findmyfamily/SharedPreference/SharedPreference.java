@@ -82,11 +82,11 @@ public class SharedPreference {
         return sharedPreference.getString(Constants.CIRCLE_NAME, Constants.NULL);
     }
 
-    public static void setCircleCode(String circleCode){
+    public static void setCircleInviteCode(String circleCode){
         sharedPreference.edit().putString(Constants.CIRCLE_CODE,circleCode).apply();
     }
 
-    public static String getCircleCode(){
+    public static String getCircleInviteCode(){
         return sharedPreference.getString(Constants.CIRCLE_CODE, Constants.NULL);
     }
 
@@ -96,5 +96,13 @@ public class SharedPreference {
 
     public static int getMapType() {
         return sharedPreference.getInt(Constants.MAP_TYPE,0);
+    }
+
+    private static void setCurrentCircleStatus(String circleId) {
+        sharedPreference.edit().putString(Constants.CURRENT_CIRCLE,circleId).apply();
+    }
+
+    private static String getCurrentCircleStatus() {
+        return sharedPreference.getString(Constants.CURRENT_CIRCLE, Constants.NULL);
     }
 }

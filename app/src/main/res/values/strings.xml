@@ -87,4 +87,8 @@
     <string name="satellite">Satellite</string>
     <string name="terrain">Terrain</string>
     <string name="hybrid">Hybrid</string>
+    <string name="safety_access">Safety Access</string>
+    <string name="help_alert">Help Alert</string>
+    <string name="emergency_contact">Emergency Contact</string>
+    <string name="invite_first_contact">Invite First Contact</string>
 </resources>

@@ -14,6 +14,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "1088376565277-42ct0ab4f1dak27rlg97cnoi45q5ucda.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.hammad.findmyfamily",
+            "certificate_hash": "c72d2a7d1b5a7618e69f3f9c7e2f801ea9e0379a"
+          }
+        },
+        {
           "client_id": "1088376565277-s55ml835sdrkl7vu11psc6fvcoar2csd.apps.googleusercontent.com",
           "client_type": 3
         }

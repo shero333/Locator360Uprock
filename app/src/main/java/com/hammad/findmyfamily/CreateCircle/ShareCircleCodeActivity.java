@@ -16,9 +16,6 @@ public class ShareCircleCodeActivity extends AppCompatActivity {
 
     private ActivityShareCircleCodeBinding binding;
 
-    //List of all edit texts (6 here)
-    //List<EditText> editTextList = new ArrayList<>();
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -48,7 +45,7 @@ public class ShareCircleCodeActivity extends AppCompatActivity {
         binding.textViewCircle6.setText(String.valueOf(code.charAt(5)));
 
         //saving the circle code in preference as well
-        SharedPreference.setCircleCode(code);
+        SharedPreference.setCircleInviteCode(code);
     }
 
     //this function will have to implement the Firebase dynamic link

@@ -24,8 +24,8 @@ public class JoinCircleFirstScreenActivity extends AppCompatActivity {
     //List of all edit texts (6 here)
     List<EditText> editTextList = new ArrayList<>();
 
-    //variable for saving the entered code
-    private String enteredInviteCode;
+    //List for containing the circle invite codes
+    List<String> circleInviteCodeList = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -104,7 +104,7 @@ public class JoinCircleFirstScreenActivity extends AppCompatActivity {
         }
     }
 
-    private boolean isEditTextLengthZero(EditText editText){
+    private boolean isEditTextLengthZero(EditText editText) {
 
         if(editText.getText().toString().trim().length() == 1){
             return true;
@@ -115,7 +115,7 @@ public class JoinCircleFirstScreenActivity extends AppCompatActivity {
     }
 
     //checking the status (enabled/disabled) of submit button
-    private void submitButtonStatus(){
+    private void submitButtonStatus() {
 
         //checking if all Edit texts length are equal to 1
         if(isEditTextLengthZero(binding.edtInput1) && isEditTextLengthZero(binding.edtInput2) &&
@@ -133,16 +133,28 @@ public class JoinCircleFirstScreenActivity extends AppCompatActivity {
         }
     }
 
-    private void buttonSubmitClickListener(){
-        enteredInviteCode = getEditTextData(binding.edtInput1).concat(getEditTextData(binding.edtInput2))
-                            .concat(getEditTextData(binding.edtInput3).concat(getEditTextData(binding.edtInput4)
-                            .concat(getEditTextData(binding.edtInput5).concat(getEditTextData(binding.edtInput6)))));
+    private void buttonSubmitClickListener() {
+        //variable for saving the entered code
+        String enteredInviteCode = getEditTextData(binding.edtInput1).concat(getEditTextData(binding.edtInput2))
+                .concat(getEditTextData(binding.edtInput3).concat(getEditTextData(binding.edtInput4)
+                        .concat(getEditTextData(binding.edtInput5).concat(getEditTextData(binding.edtInput6)))));
 
-        Toast.makeText(this, enteredInviteCode, Toast.LENGTH_SHORT).show();
+        //searching through the invite code list
+        for(int i = 0; i < circleInviteCodeList.size(); i++) {
 
+            if(enteredInviteCode.equals(circleInviteCodeList.get(i))) {
 
-        //navigating to next activity
-        startActivity(new Intent(this,JoinGroupActivity.class));
+                Toast.makeText(this, "Circle Exits", Toast.LENGTH_SHORT).show();
+
+                //navigating to next activity
+                startActivity(new Intent(this,JoinCircleActivity.class));
+            }
+            else if(!enteredInviteCode.equals(circleInviteCodeList.get(i))) {
+
+                Toast.makeText(this, "Circle Does not Exits", Toast.LENGTH_LONG).show();
+            }
+        }
+
     }
 
     //function for returning the edit text values

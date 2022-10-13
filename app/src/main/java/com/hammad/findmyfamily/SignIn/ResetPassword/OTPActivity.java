@@ -18,9 +18,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.arch.core.executor.TaskExecutor;
 
-import com.google.android.gms.tasks.TaskExecutors;
 import com.google.firebase.FirebaseException;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.PhoneAuthCredential;
@@ -28,6 +26,7 @@ import com.google.firebase.auth.PhoneAuthOptions;
 import com.google.firebase.auth.PhoneAuthProvider;
 import com.hammad.findmyfamily.R;
 import com.hammad.findmyfamily.SharedPreference.SharedPreference;
+import com.hammad.findmyfamily.SignUp.NameSignUpActivity;
 import com.hammad.findmyfamily.Util.Constants;
 import com.hammad.findmyfamily.databinding.ActivityOtpBinding;
 
@@ -38,6 +37,7 @@ import java.util.concurrent.TimeUnit;
 public class OTPActivity extends AppCompatActivity {
 
     private static final String TAG = "OTP_ACT";
+
     private ActivityOtpBinding binding;
 
     //boolean for checking whether the activity is called from Sign up or Reset Password activity
@@ -46,15 +46,10 @@ public class OTPActivity extends AppCompatActivity {
     //List of all edit texts (6 here)
     List<EditText> editTextList = new ArrayList<>();
 
-    // variable for saving the entered code
-    private String enteredOtpCode;
-
-    // for verification code
-    private String verificationId;
-
+    // variable for saving the received OTP
     private String code;
 
-    // firebase auth
+    //firebase auth
     FirebaseAuth mAuth;
 
     @Override
@@ -80,11 +75,8 @@ public class OTPActivity extends AppCompatActivity {
 
         binding.btnVerifyOtp.setOnClickListener(v -> buttonSubmitClickListener());
 
-        //function for sending the OTP
+        //sending the OTP
         sendOTP();
-
-        //resend otp count down
-        //resendOtpCounter();
 
     }
 
@@ -107,9 +99,6 @@ public class OTPActivity extends AppCompatActivity {
     }
 
     private void populateOptCodeView() {
-
-        //requesting the focus at 1st edit text (as default)
-        binding.editInput1.requestFocus();
 
         for (int j = 0; j < 6; j++)
         {
@@ -156,7 +145,7 @@ public class OTPActivity extends AppCompatActivity {
 
     private boolean isEditTextLengthZero(EditText editText){
 
-        if(editText.getText().toString().trim().length() == 1){
+        if(editText.getText().toString().trim().length() == 1) {
             return true;
         }
         else {
@@ -187,26 +176,91 @@ public class OTPActivity extends AppCompatActivity {
     }
 
     private void buttonSubmitClickListener() {
-        enteredOtpCode = getEditTextData(binding.editInput1).concat(getEditTextData(binding.editInput2))
+
+        String enteredOtpCode = getEditTextData(binding.editInput1).concat(getEditTextData(binding.editInput2))
                 .concat(getEditTextData(binding.editInput3).concat(getEditTextData(binding.editInput4)
                         .concat(getEditTextData(binding.editInput5).concat(getEditTextData(binding.editInput6)))));
 
-        verifyOTP();
+        if(enteredOtpCode.equals(code)) {
 
-        /*Toast.makeText(this, enteredOtpCode, Toast.LENGTH_SHORT).show();*/
+            Toast.makeText(this, "Phone Number Verified", Toast.LENGTH_SHORT).show();
 
-       /* if(isCalledFromSignUpActivity) {
-            startActivity(new Intent(this, NameSignUpActivity.class));
+            //navigating to next activity
+            if(isCalledFromSignUpActivity) {
+                startActivity(new Intent(this, NameSignUpActivity.class));
+            }
+            else {
+                startActivity(new Intent(this,CreateNewPasswordActivity.class));
+            }
         }
-        else {
-            startActivity(new Intent(this,CreateNewPasswordActivity.class));
-        }*/
+        else if(!enteredOtpCode.equals(code)) {
+            Toast.makeText(this, "Error! Wrong OTP.", Toast.LENGTH_SHORT).show();
+
+        }
     }
 
     //function for returning the edit text values
     private String getEditTextData(EditText editText){
         return editText.getText().toString().trim();
     }
+
+    private void sendOTP() {
+
+        PhoneAuthOptions options = PhoneAuthOptions.newBuilder(mAuth)
+                        .setPhoneNumber(SharedPreference.getPhoneNoPref())
+                        .setTimeout(60L, TimeUnit.SECONDS)
+                        .setActivity(this)
+                        .setCallbacks(mCallbacks)
+                        .build();
+        PhoneAuthProvider.verifyPhoneNumber(options);
+
+    }
+    
+    private final PhoneAuthProvider.OnVerificationStateChangedCallbacks mCallbacks = new PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
+        @Override
+        public void onVerificationCompleted(@NonNull PhoneAuthCredential phoneAuthCredential) {
+            Log.i(TAG, "onVerificationCompleted: ");
+
+            code = phoneAuthCredential.getSmsCode();
+
+            if(code != null) {
+                for(int i=0; i<code.length() ; i++) {
+                    editTextList.get(i).setText(String.valueOf(code.charAt(i)));
+                }
+            }
+        }
+
+        @Override
+        public void onVerificationFailed(@NonNull FirebaseException e) {
+            Log.e(TAG, "onVerificationFailed: " + e.getMessage());
+
+            //setting the circular progress bar visibility to gone
+            binding.progressBar.setVisibility(View.GONE);
+
+            //calling the count down timer
+            resendOtpCounter();
+
+            Toast.makeText(OTPActivity.this, "Verification Failed! Try again.", Toast.LENGTH_LONG).show();
+        }
+
+        @Override
+        public void onCodeSent(@NonNull String s, @NonNull PhoneAuthProvider.ForceResendingToken forceResendingToken) {
+            super.onCodeSent(s, forceResendingToken);
+            Log.i(TAG, "onCodeSent: ");
+
+            //setting the circular progress bar visibility to gone
+            binding.progressBar.setVisibility(View.GONE);
+
+            //requesting the focus at 1st edit text (as default)
+            binding.editInput1.requestFocus();
+            binding.editInput1.setBackgroundResource(R.drawable.pin_view_state_list);
+
+            //calling the count down timer
+            resendOtpCounter();
+
+        }
+
+    };
 
     private void resendOtpCounter() {
 
@@ -215,7 +269,7 @@ public class OTPActivity extends AppCompatActivity {
             public void onTick(long millisUntilFinished) {
 
                 //setting the count down to text view
-                binding.txtViewOtpCountDown.setText("in " + millisUntilFinished/1000 + " seconds");
+                binding.txtViewOtpCountDown.setText("in " + millisUntilFinished / 1000 + " seconds");
             }
 
             @Override
@@ -236,7 +290,11 @@ public class OTPActivity extends AppCompatActivity {
                 ClickableSpan clickableSpanResendOtp = new ClickableSpan() {
                     @Override
                     public void onClick(@NonNull View view) {
-                        Toast.makeText(OTPActivity.this, "OTP Resend", Toast.LENGTH_SHORT).show();
+
+                        //resend OTP
+                        sendOTP();
+
+                        Toast.makeText(OTPActivity.this, "OTP Resend Successfully.", Toast.LENGTH_LONG).show();
 
                         //setting count down text view visibility to Visible
                         binding.txtViewOtpCountDown.setVisibility(View.VISIBLE);
@@ -244,8 +302,17 @@ public class OTPActivity extends AppCompatActivity {
                         binding.txtViewResendOtp.setText(getString(R.string.resend_code_in));
                         binding.txtViewResendOtp.setTextColor(getColor(R.color.darkGrey));
 
-                        //calling the function again
-                        resendOtpCounter();
+                        //this if condition will be called in case of if user receives OTP, but resend the otp code
+                        if(binding.editInput3.getText().length() == 1) {
+
+                            for(int i =0; i < 6; i++) {
+                                editTextList.get(i).setText("");
+                                editTextList.get(i).clearFocus();
+                            }
+                        }
+
+                        //setting the progress bar visibility to VISIBLE
+                        binding.progressBar.setVisibility(View.VISIBLE);
 
                     }
                 };
@@ -257,72 +324,8 @@ public class OTPActivity extends AppCompatActivity {
                 binding.txtViewResendOtp.setMovementMethod(LinkMovementMethod.getInstance());
 
             }
+
         }.start();
-    }
-
-    private void sendOTP() {
-
-        //FirebaseAuth.getInstance().getFirebaseAuthSettings().setAutoRetrievedSmsCodeForPhoneNumber(SharedPreference.getPhoneNoPref(),"555111");
-
-        PhoneAuthOptions options = PhoneAuthOptions.newBuilder(mAuth)
-                        .setPhoneNumber(SharedPreference.getPhoneNoPref())
-                        .setTimeout(60L, TimeUnit.SECONDS)
-                        .setActivity(this)
-                        .setCallbacks(mCallbacks)
-                        .build();
-        PhoneAuthProvider.verifyPhoneNumber(options);
-
-    }
-    
-    private final PhoneAuthProvider.OnVerificationStateChangedCallbacks mCallbacks = new PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
-        @Override
-        public void onVerificationCompleted(@NonNull PhoneAuthCredential phoneAuthCredential) {
-            Log.i(TAG, "onVerificationCompleted: ");
-            String ac = phoneAuthCredential.getSmsCode();
-
-            if(ac != null) {
-                for(int i=0; i<ac.length() ; i++) {
-                    editTextList.get(i).setText(String.valueOf(ac.charAt(i)));
-                }
-            }
-            else {
-                Log.i(TAG, "ac == null ");
-            }
-        }
-
-        @Override
-        public void onVerificationFailed(@NonNull FirebaseException e) {
-            Log.e(TAG, "onVerificationFailed: " + e.getMessage());
-            Toast.makeText(OTPActivity.this, "Verification Failed", Toast.LENGTH_SHORT).show();
-
-        }
-
-        @Override
-        public void onCodeSent(@NonNull String s, @NonNull PhoneAuthProvider.ForceResendingToken forceResendingToken) {
-            super.onCodeSent(s, forceResendingToken);
-            Log.i(TAG, "onCodeSent: "+s);
-            /*verificationId = s;*/
-        }
-    };
-
-    private void verifyOTP() {
-
-        Log.i(TAG, "verifyOTP: ");
-
-        /*PhoneAuthCredential credential = PhoneAuthProvider.getCredential(verificationId,enteredOtpCode);
-        code = credential.getSmsCode();*/
-
-        Log.i(TAG, "code: "+code);
-
-        if(enteredOtpCode.equals(code)) {
-            Toast.makeText(this, "Verified", Toast.LENGTH_SHORT).show();
-            Log.i(TAG, "verifyOTP: if called");
-        }
-        else if(!enteredOtpCode.equals(code)) {
-            Toast.makeText(this, "Not Verified", Toast.LENGTH_SHORT).show();
-            Log.i(TAG, "verifyOTP: else if called");
-        }
-
     }
 
 }

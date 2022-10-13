@@ -1,12 +1,15 @@
 package com.hammad.findmyfamily.HomeScreen.FragmentSafety;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
 
+import com.hammad.findmyfamily.HomeScreen.FragmentLocation.AddEmergencyContactActivity;
 import com.hammad.findmyfamily.databinding.FragmentSafetyBinding;
 
 public class FragmentSafety extends Fragment {
@@ -20,6 +23,11 @@ public class FragmentSafety extends Fragment {
         binding = FragmentSafetyBinding.inflate(inflater,container,false);
         View view = binding.getRoot();
 
+        //help alert click listener
+        binding.consHelpAlert.setOnClickListener(v -> Toast.makeText(requireContext(), "Help Alert", Toast.LENGTH_SHORT).show());
+
+        //add emergency contact click listener
+        binding.btnAddEmergencyContact.setOnClickListener(v -> startActivity(new Intent(requireActivity(), AddEmergencyContactActivity.class)));
 
         return view;
     }
