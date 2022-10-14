@@ -265,14 +265,14 @@ public class LocationFragment extends Fragment implements OnMapReadyCallback, Ci
                         .icon(BitmapDescriptorFactory.defaultMarker()));
             }
 
-
             //getting the address of current location
             Geocoder geocoder = new Geocoder(requireContext(), Locale.getDefault());
 
             List<Address> addresses = null;
             try {
                 addresses = geocoder.getFromLocation(location.getLatitude(), location.getLongitude(), 1);
-            } catch (IOException e) {
+            }
+            catch (IOException e) {
                 e.printStackTrace();
             }
 

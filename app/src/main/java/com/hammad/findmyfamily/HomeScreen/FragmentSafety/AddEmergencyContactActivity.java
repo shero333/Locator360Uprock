@@ -1,12 +1,11 @@
-package com.hammad.findmyfamily.HomeScreen.FragmentLocation;
-
-import androidx.appcompat.app.AppCompatActivity;
+package com.hammad.findmyfamily.HomeScreen.FragmentSafety;
 
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Toast;
 
-import com.hammad.findmyfamily.R;
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.hammad.findmyfamily.databinding.ActivityAddEmergencyContactBinding;
 
 public class AddEmergencyContactActivity extends AppCompatActivity {

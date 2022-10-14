@@ -60,6 +60,10 @@ dependencies {
     //dynamic link
     implementation 'com.google.firebase:firebase-dynamic-links'
 
+    // firebase cloud messages and analytics
+    implementation 'com.google.firebase:firebase-messaging'
+    implementation 'com.google.firebase:firebase-analytics'
+
     //country code picker
     implementation 'com.hbb20:ccp:2.5.0'
 

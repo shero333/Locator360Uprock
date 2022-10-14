@@ -37,7 +37,6 @@ public class PhoneNoSignUpActivity extends AppCompatActivity {
     //variables for for verifying whether entered number is valid or not
     private PhoneNumberUtil.PhoneNumberType isMobile = null;
     private boolean isPhoneNoValid = false;
-    
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,9 +68,7 @@ public class PhoneNoSignUpActivity extends AppCompatActivity {
         countryCode = binding.countryCodePicker.getSelectedCountryCodeWithPlus();
 
         //country code picker
-        binding.countryCodePicker.setOnCountryChangeListener(() -> {
-            countryCode = binding.countryCodePicker.getSelectedCountryCode();
-        });
+        binding.countryCodePicker.setOnCountryChangeListener(() -> countryCode = binding.countryCodePicker.getSelectedCountryCode());
     }
 
     private void setHyperLink(){
@@ -171,10 +168,10 @@ public class PhoneNoSignUpActivity extends AppCompatActivity {
         }
     }
 
-    private void buttonClickListener(){
+    private void buttonClickListener() {
 
         String tempNumber = binding.edtPhoneSignUp.getText().toString().trim();
-        String phoneNo = "";
+        String phoneNo;
 
         if(tempNumber.startsWith("0")) {
             StringBuilder sb=new StringBuilder(tempNumber);

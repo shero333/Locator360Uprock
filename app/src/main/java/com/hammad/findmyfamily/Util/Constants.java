@@ -11,6 +11,8 @@ public interface Constants {
      String PASSWORD = "password";
      String IMAGE_PATH = "image_path";
      String IMAGE_NAME = "image_name";
+     String FCM_TOKEN = "fcm_token";
+     String CIRCLE_IDS = "circle_ids";
 
      String NULL = "null";
 
@@ -22,10 +24,12 @@ public interface Constants {
      //for circle
      String CIRCLE_COLLECTION = "Circle";
      String CIRCLE_NAME = "circle_name";
-     String CIRCLE_CODE = "circle_code";
+     String CIRCLE_JOIN_CODE = "circle_join_code";
      String CIRCLE_CODE_EXPIRY_DATE = "code_expiry_date";
      String CIRCLE_MEMBERS = "circle_members";
      String CIRCLE_ADMIN = "circle_admin";
+     String CIRCLE_TIME_STAMP = "time_stamp";
+     String MEMBER_ID = "member_id";
 
      //for location
      String LOCATION_COLLECTION = "Location";

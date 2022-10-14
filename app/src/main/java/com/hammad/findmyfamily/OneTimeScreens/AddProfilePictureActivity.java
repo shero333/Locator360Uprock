@@ -344,8 +344,10 @@ public class AddProfilePictureActivity extends AppCompatActivity {
         SharedPreference.setImagePath(NULL);
         SharedPreference.setImageName(NULL);
 
+        Commons.signUp(this);
+
         //navigating to next activity
-        startActivity(new Intent(this, RequestPermissionActivity.class));
+        /*startActivity(new Intent(this, RequestPermissionActivity.class));*/
     }
 
     /*private void rxJavaProfilePictureCompression(File file){

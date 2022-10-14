@@ -27,11 +27,14 @@ import androidx.appcompat.widget.AppCompatButton;
 import androidx.constraintlayout.utils.widget.ImageFilterView;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
+import com.google.firebase.Timestamp;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.messaging.FirebaseMessaging;
 import com.hammad.findmyfamily.BuildConfig;
+import com.hammad.findmyfamily.OneTimeScreens.RequestPermissionActivity;
 import com.hammad.findmyfamily.R;
 import com.hammad.findmyfamily.SharedPreference.SharedPreference;
 import com.hammad.findmyfamily.databinding.LayoutCameraDialogBinding;
@@ -45,6 +48,7 @@ import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -52,10 +56,12 @@ import java.util.Random;
 
 public class Commons {
 
+    private static final String TAG = "COMMONS";
+
     /*
-        These two functions {encryptedText(String text), bytesToHex(byte[] hash)} are used for encryption in SHA-256 hash code. It remain same for a particular group of text.
-        We will save this encrypted text in firebase, and when user enters password, we will convert it into Hex and then compare with the firebase password.
-    */
+            These two functions {encryptedText(String text), bytesToHex(byte[] hash)} are used for encryption in SHA-256 hash code. It remain same for a particular group of text.
+            We will save this encrypted text in firebase, and when user enters password, we will convert it into Hex and then compare with the firebase password.
+        */
     public static String encryptedText(String text) {
         MessageDigest digest;
         String encryptedText = "";
@@ -192,41 +198,6 @@ public class Commons {
         return sb.toString();
     }
 
-    public static void signUp(Context context) {
-
-        //initializing Firebase Auth & FireStore
-        FirebaseAuth fAuth = FirebaseAuth.getInstance();
-        FirebaseFirestore fStore = FirebaseFirestore.getInstance();
-
-        fAuth.createUserWithEmailAndPassword(SharedPreference.getEmailPref(), SharedPreference.getPasswordPref())
-                .addOnSuccessListener(authResult -> {
-
-                    FirebaseUser firebaseUser = fAuth.getCurrentUser();
-
-                    DocumentReference dr = fStore.collection(USERS_COLLECTION)
-                            .document(/*firebaseUser.getEmail()*/SharedPreference.getEmailPref());
-
-                    Map<String, Object> userInfo = new HashMap<>();
-
-                    userInfo.put(Constants.FIRST_NAME, SharedPreference.getFirstNamePref());
-                    userInfo.put(Constants.LAST_NAME, SharedPreference.getLastNamePref());
-                    userInfo.put(Constants.PHONE_NO, SharedPreference.getPhoneNoPref());
-                    userInfo.put(Constants.EMAIL, SharedPreference.getEmailPref());
-                    userInfo.put(Constants.PASSWORD, SharedPreference.getPasswordPref());
-                    userInfo.put(Constants.IMAGE_NAME, SharedPreference.getImageName());
-                    userInfo.put(Constants.IMAGE_PATH, SharedPreference.getImagePath());
-
-                    dr.set(userInfo);
-
-                    Toast.makeText(context, "Sign Up Successful!", Toast.LENGTH_SHORT).show();
-                })
-                .addOnFailureListener(e -> {
-                    Toast.makeText(context, "Error! Failed to Sign Up.", Toast.LENGTH_SHORT).show();
-                    Log.e("ERROR_CREATE_PSS_ACT", "signUp failed " + e.getMessage());
-                });
-
-    }
-
     @SuppressLint("MissingPermission")
     public static boolean isGpsEnabled(Activity activity, GetGPSListener gpsListener) {
 
@@ -355,6 +326,107 @@ public class Commons {
         }
 
         dialog.show();
+    }
+
+    public static void signUp(Context context) {
+
+        //initializing Firebase Auth & FireStore
+        FirebaseAuth fAuth = FirebaseAuth.getInstance();
+        FirebaseFirestore fStore = FirebaseFirestore.getInstance();
+
+        fAuth.createUserWithEmailAndPassword(SharedPreference.getEmailPref(), SharedPreference.getPasswordPref())
+                .addOnSuccessListener(authResult -> {
+
+                    //FirebaseUser firebaseUser = fAuth.getCurrentUser();
+
+                    DocumentReference dr = fStore.collection(USERS_COLLECTION)
+                            .document(SharedPreference.getEmailPref());
+
+                    Map<String, Object> userInfo = new HashMap<>();
+
+                    userInfo.put(Constants.FIRST_NAME, SharedPreference.getFirstNamePref());
+                    userInfo.put(Constants.LAST_NAME, SharedPreference.getLastNamePref());
+                    userInfo.put(Constants.PHONE_NO, SharedPreference.getPhoneNoPref());
+                    userInfo.put(Constants.EMAIL, SharedPreference.getEmailPref());
+                    userInfo.put(Constants.PASSWORD, SharedPreference.getPasswordPref());
+                    userInfo.put(Constants.IMAGE_NAME, SharedPreference.getImageName());
+                    userInfo.put(Constants.IMAGE_PATH, SharedPreference.getImagePath());
+                    userInfo.put(Constants.FCM_TOKEN,null);
+
+                    dr.set(userInfo);
+
+                    //setting the circle info as sub-collection data
+                    Map<String,Object> circleData = new HashMap<>();
+
+                    Map<String,Object> circleMemberIds = new HashMap<>();
+                    circleMemberIds.put(Constants.MEMBER_ID,SharedPreference.getEmailPref());
+
+                    circleData.put(Constants.CIRCLE_NAME,SharedPreference.getCircleName());
+                    circleData.put(Constants.CIRCLE_JOIN_CODE,SharedPreference.getCircleInviteCode());
+                    circleData.put(Constants.CIRCLE_ADMIN,SharedPreference.getEmailPref());
+                    circleData.put(Constants.CIRCLE_TIME_STAMP,new Timestamp(new Date()));
+                    circleData.put(Constants.CIRCLE_CODE_EXPIRY_DATE,new Timestamp(new Date()));
+                    circleData.put(Constants.CIRCLE_MEMBERS,circleMemberIds);
+
+                    dr.collection(USERS_COLLECTION)
+                            .document(SharedPreference.getEmailPref())
+                            .collection(Constants.CIRCLE_COLLECTION)
+                            .document().set(circleData);
+
+                    context.startActivity(new Intent(context, RequestPermissionActivity.class));
+
+                    addFCMToken();
+
+                    Toast.makeText(context, "Sign Up Successful!", Toast.LENGTH_SHORT).show();
+                })
+                .addOnFailureListener(e -> {
+                    Toast.makeText(context, "Error! Failed to Sign Up.", Toast.LENGTH_SHORT).show();
+                    Log.e(TAG, "signUp failed " + e.getMessage());
+                });
+
+    }
+
+    private static void addFCMToken() {
+
+        // calls this function every time a user sign up or sign in to get a latest token. This will also handle the cases, when a token is changed.
+
+        FirebaseMessaging.getInstance().getToken()
+                .addOnCompleteListener(task -> {
+
+                    if(task.isSuccessful()) {
+
+                        Map<String,Object> addFCMToken= new HashMap<>();
+                        addFCMToken.put(Constants.FCM_TOKEN,task.getResult());
+
+                        // saves the token in firebase
+                        FirebaseFirestore.getInstance().collection(USERS_COLLECTION)
+                                .document(SharedPreference.getEmailPref())
+                                .update(addFCMToken)
+                                .addOnSuccessListener(o -> Log.i(TAG, "addFCMToken successful"))
+                                .addOnFailureListener(e -> Log.e(TAG, "addFCMToken failed: "+ e.getMessage()));
+                    }
+                });
+
+    }
+
+    private static void deleteFCMToken() {
+
+        /*
+            delete the fcm when user logged out. This will help in determining the status of user (logged in/out)
+            if a user has logged out of app, he will not receive FCM messages
+        */
+
+        // deletes the value of a specific field
+        Map<String,Object> deleteFCMToken = new HashMap<>();
+        deleteFCMToken.put(Constants.FCM_TOKEN, FieldValue.delete());
+
+        DocumentReference documentReference = FirebaseFirestore.getInstance()
+                .collection(USERS_COLLECTION)
+                .document(SharedPreference.getEmailPref());
+
+        documentReference.update(deleteFCMToken)
+                .addOnSuccessListener(unused -> Log.i(TAG, "deleteFCMToken successful"))
+                .addOnFailureListener(e -> Log.e(TAG, "deleteFCMToken: " + e.getMessage()));
     }
 
 }
