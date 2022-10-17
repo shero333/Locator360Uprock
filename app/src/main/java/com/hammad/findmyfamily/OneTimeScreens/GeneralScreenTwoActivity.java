@@ -30,8 +30,6 @@ public class GeneralScreenTwoActivity extends AppCompatActivity {
         //button continue click listener
         binding.btnContScreenTwo.setOnClickListener(v -> {
 
-            //sign up
-
             //navigating to Home Screen
             startActivity(new Intent(this, HomeActivity.class));
             finish();

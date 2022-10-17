@@ -58,7 +58,7 @@ public class AddProfilePictureActivity extends AppCompatActivity {
         binding.txtSkip.setOnClickListener(v -> skipProfileImage());
 
         //button continue click listener
-        binding.btnContAddProfilePic.setOnClickListener(v -> startActivity(new Intent(this, RequestPermissionActivity.class)));
+        binding.btnContAddProfilePic.setOnClickListener(v -> continueButtonClickListener());
     }
 
     private void uploadProfileImage() {
@@ -304,9 +304,6 @@ public class AddProfilePictureActivity extends AppCompatActivity {
                         //saving the compressed file path in variable
                         currentPicturePath = compressedFile.getAbsolutePath();
 
-                        //deletes the original camera captured image
-                        file.delete();
-
                         //saving the image name in shared preference
                         SharedPreference.setImageName(compressedFile.getName());
                     }
@@ -344,10 +341,31 @@ public class AddProfilePictureActivity extends AppCompatActivity {
         SharedPreference.setImagePath(NULL);
         SharedPreference.setImageName(NULL);
 
-        Commons.signUp(this);
+        if(Commons.signUp(this)) {
+            //navigating to next activity
+            startActivity(new Intent(this, RequestPermissionActivity.class));
+        }
+        /*else if(!Commons.signUp(this)) {
+            Toast.makeText(this, "Failed to Sign Up. Try Again!", Toast.LENGTH_LONG).show();
+        }*/
 
-        //navigating to next activity
-        /*startActivity(new Intent(this, RequestPermissionActivity.class));*/
+    }
+
+    private void continueButtonClickListener() {
+
+        if(Commons.signUp(this)) {
+            Log.e(TAG, "if called");
+
+            //uploads the image in background
+            Commons.uploadProfileImage();
+
+            // navigating to next screen
+            startActivity(new Intent(this, RequestPermissionActivity.class));
+        }
+        Log.e(TAG, "else called");
+        /*else if(!Commons.signUp(this)) {
+            Toast.makeText(this, "Failed to Sign Up. Try Again!", Toast.LENGTH_LONG).show();
+        }*/
     }
 
     /*private void rxJavaProfilePictureCompression(File file){

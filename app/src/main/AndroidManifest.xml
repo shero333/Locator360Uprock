@@ -75,7 +75,7 @@
 
         <activity
             android:name=".OneTimeScreens.GeneralScreenOneActivity"
-            android:exported="false" />
+            android:exported="false"/>
 
         <activity
             android:name=".OneTimeScreens.RequestPermissionActivity"
@@ -83,11 +83,11 @@
 
         <activity
             android:name=".OneTimeScreens.AddProfilePictureActivity"
-            android:exported="false" />
+            android:exported="false"/>
 
         <activity
             android:name=".OneTimeScreens.JoinCircleActivity"
-            android:exported="false" />
+            android:exported="false"/>
 
         <activity
             android:name=".SignIn.EnterPasswordSignInActivity"
@@ -117,7 +117,7 @@
         <activity
             android:name=".SignUp.EmailSignUpActivity"
             android:exported="false"
-            android:windowSoftInputMode="adjustResize" />
+            android:windowSoftInputMode="adjustResize"/>
 
         <activity
             android:name=".SignUp.NameSignUpActivity"

@@ -183,8 +183,6 @@ public class OTPActivity extends AppCompatActivity {
 
         if(enteredOtpCode.equals(code)) {
 
-            Toast.makeText(this, "Phone Number Verified", Toast.LENGTH_SHORT).show();
-
             //navigating to next activity
             if(isCalledFromSignUpActivity) {
                 startActivity(new Intent(this, NameSignUpActivity.class));

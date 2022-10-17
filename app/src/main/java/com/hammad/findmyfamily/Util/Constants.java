@@ -14,6 +14,9 @@ public interface Constants {
      String FCM_TOKEN = "fcm_token";
      String CIRCLE_IDS = "circle_ids";
 
+     // for Cloud Storage
+     String PROFILE_IMAGES = "profile_images";
+
      String NULL = "null";
 
      //request codes

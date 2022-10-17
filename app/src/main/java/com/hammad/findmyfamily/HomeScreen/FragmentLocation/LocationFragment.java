@@ -266,7 +266,7 @@ public class LocationFragment extends Fragment implements OnMapReadyCallback, Ci
             }
 
             //getting the address of current location
-            Geocoder geocoder = new Geocoder(requireContext(), Locale.getDefault());
+            Geocoder geocoder = new Geocoder(getContext(), Locale.getDefault());
 
             List<Address> addresses = null;
             try {

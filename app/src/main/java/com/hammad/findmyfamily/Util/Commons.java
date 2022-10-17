@@ -33,8 +33,9 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.messaging.FirebaseMessaging;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 import com.hammad.findmyfamily.BuildConfig;
-import com.hammad.findmyfamily.OneTimeScreens.RequestPermissionActivity;
 import com.hammad.findmyfamily.R;
 import com.hammad.findmyfamily.SharedPreference.SharedPreference;
 import com.hammad.findmyfamily.databinding.LayoutCameraDialogBinding;
@@ -48,7 +49,6 @@ import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.text.SimpleDateFormat;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -328,7 +328,9 @@ public class Commons {
         dialog.show();
     }
 
-    public static void signUp(Context context) {
+    public static boolean signUp(Context context) {
+
+        final boolean[] status = {false};
 
         //initializing Firebase Auth & FireStore
         FirebaseAuth fAuth = FirebaseAuth.getInstance();
@@ -336,8 +338,6 @@ public class Commons {
 
         fAuth.createUserWithEmailAndPassword(SharedPreference.getEmailPref(), SharedPreference.getPasswordPref())
                 .addOnSuccessListener(authResult -> {
-
-                    //FirebaseUser firebaseUser = fAuth.getCurrentUser();
 
                     DocumentReference dr = fStore.collection(USERS_COLLECTION)
                             .document(SharedPreference.getEmailPref());
@@ -353,11 +353,11 @@ public class Commons {
                     userInfo.put(Constants.IMAGE_PATH, SharedPreference.getImagePath());
                     userInfo.put(Constants.FCM_TOKEN,null);
 
-                    dr.set(userInfo);
 
                     //setting the circle info as sub-collection data
                     Map<String,Object> circleData = new HashMap<>();
 
+                    //array of circle members id
                     Map<String,Object> circleMemberIds = new HashMap<>();
                     circleMemberIds.put(Constants.MEMBER_ID,SharedPreference.getEmailPref());
 
@@ -368,21 +368,68 @@ public class Commons {
                     circleData.put(Constants.CIRCLE_CODE_EXPIRY_DATE,new Timestamp(new Date()));
                     circleData.put(Constants.CIRCLE_MEMBERS,circleMemberIds);
 
-                    dr.collection(USERS_COLLECTION)
-                            .document(SharedPreference.getEmailPref())
-                            .collection(Constants.CIRCLE_COLLECTION)
-                            .document().set(circleData);
+                    dr.set(userInfo);
+                    dr.collection(Constants.CIRCLE_COLLECTION).add(circleData);
 
-                    context.startActivity(new Intent(context, RequestPermissionActivity.class));
-
+                    // with sign up, a FCM token will be saved with user for sending Cloud Messages Notification
                     addFCMToken();
 
-                    Toast.makeText(context, "Sign Up Successful!", Toast.LENGTH_SHORT).show();
+                    Log.i(TAG, "signUp successful: ");
+
+                    status[0] = true;
                 })
                 .addOnFailureListener(e -> {
-                    Toast.makeText(context, "Error! Failed to Sign Up.", Toast.LENGTH_SHORT).show();
                     Log.e(TAG, "signUp failed " + e.getMessage());
+
+                    if (e.getMessage().equals(context.getString(R.string.email_already_in_use))) {
+                        Toast.makeText(context, context.getString(R.string.email_already_in_use), Toast.LENGTH_LONG).show();
+                    }
+                    else {
+                        Toast.makeText(context, "Failed to Sign Up. Try Again!", Toast.LENGTH_LONG).show();
+                    }
+
+                    status[0] = false;
                 });
+
+        return status[0];
+    }
+
+    public static void uploadProfileImage() {
+
+        // variable for handling the failed condition, if it fails is will retry till 3 times and then will
+        // trigger a condition showing that the image uploading failed
+        int checkFailedStatus = 0;
+
+        StorageReference storageReference = FirebaseStorage.getInstance().getReference(Constants.PROFILE_IMAGES);
+
+        StorageReference fileRef = storageReference.child(SharedPreference.getImageName());
+
+        fileRef.putFile(Uri.fromFile(new File(SharedPreference.getImagePath())))
+                .addOnSuccessListener(taskSnapshot -> {
+                    fileRef.getDownloadUrl()
+                            .addOnSuccessListener(uri -> {
+
+                                //when successful; update the values of image related field
+                                Map<String,Object> imagePropertiesMap = new HashMap<>();
+                                imagePropertiesMap.put(Constants.IMAGE_PATH,uri.toString());
+                                imagePropertiesMap.put(Constants.IMAGE_NAME,SharedPreference.getImageName());
+
+                                FirebaseFirestore.getInstance().collection(USERS_COLLECTION)
+                                        .document(SharedPreference.getEmailPref())
+                                        .update(imagePropertiesMap)
+                                        .addOnSuccessListener(unused -> Log.i(TAG, "update image fields: successful"))
+                                        .addOnFailureListener(e -> Log.e(TAG, "update image fields: failed" + e.getMessage()));
+
+                            });
+        })
+                .addOnFailureListener(e -> {
+                    Log.e(TAG, "Fail to upload image: " + e.getMessage());
+
+                    if(checkFailedStatus < 3) {
+                        //recall the function to retry for uploading image to Firebase Storage
+                        uploadProfileImage();
+                    }
+        });
 
     }
 

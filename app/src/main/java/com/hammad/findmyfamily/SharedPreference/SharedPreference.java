@@ -62,7 +62,7 @@ public class SharedPreference {
         sharedPreference.edit().putString(Constants.IMAGE_PATH,imagePath).apply();
     }
 
-    public static String getImagePath(){
+    public static String getImagePath() {
         return sharedPreference.getString(IMAGE_PATH,NULL);
     }
 

@@ -11,6 +11,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.hammad.findmyfamily.HomeScreen.HomeActivity;
 import com.hammad.findmyfamily.OneTimeScreens.JoinCircleFirstScreenActivity;
 import com.hammad.findmyfamily.SignIn.PhoneNoSignInActivity;
 import com.hammad.findmyfamily.SignUp.PhoneNoSignUpActivity;
@@ -57,7 +58,7 @@ public class StartScreenActivity extends AppCompatActivity {
 
         documentReference.get().addOnSuccessListener(documentSnapshot -> {
 
-           startActivity(new Intent(StartScreenActivity.this, JoinCircleFirstScreenActivity.class));
+           startActivity(new Intent(StartScreenActivity.this, HomeActivity.class));
            finish();
         });
     }
