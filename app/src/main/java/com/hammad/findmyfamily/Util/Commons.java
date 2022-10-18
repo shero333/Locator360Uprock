@@ -52,11 +52,18 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Random;
 
 public class Commons {
 
     private static final String TAG = "COMMONS";
+
+    /*
+        variable for handling the failed condition, if it fails is will retry till 3 times and then will
+        trigger a condition showing that the image uploading failed
+    */
+    static int checkFailedStatus = 0;
 
     /*
             These two functions {encryptedText(String text), bytesToHex(byte[] hash)} are used for encryption in SHA-256 hash code. It remain same for a particular group of text.
@@ -249,13 +256,9 @@ public class Commons {
         context.startActivity(new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS, Uri.parse("package:" + BuildConfig.APPLICATION_ID)));
     }
 
-    public interface GetGPSListener {
-        void getGPSIntent(Intent intent);
-    }
-
     public static void locationPermissionDialog(Activity activity) {
 
-        Dialog dialog=new Dialog(activity);
+        Dialog dialog = new Dialog(activity);
         dialog.setContentView(R.layout.layout_location_dialog);
 
         //setting the transparent background
@@ -279,7 +282,7 @@ public class Commons {
         dialog.show();
     }
 
-    public static void cameraAndGalleryPermissionDialog(Activity activity,boolean isCameraDialog) {
+    public static void cameraAndGalleryPermissionDialog(Activity activity, boolean isCameraDialog) {
 
         Dialog dialog = new Dialog(activity);
 
@@ -294,7 +297,7 @@ public class Commons {
         //setting the width and height of alert dialog
         dialog.getWindow().setLayout(width, ConstraintLayout.LayoutParams.WRAP_CONTENT);
 
-        if(isCameraDialog) {
+        if (isCameraDialog) {
 
             LayoutCameraDialogBinding cameraDialogBinding = LayoutCameraDialogBinding.inflate(LayoutInflater.from(activity));
             dialog.setContentView(cameraDialogBinding.getRoot());
@@ -308,8 +311,7 @@ public class Commons {
             //img view cancel dialog
             cameraDialogBinding.imgCancelDialog.setOnClickListener(v -> dialog.dismiss());
 
-        }
-        else {
+        } else {
 
             LayoutGalleryDialogBinding galleryDialogBinding = LayoutGalleryDialogBinding.inflate(LayoutInflater.from(activity));
             dialog.setContentView(galleryDialogBinding.getRoot());
@@ -328,9 +330,7 @@ public class Commons {
         dialog.show();
     }
 
-    public static boolean signUp(Context context) {
-
-        final boolean[] status = {false};
+    public static void signUp(Context context, OnSignUpSuccessListener onSignUpSuccessListener) {
 
         //initializing Firebase Auth & FireStore
         FirebaseAuth fAuth = FirebaseAuth.getInstance();
@@ -344,6 +344,11 @@ public class Commons {
 
                     Map<String, Object> userInfo = new HashMap<>();
 
+                    // when in 'Circle' sub-collection, a new document is created,
+                    // its id will be stored in 'User' collection document as field. Later this ids will be used to extract Circle info
+                    Map<String, Object> data1 = new HashMap<>();
+                    data1.put(Constants.ID, null);
+
                     userInfo.put(Constants.FIRST_NAME, SharedPreference.getFirstNamePref());
                     userInfo.put(Constants.LAST_NAME, SharedPreference.getLastNamePref());
                     userInfo.put(Constants.PHONE_NO, SharedPreference.getPhoneNoPref());
@@ -351,54 +356,62 @@ public class Commons {
                     userInfo.put(Constants.PASSWORD, SharedPreference.getPasswordPref());
                     userInfo.put(Constants.IMAGE_NAME, SharedPreference.getImageName());
                     userInfo.put(Constants.IMAGE_PATH, SharedPreference.getImagePath());
-                    userInfo.put(Constants.FCM_TOKEN,null);
-
+                    userInfo.put(Constants.FCM_TOKEN, null);
+                    userInfo.put(Constants.CIRCLE_IDS, data1);
 
                     //setting the circle info as sub-collection data
-                    Map<String,Object> circleData = new HashMap<>();
+                    Map<String, Object> circleData = new HashMap<>();
 
                     //array of circle members id
-                    Map<String,Object> circleMemberIds = new HashMap<>();
-                    circleMemberIds.put(Constants.MEMBER_ID,SharedPreference.getEmailPref());
+                    Map<String, Object> circleMemberIds = new HashMap<>();
+                    circleMemberIds.put(Constants.MEMBER_ID, SharedPreference.getEmailPref());
 
-                    circleData.put(Constants.CIRCLE_NAME,SharedPreference.getCircleName());
-                    circleData.put(Constants.CIRCLE_JOIN_CODE,SharedPreference.getCircleInviteCode());
-                    circleData.put(Constants.CIRCLE_ADMIN,SharedPreference.getEmailPref());
-                    circleData.put(Constants.CIRCLE_TIME_STAMP,new Timestamp(new Date()));
-                    circleData.put(Constants.CIRCLE_CODE_EXPIRY_DATE,new Timestamp(new Date()));
-                    circleData.put(Constants.CIRCLE_MEMBERS,circleMemberIds);
+                    circleData.put(Constants.CIRCLE_NAME, SharedPreference.getCircleName());
+                    circleData.put(Constants.CIRCLE_JOIN_CODE, SharedPreference.getCircleInviteCode());
+                    circleData.put(Constants.CIRCLE_ADMIN, SharedPreference.getEmailPref());
+                    circleData.put(Constants.CIRCLE_TIME_STAMP, new Timestamp(new Date()));
+                    circleData.put(Constants.CIRCLE_CODE_EXPIRY_DATE, new Timestamp(new Date()));
+                    circleData.put(Constants.CIRCLE_MEMBERS, circleMemberIds);
 
                     dr.set(userInfo);
-                    dr.collection(Constants.CIRCLE_COLLECTION).add(circleData);
+                    dr.collection(Constants.CIRCLE_COLLECTION).add(circleData)
+                            .addOnSuccessListener(documentReference -> {
+
+                                /*// when in 'Circle' sub-collection, a new document is created,
+                                // its id will be stored in 'User' collection document as field. Later this ids will be used to extract Circle info
+                                Map<String, Object> data1 = new HashMap<>();
+                                data1.put(Constants.CIRCLE_IDS, documentReference.getId());*/
+                                data1.put(Constants.ID, documentReference.getId());
+
+                                FirebaseFirestore.getInstance().collection(USERS_COLLECTION)
+                                        .document(SharedPreference.getEmailPref())
+                                        .update(data1)
+                                        .addOnSuccessListener(unused -> Log.i(TAG, "onSuccess: "))
+                                        .addOnFailureListener(e -> Log.i(TAG, "onFailure: "+e.getMessage()));
+                            });
 
                     // with sign up, a FCM token will be saved with user for sending Cloud Messages Notification
                     addFCMToken();
 
+                    //calling the SignUpSuccessListener interface
+                    onSignUpSuccessListener.onSignUpSuccessful(true);
+
                     Log.i(TAG, "signUp successful: ");
 
-                    status[0] = true;
                 })
                 .addOnFailureListener(e -> {
                     Log.e(TAG, "signUp failed " + e.getMessage());
 
                     if (e.getMessage().equals(context.getString(R.string.email_already_in_use))) {
                         Toast.makeText(context, context.getString(R.string.email_already_in_use), Toast.LENGTH_LONG).show();
-                    }
-                    else {
+                    } else {
                         Toast.makeText(context, "Failed to Sign Up. Try Again!", Toast.LENGTH_LONG).show();
                     }
 
-                    status[0] = false;
                 });
-
-        return status[0];
     }
 
     public static void uploadProfileImage() {
-
-        // variable for handling the failed condition, if it fails is will retry till 3 times and then will
-        // trigger a condition showing that the image uploading failed
-        int checkFailedStatus = 0;
 
         StorageReference storageReference = FirebaseStorage.getInstance().getReference(Constants.PROFILE_IMAGES);
 
@@ -406,57 +419,62 @@ public class Commons {
 
         fileRef.putFile(Uri.fromFile(new File(SharedPreference.getImagePath())))
                 .addOnSuccessListener(taskSnapshot -> {
-                    fileRef.getDownloadUrl()
-                            .addOnSuccessListener(uri -> {
+                    fileRef.getDownloadUrl().addOnSuccessListener(uri -> {
 
-                                //when successful; update the values of image related field
-                                Map<String,Object> imagePropertiesMap = new HashMap<>();
-                                imagePropertiesMap.put(Constants.IMAGE_PATH,uri.toString());
-                                imagePropertiesMap.put(Constants.IMAGE_NAME,SharedPreference.getImageName());
+                        //when successful; update the values of image related field
+                        Map<String, Object> imagePropertiesMap = new HashMap<>();
+                        imagePropertiesMap.put(Constants.IMAGE_PATH, uri.toString());
+                        imagePropertiesMap.put(Constants.IMAGE_NAME, SharedPreference.getImageName());
 
-                                FirebaseFirestore.getInstance().collection(USERS_COLLECTION)
-                                        .document(SharedPreference.getEmailPref())
-                                        .update(imagePropertiesMap)
-                                        .addOnSuccessListener(unused -> Log.i(TAG, "update image fields: successful"))
-                                        .addOnFailureListener(e -> Log.e(TAG, "update image fields: failed" + e.getMessage()));
+                        FirebaseFirestore.getInstance().collection(USERS_COLLECTION)
+                                .document(SharedPreference.getEmailPref())
+                                .update(imagePropertiesMap)
+                                .addOnSuccessListener(unused -> Log.i(TAG, "update image fields: successful"))
+                                .addOnFailureListener(e -> Log.e(TAG, "update image fields: failed" + e.getMessage()));
 
-                            });
-        })
+                    });
+
+                    //setting the value of 'checkFailedStatus' to zero. Because the variable is static and its value can be greater than 0
+                    checkFailedStatus = 0;
+                })
                 .addOnFailureListener(e -> {
                     Log.e(TAG, "Fail to upload image: " + e.getMessage());
 
-                    if(checkFailedStatus < 3) {
-                        //recall the function to retry for uploading image to Firebase Storage
-                        uploadProfileImage();
-                    }
-        });
+                    //incrementing the 'checkFailedStatus' value
+                    checkFailedStatus++;
 
+                    if (checkFailedStatus < 4) {
+
+                        if (checkFailedStatus == 3) checkFailedStatus = 0;
+                        else uploadProfileImage();
+                    }
+                });
     }
 
-    private static void addFCMToken() {
+    public static void addFCMToken() {
 
         // calls this function every time a user sign up or sign in to get a latest token. This will also handle the cases, when a token is changed.
 
         FirebaseMessaging.getInstance().getToken()
                 .addOnCompleteListener(task -> {
 
-                    if(task.isSuccessful()) {
+                    if (task.isSuccessful()) {
 
-                        Map<String,Object> addFCMToken= new HashMap<>();
-                        addFCMToken.put(Constants.FCM_TOKEN,task.getResult());
+                        Map<String, Object> addFCMToken = new HashMap<>();
+                        addFCMToken.put(Constants.FCM_TOKEN, task.getResult());
 
                         // saves the token in firebase
                         FirebaseFirestore.getInstance().collection(USERS_COLLECTION)
                                 .document(SharedPreference.getEmailPref())
                                 .update(addFCMToken)
                                 .addOnSuccessListener(o -> Log.i(TAG, "addFCMToken successful"))
-                                .addOnFailureListener(e -> Log.e(TAG, "addFCMToken failed: "+ e.getMessage()));
+                                .addOnFailureListener(e -> Log.e(TAG, "addFCMToken failed: " + e.getMessage()));
                     }
                 });
 
     }
 
-    private static void deleteFCMToken() {
+    public static void deleteFCMToken() {
 
         /*
             delete the fcm when user logged out. This will help in determining the status of user (logged in/out)
@@ -464,16 +482,34 @@ public class Commons {
         */
 
         // deletes the value of a specific field
-        Map<String,Object> deleteFCMToken = new HashMap<>();
-        deleteFCMToken.put(Constants.FCM_TOKEN, FieldValue.delete());
+        Map<String, Object> deleteFCMToken = new HashMap<>();
+        deleteFCMToken.put(Constants.FCM_TOKEN, "");
 
-        DocumentReference documentReference = FirebaseFirestore.getInstance()
+        //Log.i(TAG, "current user email: "+ Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getEmail());
+       Log.i(TAG, "shared pref email: "+SharedPreference.getEmailPref());
+
+        // update the token value in firebase
+        FirebaseFirestore.getInstance().collection(USERS_COLLECTION)
+                .document(SharedPreference.getEmailPref())
+                .update(deleteFCMToken)
+                .addOnSuccessListener(o -> Log.i(TAG, "deleteFCMToken successful"))
+                .addOnFailureListener(e -> Log.e(TAG, "deleteFCMToken failed: " + e.getMessage()));
+
+        /*DocumentReference documentReference = FirebaseFirestore.getInstance()
                 .collection(USERS_COLLECTION)
                 .document(SharedPreference.getEmailPref());
 
         documentReference.update(deleteFCMToken)
                 .addOnSuccessListener(unused -> Log.i(TAG, "deleteFCMToken successful"))
-                .addOnFailureListener(e -> Log.e(TAG, "deleteFCMToken: " + e.getMessage()));
+                .addOnFailureListener(e -> Log.e(TAG, "deleteFCMToken: " + e.getMessage()));*/
+    }
+
+    public interface OnSignUpSuccessListener {
+        void onSignUpSuccessful(boolean isSuccessful);
+    }
+
+    public interface GetGPSListener {
+        void getGPSIntent(Intent intent);
     }
 
 }

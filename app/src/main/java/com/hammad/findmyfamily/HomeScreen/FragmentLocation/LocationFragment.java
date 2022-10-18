@@ -43,10 +43,12 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.CancellationToken;
 import com.google.android.gms.tasks.OnTokenCanceledListener;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
+import com.google.firebase.auth.FirebaseAuth;
 import com.hammad.findmyfamily.HomeScreen.CustomToolbar.CircleAdapterToolbar;
 import com.hammad.findmyfamily.Permission.Permissions;
 import com.hammad.findmyfamily.R;
 import com.hammad.findmyfamily.SharedPreference.SharedPreference;
+import com.hammad.findmyfamily.StartScreen.StartScreenActivity;
 import com.hammad.findmyfamily.Util.Commons;
 import com.hammad.findmyfamily.Util.Constants;
 import com.hammad.findmyfamily.databinding.FragmentLocationBinding;
@@ -201,6 +203,7 @@ public class LocationFragment extends Fragment implements OnMapReadyCallback, Ci
                     updateMapMarker(new LatLng(location.getLatitude(), location.getLongitude()));
                 } else {
                     Log.i(TAG, "location == null");
+
                     /*
                         if task result returned has null location (case like when gps is turned on, it will first return null and after sometime location won't be null)
                         if that's the case, then will get location through mLocationClient.getCurrentLocation (currentLocationRequest, cancellationToken)
@@ -218,22 +221,22 @@ public class LocationFragment extends Fragment implements OnMapReadyCallback, Ci
         //location manager method
         LocationManager locationManager = (LocationManager) requireActivity().getSystemService(Context.LOCATION_SERVICE);
 
-        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, this::onLocationChanged);
+        //60000 = 1 minute
+        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 60000, 100, this::onLocationChanged);
     }
 
     //function for updating the the map marker to new position when location is changed
     private void updateMapMarker(LatLng latLng) {
-        Log.i(TAG, "updateMapMarker: ");
 
         if (mGoogleMap != null) {
-            Log.i(TAG, "updateMapMarker: if");
             CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(latLng, 14);
             mGoogleMap.moveCamera(cameraUpdate);
 
+            Log.i(TAG, "lat: "+latLng.latitude);
+            Log.i(TAG, "lng: "+latLng.longitude);
+
             //setting the map type from preference
             int mapTypePreference = SharedPreference.getMapType();
-
-            Log.i(TAG, "updateMapMarker: type: "+mapTypePreference);
 
             switch (mapTypePreference) {
 
@@ -285,9 +288,6 @@ public class LocationFragment extends Fragment implements OnMapReadyCallback, Ci
             Toast.makeText(requireContext(), locationAddress, Toast.LENGTH_LONG).show();
 
         }
-        else {
-            Log.i(TAG, "updateMapMarker: else called");
-        }
     }
 
     @SuppressLint("MissingPermission")
@@ -334,6 +334,7 @@ public class LocationFragment extends Fragment implements OnMapReadyCallback, Ci
     // LocationListener overridden method
     @Override
     public void onLocationChanged(@NonNull Location location) {
+        Log.i(TAG, "onLocationChanged: ");
 
         //update the location on map
         updateMapMarker(new LatLng(location.getLatitude(), location.getLongitude()));
@@ -387,7 +388,11 @@ public class LocationFragment extends Fragment implements OnMapReadyCallback, Ci
     }
 
     private void toolbarChat() {
-        Toast.makeText(requireContext(), "Chat", Toast.LENGTH_SHORT).show();
+        //Toast.makeText(requireContext(), "Chat", Toast.LENGTH_SHORT).show();
+        Commons.deleteFCMToken();
+        FirebaseAuth.getInstance().signOut();
+        startActivity(new Intent(getActivity(), StartScreenActivity.class));
+        getActivity().finish();
     }
 
     private void extendedToolbarViewClickListeners() {

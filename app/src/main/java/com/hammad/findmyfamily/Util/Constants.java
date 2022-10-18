@@ -13,6 +13,7 @@ public interface Constants {
      String IMAGE_NAME = "image_name";
      String FCM_TOKEN = "fcm_token";
      String CIRCLE_IDS = "circle_ids";
+     String ID = "id";
 
      // for Cloud Storage
      String PROFILE_IMAGES = "profile_images";

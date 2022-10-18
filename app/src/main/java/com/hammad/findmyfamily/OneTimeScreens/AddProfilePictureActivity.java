@@ -38,6 +38,7 @@ public class AddProfilePictureActivity extends AppCompatActivity {
 
     // saving the current path of image
     private static String currentPicturePath = "";
+
     private ActivityAddProfilePictureBinding binding;
 
     private static final String TAG = "ACT_ADD_PROF";
@@ -341,31 +342,28 @@ public class AddProfilePictureActivity extends AppCompatActivity {
         SharedPreference.setImagePath(NULL);
         SharedPreference.setImageName(NULL);
 
-        if(Commons.signUp(this)) {
-            //navigating to next activity
-            startActivity(new Intent(this, RequestPermissionActivity.class));
-        }
-        /*else if(!Commons.signUp(this)) {
-            Toast.makeText(this, "Failed to Sign Up. Try Again!", Toast.LENGTH_LONG).show();
-        }*/
+        Commons.signUp(this, isSuccessful -> {
 
+            if(isSuccessful) {
+                //navigating to next activity
+                startActivity(new Intent(this, RequestPermissionActivity.class));
+            }
+        });
     }
 
     private void continueButtonClickListener() {
 
-        if(Commons.signUp(this)) {
-            Log.e(TAG, "if called");
+        Commons.signUp(this, isSuccessful -> {
 
-            //uploads the image in background
-            Commons.uploadProfileImage();
+            if(isSuccessful) {
 
-            // navigating to next screen
-            startActivity(new Intent(this, RequestPermissionActivity.class));
-        }
-        Log.e(TAG, "else called");
-        /*else if(!Commons.signUp(this)) {
-            Toast.makeText(this, "Failed to Sign Up. Try Again!", Toast.LENGTH_LONG).show();
-        }*/
+                //uploads the image in background
+                Commons.uploadProfileImage();
+
+                // navigating to next screen
+                startActivity(new Intent(this, RequestPermissionActivity.class));
+            }
+        });
     }
 
     /*private void rxJavaProfilePictureCompression(File file){

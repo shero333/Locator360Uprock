@@ -1,5 +1,6 @@
 package com.hammad.findmyfamily.SignUp;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -12,6 +13,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.hammad.findmyfamily.R;
+import com.hammad.findmyfamily.SharedPreference.SharedPreference;
 import com.hammad.findmyfamily.Util.Commons;
 import com.hammad.findmyfamily.Util.Constants;
 import com.hammad.findmyfamily.databinding.ActivityEmailSignUpBinding;
@@ -74,12 +76,23 @@ public class EmailSignUpActivity extends AppCompatActivity {
 
     private void buttonClickListener() {
 
+        boolean doesEmailAlreadyExist = false;
+
         for (int i = 0; i < registeredEmailList.size(); i++) {
 
             if (registeredEmailList.get(i).equals(binding.edtEmailSignUp.getText().toString())) {
-                Toast.makeText(this, getString(R.string.email_already_in_use), Toast.LENGTH_SHORT).show();
+                doesEmailAlreadyExist = true;
                 break;
             }
+        }
+
+        if(doesEmailAlreadyExist) {
+            Toast.makeText(this, getString(R.string.email_already_in_use), Toast.LENGTH_LONG).show();
+        }
+        else {
+            SharedPreference.setEmailPref(binding.edtEmailSignUp.getText().toString());
+
+            startActivity(new Intent(this,CreatePasswordActivity.class));
         }
 
     }
