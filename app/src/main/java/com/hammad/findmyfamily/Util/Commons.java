@@ -38,6 +38,7 @@ import com.google.firebase.storage.StorageReference;
 import com.hammad.findmyfamily.BuildConfig;
 import com.hammad.findmyfamily.R;
 import com.hammad.findmyfamily.SharedPreference.SharedPreference;
+import com.hammad.findmyfamily.StartScreen.StartScreenActivity;
 import com.hammad.findmyfamily.databinding.LayoutCameraDialogBinding;
 import com.hammad.findmyfamily.databinding.LayoutGalleryDialogBinding;
 
@@ -52,7 +53,6 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Objects;
 import java.util.Random;
 
 public class Commons {
@@ -68,7 +68,7 @@ public class Commons {
     /*
             These two functions {encryptedText(String text), bytesToHex(byte[] hash)} are used for encryption in SHA-256 hash code. It remain same for a particular group of text.
             We will save this encrypted text in firebase, and when user enters password, we will convert it into Hex and then compare with the firebase password.
-        */
+    */
     public static String encryptedText(String text) {
         MessageDigest digest;
         String encryptedText = "";
@@ -103,6 +103,7 @@ public class Commons {
     }
 
     public static boolean validateEmailAddress(String input) {
+
         if (!input.isEmpty() && Patterns.EMAIL_ADDRESS.matcher(input).matches()) {
             //enable the continue button
             return true;
@@ -330,7 +331,7 @@ public class Commons {
         dialog.show();
     }
 
-    public static void signUp(Context context, OnSignUpSuccessListener onSignUpSuccessListener) {
+    public static void signUp(Context context, OnSuccessListenerInterface onSuccessListenerInterface) {
 
         //initializing Firebase Auth & FireStore
         FirebaseAuth fAuth = FirebaseAuth.getInstance();
@@ -344,10 +345,9 @@ public class Commons {
 
                     Map<String, Object> userInfo = new HashMap<>();
 
-                    // when in 'Circle' sub-collection, a new document is created,
-                    // its id will be stored in 'User' collection document as field. Later this ids will be used to extract Circle info
-                    Map<String, Object> data1 = new HashMap<>();
-                    data1.put(Constants.ID, null);
+                    // array for storing circle ids in user document
+                    Map<String, Object> data = new HashMap<>();
+                    data.put(Constants.ID, Constants.NULL);
 
                     userInfo.put(Constants.FIRST_NAME, SharedPreference.getFirstNamePref());
                     userInfo.put(Constants.LAST_NAME, SharedPreference.getLastNamePref());
@@ -357,44 +357,41 @@ public class Commons {
                     userInfo.put(Constants.IMAGE_NAME, SharedPreference.getImageName());
                     userInfo.put(Constants.IMAGE_PATH, SharedPreference.getImagePath());
                     userInfo.put(Constants.FCM_TOKEN, null);
-                    userInfo.put(Constants.CIRCLE_IDS, data1);
+                    userInfo.put(Constants.CIRCLE_IDS, data);
 
                     //setting the circle info as sub-collection data
                     Map<String, Object> circleData = new HashMap<>();
-
-                    //array of circle members id
-                    Map<String, Object> circleMemberIds = new HashMap<>();
-                    circleMemberIds.put(Constants.MEMBER_ID, SharedPreference.getEmailPref());
 
                     circleData.put(Constants.CIRCLE_NAME, SharedPreference.getCircleName());
                     circleData.put(Constants.CIRCLE_JOIN_CODE, SharedPreference.getCircleInviteCode());
                     circleData.put(Constants.CIRCLE_ADMIN, SharedPreference.getEmailPref());
                     circleData.put(Constants.CIRCLE_TIME_STAMP, new Timestamp(new Date()));
                     circleData.put(Constants.CIRCLE_CODE_EXPIRY_DATE, new Timestamp(new Date()));
-                    circleData.put(Constants.CIRCLE_MEMBERS, circleMemberIds);
+                    circleData.put(Constants.CIRCLE_MEMBERS, FieldValue.arrayUnion(SharedPreference.getEmailPref()));
 
                     dr.set(userInfo);
                     dr.collection(Constants.CIRCLE_COLLECTION).add(circleData)
                             .addOnSuccessListener(documentReference -> {
 
-                                /*// when in 'Circle' sub-collection, a new document is created,
-                                // its id will be stored in 'User' collection document as field. Later this ids will be used to extract Circle info
-                                Map<String, Object> data1 = new HashMap<>();
-                                data1.put(Constants.CIRCLE_IDS, documentReference.getId());*/
-                                data1.put(Constants.ID, documentReference.getId());
+                                /*
+                                    when in 'Circle' sub-collection, a new document is created,
+                                    its id will be stored in 'User' collection document as field. Later this ids will be used to extract Circle info
+                                */
 
-                                FirebaseFirestore.getInstance().collection(USERS_COLLECTION)
-                                        .document(SharedPreference.getEmailPref())
-                                        .update(data1)
-                                        .addOnSuccessListener(unused -> Log.i(TAG, "onSuccess: "))
-                                        .addOnFailureListener(e -> Log.i(TAG, "onFailure: "+e.getMessage()));
+                                DocumentReference documentRefCircleId = FirebaseFirestore.getInstance().collection(USERS_COLLECTION)
+                                        .document(SharedPreference.getEmailPref());
+
+                                documentRefCircleId.update(Constants.CIRCLE_IDS, FieldValue.arrayUnion(documentReference.getId()))
+                                        .addOnSuccessListener(unused -> Log.i(TAG, "CIRCLE ID: success"))
+                                        .addOnFailureListener(e -> Log.i(TAG, "CIRCLE ID: failure = "+e.getMessage()));
+
                             });
 
                     // with sign up, a FCM token will be saved with user for sending Cloud Messages Notification
                     addFCMToken();
 
                     //calling the SignUpSuccessListener interface
-                    onSignUpSuccessListener.onSignUpSuccessful(true);
+                    onSuccessListenerInterface.onSuccess(true);
 
                     Log.i(TAG, "signUp successful: ");
 
@@ -453,7 +450,10 @@ public class Commons {
 
     public static void addFCMToken() {
 
-        // calls this function every time a user sign up or sign in to get a latest token. This will also handle the cases, when a token is changed.
+        /*
+            calls this function every time a user sign up or sign in to get a latest token.
+            This will also handle the cases, when a token is changed.
+        */
 
         FirebaseMessaging.getInstance().getToken()
                 .addOnCompleteListener(task -> {
@@ -474,42 +474,73 @@ public class Commons {
 
     }
 
-    public static void deleteFCMToken() {
+    public static void deleteFCMToken(OnSuccessListenerInterface onSuccessListenerInterface) {
 
         /*
             delete the fcm when user logged out. This will help in determining the status of user (logged in/out)
             if a user has logged out of app, he will not receive FCM messages
         */
 
-        // deletes the value of a specific field
+        // delete the value of specified field
         Map<String, Object> deleteFCMToken = new HashMap<>();
-        deleteFCMToken.put(Constants.FCM_TOKEN, "");
-
-        //Log.i(TAG, "current user email: "+ Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getEmail());
-       Log.i(TAG, "shared pref email: "+SharedPreference.getEmailPref());
+        deleteFCMToken.put(Constants.FCM_TOKEN, Constants.NULL);
 
         // update the token value in firebase
         FirebaseFirestore.getInstance().collection(USERS_COLLECTION)
                 .document(SharedPreference.getEmailPref())
                 .update(deleteFCMToken)
-                .addOnSuccessListener(o -> Log.i(TAG, "deleteFCMToken successful"))
+                .addOnSuccessListener(o -> {
+                    Log.i(TAG, "deleteFCMToken successful");
+                    onSuccessListenerInterface.onSuccess(true);
+                })
                 .addOnFailureListener(e -> Log.e(TAG, "deleteFCMToken failed: " + e.getMessage()));
-
-        /*DocumentReference documentReference = FirebaseFirestore.getInstance()
-                .collection(USERS_COLLECTION)
-                .document(SharedPreference.getEmailPref());
-
-        documentReference.update(deleteFCMToken)
-                .addOnSuccessListener(unused -> Log.i(TAG, "deleteFCMToken successful"))
-                .addOnFailureListener(e -> Log.e(TAG, "deleteFCMToken: " + e.getMessage()));*/
     }
 
-    public interface OnSignUpSuccessListener {
-        void onSignUpSuccessful(boolean isSuccessful);
+    // interface for handling the success scenarios in sign up, sign in, and FCM token deletion
+    public interface OnSuccessListenerInterface {
+        void onSuccess(boolean isSuccessful);
     }
 
     public interface GetGPSListener {
         void getGPSIntent(Intent intent);
+    }
+
+    public static void signIn(Context context, String password, OnSuccessListenerInterface onSuccessListenerInterface) {
+
+        FirebaseAuth.getInstance().signInWithEmailAndPassword(SharedPreference.getEmailPref(),password)
+                .addOnSuccessListener(authResult -> onSuccessListenerInterface.onSuccess(true))
+                .addOnFailureListener(e -> {
+
+                    if(e.getMessage().contains("The password is invalid or the user does not have a password.")) {
+                        Toast.makeText(context, "Error! Incorrect Password.", Toast.LENGTH_LONG).show();
+
+                        Log.e(TAG, "incorrect password error: " + e.getMessage());
+                    }
+                    else if(e.getMessage().contains("There is no user record corresponding to this identifier. The user may have been deleted.")){
+                        Toast.makeText(context, "Error! Incorrect Email.", Toast.LENGTH_LONG).show();
+
+                        Log.e(TAG, "incorrect email error: " + e.getMessage());
+                    }
+                    else {
+                        Toast.makeText(context, "Error! Try Again.", Toast.LENGTH_LONG).show();
+
+                        Log.e(TAG, "sign in error: " + e.getMessage());
+                    }
+                });
+
+    }
+
+    public static void signOut(Activity activity) {
+
+        Commons.deleteFCMToken(isSuccessful -> {
+
+            if(isSuccessful) {
+                FirebaseAuth.getInstance().signOut();
+                activity.startActivity(new Intent(activity, StartScreenActivity.class));
+                activity.finish();
+            }
+        });
+
     }
 
 }

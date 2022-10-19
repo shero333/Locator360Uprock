@@ -192,7 +192,7 @@ public class OTPActivity extends AppCompatActivity {
             }
         }
         else if(!enteredOtpCode.equals(code)) {
-            Toast.makeText(this, "Error! Wrong OTP.", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Error! OTP cannot be verified.", Toast.LENGTH_LONG).show();
 
         }
     }

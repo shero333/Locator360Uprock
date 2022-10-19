@@ -11,12 +11,18 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.hammad.findmyfamily.R;
+import com.hammad.findmyfamily.SharedPreference.SharedPreference;
 import com.hammad.findmyfamily.StartScreen.StartScreenActivity;
 import com.hammad.findmyfamily.Util.Commons;
+import com.hammad.findmyfamily.Util.Constants;
 import com.hammad.findmyfamily.databinding.ActivityCreateNewPasswordBinding;
 
 public class CreateNewPasswordActivity extends AppCompatActivity {
+
+    private static final String TAG = "ACT_NEW_PASS";
 
     private ActivityCreateNewPasswordBinding binding;
 
@@ -53,31 +59,28 @@ public class CreateNewPasswordActivity extends AppCompatActivity {
 
             strPassword = Commons.encryptedText(s);
 
-            if(s.length() >= 8) {
+            if (s.length() >= 8) {
 
                 //setting the helper text
                 binding.layoutPassword.setHelperText(" ");
 
-                if(strPassword.equals(strConfirmPassword)) {
+                if (strPassword.equals(strConfirmPassword)) {
                     passwordsMatchScenario();
-                }
-                else if(!strPassword.equals(strConfirmPassword)) {
+                } else if (!strPassword.equals(strConfirmPassword)) {
 
-                    if(binding.edtConfirmPassword.length() == 0) {
+                    if (binding.edtConfirmPassword.length() == 0) {
 
                         binding.layoutConfirmPassword.setHelperText(" ");
 
                         //setting the reset button state to disable
                         setResetPasswordButtonStatus(false, R.drawable.disabled_round_button, getColor(R.color.orange));
-                    }
-                    else {
+                    } else {
                         passwordsMismatchScenario();
                     }
 
                 }
 
-            }
-            else if(s.length() < 8) {
+            } else if (s.length() < 8) {
 
                 //setting the helper text
                 binding.layoutPassword.setHelperText(getString(R.string.minimum_8_character_password));
@@ -86,7 +89,7 @@ public class CreateNewPasswordActivity extends AppCompatActivity {
                 binding.layoutConfirmPassword.setHelperText(" ");
 
                 //setting the reset button status to disabled
-                setResetPasswordButtonStatus(false,R.drawable.disabled_round_button,getColor(R.color.orange));
+                setResetPasswordButtonStatus(false, R.drawable.disabled_round_button, getColor(R.color.orange));
             }
 
         }
@@ -96,7 +99,6 @@ public class CreateNewPasswordActivity extends AppCompatActivity {
         }
 
     };
-
     private final TextWatcher confirmPasswordTextWatcher = new TextWatcher() {
         @Override
         public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -109,22 +111,20 @@ public class CreateNewPasswordActivity extends AppCompatActivity {
 
             strConfirmPassword = Commons.encryptedText(s);
 
-            if(strConfirmPassword.equals(strPassword)) {
+            if (strConfirmPassword.equals(strPassword)) {
 
-                if(binding.edtConfirmPassword.length() == 0 && binding.edtPassword.length() == 0) {
+                if (binding.edtConfirmPassword.length() == 0 && binding.edtPassword.length() == 0) {
 
                     binding.layoutConfirmPassword.setHelperText(" ");
 
                     //setting the reset button state to disable
                     setResetPasswordButtonStatus(false, R.drawable.disabled_round_button, getColor(R.color.orange));
 
-                }
-                else {
+                } else {
                     passwordsMatchScenario();
                 }
 
-            }
-            else if(!strConfirmPassword.equals(strPassword)) {
+            } else if (!strConfirmPassword.equals(strPassword)) {
 
                 passwordsMismatchScenario();
             }
@@ -132,7 +132,8 @@ public class CreateNewPasswordActivity extends AppCompatActivity {
         }
 
         @Override
-        public void afterTextChanged(Editable editable) {}
+        public void afterTextChanged(Editable editable) {
+        }
     };
 
     private void setResetPasswordButtonStatus(boolean status, int layout, int color) {
@@ -163,11 +164,49 @@ public class CreateNewPasswordActivity extends AppCompatActivity {
 
     private void resetPasswordClickListener() {
 
-        //update password in firebase
+        //sets progress bar visibility to VISIBLE
+        binding.progressBar.setVisibility(View.VISIBLE);
 
-        Toast.makeText(this, "Password reset successful", Toast.LENGTH_SHORT).show();
-        startActivity(new Intent(this, StartScreenActivity.class));
-        finish();
+        //update password in firebase
+        FirebaseFirestore.getInstance()
+                .collection(Constants.USERS_COLLECTION)
+                .whereEqualTo(Constants.PHONE_NO, SharedPreference.getPhoneNoPref())
+                .get()
+                .addOnSuccessListener(queryDocumentSnapshots -> {
+
+                    //gets the registered email
+                    String val = queryDocumentSnapshots.getDocuments().get(0).getString(Constants.EMAIL);
+
+                    //update password value in registered email document
+                    DocumentReference dr = FirebaseFirestore.getInstance().collection(Constants.USERS_COLLECTION).document(val);
+
+                    dr.update(Constants.PASSWORD, strConfirmPassword)
+                            .addOnSuccessListener(unused -> {
+
+                                //sets progress bar visibility to GONE
+                                binding.progressBar.setVisibility(View.GONE);
+
+                                Toast.makeText(this, "Password reset successfully.", Toast.LENGTH_SHORT).show();
+                                startActivity(new Intent(this, StartScreenActivity.class));
+                                finish();
+                            })
+                            .addOnFailureListener(e -> {
+
+                                //sets progress bar visibility to GONE
+                                binding.progressBar.setVisibility(View.GONE);
+
+                                Log.e(TAG, "failed to update password: " + e.getMessage());
+                                Toast.makeText(this, "Error! Failed to Update Password.", Toast.LENGTH_LONG).show();
+                            });
+                })
+                .addOnFailureListener(e -> {
+
+                    //sets progress bar visibility to GONE
+                    binding.progressBar.setVisibility(View.GONE);
+
+                    Log.i(TAG, "cannot find phone no: " + e.getMessage());
+                    Toast.makeText(this, "Error! cannot find Entered Phone Number.", Toast.LENGTH_LONG).show();
+                });
     }
 
 }

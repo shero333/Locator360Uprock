@@ -8,20 +8,27 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.i18n.phonenumbers.NumberParseException;
 import com.google.i18n.phonenumbers.PhoneNumberUtil;
 import com.google.i18n.phonenumbers.Phonenumber;
 import com.hammad.findmyfamily.R;
 import com.hammad.findmyfamily.SharedPreference.SharedPreference;
 import com.hammad.findmyfamily.SignIn.ResetPassword.OTPActivity;
-import com.hammad.findmyfamily.SignUp.NameSignUpActivity;
 import com.hammad.findmyfamily.Util.Constants;
 import com.hammad.findmyfamily.databinding.ActivityResetPasswordBinding;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class ResetPasswordActivity extends AppCompatActivity {
+
+    private static final String TAG = "ACT_RESET_PASS";
 
     ActivityResetPasswordBinding binding;
 
@@ -29,7 +36,11 @@ public class ResetPasswordActivity extends AppCompatActivity {
 
     //variables for for verifying whether entered number is valid or not
     private PhoneNumberUtil.PhoneNumberType isMobile = null;
+
     private boolean isPhoneNoValid = false;
+
+    //list of registered user
+    private List<String> registeredPhoneNoList = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,6 +59,27 @@ public class ResetPasswordActivity extends AppCompatActivity {
 
         binding.btnNextResetPassword.setOnClickListener(v -> buttonClickListener());
 
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        //get the list of registered phone no
+        getPhoneNoList();
+    }
+
+    private void getPhoneNoList() {
+
+        FirebaseFirestore.getInstance().collection(Constants.USERS_COLLECTION)
+                .get()
+                .addOnSuccessListener(queryDocumentSnapshots -> {
+
+                    for(DocumentSnapshot doc: queryDocumentSnapshots) {
+                        registeredPhoneNoList.add(doc.getString(Constants.PHONE_NO));
+                    }
+                })
+                .addOnFailureListener(e -> Log.i(TAG, "getPhoneNoList() error: "+e.getMessage()));
 
     }
 
@@ -57,9 +89,7 @@ public class ResetPasswordActivity extends AppCompatActivity {
         countryCode = binding.countryCodePickerForgetPass.getSelectedCountryCodeWithPlus();
 
         //country code picker
-        binding.countryCodePickerForgetPass.setOnCountryChangeListener(() -> {
-            countryCode = binding.countryCodePickerForgetPass.getSelectedCountryCode();
-        });
+        binding.countryCodePickerForgetPass.setOnCountryChangeListener(() -> countryCode = binding.countryCodePickerForgetPass.getSelectedCountryCode());
     }
 
     private TextWatcher numberTextWatcher = new TextWatcher() {
@@ -115,7 +145,9 @@ public class ResetPasswordActivity extends AppCompatActivity {
         }
     }
 
-    private void buttonClickListener(){
+    private void buttonClickListener() {
+
+        boolean isPhoneNoRegistered = false;
 
         String tempNumber = binding.edtPhoneResetPass.getText().toString().trim();
         String phoneNo = "";
@@ -135,12 +167,29 @@ public class ResetPasswordActivity extends AppCompatActivity {
             phoneNo = phoneNo.concat(tempNumber);
         }
 
-        //saving the entered phone number in preference
-        SharedPreference.setPhoneNoPref(phoneNo);
+        for (String phoneNumber : registeredPhoneNoList) {
+            if(phoneNumber.equals(phoneNo)) {
+                isPhoneNoRegistered = true;
+                break;
+            }
+        }
 
-        //navigates to the OTP activity
-        Intent intent = new Intent(this, OTPActivity.class);
-        intent.putExtra(Constants.OTP_ACT_KEY,false);
-        startActivity(intent);
+        // if phone no registered, then navigate to next activity. Else display Error Toast
+        if(isPhoneNoRegistered) {
+
+            //save number to preference
+            SharedPreference.setPhoneNoPref(phoneNo);
+
+            //navigates to the OTP activity
+            Intent intent = new Intent(this, OTPActivity.class);
+            intent.putExtra(Constants.OTP_ACT_KEY,false);
+            startActivity(intent);
+        }
+        else if(!isPhoneNoRegistered) {
+            Log.i(TAG, "phone number not registered");
+            Toast.makeText(this, "Error! No registered phone number found. ", Toast.LENGTH_LONG).show();
+        }
+
     }
+
 }

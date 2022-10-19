@@ -43,9 +43,6 @@ public class PhoneNoSignInActivity extends AppCompatActivity {
     //list of registered user
     private List<User> registeredUserList = new ArrayList<>();
 
-    //this integer saves the index of registered user (if any)
-    private int userInfoIndex = -1;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -81,9 +78,7 @@ public class PhoneNoSignInActivity extends AppCompatActivity {
         countryCode = binding.countryCodePickerSignIn.getSelectedCountryCodeWithPlus();
 
         //country code picker
-        binding.countryCodePickerSignIn.setOnCountryChangeListener(() -> {
-            countryCode = binding.countryCodePickerSignIn.getSelectedCountryCode();
-        });
+        binding.countryCodePickerSignIn.setOnCountryChangeListener(() -> countryCode = binding.countryCodePickerSignIn.getSelectedCountryCode());
     }
 
     private TextWatcher numberTextWatcher = new TextWatcher() {
@@ -135,7 +130,11 @@ public class PhoneNoSignInActivity extends AppCompatActivity {
         }
     }
 
-    private void buttonCLickListener(){
+    private void buttonCLickListener() {
+
+        //this integer saves the index of registered user (if any)
+        int userInfoIndex = -1;
+
         String tempNumber = binding.edtPhoneSignIn.getText().toString().trim();
         String phoneNo = "";
 
@@ -156,7 +155,7 @@ public class PhoneNoSignInActivity extends AppCompatActivity {
 
         //checking if entered number exist in registered user. If yes, login; else navigate to sign up
         for(int i =0; i < registeredUserList.size(); i++) {
-            if(registeredUserList.get(i).getPhoneNo().equals(phoneNo)){
+            if(registeredUserList.get(i).getPhoneNo().equals(phoneNo)) {
 
                 //saves the user info index
                 userInfoIndex = i;
@@ -165,10 +164,10 @@ public class PhoneNoSignInActivity extends AppCompatActivity {
         }
 
         //if value <0, it means no registered user. Navigates to Sign up
-        if(userInfoIndex < 0){
+        if(userInfoIndex < 0) {
             startActivity(new Intent(this, PhoneNoSignUpActivity.class));
         }
-        else if(userInfoIndex >= 0){
+        else if(userInfoIndex >= 0) {
 
             //saving the values of Email, FirstName, and Password to preference
             SharedPreference.setEmailPref(registeredUserList.get(userInfoIndex).getEmail());
@@ -188,7 +187,7 @@ public class PhoneNoSignInActivity extends AppCompatActivity {
         getRegisteredUserList();
     }
 
-    private void getRegisteredUserList(){
+    private void getRegisteredUserList() {
 
         fStore.collection(USERS_COLLECTION).get()
                 .addOnSuccessListener(queryDocumentSnapshots -> {

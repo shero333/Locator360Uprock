@@ -43,12 +43,10 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.CancellationToken;
 import com.google.android.gms.tasks.OnTokenCanceledListener;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
-import com.google.firebase.auth.FirebaseAuth;
 import com.hammad.findmyfamily.HomeScreen.CustomToolbar.CircleAdapterToolbar;
 import com.hammad.findmyfamily.Permission.Permissions;
 import com.hammad.findmyfamily.R;
 import com.hammad.findmyfamily.SharedPreference.SharedPreference;
-import com.hammad.findmyfamily.StartScreen.StartScreenActivity;
 import com.hammad.findmyfamily.Util.Commons;
 import com.hammad.findmyfamily.Util.Constants;
 import com.hammad.findmyfamily.databinding.FragmentLocationBinding;
@@ -110,8 +108,7 @@ public class LocationFragment extends Fragment implements OnMapReadyCallback, Ci
     private void initializeMap() {
         SupportMapFragment mapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(binding.map.getId());
 
-        //assert keyword is used like 'if'. Like if(mapFragment != null){ mapFragment.getMapAsync(this); }
-        //assert mapFragment != null;
+
         if(mapFragment != null){
             mapFragment.getMapAsync(this);
         }
@@ -261,7 +258,6 @@ public class LocationFragment extends Fragment implements OnMapReadyCallback, Ci
                     break;
             }
 
-            //assert mGoogleMap != null;
             if(mGoogleMap != null) {
                 mGoogleMap.addMarker(new MarkerOptions()
                         .position(latLng)
@@ -269,7 +265,7 @@ public class LocationFragment extends Fragment implements OnMapReadyCallback, Ci
             }
 
             //getting the address of current location
-            Geocoder geocoder = new Geocoder(getContext(), Locale.getDefault());
+            Geocoder geocoder = new Geocoder(requireContext(), Locale.getDefault());
 
             List<Address> addresses = null;
             try {
@@ -279,8 +275,6 @@ public class LocationFragment extends Fragment implements OnMapReadyCallback, Ci
                 e.printStackTrace();
             }
 
-            //assert is used to check expected boolean condition
-            //assert addresses != null;
             if(addresses != null) {
                 locationAddress = addresses.get(0).getAddressLine(0);
             }
@@ -389,10 +383,8 @@ public class LocationFragment extends Fragment implements OnMapReadyCallback, Ci
 
     private void toolbarChat() {
         //Toast.makeText(requireContext(), "Chat", Toast.LENGTH_SHORT).show();
-        Commons.deleteFCMToken();
-        FirebaseAuth.getInstance().signOut();
-        startActivity(new Intent(getActivity(), StartScreenActivity.class));
-        getActivity().finish();
+
+        Commons.signOut(requireActivity());
     }
 
     private void extendedToolbarViewClickListeners() {

@@ -33,7 +33,6 @@ public interface Constants {
      String CIRCLE_MEMBERS = "circle_members";
      String CIRCLE_ADMIN = "circle_admin";
      String CIRCLE_TIME_STAMP = "time_stamp";
-     String MEMBER_ID = "member_id";
 
      //for location
      String LOCATION_COLLECTION = "Location";

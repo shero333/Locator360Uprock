@@ -68,7 +68,8 @@ public class EmailSignInActivity extends AppCompatActivity {
         public void afterTextChanged(Editable editable) {}
     };
 
-    private void buttonClickListener(){
+    private void buttonClickListener() {
+
         //saving email in preference
         SharedPreference.setEmailPref(binding.edtEmailSignIn.getText().toString());
 

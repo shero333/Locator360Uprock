@@ -12,10 +12,8 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.hammad.findmyfamily.HomeScreen.HomeActivity;
-import com.hammad.findmyfamily.OneTimeScreens.JoinCircleFirstScreenActivity;
 import com.hammad.findmyfamily.SignIn.PhoneNoSignInActivity;
 import com.hammad.findmyfamily.SignUp.PhoneNoSignUpActivity;
-import com.hammad.findmyfamily.Util.Commons;
 import com.hammad.findmyfamily.databinding.ActivityStartScreenBinding;
 
 public class StartScreenActivity extends AppCompatActivity {

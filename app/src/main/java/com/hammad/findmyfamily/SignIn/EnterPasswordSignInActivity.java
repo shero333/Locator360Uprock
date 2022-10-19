@@ -4,13 +4,12 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.google.firebase.auth.FirebaseAuth;
+import com.hammad.findmyfamily.HomeScreen.HomeActivity;
 import com.hammad.findmyfamily.OneTimeScreens.JoinCircleFirstScreenActivity;
 import com.hammad.findmyfamily.R;
 import com.hammad.findmyfamily.SharedPreference.SharedPreference;
@@ -23,8 +22,6 @@ public class EnterPasswordSignInActivity extends AppCompatActivity {
 
     private String encryptedPassword;
 
-    private FirebaseAuth fAuth;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -33,9 +30,6 @@ public class EnterPasswordSignInActivity extends AppCompatActivity {
         binding = ActivityEnterPasswordSignInBinding.inflate(getLayoutInflater());
         View view = binding.getRoot();
         setContentView(view);
-
-        //initializing firebase authentication
-        fAuth = FirebaseAuth.getInstance();
 
         //setting the user's first name saved in preference from list
         binding.txtUsername.append(" " + SharedPreference.getFirstNamePref() + "?");
@@ -83,36 +77,20 @@ public class EnterPasswordSignInActivity extends AppCompatActivity {
         public void afterTextChanged(Editable editable) {}
     };
 
-    private void buttonClickListener(){
+    private void buttonClickListener() {
 
-        fAuth.signInWithEmailAndPassword(SharedPreference.getEmailPref(),encryptedPassword)
-                .addOnSuccessListener(authResult -> {
+        Commons.signIn(this, encryptedPassword, isSuccessful -> {
 
-                    Toast.makeText(EnterPasswordSignInActivity.this, "Sign In Successful", Toast.LENGTH_SHORT).show();
-                    startActivity(new Intent(EnterPasswordSignInActivity.this, JoinCircleFirstScreenActivity.class));
-                    finish();
+            if(isSuccessful) {
 
-                })
-                .addOnFailureListener(e -> {
+                //add FCM token
+                Commons.addFCMToken();
 
-                    if(e.getMessage().contains("The password is invalid or the user does not have a password.")) {
-                        Toast.makeText(this, "Error! Incorrect Password", Toast.LENGTH_SHORT).show();
-
-                        Log.e("ERROR_ENTER_PASS", "incorrect password error: " + e.getMessage());
-                    }
-                    else if(e.getMessage().contains("There is no user record corresponding to this identifier. The user may have been deleted.")){
-                        Toast.makeText(this, "Error! Incorrect Email", Toast.LENGTH_SHORT).show();
-
-                        Log.e("ERROR_ENTER_PASS", "incorrect email error: " + e.getMessage());
-                    }
-                    else {
-                        Toast.makeText(this, "Error! Try Again.", Toast.LENGTH_SHORT).show();
-                        e.getMessage();
-
-                        Log.e("ERROR_ENTER_PASS", "error: " + e.getMessage());
-                    }
-
-                });
+                //navigate to next activity
+                startActivity(new Intent(EnterPasswordSignInActivity.this, /*JoinCircleFirstScreenActivity*/HomeActivity.class));
+                finish();
+            }
+        });
 
     }
 }
