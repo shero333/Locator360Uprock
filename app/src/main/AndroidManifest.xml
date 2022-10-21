@@ -126,7 +126,8 @@
         <activity
             android:name=".SignIn.PhoneNoSignInActivity"
             android:exported="false"
-            android:launchMode="singleTop" />
+            android:launchMode="singleTop"
+            android:windowSoftInputMode="adjustResize"/>
 
         <activity
             android:name=".SignUp.PhoneNoSignUpActivity"
