@@ -6,8 +6,8 @@
 
     <androidx.constraintlayout.utils.widget.ImageFilterView
         android:id="@+id/img_view_member_profile"
-        android:layout_width="@dimen/_70sdp"
-        android:layout_height="@dimen/_70sdp"
+        android:layout_width="@dimen/_60sdp"
+        android:layout_height="@dimen/_60sdp"
         android:src="@drawable/drawable_no_member_profile"
         app:roundPercent="1"
         android:layout_marginStart="@dimen/_10sdp"
@@ -34,7 +34,7 @@
         android:id="@+id/txt_view_member_name"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:textSize="@dimen/_16ssp"
+        android:textSize="@dimen/_14ssp"
         android:textStyle="bold"
         android:textColor="@color/black"
         android:text="Jhonny Depp"
@@ -89,7 +89,7 @@
         android:id="@+id/txt_view_last_known_address"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:textSize="@dimen/_13ssp"
+        android:textSize="@dimen/_12ssp"
         android:textColor="#A6000000"
 
         android:text="Sector E, DHA Rawalpindi, Pakistan"

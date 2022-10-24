@@ -378,6 +378,7 @@ public class LocationFragment extends Fragment implements OnMapReadyCallback, Ci
     }
 
     private void toolbarSettings() {
+
         Toast.makeText(requireContext(), "Settings", Toast.LENGTH_SHORT).show();
     }
 

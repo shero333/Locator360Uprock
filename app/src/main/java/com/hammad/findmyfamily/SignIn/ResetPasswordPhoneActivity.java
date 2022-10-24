@@ -21,16 +21,16 @@ import com.hammad.findmyfamily.R;
 import com.hammad.findmyfamily.SharedPreference.SharedPreference;
 import com.hammad.findmyfamily.SignIn.ResetPassword.OTPActivity;
 import com.hammad.findmyfamily.Util.Constants;
-import com.hammad.findmyfamily.databinding.ActivityResetPasswordBinding;
+import com.hammad.findmyfamily.databinding.ActivityResetPasswordPhoneBinding;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class ResetPasswordActivity extends AppCompatActivity {
+public class ResetPasswordPhoneActivity extends AppCompatActivity {
 
     private static final String TAG = "ACT_RESET_PASS";
 
-    ActivityResetPasswordBinding binding;
+    ActivityResetPasswordPhoneBinding binding;
 
     private String countryCode;
 
@@ -47,7 +47,7 @@ public class ResetPasswordActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         //initializing view binding
-        binding = ActivityResetPasswordBinding.inflate(getLayoutInflater());
+        binding = ActivityResetPasswordPhoneBinding.inflate(getLayoutInflater());
         View view = binding.getRoot();
         setContentView(view);
 

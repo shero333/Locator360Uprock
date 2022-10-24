@@ -92,4 +92,13 @@
     <string name="emergency_contact">Emergency Contact</string>
     <string name="invite_first_contact">Invite First Contact</string>
     <string name="email_already_in_use">The email address is already in use by another account.</string>
+    <string name="reset_password_email">Reset Password</string>
+    <string name="email_address">Email address</string>
+    <string name="sub_title_pass_email">Enter the email associated with your\naccount and we\'ll send an email with\ninstructions to reset your password.</string>
+    <string name="send_instructions">Send Instructions</string>
+    <string name="check_your_mail">Check your mail</string>
+    <string name="sub_title_reset_pass_email">We have sent a password recovery\nlink to your email.</string>
+    <string name="open_email_app">Open email app</string>
+    <string name="skip_i_ll_confirm_later">Skip, I\'ll confirm later</string>
+    <string name="txt_footer_">Did not receive email? Check your spam filter,\nor try another email address</string>
 </resources>

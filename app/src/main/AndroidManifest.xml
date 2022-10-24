@@ -35,105 +35,81 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Locator360"
         tools:targetApi="31">
-
+        <activity
+            android:name=".CheckEmailActivity"
+            android:exported="false" />
         <activity
             android:name=".HomeScreen.FragmentSafety.AddEmergencyContactActivity"
             android:exported="false" />
-
         <activity
             android:name=".SignIn.ResetPassword.CreateNewPasswordActivity"
             android:exported="false"
             android:windowSoftInputMode="adjustResize" />
-
         <activity
-            android:name=".SignIn.ResetPasswordActivity"
+            android:name=".SignIn.ResetPasswordPhoneActivity"
             android:exported="false" />
-
         <activity
             android:name=".HomeScreen.HomeActivity"
-            android:exported="true"
-            android:launchMode="singleTask">
-            <!--<intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>-->
-        </activity>
-
+            android:exported="false"
+            android:launchMode="singleTask" />
         <activity
             android:name=".CreateCircle.ShareCircleCodeActivity"
             android:exported="false" />
-
         <activity
             android:name=".CreateCircle.CreateCircleActivity"
             android:exported="false"
             android:windowSoftInputMode="adjustResize" />
-
         <activity
             android:name=".OneTimeScreens.GeneralScreenTwoActivity"
             android:exported="false" />
-
         <activity
             android:name=".OneTimeScreens.GeneralScreenOneActivity"
-            android:exported="false"/>
-
+            android:exported="false" />
         <activity
             android:name=".OneTimeScreens.RequestPermissionActivity"
             android:exported="false" />
-
         <activity
             android:name=".OneTimeScreens.AddProfilePictureActivity"
-            android:exported="false"/>
-
+            android:exported="false" />
         <activity
             android:name=".OneTimeScreens.JoinCircleActivity"
-            android:exported="false"/>
-
+            android:exported="false" />
         <activity
             android:name=".SignIn.EnterPasswordSignInActivity"
             android:exported="false"
             android:windowSoftInputMode="adjustResize" />
-
         <activity
             android:name=".SignIn.EmailSignInActivity"
             android:clearTaskOnLaunch="true"
             android:exported="false"
             android:windowSoftInputMode="adjustResize" />
-
         <activity
             android:name=".SignIn.ResetPassword.OTPActivity"
             android:exported="false"
             android:windowSoftInputMode="adjustResize" />
-
         <activity
             android:name=".OneTimeScreens.JoinCircleFirstScreenActivity"
             android:exported="false" />
-
         <activity
             android:name=".SignUp.CreatePasswordActivity"
             android:exported="false"
             android:windowSoftInputMode="adjustResize" />
-
         <activity
             android:name=".SignUp.EmailSignUpActivity"
             android:exported="false"
-            android:windowSoftInputMode="adjustResize"/>
-
+            android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".SignUp.NameSignUpActivity"
             android:exported="false" />
-
         <activity
             android:name=".SignIn.PhoneNoSignInActivity"
             android:exported="false"
             android:launchMode="singleTop"
-            android:windowSoftInputMode="adjustResize"/>
-
+            android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".SignUp.PhoneNoSignUpActivity"
             android:exported="false"
             android:windowSoftInputMode="adjustResize" />
-
         <activity
             android:name=".StartScreen.StartScreenActivity"
             android:exported="true"
@@ -144,6 +120,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".ResetPasswordEmailActivity"
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize" />
 
         <provider
             android:name="androidx.core.content.FileProvider"
@@ -158,7 +138,6 @@
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyBE9d03i-pCJMyNCOgwL298fVvJeeCetOw" />
-
     </application>
 
 </manifest>

@@ -71,7 +71,7 @@ public class PhoneNoSignUpActivity extends AppCompatActivity {
         binding.countryCodePicker.setOnCountryChangeListener(() -> countryCode = binding.countryCodePicker.getSelectedCountryCode());
     }
 
-    private void setHyperLink(){
+    private void setHyperLink() {
         SpannableString spannableString=new SpannableString(privacyPolicyText);
 
         //color span for hyperlinks

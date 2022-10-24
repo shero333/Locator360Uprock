@@ -8,9 +8,9 @@ import android.view.View;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.hammad.findmyfamily.OneTimeScreens.JoinCircleFirstScreenActivity;
 import com.hammad.findmyfamily.R;
 import com.hammad.findmyfamily.SharedPreference.SharedPreference;
+import com.hammad.findmyfamily.StartScreen.StartScreenActivity;
 import com.hammad.findmyfamily.Util.Commons;
 import com.hammad.findmyfamily.databinding.ActivityCreatePasswordBinding;
 
@@ -73,14 +73,13 @@ public class CreatePasswordActivity extends AppCompatActivity {
         public void afterTextChanged(Editable editable) {}
     };
 
-    private void buttonClickListener(){
+    private void buttonClickListener() {
 
         //saving password to preference
         SharedPreference.setPasswordPref(encryptedPassword);
 
         //navigating to next activity
-        startActivity(new Intent(this, JoinCircleFirstScreenActivity.class));
+        startActivity(new Intent(this, StartScreenActivity.class/*JoinCircleFirstScreenActivity.class*/));
         finish();
-
     }
 }

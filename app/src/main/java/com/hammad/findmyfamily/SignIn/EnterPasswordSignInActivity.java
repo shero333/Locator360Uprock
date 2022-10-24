@@ -11,6 +11,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.hammad.findmyfamily.HomeScreen.HomeActivity;
 import com.hammad.findmyfamily.R;
+import com.hammad.findmyfamily.ResetPasswordEmailActivity;
 import com.hammad.findmyfamily.SharedPreference.SharedPreference;
 import com.hammad.findmyfamily.Util.Commons;
 import com.hammad.findmyfamily.databinding.ActivityEnterPasswordSignInBinding;
@@ -40,7 +41,7 @@ public class EnterPasswordSignInActivity extends AppCompatActivity {
         binding.btnContPhoneSignIn.setOnClickListener(v -> buttonClickListener());
 
         //forget password
-        binding.txtForgetPassword.setOnClickListener(v -> startActivity(new Intent(this, ResetPasswordActivity.class)));
+        binding.txtForgetPassword.setOnClickListener(v -> startActivity(new Intent(this, ResetPasswordEmailActivity.class)));
 
         //if the first name retrieved against phone number is incorrect, then moves onto the account verification activity
         binding.txtUsername.setOnClickListener(v -> Toast.makeText(this, "Verifying Account Details", Toast.LENGTH_SHORT).show());
@@ -78,7 +79,7 @@ public class EnterPasswordSignInActivity extends AppCompatActivity {
 
     private void buttonClickListener() {
 
-        Commons.signIn(this, encryptedPassword, isSuccessful -> {
+        Commons.signIn(this, /*encryptedPassword*/binding.edtPasswordSignIn.getText().toString(), isSuccessful -> {
 
             if(isSuccessful) {
 
