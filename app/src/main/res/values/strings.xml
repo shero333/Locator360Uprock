@@ -101,4 +101,7 @@
     <string name="open_email_app">Open email app</string>
     <string name="skip_i_ll_confirm_later">Skip, I\'ll confirm later</string>
     <string name="txt_footer_">Did not receive email? Check your spam filter,\nor try another email address</string>
+    <string name="how_will_add_this_person">How will add this person?</string>
+    <string name="select_from_contact">Select from contact</string>
+    <string name="add_manually">Add Manually</string>
 </resources>

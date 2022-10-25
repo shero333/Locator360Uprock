@@ -35,7 +35,7 @@ public class NameSignUpActivity extends AppCompatActivity {
 
     }
 
-    private TextWatcher firstNameTextWatcher = new TextWatcher() {
+    private final TextWatcher firstNameTextWatcher = new TextWatcher() {
         @Override
         public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
 
@@ -63,7 +63,7 @@ public class NameSignUpActivity extends AppCompatActivity {
         public void afterTextChanged(Editable editable) {}
     };
 
-    private TextWatcher lastNameTextWatcher =new TextWatcher() {
+    private final TextWatcher lastNameTextWatcher =new TextWatcher() {
         @Override
         public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
 

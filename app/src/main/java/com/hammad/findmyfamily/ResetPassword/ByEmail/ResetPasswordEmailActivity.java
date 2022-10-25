@@ -1,4 +1,4 @@
-package com.hammad.findmyfamily;
+package com.hammad.findmyfamily.ResetPassword.ByEmail;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -14,8 +14,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.hammad.findmyfamily.R;
 import com.hammad.findmyfamily.Util.Commons;
 import com.hammad.findmyfamily.Util.Constants;
 import com.hammad.findmyfamily.databinding.ActivityResetPasswordEmailBinding;
@@ -23,6 +23,7 @@ import com.hammad.findmyfamily.databinding.ActivityResetPasswordEmailBinding;
 public class ResetPasswordEmailActivity extends AppCompatActivity {
 
     private static final String TAG = "RESET_PASS_EMAIL";
+
     private ActivityResetPasswordEmailBinding binding;
 
     private String enteredEmail;
@@ -84,7 +85,6 @@ public class ResetPasswordEmailActivity extends AppCompatActivity {
     private void buttonClickListener() {
 
         // checking if the entered email is registered or not
-
         FirebaseFirestore.getInstance().collection(Constants.USERS_COLLECTION)
                 .document(enteredEmail)
                 .get()
@@ -96,11 +96,19 @@ public class ResetPasswordEmailActivity extends AppCompatActivity {
                         binding.layoutEmail.setHelperText(" ");
 
                         //sending the recovery email
-                        FirebaseAuth.getInstance().sendPasswordResetEmail(enteredEmail);
+                        FirebaseAuth.getInstance().
+                                sendPasswordResetEmail(enteredEmail)
+                                .addOnSuccessListener(unused -> {
 
-                        //navigating to next activity
-                        startActivity(new Intent(this,CheckEmailActivity.class));
+                                    Log.i(TAG, "password reset email send successfully");
 
+                                    //navigating to next activity
+                                    startActivity(new Intent(this, CheckEmailActivity.class));
+                                })
+                                .addOnFailureListener(e -> {
+                                    Log.e(TAG, "password reset email sending failed: " + e.getMessage());
+                                    Toast.makeText(this, "Error! Failed to send Reset Password Request.", Toast.LENGTH_LONG).show();
+                                });
                     }
                     else if(!documentSnapshot.exists()) {
 
@@ -108,7 +116,7 @@ public class ResetPasswordEmailActivity extends AppCompatActivity {
                         binding.layoutEmail.setHelperText("email does not exist");
 
                         //toast message
-                        Toast.makeText(this, "Error! email does not exist", Toast.LENGTH_LONG).show();
+                        Toast.makeText(this, "Error! email does not exist.", Toast.LENGTH_LONG).show();
 
                     }
 

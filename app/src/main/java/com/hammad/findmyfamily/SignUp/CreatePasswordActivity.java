@@ -8,17 +8,16 @@ import android.view.View;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.hammad.findmyfamily.OneTimeScreens.JoinCircleFirstScreenActivity;
 import com.hammad.findmyfamily.R;
 import com.hammad.findmyfamily.SharedPreference.SharedPreference;
-import com.hammad.findmyfamily.StartScreen.StartScreenActivity;
-import com.hammad.findmyfamily.Util.Commons;
 import com.hammad.findmyfamily.databinding.ActivityCreatePasswordBinding;
 
 public class CreatePasswordActivity extends AppCompatActivity {
 
     private ActivityCreatePasswordBinding binding;
 
-    private String encryptedPassword;
+    private String password;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,16 +36,16 @@ public class CreatePasswordActivity extends AppCompatActivity {
 
     }
 
-    private TextWatcher passwordTextWatcher = new TextWatcher() {
+    private final TextWatcher passwordTextWatcher = new TextWatcher() {
         @Override
         public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
 
         @Override
         public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
-            String s=charSequence.toString().trim();
+            password =charSequence.toString().trim();
 
-            if(s.length() >= 8) {
+            if(password.length() >= 8) {
 
                 //if password length is correct, then removes the helper text
                 binding.layoutPasswordSignUp.setHelperText(" ");
@@ -54,11 +53,8 @@ public class CreatePasswordActivity extends AppCompatActivity {
                 binding.btnContPasswordSignUp.setEnabled(true);
                 binding.btnContPasswordSignUp.setBackgroundResource(R.drawable.white_rounded_button);
 
-                //encrypting the password
-                encryptedPassword = Commons.encryptedText(s);
-
             }
-            else if(s.length() < 8) {
+            else if(password.length() < 8) {
 
                 //if password length is incorrect, then sets the helper text
                 binding.layoutPasswordSignUp.setHelperText(getString(R.string.minimum_8_character_password));
@@ -76,10 +72,10 @@ public class CreatePasswordActivity extends AppCompatActivity {
     private void buttonClickListener() {
 
         //saving password to preference
-        SharedPreference.setPasswordPref(encryptedPassword);
+        SharedPreference.setPasswordPref(password);
 
         //navigating to next activity
-        startActivity(new Intent(this, StartScreenActivity.class/*JoinCircleFirstScreenActivity.class*/));
+        startActivity(new Intent(this, JoinCircleFirstScreenActivity.class));
         finish();
     }
 }

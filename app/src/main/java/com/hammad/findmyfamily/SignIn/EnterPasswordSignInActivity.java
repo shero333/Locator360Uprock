@@ -11,7 +11,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.hammad.findmyfamily.HomeScreen.HomeActivity;
 import com.hammad.findmyfamily.R;
-import com.hammad.findmyfamily.ResetPasswordEmailActivity;
+import com.hammad.findmyfamily.ResetPassword.ByEmail.ResetPasswordEmailActivity;
 import com.hammad.findmyfamily.SharedPreference.SharedPreference;
 import com.hammad.findmyfamily.Util.Commons;
 import com.hammad.findmyfamily.databinding.ActivityEnterPasswordSignInBinding;
@@ -20,7 +20,7 @@ public class EnterPasswordSignInActivity extends AppCompatActivity {
 
     private ActivityEnterPasswordSignInBinding binding;
 
-    private String encryptedPassword;
+    private String password;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,28 +47,26 @@ public class EnterPasswordSignInActivity extends AppCompatActivity {
         binding.txtUsername.setOnClickListener(v -> Toast.makeText(this, "Verifying Account Details", Toast.LENGTH_SHORT).show());
     }
 
-    private TextWatcher passwordTextWatcher = new TextWatcher() {
+    private final TextWatcher passwordTextWatcher = new TextWatcher() {
+
         @Override
         public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
 
         @Override
         public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
-            String s=charSequence.toString().trim();
+            password =charSequence.toString().trim();
 
-            if(s.length() == 0){
+            if(password.length() == 0) {
 
                 binding.btnContPhoneSignIn.setEnabled(false);
                 binding.btnContPhoneSignIn.setBackgroundResource(R.drawable.disabled_round_button);
 
             }
-            else if(s.length() > 0){
+            else if(password.length() > 0) {
 
                 binding.btnContPhoneSignIn.setEnabled(true);
                 binding.btnContPhoneSignIn.setBackgroundResource(R.drawable.white_rounded_button);
-
-                //encrypting the password
-                encryptedPassword = Commons.encryptedText(s);
             }
 
         }
@@ -79,7 +77,7 @@ public class EnterPasswordSignInActivity extends AppCompatActivity {
 
     private void buttonClickListener() {
 
-        Commons.signIn(this, /*encryptedPassword*/binding.edtPasswordSignIn.getText().toString(), isSuccessful -> {
+        Commons.signIn(this, password, isSuccessful -> {
 
             if(isSuccessful) {
 
@@ -87,7 +85,7 @@ public class EnterPasswordSignInActivity extends AppCompatActivity {
                 Commons.addFCMToken();
 
                 //navigate to next activity
-                startActivity(new Intent(EnterPasswordSignInActivity.this, /*JoinCircleFirstScreenActivity*/HomeActivity.class));
+                startActivity(new Intent(EnterPasswordSignInActivity.this, HomeActivity.class));
                 finish();
             }
         });

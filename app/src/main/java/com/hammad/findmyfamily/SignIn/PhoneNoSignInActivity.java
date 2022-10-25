@@ -81,7 +81,7 @@ public class PhoneNoSignInActivity extends AppCompatActivity {
         binding.countryCodePickerSignIn.setOnCountryChangeListener(() -> countryCode = binding.countryCodePickerSignIn.getSelectedCountryCode());
     }
 
-    private TextWatcher numberTextWatcher = new TextWatcher() {
+    private final TextWatcher numberTextWatcher = new TextWatcher() {
         @Override
         public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
 

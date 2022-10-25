@@ -22,7 +22,7 @@ import com.google.i18n.phonenumbers.PhoneNumberUtil;
 import com.google.i18n.phonenumbers.Phonenumber;
 import com.hammad.findmyfamily.R;
 import com.hammad.findmyfamily.SharedPreference.SharedPreference;
-import com.hammad.findmyfamily.SignIn.ResetPassword.OTPActivity;
+import com.hammad.findmyfamily.ResetPassword.ByPhoneNo.OTPActivity;
 import com.hammad.findmyfamily.Util.Constants;
 import com.hammad.findmyfamily.databinding.ActivityPhoneNoSignUpBinding;
 
@@ -72,6 +72,7 @@ public class PhoneNoSignUpActivity extends AppCompatActivity {
     }
 
     private void setHyperLink() {
+
         SpannableString spannableString=new SpannableString(privacyPolicyText);
 
         //color span for hyperlinks
@@ -116,7 +117,7 @@ public class PhoneNoSignUpActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
-    private TextWatcher numberTextWatcher = new TextWatcher() {
+    private final TextWatcher numberTextWatcher = new TextWatcher() {
         @Override
         public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
 

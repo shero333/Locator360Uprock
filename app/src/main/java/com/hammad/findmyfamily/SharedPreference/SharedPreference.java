@@ -98,19 +98,21 @@ public class SharedPreference {
         return sharedPreference.getInt(Constants.MAP_TYPE,0);
     }
 
-    private static void setCurrentCircleStatus(String circleId) {
+    public static void setCurrentCircleStatus(String circleId) {
         sharedPreference.edit().putString(Constants.CURRENT_CIRCLE,circleId).apply();
     }
 
-    private static String getCurrentCircleStatus() {
+    public static String getCurrentCircleStatus() {
         return sharedPreference.getString(Constants.CURRENT_CIRCLE, Constants.NULL);
     }
 
-    private static void setFCMToken(String token) {
-        sharedPreference.edit().putString(Constants.FCM_TOKEN,token).apply();
+    public static void setEmergencyContactStatus(boolean isContactAdded) {
+        sharedPreference.edit().putBoolean(Constants.ARE_EMERG_CONTACTS_ADDED,isContactAdded).apply();
     }
 
-    private static String getFCMToken() {
-        return sharedPreference.getString(Constants.FCM_TOKEN, NULL);
+    public static boolean getEmergencyContactStatus() {
+        return sharedPreference.getBoolean(Constants.ARE_EMERG_CONTACTS_ADDED,false);
     }
+
+
 }

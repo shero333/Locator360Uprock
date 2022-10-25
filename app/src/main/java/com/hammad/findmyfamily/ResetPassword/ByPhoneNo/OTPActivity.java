@@ -1,4 +1,4 @@
-package com.hammad.findmyfamily.SignIn.ResetPassword;
+package com.hammad.findmyfamily.ResetPassword.ByPhoneNo;
 
 import android.content.Intent;
 import android.graphics.Color;
@@ -188,7 +188,7 @@ public class OTPActivity extends AppCompatActivity {
                 startActivity(new Intent(this, NameSignUpActivity.class));
             }
             else {
-                startActivity(new Intent(this,CreateNewPasswordActivity.class));
+                startActivity(new Intent(this, CreateNewPasswordActivity.class));
             }
         }
         else if(!enteredOtpCode.equals(code)) {

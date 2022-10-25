@@ -49,7 +49,7 @@ public class EmailSignUpActivity extends AppCompatActivity {
 
     }
 
-    private TextWatcher emailTextWatcher = new TextWatcher() {
+    private final TextWatcher emailTextWatcher = new TextWatcher() {
         @Override
         public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
         }

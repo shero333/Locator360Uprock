@@ -53,4 +53,17 @@ public interface Constants {
 
      String CURRENT_CIRCLE = "current_circle";
 
+     String ARE_EMERG_CONTACTS_ADDED = "are_emerg_contacts_added";
+
+     String EMERGENCY_CONTACT = "emergency_contact";
+     String CONTACT_ID = "contact_id";
+     String CONTACT_NAME = "contact_name";
+     String CONTACT_NO = "contact_no";
+     String IS_CONTACT_APPROVED = "is_contact_approved";
+     String OWNER_PHONE_NO = "owner_phone_no";
+     String OWNER_EMAIL = "owner_email";
+
+     String DATABASE_NAME = "FindMyFamily_db";
+
+
 }

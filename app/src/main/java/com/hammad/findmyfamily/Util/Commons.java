@@ -287,17 +287,6 @@ public class Commons {
 
         Dialog dialog = new Dialog(activity);
 
-        //setting the transparent background
-        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-
-        //this sets the width of dialog to 90%
-        DisplayMetrics displayMetrics = new DisplayMetrics();
-        activity.getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
-        int width = (int) (displayMetrics.widthPixels * 0.9);
-
-        //setting the width and height of alert dialog
-        dialog.getWindow().setLayout(width, ConstraintLayout.LayoutParams.WRAP_CONTENT);
-
         if (isCameraDialog) {
 
             LayoutCameraDialogBinding cameraDialogBinding = LayoutCameraDialogBinding.inflate(LayoutInflater.from(activity));
@@ -312,7 +301,8 @@ public class Commons {
             //img view cancel dialog
             cameraDialogBinding.imgCancelDialog.setOnClickListener(v -> dialog.dismiss());
 
-        } else {
+        }
+        else {
 
             LayoutGalleryDialogBinding galleryDialogBinding = LayoutGalleryDialogBinding.inflate(LayoutInflater.from(activity));
             dialog.setContentView(galleryDialogBinding.getRoot());
@@ -327,6 +317,17 @@ public class Commons {
             galleryDialogBinding.imgCancelDialog.setOnClickListener(v -> dialog.dismiss());
 
         }
+
+        //setting the transparent background
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+
+        //this sets the width of dialog to 90%
+        DisplayMetrics displayMetrics = new DisplayMetrics();
+        activity.getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+        int width = (int) (displayMetrics.widthPixels * 0.9);
+
+        //setting the width and height of alert dialog
+        dialog.getWindow().setLayout(width, ConstraintLayout.LayoutParams.WRAP_CONTENT);
 
         dialog.show();
     }
@@ -353,7 +354,6 @@ public class Commons {
                     userInfo.put(Constants.LAST_NAME, SharedPreference.getLastNamePref());
                     userInfo.put(Constants.PHONE_NO, SharedPreference.getPhoneNoPref());
                     userInfo.put(Constants.EMAIL, SharedPreference.getEmailPref());
-                    userInfo.put(Constants.PASSWORD, SharedPreference.getPasswordPref());
                     userInfo.put(Constants.IMAGE_NAME, SharedPreference.getImageName());
                     userInfo.put(Constants.IMAGE_PATH, SharedPreference.getImagePath());
                     userInfo.put(Constants.FCM_TOKEN, null);
@@ -382,7 +382,12 @@ public class Commons {
                                         .document(SharedPreference.getEmailPref());
 
                                 documentRefCircleId.update(Constants.CIRCLE_IDS, FieldValue.arrayUnion(documentReference.getId()))
-                                        .addOnSuccessListener(unused -> Log.i(TAG, "CIRCLE ID: success"))
+                                        .addOnSuccessListener(unused -> {
+                                            Log.i(TAG, "CIRCLE ID: success");
+
+                                            //after sign up, removes the password from shared preference
+                                            SharedPreference.setPasswordPref(Constants.NULL);
+                                        })
                                         .addOnFailureListener(e -> Log.i(TAG, "CIRCLE ID: failure = "+e.getMessage()));
 
                             });

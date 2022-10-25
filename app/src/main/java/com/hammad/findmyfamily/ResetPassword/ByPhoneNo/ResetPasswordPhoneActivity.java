@@ -1,4 +1,4 @@
-package com.hammad.findmyfamily.SignIn;
+package com.hammad.findmyfamily.ResetPassword.ByPhoneNo;
 
 import android.content.Intent;
 import android.content.res.ColorStateList;
@@ -19,7 +19,6 @@ import com.google.i18n.phonenumbers.PhoneNumberUtil;
 import com.google.i18n.phonenumbers.Phonenumber;
 import com.hammad.findmyfamily.R;
 import com.hammad.findmyfamily.SharedPreference.SharedPreference;
-import com.hammad.findmyfamily.SignIn.ResetPassword.OTPActivity;
 import com.hammad.findmyfamily.Util.Constants;
 import com.hammad.findmyfamily.databinding.ActivityResetPasswordPhoneBinding;
 
@@ -92,7 +91,7 @@ public class ResetPasswordPhoneActivity extends AppCompatActivity {
         binding.countryCodePickerForgetPass.setOnCountryChangeListener(() -> countryCode = binding.countryCodePickerForgetPass.getSelectedCountryCode());
     }
 
-    private TextWatcher numberTextWatcher = new TextWatcher() {
+    private final TextWatcher numberTextWatcher = new TextWatcher() {
         @Override
         public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
 

@@ -36,7 +36,7 @@ public class ShareCircleCodeActivity extends AppCompatActivity {
     }
 
     //setting the code to textviews
-    private void setCircleCode(String code){
+    private void setCircleCode(String code) {
         binding.textViewCircle1.setText(String.valueOf(code.charAt(0)));
         binding.textViewCircle2.setText(String.valueOf(code.charAt(1)));
         binding.textViewCircle3.setText(String.valueOf(code.charAt(2)));
@@ -49,7 +49,7 @@ public class ShareCircleCodeActivity extends AppCompatActivity {
     }
 
     //this function will have to implement the Firebase dynamic link
-    private void shareCircleCode(){
+    private void shareCircleCode() {
         Toast.makeText(this, "Share Code", Toast.LENGTH_SHORT).show();
     }
 

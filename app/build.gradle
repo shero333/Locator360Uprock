@@ -84,4 +84,9 @@ dependencies {
 
     //firebase storage
     implementation 'com.google.firebase:firebase-storage'
+
+    //Room DB
+    implementation "androidx.room:room-runtime:$rootProject.roomVersion"
+    annotationProcessor "androidx.room:room-compiler:$rootProject.roomVersion"
+    androidTestImplementation "androidx.room:room-testing:$rootProject.roomVersion"
 }

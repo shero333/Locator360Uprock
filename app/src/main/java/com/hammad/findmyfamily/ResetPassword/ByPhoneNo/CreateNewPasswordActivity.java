@@ -1,4 +1,4 @@
-package com.hammad.findmyfamily.SignIn.ResetPassword;
+package com.hammad.findmyfamily.ResetPassword.ByPhoneNo;
 
 import android.content.Intent;
 import android.content.res.ColorStateList;
@@ -16,7 +16,6 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.hammad.findmyfamily.R;
 import com.hammad.findmyfamily.SharedPreference.SharedPreference;
 import com.hammad.findmyfamily.StartScreen.StartScreenActivity;
-import com.hammad.findmyfamily.Util.Commons;
 import com.hammad.findmyfamily.Util.Constants;
 import com.hammad.findmyfamily.databinding.ActivityCreateNewPasswordBinding;
 
@@ -55,11 +54,9 @@ public class CreateNewPasswordActivity extends AppCompatActivity {
         @Override
         public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
-            String s = charSequence.toString().trim();
+            strPassword = charSequence.toString().trim();
 
-            strPassword = Commons.encryptedText(s);
-
-            if (s.length() >= 8) {
+            if (strPassword.length() >= 8) {
 
                 //setting the helper text
                 binding.layoutPassword.setHelperText(" ");
@@ -80,7 +77,8 @@ public class CreateNewPasswordActivity extends AppCompatActivity {
 
                 }
 
-            } else if (s.length() < 8) {
+            }
+            else if (strPassword.length() < 8) {
 
                 //setting the helper text
                 binding.layoutPassword.setHelperText(getString(R.string.minimum_8_character_password));
@@ -100,16 +98,14 @@ public class CreateNewPasswordActivity extends AppCompatActivity {
 
     };
     private final TextWatcher confirmPasswordTextWatcher = new TextWatcher() {
+
         @Override
-        public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-        }
+        public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
 
         @Override
         public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
-            String s = charSequence.toString().trim();
-
-            strConfirmPassword = Commons.encryptedText(s);
+            strConfirmPassword = charSequence.toString().trim();
 
             if (strConfirmPassword.equals(strPassword)) {
 
@@ -132,8 +128,7 @@ public class CreateNewPasswordActivity extends AppCompatActivity {
         }
 
         @Override
-        public void afterTextChanged(Editable editable) {
-        }
+        public void afterTextChanged(Editable editable) {}
     };
 
     private void setResetPasswordButtonStatus(boolean status, int layout, int color) {
