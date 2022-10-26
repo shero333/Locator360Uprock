@@ -104,4 +104,9 @@
     <string name="how_will_add_this_person">How will add this person?</string>
     <string name="select_from_contact">Select from contact</string>
     <string name="add_manually">Add Manually</string>
+    <string name="search_view">Search View</string>
+    <string name="added">Added</string>
+    <string name="phone_no">Phone No</string>
+    <string name="contact_name">Contact Name</string>
+    <string name="cn">CN</string>
 </resources>

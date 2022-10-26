@@ -1,6 +1,7 @@
-package com.hammad.findmyfamily.HomeScreen.FragmentSafety;
+package com.hammad.findmyfamily.HomeScreen.FragmentSafety.EmergencyContacts;
 
 import android.app.Dialog;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
@@ -12,17 +13,17 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
-import com.hammad.findmyfamily.databinding.ActivityAddEmergencyContactBinding;
+import com.hammad.findmyfamily.databinding.ActivityEmergencyContactsLandingBinding;
 import com.hammad.findmyfamily.databinding.LayoutDialogAddEmergncyContactBinding;
 
-public class AddEmergencyContactActivity extends AppCompatActivity {
+public class EmergencyContactsLandingActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         //initialize binding
-        ActivityAddEmergencyContactBinding binding = ActivityAddEmergencyContactBinding.inflate(getLayoutInflater());
+        ActivityEmergencyContactsLandingBinding binding = ActivityEmergencyContactsLandingBinding.inflate(getLayoutInflater());
         View view = binding.getRoot();
         setContentView(view);
 
@@ -38,13 +39,13 @@ public class AddEmergencyContactActivity extends AppCompatActivity {
 
         //dialog add from contact button click listener
         dialogBinding.btnSelectFromContact.setOnClickListener(view -> {
-            Toast.makeText(this, "Add from Contact", Toast.LENGTH_SHORT).show();
+            startActivity(new Intent(this,AddContactActivity.class));
             addContactsDialog.dismiss();
         });
 
         //add contact manually
         dialogBinding.txtAddManually.setOnClickListener(view -> {
-            Toast.makeText(this, "Add Manually", Toast.LENGTH_SHORT).show();
+            startActivity(new Intent(this,AddContactManuallyActivity.class));
             addContactsDialog.dismiss();
         });
 

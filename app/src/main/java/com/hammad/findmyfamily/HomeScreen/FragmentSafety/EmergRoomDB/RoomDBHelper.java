@@ -1,4 +1,4 @@
-package com.hammad.findmyfamily.HomeScreen.FragmentSafety.EmergContactRoomDB;
+package com.hammad.findmyfamily.HomeScreen.FragmentSafety.EmergRoomDB;
 
 import android.content.Context;
 
@@ -24,4 +24,6 @@ public abstract class RoomDBHelper extends RoomDatabase {
 
         return instance;
     }
+
+    public abstract EmergencyContactDao emergencyContactDao();
 }

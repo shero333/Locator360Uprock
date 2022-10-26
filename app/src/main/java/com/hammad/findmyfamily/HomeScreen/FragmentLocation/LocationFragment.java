@@ -43,7 +43,6 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.CancellationToken;
 import com.google.android.gms.tasks.OnTokenCanceledListener;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
-import com.hammad.findmyfamily.HomeScreen.CustomToolbar.CircleAdapterToolbar;
 import com.hammad.findmyfamily.Permission.Permissions;
 import com.hammad.findmyfamily.R;
 import com.hammad.findmyfamily.SharedPreference.SharedPreference;
@@ -57,7 +56,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
-public class LocationFragment extends Fragment implements OnMapReadyCallback, CircleAdapterToolbar.OnToolbarCircleClickListener, LocationListener, BottomSheetMemberAdapter.OnAddedMemberClickInterface, BottomSheetMemberAdapter.OnAddNewMemberInterface {
+public class LocationFragment extends Fragment implements OnMapReadyCallback, CircleToolbarAdapter.OnToolbarCircleClickListener, LocationListener, BottomSheetMemberAdapter.OnAddedMemberClickInterface, BottomSheetMemberAdapter.OnAddNewMemberInterface {
 
     private static final String TAG = "FRAG_LOCATION";
 
@@ -458,7 +457,7 @@ public class LocationFragment extends Fragment implements OnMapReadyCallback, Ci
         LinearLayoutManager layoutManager = new LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false);
         circleSelectionRecyclerView.setLayoutManager(layoutManager);
 
-        CircleAdapterToolbar adapterToolbar = new CircleAdapterToolbar(requireContext(), circleStringList, this);
+        CircleToolbarAdapter adapterToolbar = new CircleToolbarAdapter(requireContext(), circleStringList, this);
         circleSelectionRecyclerView.setAdapter(adapterToolbar);
     }
 

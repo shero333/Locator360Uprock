@@ -10,6 +10,7 @@
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_CONTACTS" />
 
     <uses-feature
         android:name="android.hardware.location.gps"
@@ -20,6 +21,22 @@
     <uses-feature
         android:name="android.hardware.location"
         android:required="true" />
+    <!--
+ This query is used to identify email apps installed in our phone.
+         Because on Android 11 and onward package visibility has been limited,
+         and methods like 'queryIntentActivities' results are affected by it.
+         So if a package visibility is not available dy default, we have to declare them through 'queries' and 'intent-filter'
+         in manifest
+    -->
+    <queries>
+        <intent>
+            <action android:name="android.intent.action.SENDTO" />
+
+            <category android:name="android.intent.category.DEFAULT" />
+
+            <data android:scheme="mailto" />
+        </intent>
+    </queries>
 
     <application
         android:name=".Application.App"
@@ -35,12 +52,17 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Locator360"
         tools:targetApi="31">
-
+        <activity
+            android:name=".HomeScreen.FragmentSafety.EmergencyContacts.AddContactManuallyActivity"
+            android:exported="false" />
+        <activity
+            android:name=".HomeScreen.FragmentSafety.EmergencyContacts.AddContactActivity"
+            android:exported="false" />
         <activity
             android:name=".ResetPassword.ByEmail.CheckEmailActivity"
-            android:exported="false"/>
+            android:exported="false" />
         <activity
-            android:name=".HomeScreen.FragmentSafety.AddEmergencyContactActivity"
+            android:name=".HomeScreen.FragmentSafety.EmergencyContacts.EmergencyContactsLandingActivity"
             android:exported="false" />
         <activity
             android:name=".ResetPassword.ByPhoneNo.CreateNewPasswordActivity"
@@ -71,7 +93,7 @@
             android:exported="false" />
         <activity
             android:name=".OneTimeScreens.AddProfilePictureActivity"
-            android:exported="false"/>
+            android:exported="false" />
         <activity
             android:name=".OneTimeScreens.JoinCircleActivity"
             android:exported="false" />
@@ -121,7 +143,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <activity
             android:name=".ResetPassword.ByEmail.ResetPasswordEmailActivity"
             android:exported="false"
@@ -132,7 +153,6 @@
             android:authorities="com.hammad.android.findmyfamily"
             android:exported="false"
             android:grantUriPermissions="true">
-
             <meta-data
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/file_paths" />
@@ -141,21 +161,6 @@
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyBE9d03i-pCJMyNCOgwL298fVvJeeCetOw" />
-
     </application>
-
-
-    <!-- This query is used to identify email apps installed in our phone.
-         Because on Android 11 and onward package visibility has been limited,
-         and methods like 'queryIntentActivities' results are affected by it.
-         So if a package visibility is not available dy default, we have to declare them through 'queries' and 'intent-filter'
-         in manifest-->
-    <queries>
-        <intent>
-            <action android:name="android.intent.action.SENDTO"/>
-            <category android:name="android.intent.category.DEFAULT"/>
-            <data android:scheme="mailto"/>
-        </intent>
-    </queries>
 
 </manifest>

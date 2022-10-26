@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/constraint_contact"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="@dimen/_10sdp"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <TextView
+        android:id="@+id/txt_contact_letters"
+        android:layout_width="@dimen/_50sdp"
+        android:layout_height="@dimen/_50sdp"
+        android:background="@drawable/drawable_circle_safety_frag"
+        android:backgroundTint="@color/grey"
+        android:text="@string/cn"
+        android:textColor="@color/black"
+        android:textSize="@dimen/_12ssp"
+        android:textStyle="bold"
+        android:textAllCaps="true"
+        android:textAlignment="center"
+        android:gravity="center"
+        android:layout_marginStart="@dimen/_10sdp"
+        android:layout_marginBottom="@dimen/_10sdp"
+        android:layout_marginTop="@dimen/_10sdp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
+
+    <TextView
+        android:id="@+id/txt_contact_name"
+        android:layout_width="@dimen/_100sdp"
+        android:layout_height="wrap_content"
+        android:text="@string/contact_name"
+        android:textSize="@dimen/_12ssp"
+        android:minLines="2"
+        android:textColor="@color/black"
+        android:textStyle="bold"
+        android:layout_marginStart="@dimen/_20sdp"
+        app:layout_constraintStart_toEndOf="@id/txt_contact_letters"
+        app:layout_constraintTop_toTopOf="@id/txt_contact_letters"/>
+
+    <TextView
+        android:id="@+id/txt_contact_no"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/phone_no"
+        android:textSize="@dimen/_12ssp"
+        android:textColor="@color/black"
+        android:textStyle="bold"
+        android:layout_marginStart="@dimen/_20sdp"
+        android:layout_marginTop="@dimen/_5sdp"
+        app:layout_constraintStart_toEndOf="@id/txt_contact_letters"
+        app:layout_constraintTop_toBottomOf="@id/txt_contact_name"
+        app:layout_constraintBottom_toBottomOf="@id/txt_contact_letters"/>
+
+
+    <TextView
+        android:id="@+id/txt_contact_status"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/added"
+        android:textAllCaps="true"
+        android:textColor="@color/orange"
+        android:textStyle="bold"
+        android:textSize="@dimen/_12ssp"
+        android:gravity="center_vertical"
+        android:layout_marginEnd="@dimen/_10sdp"
+        app:layout_constraintTop_toTopOf="@id/txt_contact_letters"
+        app:layout_constraintBottom_toBottomOf="@id/txt_contact_letters"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
+    <TextView
+        android:layout_width="0dp"
+        android:layout_height="@dimen/_3sdp"
+        app:layout_constraintWidth_percent="0.95"
+        android:layout_marginTop="@dimen/_10sdp"
+        android:layout_marginBottom="@dimen/_10sdp"
+        android:background="@drawable/drawable_line_bottom_sheet"
+        android:backgroundTint="@color/orange"
+        app:layout_constraintTop_toBottomOf="@id/txt_contact_letters"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
