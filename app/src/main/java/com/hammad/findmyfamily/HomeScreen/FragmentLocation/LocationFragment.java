@@ -53,6 +53,8 @@ import com.hammad.findmyfamily.databinding.LayoutBottomSheetMapTypeBinding;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
@@ -67,6 +69,7 @@ public class LocationFragment extends Fragment implements OnMapReadyCallback, Ci
     Animation showToolbarExtAnim, hideToolbarExtAnim;
 
     private FragmentLocationBinding binding;
+
     private FusedLocationProviderClient mLocationClient;
     private GoogleMap mGoogleMap;
     private Location location;
@@ -79,8 +82,6 @@ public class LocationFragment extends Fragment implements OnMapReadyCallback, Ci
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-
-        Log.i(TAG, "onCreateView: ");
 
         //initializing view binding
         binding = FragmentLocationBinding.inflate(inflater, container, false);
@@ -105,8 +106,8 @@ public class LocationFragment extends Fragment implements OnMapReadyCallback, Ci
     }
 
     private void initializeMap() {
-        SupportMapFragment mapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(binding.map.getId());
 
+        SupportMapFragment mapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(binding.map.getId());
 
         if(mapFragment != null){
             mapFragment.getMapAsync(this);
@@ -197,7 +198,8 @@ public class LocationFragment extends Fragment implements OnMapReadyCallback, Ci
                     Log.i(TAG, "location != null");
 
                     updateMapMarker(new LatLng(location.getLatitude(), location.getLongitude()));
-                } else {
+                }
+                else {
                     Log.i(TAG, "location == null");
 
                     /*
@@ -212,13 +214,63 @@ public class LocationFragment extends Fragment implements OnMapReadyCallback, Ci
     }
 
     @SuppressLint("MissingPermission")
+    private void getLocationThroughCurrentLocationApproach() {
+
+        Log.i(TAG, "getLocationThroughCurrentLocationApproach: ");
+
+        CurrentLocationRequest currentLocationRequest = new CurrentLocationRequest.Builder().build();
+
+        CancellationToken cancellationToken = new CancellationToken() {
+            @NonNull
+            @Override
+            public CancellationToken onCanceledRequested(@NonNull OnTokenCanceledListener onTokenCanceledListener) {
+                return null;
+            }
+
+            @Override
+            public boolean isCancellationRequested() {
+                return false;
+            }
+        };
+
+        mLocationClient.getCurrentLocation(currentLocationRequest, cancellationToken).addOnCompleteListener(task -> {
+
+            if (task.isSuccessful()) {
+                Log.i(TAG, "task successful 2: ");
+
+                location = task.getResult();
+
+                if (location != null) {
+                    Log.i(TAG, "location != null : 2nd");
+
+                    // moves marker to the location
+                    updateMapMarker(new LatLng(location.getLatitude(), location.getLongitude()));
+                }
+            }
+        });
+
+    }
+
+    @SuppressLint("MissingPermission")
     private void startLocationUpdates() {
 
         //location manager method
         LocationManager locationManager = (LocationManager) requireActivity().getSystemService(Context.LOCATION_SERVICE);
 
-        //60000 = 1 minute
-        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 60000, 100, this::onLocationChanged);
+        // 60000 milliseconds = 1 minute
+        // 1000 milliseconds = 1 second
+        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 60000, 0, this::onLocationChanged);
+    }
+
+    // LocationListener overridden method
+    @Override
+    public void onLocationChanged(@NonNull Location location) {
+        Date time = Calendar.getInstance().getTime();
+        Log.i(TAG, "onLocationChanged: ");
+        Log.i(TAG, "time: "+time);
+
+        //update the location on map
+        updateMapMarker(new LatLng(location.getLatitude(), location.getLongitude()));
     }
 
     //function for updating the the map marker to new position when location is changed
@@ -228,8 +280,8 @@ public class LocationFragment extends Fragment implements OnMapReadyCallback, Ci
             CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(latLng, 14);
             mGoogleMap.moveCamera(cameraUpdate);
 
-            Log.i(TAG, "lat: "+latLng.latitude);
-            Log.i(TAG, "lng: "+latLng.longitude);
+            Log.i(TAG, "updated lat: "+latLng.latitude);
+            Log.i(TAG, "updated lng: "+latLng.longitude);
 
             //setting the map type from preference
             int mapTypePreference = SharedPreference.getMapType();
@@ -281,56 +333,6 @@ public class LocationFragment extends Fragment implements OnMapReadyCallback, Ci
             Toast.makeText(requireContext(), locationAddress, Toast.LENGTH_LONG).show();
 
         }
-    }
-
-    @SuppressLint("MissingPermission")
-    private void getLocationThroughCurrentLocationApproach() {
-
-        Log.i(TAG, "getLocationThroughCurrentLocationApproach: ");
-
-        CurrentLocationRequest currentLocationRequest = new CurrentLocationRequest.Builder().build();
-
-        CancellationToken cancellationToken = new CancellationToken() {
-            @NonNull
-            @Override
-            public CancellationToken onCanceledRequested(@NonNull OnTokenCanceledListener onTokenCanceledListener) {
-                return null;
-            }
-
-            @Override
-            public boolean isCancellationRequested() {
-                return false;
-            }
-        };
-
-        mLocationClient.getCurrentLocation(currentLocationRequest, cancellationToken).addOnCompleteListener(task -> {
-
-            if (task.isSuccessful()) {
-                Log.i(TAG, "task successful 2: ");
-
-                location = task.getResult();
-
-                if (location != null) {
-                    Log.i(TAG, "location != null : 2nd");
-
-                    // moves marker to the location
-                    updateMapMarker(new LatLng(location.getLatitude(), location.getLongitude()));
-                }
-                else {
-                    Log.i(TAG, "location == null : 2nd");
-                }
-            }
-        });
-
-    }
-
-    // LocationListener overridden method
-    @Override
-    public void onLocationChanged(@NonNull Location location) {
-        Log.i(TAG, "onLocationChanged: ");
-
-        //update the location on map
-        updateMapMarker(new LatLng(location.getLatitude(), location.getLongitude()));
     }
 
     private void loadAnimations() {
@@ -429,7 +431,7 @@ public class LocationFragment extends Fragment implements OnMapReadyCallback, Ci
     }
 
     private void joinCircle() {
-        Toast.makeText(requireContext(), "Join Circle", Toast.LENGTH_SHORT).show();
+       startActivity(new Intent(requireActivity(),JoinCircleMainActivity.class));
     }
 
     public void circleExtendedView() {

@@ -21,17 +21,23 @@ import android.util.DisplayMetrics;
 import android.util.Log;
 import android.util.Patterns;
 import android.view.LayoutInflater;
+import android.widget.EditText;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.widget.AppCompatButton;
 import androidx.constraintlayout.utils.widget.ImageFilterView;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.Timestamp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.messaging.FirebaseMessaging;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
@@ -52,6 +58,7 @@ import java.security.NoSuchAlgorithmException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
@@ -545,6 +552,55 @@ public class Commons {
                 activity.finish();
             }
         });
+
+    }
+
+    //returns true if edit text length is equal to 1
+    public static boolean isEditTextLengthZero(EditText editText) {
+
+        return editText.getText().toString().trim().length() == 1;
+    }
+
+    //function for returning the edit text values
+    public static String getEditTextData(EditText editText) {
+        return editText.getText().toString().trim();
+    }
+
+    public static void clearEditTextListFocus(List<EditText> editTextList) {
+
+        for (int i=0; i < editTextList.size(); i++) {
+            editTextList.get(i).clearFocus();
+        }
+    }
+
+    public interface OnCircleJoinListener {
+        void onCircleJoin(boolean doesCircleExist);
+    }
+
+    public static void joinCircle(Context context,String enteredInviteCode) {
+
+        FirebaseFirestore.getInstance().collectionGroup(USERS_COLLECTION)
+                .whereEqualTo(Constants.CIRCLE_COLLECTION,enteredInviteCode)
+                .get()
+                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                    @Override
+                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+
+                        Log.i(TAG, "onSuccess: ");
+
+                        for(DocumentSnapshot doc:queryDocumentSnapshots) {
+                            Log.i(TAG, "inner loop: "+doc.getId());
+                        }
+
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.i(TAG, "onFailure: "+e.getMessage());
+
+                    }
+                });
 
     }
 

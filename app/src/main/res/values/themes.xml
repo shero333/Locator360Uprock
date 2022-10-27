@@ -23,19 +23,14 @@
 
     <style name="Search_View" parent="Widget.AppCompat.SearchView">
 
-        <!-- Changing the icon tint -->
-        <item name="android:textColorSecondary">@color/white</item>
-
-        <!--<item name="queryHint">Search Contact</item>-->
-        <!--<item name="android:hint">Search Contact</item>-->
-        <!--<item name="hintTextColor">@color/white</item>-->
-
         <!-- Query Text color -->
         <item name="android:textColorPrimary">@color/white</item>
-
-        <item name="android:iconifiedByDefault">true</item>
-        <!--<item name="android:searchIcon">@null</item>-->
-        <item name="android:searchHintIcon">@null</item>
+        <!-- Changing the icon tint, hint icon tint, and remove text (cross) tint-->
+        <item name="android:textColorSecondary">@color/white</item>
+        <!-- Query hint -->
+        <item name="queryHint">Search Contact</item>
+        <!-- Query hint color -->
+        <item name="android:textColorHint">@color/white</item>
 
     </style>
 

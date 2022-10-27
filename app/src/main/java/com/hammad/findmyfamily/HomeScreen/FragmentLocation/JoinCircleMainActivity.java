@@ -1,39 +1,35 @@
-package com.hammad.findmyfamily.OneTimeScreens;
+package com.hammad.findmyfamily.HomeScreen.FragmentLocation;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.hammad.findmyfamily.CreateCircle.CreateCircleActivity;
 import com.hammad.findmyfamily.R;
 import com.hammad.findmyfamily.Util.Commons;
-import com.hammad.findmyfamily.databinding.ActivityJoinCircleFirstScreenBinding;
+import com.hammad.findmyfamily.databinding.ActivityJoinCircleMainBinding;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class JoinCircleFirstScreenActivity extends AppCompatActivity {
+public class JoinCircleMainActivity extends AppCompatActivity {
 
-    private ActivityJoinCircleFirstScreenBinding binding;
+    ActivityJoinCircleMainBinding binding;
 
     //List of all edit texts (6 here)
     List<EditText> editTextList = new ArrayList<>();
-
-    //List for containing the circle invite codes
-    List<String> circleInviteCodeList = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        //initialize binding
-        binding = ActivityJoinCircleFirstScreenBinding.inflate(getLayoutInflater());
+        //initializing binding
+        binding = ActivityJoinCircleMainBinding.inflate(getLayoutInflater());
         View view = binding.getRoot();
         setContentView(view);
 
@@ -43,12 +39,15 @@ public class JoinCircleFirstScreenActivity extends AppCompatActivity {
         //populating the edit texts as invite code view
         populateInviteCodeView();
 
-        binding.btnSubmit.setOnClickListener(v -> buttonSubmitClickListener());
+        //toolbar back button
+        binding.toolbarJoinCircle.setNavigationOnClickListener(v -> onBackPressed());
 
-        binding.btnCreateCircle.setOnClickListener(v -> startActivity(new Intent(this, CreateCircleActivity.class)));
+        //button submit click listener
+        binding.btnSubmit.setOnClickListener(v -> submitButtonClickListener());
     }
 
     private void addEditTextViews() {
+
         editTextList.add(binding.edtInput1);
         editTextList.add(binding.edtInput2);
         editTextList.add(binding.edtInput3);
@@ -124,7 +123,13 @@ public class JoinCircleFirstScreenActivity extends AppCompatActivity {
         }
     }
 
-    private void buttonSubmitClickListener() {
+    private void submitButtonClickListener() {
+
+        //clears the focus of edit text list
+        Commons.clearEditTextListFocus(editTextList);
+
+        //setting the progress bar visibility
+        //binding.progressBar.setVisibility(View.VISIBLE);
 
         //variable for saving the entered code
         String enteredInviteCode = Commons.getEditTextData(binding.edtInput1)
@@ -134,21 +139,11 @@ public class JoinCircleFirstScreenActivity extends AppCompatActivity {
                                     .concat(Commons.getEditTextData(binding.edtInput5)
                                     .concat(Commons.getEditTextData(binding.edtInput6)))));
 
-        //searching through the invite code list
-        for(int i = 0; i < circleInviteCodeList.size(); i++) {
+        Log.i("COMMONS", "code: "+enteredInviteCode);
 
-            if(enteredInviteCode.equals(circleInviteCodeList.get(i))) {
 
-                Toast.makeText(this, "Circle Exits", Toast.LENGTH_SHORT).show();
-
-                //navigating to next activity
-                startActivity(new Intent(this,JoinCircleActivity.class));
-            }
-            else if(!enteredInviteCode.equals(circleInviteCodeList.get(i))) {
-
-                Toast.makeText(this, "Circle Does not Exits", Toast.LENGTH_LONG).show();
-            }
-        }
+        Commons.joinCircle(this,enteredInviteCode);
 
     }
+
 }
