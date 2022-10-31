@@ -114,5 +114,12 @@ public class SharedPreference {
         return sharedPreference.getBoolean(Constants.ARE_EMERG_CONTACTS_ADDED,false);
     }
 
+    public static void setCircleId(String circleId) {
+        sharedPreference.edit().putString(Constants.CIRCLE_ID,circleId).apply();
+    }
+
+    public static String getCircleId() {
+        return sharedPreference.getString(Constants.CIRCLE_ID, NULL);
+    }
 
 }

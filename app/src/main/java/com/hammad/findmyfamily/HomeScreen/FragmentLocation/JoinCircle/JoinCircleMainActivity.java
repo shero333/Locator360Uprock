@@ -1,9 +1,8 @@
-package com.hammad.findmyfamily.HomeScreen.FragmentLocation;
+package com.hammad.findmyfamily.HomeScreen.FragmentLocation.JoinCircle;
 
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -129,7 +128,7 @@ public class JoinCircleMainActivity extends AppCompatActivity {
         Commons.clearEditTextListFocus(editTextList);
 
         //setting the progress bar visibility
-        //binding.progressBar.setVisibility(View.VISIBLE);
+        binding.progressBar.setVisibility(View.VISIBLE);
 
         //variable for saving the entered code
         String enteredInviteCode = Commons.getEditTextData(binding.edtInput1)
@@ -139,11 +138,21 @@ public class JoinCircleMainActivity extends AppCompatActivity {
                                     .concat(Commons.getEditTextData(binding.edtInput5)
                                     .concat(Commons.getEditTextData(binding.edtInput6)))));
 
-        Log.i("COMMONS", "code: "+enteredInviteCode);
 
 
-        Commons.joinCircle(this,enteredInviteCode);
+        // join circle method
+        Commons.joinCircle(this, enteredInviteCode, doesCircleExist -> {
 
+            //setting the progress bar visibility
+            binding.progressBar.setVisibility(View.GONE);
+
+            if(doesCircleExist) {
+
+                //navigating to next activity
+                Toast.makeText(this, "Circle Exist", Toast.LENGTH_SHORT).show();
+            }
+
+        });
     }
 
 }

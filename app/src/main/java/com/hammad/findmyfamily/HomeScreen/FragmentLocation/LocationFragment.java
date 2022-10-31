@@ -43,6 +43,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.CancellationToken;
 import com.google.android.gms.tasks.OnTokenCanceledListener;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
+import com.hammad.findmyfamily.HomeScreen.FragmentLocation.JoinCircle.JoinCircleMainActivity;
 import com.hammad.findmyfamily.Permission.Permissions;
 import com.hammad.findmyfamily.R;
 import com.hammad.findmyfamily.SharedPreference.SharedPreference;
@@ -431,7 +432,7 @@ public class LocationFragment extends Fragment implements OnMapReadyCallback, Ci
     }
 
     private void joinCircle() {
-       startActivity(new Intent(requireActivity(),JoinCircleMainActivity.class));
+       startActivity(new Intent(requireActivity(), JoinCircleMainActivity.class));
     }
 
     public void circleExtendedView() {

@@ -64,5 +64,7 @@ public interface Constants {
 
      String DATABASE_NAME = "FindMyFamily_db";
 
+     String CIRCLE_ID = "circle_id";
+
 
 }

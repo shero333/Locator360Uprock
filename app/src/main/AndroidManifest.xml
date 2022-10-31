@@ -53,7 +53,7 @@
         android:theme="@style/Theme.Locator360"
         tools:targetApi="31">
         <activity
-            android:name=".HomeScreen.FragmentLocation.JoinCircleMainActivity"
+            android:name=".HomeScreen.FragmentLocation.JoinCircle.JoinCircleMainActivity"
             android:exported="false" />
         <activity
             android:name=".HomeScreen.FragmentSafety.EmergencyContacts.AddContactManuallyActivity"

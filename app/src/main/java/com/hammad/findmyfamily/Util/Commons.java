@@ -24,20 +24,16 @@ import android.view.LayoutInflater;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.widget.AppCompatButton;
 import androidx.constraintlayout.utils.widget.ImageFilterView;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.Timestamp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.messaging.FirebaseMessaging;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
@@ -577,29 +573,37 @@ public class Commons {
         void onCircleJoin(boolean doesCircleExist);
     }
 
-    public static void joinCircle(Context context,String enteredInviteCode) {
+    public static void joinCircle(Context context,String enteredInviteCode, OnCircleJoinListener onCircleJoinListener) {
 
-        FirebaseFirestore.getInstance().collectionGroup(USERS_COLLECTION)
-                .whereEqualTo(Constants.CIRCLE_COLLECTION,enteredInviteCode)
+        FirebaseFirestore.getInstance().collectionGroup(Constants.CIRCLE_COLLECTION)
+                .whereEqualTo(Constants.CIRCLE_JOIN_CODE,enteredInviteCode)
                 .get()
-                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-                    @Override
-                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                .addOnSuccessListener(queryDocumentSnapshots -> {
 
-                        Log.i(TAG, "onSuccess: ");
+                    if(queryDocumentSnapshots != null && !queryDocumentSnapshots.isEmpty()) {
+                        for(DocumentSnapshot doc: queryDocumentSnapshots) {
 
-                        for(DocumentSnapshot doc:queryDocumentSnapshots) {
-                            Log.i(TAG, "inner loop: "+doc.getId());
+                            //getting the data
+
+                            //interface calling
+                            onCircleJoinListener.onCircleJoin(true);
                         }
+                    }
+                    else {
+                        Log.e(TAG, "circle does not exist");
+                        Toast.makeText(context, "Error! Circle does not exist.", Toast.LENGTH_LONG).show();
+
+                        //calling the interface
+                        onCircleJoinListener.onCircleJoin(false);
 
                     }
                 })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Log.i(TAG, "onFailure: "+e.getMessage());
+                .addOnFailureListener(e -> {
+                    Log.e(TAG, "join circle error: "+e.getMessage());
+                    Toast.makeText(context, "Error! Try again.", Toast.LENGTH_LONG).show();
 
-                    }
+                    //calling the interface
+                    onCircleJoinListener.onCircleJoin(false);
                 });
 
     }
