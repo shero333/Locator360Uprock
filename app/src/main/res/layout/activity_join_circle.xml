@@ -35,7 +35,7 @@
         app:layout_constraintTop_toBottomOf="@id/txt_title_join_group"/>
 
     <androidx.constraintlayout.utils.widget.ImageFilterView
-        android:id="@+id/icon_invite_group"
+        android:id="@+id/icon_circle"
         android:layout_width="@dimen/_100sdp"
         android:layout_height="@dimen/_100sdp"
         app:roundPercent="1"
@@ -48,33 +48,33 @@
         app:layout_constraintBottom_toBottomOf="parent"/>
 
     <TextView
-        android:id="@+id/txt_group_name_first_char"
+        android:id="@+id/txt_circle_name_first_char"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="@dimen/_30ssp"
         android:textColor="@color/white"
         android:textStyle="normal"
-        android:text="D"
+        tools:text="D"
         tools:visibility="visible"
         android:visibility="visible"
-        app:layout_constraintStart_toStartOf="@id/icon_invite_group"
-        app:layout_constraintEnd_toEndOf="@id/icon_invite_group"
-        app:layout_constraintTop_toTopOf="@id/icon_invite_group"
-        app:layout_constraintBottom_toBottomOf="@id/icon_invite_group"/>
+        app:layout_constraintStart_toStartOf="@id/icon_circle"
+        app:layout_constraintEnd_toEndOf="@id/icon_circle"
+        app:layout_constraintTop_toTopOf="@id/icon_circle"
+        app:layout_constraintBottom_toBottomOf="@id/icon_circle"/>
 
     <TextView
-        android:id="@+id/txt_invite_group_name"
+        android:id="@+id/txt_circle_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/danny_mark"
+        tools:text="@string/danny_mark"
         android:padding="@dimen/_2sdp"
         android:textStyle="bold"
         android:textColor="@color/white"
         android:textSize="@dimen/_14ssp"
         android:layout_marginTop="@dimen/_15sdp"
-        app:layout_constraintStart_toStartOf="@id/icon_invite_group"
-        app:layout_constraintEnd_toEndOf="@id/icon_invite_group"
-        app:layout_constraintTop_toBottomOf="@id/icon_invite_group"/>
+        app:layout_constraintStart_toStartOf="@id/icon_circle"
+        app:layout_constraintEnd_toEndOf="@id/icon_circle"
+        app:layout_constraintTop_toBottomOf="@id/icon_circle"/>
 
     <TextView
         android:id="@+id/txt_footer_join_group"
@@ -95,7 +95,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         app:layout_constraintWidth_percent="0.8"
-        android:text="Join"
+        android:text="@string/join"
         android:textColor="@color/orange"
         android:background="@drawable/white_rounded_button"
         app:backgroundTint="@color/white"
@@ -109,7 +109,7 @@
         android:id="@+id/txt_cancel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Cancel"
+        android:text="@string/cancel"
         android:textColor="@color/white"
         android:textSize="@dimen/_12ssp"
         android:textStyle="bold"
@@ -118,5 +118,19 @@
         app:layout_constraintStart_toStartOf="@id/btn_join_group"
         app:layout_constraintEnd_toEndOf="@id/btn_join_group"
         app:layout_constraintTop_toBottomOf="@id/btn_join_group"/>
+
+    <ProgressBar
+        android:id="@+id/progress_bar"
+        android:layout_width="@dimen/_50sdp"
+        android:layout_height="@dimen/_50sdp"
+        android:theme="@style/Progress_bar"
+        android:indeterminate="true"
+        android:visibility="gone"
+        tools:visibility="visible"
+        android:progressTint="@color/white"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/txt_circle_name"
+        app:layout_constraintBottom_toBottomOf="@id/txt_footer_join_group"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

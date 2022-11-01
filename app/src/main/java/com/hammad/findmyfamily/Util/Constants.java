@@ -65,6 +65,10 @@ public interface Constants {
      String DATABASE_NAME = "FindMyFamily_db";
 
      String CIRCLE_ID = "circle_id";
+     String CIRCLE = "circle";
+
+     // string for differentiating whether join circle is called during sign up or from home screen
+     String CIRCLE_JOIN_ACT_KEY = "join_act_key";
 
 
 }

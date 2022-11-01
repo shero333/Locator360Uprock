@@ -111,4 +111,6 @@
     <string name="cn">CN</string>
     <string name="enter_invite_code">Enter Invite Code</string>
     <string name="enter_circle_invite_code">Enter Circle Invite code</string>
+    <string name="cancel">Cancel</string>
+    <string name="join">Join</string>
 </resources>

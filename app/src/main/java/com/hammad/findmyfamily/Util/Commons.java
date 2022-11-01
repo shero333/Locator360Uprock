@@ -38,6 +38,7 @@ import com.google.firebase.messaging.FirebaseMessaging;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.hammad.findmyfamily.BuildConfig;
+import com.hammad.findmyfamily.HomeScreen.FragmentLocation.JoinCircle.CircleModel;
 import com.hammad.findmyfamily.R;
 import com.hammad.findmyfamily.SharedPreference.SharedPreference;
 import com.hammad.findmyfamily.StartScreen.StartScreenActivity;
@@ -48,9 +49,6 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
@@ -67,43 +65,6 @@ public class Commons {
         trigger a condition showing that the image uploading failed
     */
     static int checkFailedStatus = 0;
-
-    /*
-            These two functions {encryptedText(String text), bytesToHex(byte[] hash)} are used for encryption in SHA-256 hash code. It remain same for a particular group of text.
-            We will save this encrypted text in firebase, and when user enters password, we will convert it into Hex and then compare with the firebase password.
-    */
-    public static String encryptedText(String text) {
-        MessageDigest digest;
-        String encryptedText = "";
-        try {
-            digest = MessageDigest.getInstance("SHA-256");
-            byte[] hash = digest.digest(text.getBytes("UTF-8"));
-
-            encryptedText = bytesToHex(hash);
-
-        } catch (NoSuchAlgorithmException e) {
-            Log.e("ERROR_COMMONS", "NoSuchAlgorithmException " + e.getMessage());
-            e.printStackTrace();
-        } catch (UnsupportedEncodingException e) {
-            Log.e("ERROR_COMMONS", "UnsupportedEncodingException " + e.getMessage());
-            e.printStackTrace();
-
-        }
-
-        return encryptedText;
-    }
-
-    private static String bytesToHex(byte[] hash) {
-        StringBuilder hexString = new StringBuilder(2 * hash.length);
-        for (int i = 0; i < hash.length; i++) {
-            String hex = Integer.toHexString(0xff & hash[i]);
-            if (hex.length() == 1) {
-                hexString.append('0');
-            }
-            hexString.append(hex);
-        }
-        return hexString.toString();
-    }
 
     public static boolean validateEmailAddress(String input) {
 
@@ -410,7 +371,7 @@ public class Commons {
                     if (e.getMessage().equals(context.getString(R.string.email_already_in_use))) {
                         Toast.makeText(context, context.getString(R.string.email_already_in_use), Toast.LENGTH_LONG).show();
                     } else {
-                        Toast.makeText(context, "Failed to Sign Up. Try Again!", Toast.LENGTH_LONG).show();
+                        Toast.makeText(context, "Failed to Sign Up. Try Again!", Toast.LENGTH_SHORT).show();
                     }
 
                 });
@@ -520,17 +481,17 @@ public class Commons {
                 .addOnFailureListener(e -> {
 
                     if(e.getMessage().contains("The password is invalid or the user does not have a password.")) {
-                        Toast.makeText(context, "Error! Incorrect Password.", Toast.LENGTH_LONG).show();
+                        Toast.makeText(context, "Error! Incorrect Password.", Toast.LENGTH_SHORT).show();
 
                         Log.e(TAG, "incorrect password error: " + e.getMessage());
                     }
                     else if(e.getMessage().contains("There is no user record corresponding to this identifier. The user may have been deleted.")){
-                        Toast.makeText(context, "Error! Incorrect Email.", Toast.LENGTH_LONG).show();
+                        Toast.makeText(context, "Error! Incorrect Email.", Toast.LENGTH_SHORT).show();
 
                         Log.e(TAG, "incorrect email error: " + e.getMessage());
                     }
                     else {
-                        Toast.makeText(context, "Error! Try Again.", Toast.LENGTH_LONG).show();
+                        Toast.makeText(context, "Error! Try Again.", Toast.LENGTH_SHORT).show();
 
                         Log.e(TAG, "sign in error: " + e.getMessage());
                     }
@@ -569,11 +530,11 @@ public class Commons {
         }
     }
 
-    public interface OnCircleJoinListener {
-        void onCircleJoin(boolean doesCircleExist);
+    public interface OnCircleAvailabilityCheckListener {
+        void onCircleAvailability(boolean doesCircleExist, CircleModel circleModel);
     }
 
-    public static void joinCircle(Context context,String enteredInviteCode, OnCircleJoinListener onCircleJoinListener) {
+    public static void checkCircleAvailability(Context context, String enteredInviteCode, OnCircleAvailabilityCheckListener onCircleAvailabilityCheckListener) {
 
         FirebaseFirestore.getInstance().collectionGroup(Constants.CIRCLE_COLLECTION)
                 .whereEqualTo(Constants.CIRCLE_JOIN_CODE,enteredInviteCode)
@@ -583,27 +544,32 @@ public class Commons {
                     if(queryDocumentSnapshots != null && !queryDocumentSnapshots.isEmpty()) {
                         for(DocumentSnapshot doc: queryDocumentSnapshots) {
 
-                            //getting the data
+                            List<String> circleMembersList;
 
-                            //interface calling
-                            onCircleJoinListener.onCircleJoin(true);
+                            circleMembersList = (List<String>) doc.get(Constants.CIRCLE_MEMBERS);
+
+                            //interface calling with circle details
+                            onCircleAvailabilityCheckListener.onCircleAvailability(true,
+                                    new CircleModel(doc.getId(),
+                                            doc.getString(Constants.CIRCLE_ADMIN),
+                                            doc.getString(Constants.CIRCLE_NAME),circleMembersList));
                         }
                     }
                     else {
                         Log.e(TAG, "circle does not exist");
-                        Toast.makeText(context, "Error! Circle does not exist.", Toast.LENGTH_LONG).show();
+                        Toast.makeText(context, "Error! Circle does not exist.", Toast.LENGTH_SHORT).show();
 
                         //calling the interface
-                        onCircleJoinListener.onCircleJoin(false);
+                        onCircleAvailabilityCheckListener.onCircleAvailability(false,null);
 
                     }
                 })
                 .addOnFailureListener(e -> {
                     Log.e(TAG, "join circle error: "+e.getMessage());
-                    Toast.makeText(context, "Error! Try again.", Toast.LENGTH_LONG).show();
+                    Toast.makeText(context, "Error! Try again.", Toast.LENGTH_SHORT).show();
 
                     //calling the interface
-                    onCircleJoinListener.onCircleJoin(false);
+                    onCircleAvailabilityCheckListener.onCircleAvailability(false,null);
                 });
 
     }

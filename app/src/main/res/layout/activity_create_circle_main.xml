@@ -4,21 +4,22 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".CreateCircle.CreateCircleActivity"
+    tools:context=".HomeScreen.FragmentLocation.CreateCircleMainActivity"
     android:background="@color/orange">
 
-    <TextView
-        android:id="@+id/txt_header_create_circle"
-        android:layout_width="wrap_content"
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar_create_circle"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textSize="@dimen/_16ssp"
-        android:textStyle="bold"
-        android:textColor="@color/white"
-        android:text="@string/give_your_circle_a_name"
-        android:layout_marginTop="@dimen/_40sdp"
+        android:paddingStart="@dimen/_5sdp"
+        android:paddingEnd="@dimen/_5sdp"
+        app:navigationIcon="@drawable/ic_arrow_back"
+        android:background="@color/orange"
+        app:title="Create New Circle"
+        app:titleTextColor="@color/white"
+        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"/>
+        app:layout_constraintEnd_toEndOf="parent"/>
 
     <EditText
         android:id="@+id/edt_txt_circle_name"
@@ -26,35 +27,29 @@
         android:layout_height="wrap_content"
         app:layout_constraintWidth_percent="0.8"
         android:background="@drawable/drawable_square_button"
+        android:backgroundTint="@color/orange"
         android:textSize="@dimen/_14ssp"
         android:inputType="text"
         android:imeOptions="actionDone"
         android:cursorVisible="true"
-        android:textCursorDrawable="@color/orange"
+        android:textCursorDrawable="@color/white"
         android:padding="@dimen/_10sdp"
         android:autofillHints="@null"
         android:paddingStart="@dimen/_15sdp"
         android:hint="@string/enter_circle_name"
-        android:textColor="@color/orange"
-        android:layout_marginTop="@dimen/_50sdp"
+        android:textColorHint="#CCFFFFFF"
+        android:textColor="@color/white"
+        android:layout_marginTop="@dimen/_25sdp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/txt_header_create_circle"/>
-    
-    <TextView
-        android:id="@+id/txt_footer_create_circle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/you_can_create_circle_for_every_group"
-        android:textColor="@color/white_with_opacity"
-        android:textSize="@dimen/_12ssp"
-        android:layout_marginBottom="@dimen/_15sdp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/btn_cont_create_circle"/>
+        app:layout_constraintTop_toBottomOf="@id/toolbar_create_circle">
+
+        <requestFocus/>
+
+    </EditText>
 
     <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/btn_cont_create_circle"
+        android:id="@+id/btn_create_circle"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         app:layout_constraintWidth_percent="0.8"
@@ -62,10 +57,10 @@
         android:text="@string/txt_continue"
         android:enabled="false"
         android:textColor="@color/orange"
-        app:layout_constraintVertical_bias="0.8"
+        app:layout_constraintVertical_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/edt_txt_circle_name"
         app:layout_constraintBottom_toBottomOf="parent"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

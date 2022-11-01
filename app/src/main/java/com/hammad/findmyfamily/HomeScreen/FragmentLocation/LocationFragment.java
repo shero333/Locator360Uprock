@@ -278,7 +278,7 @@ public class LocationFragment extends Fragment implements OnMapReadyCallback, Ci
     private void updateMapMarker(LatLng latLng) {
 
         if (mGoogleMap != null) {
-            CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(latLng, 14);
+            CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(latLng, 15);
             mGoogleMap.moveCamera(cameraUpdate);
 
             Log.i(TAG, "updated lat: "+latLng.latitude);
@@ -317,7 +317,7 @@ public class LocationFragment extends Fragment implements OnMapReadyCallback, Ci
             }
 
             //getting the address of current location
-            Geocoder geocoder = new Geocoder(requireContext(), Locale.getDefault());
+            Geocoder geocoder = new Geocoder(/*requireContext()*/getContext(), Locale.getDefault());
 
             List<Address> addresses = null;
             try {
@@ -428,7 +428,7 @@ public class LocationFragment extends Fragment implements OnMapReadyCallback, Ci
     }
 
     private void createNewCircle() {
-        Toast.makeText(requireContext(), "Create Circle", Toast.LENGTH_SHORT).show();
+        startActivity(new Intent(requireActivity(),CreateCircleMainActivity.class));
     }
 
     private void joinCircle() {

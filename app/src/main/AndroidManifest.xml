@@ -21,11 +21,13 @@
     <uses-feature
         android:name="android.hardware.location"
         android:required="true" />
+
     <!--
- This query is used to identify email apps installed in our phone.
+        This query is used to identify email apps installed in our phone.
          Because on Android 11 and onward package visibility has been limited,
          and methods like 'queryIntentActivities' results are affected by it.
-         So if a package visibility is not available dy default, we have to declare them through 'queries' and 'intent-filter'
+         So if a package visibility is not available dy default,
+         we have to declare them through 'queries' and 'intent-filter'
          in manifest
     -->
     <queries>
@@ -52,6 +54,11 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Locator360"
         tools:targetApi="31">
+
+        <activity
+            android:name=".HomeScreen.FragmentLocation.CreateCircleMainActivity"
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize"/>
         <activity
             android:name=".HomeScreen.FragmentLocation.JoinCircle.JoinCircleMainActivity"
             android:exported="false" />

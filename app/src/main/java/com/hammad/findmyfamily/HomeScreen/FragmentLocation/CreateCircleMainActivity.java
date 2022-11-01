@@ -1,41 +1,37 @@
-package com.hammad.findmyfamily.CreateCircle;
+package com.hammad.findmyfamily.HomeScreen.FragmentLocation;
 
-import android.content.Intent;
+import androidx.appcompat.app.AppCompatActivity;
+
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
-
-import androidx.appcompat.app.AppCompatActivity;
+import android.widget.Toast;
 
 import com.hammad.findmyfamily.R;
-import com.hammad.findmyfamily.SharedPreference.SharedPreference;
-import com.hammad.findmyfamily.databinding.ActivityCreateCircleBinding;
+import com.hammad.findmyfamily.databinding.ActivityCreateCircleMainBinding;
 
-public class CreateCircleActivity extends AppCompatActivity {
+public class CreateCircleMainActivity extends AppCompatActivity {
 
-    private ActivityCreateCircleBinding binding;
+    ActivityCreateCircleMainBinding binding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         //initializing binding
-        binding = ActivityCreateCircleBinding.inflate(getLayoutInflater());
+        binding = ActivityCreateCircleMainBinding.inflate(getLayoutInflater());
         View view = binding.getRoot();
         setContentView(view);
+
+        // toolbar back pressed
+        binding.toolbarCreateCircle.setNavigationOnClickListener(v -> onBackPressed());
 
         //text watcher
         binding.edtTxtCircleName.addTextChangedListener(createCircleTextWatcher);
 
-        //button continue click listener
-        binding.btnContCreateCircle.setOnClickListener(v -> {
-
-            //saving the value in shared preference
-            SharedPreference.setCircleName(binding.edtTxtCircleName.getText().toString());
-
-            startActivity(new Intent(this, ShareCircleCodeActivity.class));
-        });
+        //click listener
+        binding.btnCreateCircle.setOnClickListener(v -> buttonClickListener());
     }
 
     private final TextWatcher createCircleTextWatcher = new TextWatcher() {
@@ -51,18 +47,24 @@ public class CreateCircleActivity extends AppCompatActivity {
             if(s.length() > 3){
 
                 //enabling the 'continue' button
-                binding.btnContCreateCircle.setEnabled(true);
-                binding.btnContCreateCircle.setBackgroundResource(R.drawable.white_rounded_button);
+                binding.btnCreateCircle.setEnabled(true);
+                binding.btnCreateCircle.setBackgroundResource(R.drawable.white_rounded_button);
             }
             else{
 
                 //disable the 'continue' button
-                binding.btnContCreateCircle.setEnabled(false);
-                binding.btnContCreateCircle.setBackgroundResource(R.drawable.disabled_round_button);
+                binding.btnCreateCircle.setEnabled(false);
+                binding.btnCreateCircle.setBackgroundResource(R.drawable.disabled_round_button);
             }
         }
 
         @Override
         public void afterTextChanged(Editable editable) {}
     };
+
+    private void buttonClickListener() {
+
+        Toast.makeText(this, "Button Click", Toast.LENGTH_SHORT).show();
+
+    }
 }

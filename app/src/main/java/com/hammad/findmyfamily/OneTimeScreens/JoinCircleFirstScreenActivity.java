@@ -6,13 +6,13 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.hammad.findmyfamily.CreateCircle.CreateCircleActivity;
 import com.hammad.findmyfamily.R;
 import com.hammad.findmyfamily.Util.Commons;
+import com.hammad.findmyfamily.Util.Constants;
 import com.hammad.findmyfamily.databinding.ActivityJoinCircleFirstScreenBinding;
 
 import java.util.ArrayList;
@@ -20,13 +20,9 @@ import java.util.List;
 
 public class JoinCircleFirstScreenActivity extends AppCompatActivity {
 
-    private ActivityJoinCircleFirstScreenBinding binding;
-
     //List of all edit texts (6 here)
     List<EditText> editTextList = new ArrayList<>();
-
-    //List for containing the circle invite codes
-    List<String> circleInviteCodeList = new ArrayList<>();
+    private ActivityJoinCircleFirstScreenBinding binding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,35 +58,29 @@ public class JoinCircleFirstScreenActivity extends AppCompatActivity {
         //requesting the focus at 1st edit text (as default)
         binding.edtInput1.requestFocus();
 
-        for (int j = 0; j < 6; j++)
-        {
+        for (int j = 0; j < 6; j++) {
             //current iteration variable
             int currentIndex = j;
 
             editTextList.get(j).addTextChangedListener(new TextWatcher() {
                 @Override
-                public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
+                public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                }
 
                 @Override
                 public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
                     String s = charSequence.toString().trim();
 
-                    if(s.length() == 1)
-                    {
-                        if(currentIndex < 5)
-                        {
-                            editTextList.get(currentIndex+1).requestFocus();
+                    if (s.length() == 1) {
+                        if (currentIndex < 5) {
+                            editTextList.get(currentIndex + 1).requestFocus();
                         }
 
                         editTextList.get(currentIndex).setBackgroundResource(R.drawable.drawable_pin_entered);
-                    }
-                    else if(editTextList.get(currentIndex).isFocused())
-                    {
+                    } else if (editTextList.get(currentIndex).isFocused()) {
                         editTextList.get(currentIndex).setBackgroundResource(R.drawable.pin_view_state_list);
-                    }
-                    else if(!editTextList.get(currentIndex).isFocused() || s.length() == 0)
-                    {
+                    } else if (!editTextList.get(currentIndex).isFocused() || s.length() == 0) {
                         editTextList.get(currentIndex).setBackgroundResource(R.drawable.drawable_no_pin);
                     }
 
@@ -100,7 +90,8 @@ public class JoinCircleFirstScreenActivity extends AppCompatActivity {
                 }
 
                 @Override
-                public void afterTextChanged(Editable editable) {}
+                public void afterTextChanged(Editable editable) {
+                }
             });
         }
     }
@@ -109,15 +100,13 @@ public class JoinCircleFirstScreenActivity extends AppCompatActivity {
     private void submitButtonStatus() {
 
         //checking if all Edit texts length are equal to 1
-        if(Commons.isEditTextLengthZero(binding.edtInput1) && Commons.isEditTextLengthZero(binding.edtInput2) &&
+        if (Commons.isEditTextLengthZero(binding.edtInput1) && Commons.isEditTextLengthZero(binding.edtInput2) &&
                 Commons.isEditTextLengthZero(binding.edtInput3) && Commons.isEditTextLengthZero(binding.edtInput4) &&
-                Commons.isEditTextLengthZero(binding.edtInput5) && Commons.isEditTextLengthZero(binding.edtInput6))
-        {
+                Commons.isEditTextLengthZero(binding.edtInput5) && Commons.isEditTextLengthZero(binding.edtInput6)) {
             //setting the submit button to enabled
             binding.btnSubmit.setEnabled(true);
             binding.btnSubmit.setBackgroundResource(R.drawable.orange_rounded_button);
-        }
-        else{
+        } else {
             //setting the submit button to disabled
             binding.btnSubmit.setEnabled(false);
             binding.btnSubmit.setBackgroundResource(R.drawable.disabled_round_button);
@@ -125,6 +114,9 @@ public class JoinCircleFirstScreenActivity extends AppCompatActivity {
     }
 
     private void buttonSubmitClickListener() {
+
+        //setting the progress bar visibility
+        binding.progressBar.setVisibility(View.VISIBLE);
 
         //variable for saving the entered code
         String enteredInviteCode = Commons.getEditTextData(binding.edtInput1)
@@ -134,21 +126,21 @@ public class JoinCircleFirstScreenActivity extends AppCompatActivity {
                                     .concat(Commons.getEditTextData(binding.edtInput5)
                                     .concat(Commons.getEditTextData(binding.edtInput6)))));
 
-        //searching through the invite code list
-        for(int i = 0; i < circleInviteCodeList.size(); i++) {
+        // join circle method
+        Commons.checkCircleAvailability(this, enteredInviteCode, (doesCircleExist, circleModel) -> {
 
-            if(enteredInviteCode.equals(circleInviteCodeList.get(i))) {
+            //setting the progress bar visibility
+            binding.progressBar.setVisibility(View.GONE);
 
-                Toast.makeText(this, "Circle Exits", Toast.LENGTH_SHORT).show();
-
-                //navigating to next activity
-                startActivity(new Intent(this,JoinCircleActivity.class));
+            if (doesCircleExist) {
+                Intent intent = new Intent(this, JoinCircleActivity.class);
+                intent.putExtra(Constants.CIRCLE, circleModel);
+                intent.putExtra(Constants.CIRCLE_JOIN_ACT_KEY, true);
+                startActivity(intent);
+                finish();
             }
-            else if(!enteredInviteCode.equals(circleInviteCodeList.get(i))) {
 
-                Toast.makeText(this, "Circle Does not Exits", Toast.LENGTH_LONG).show();
-            }
-        }
+        });
 
     }
 }
