@@ -70,5 +70,8 @@ public interface Constants {
      // string for differentiating whether join circle is called during sign up or from home screen
      String CIRCLE_JOIN_ACT_KEY = "join_act_key";
 
+     String RETURNED_CIRCLE_NAME = "circle_name";
+
+     String ADD_MEMBER_BUTTON_CLICKED = "button_clicked";
 
 }

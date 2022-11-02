@@ -1,5 +1,6 @@
 package com.hammad.findmyfamily.OneTimeScreens;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -132,8 +133,11 @@ public class JoinCircleActivity extends AppCompatActivity {
                             startActivity(new Intent(this, AddProfilePictureActivity.class));
                         }
                         else {
-                            startActivity(new Intent(this, HomeActivity.class));
+                            Intent intent = new Intent();
+                            intent.putExtra(Constants.RETURNED_CIRCLE_NAME,circleModel.getCircleName());
+                            setResult(Activity.RESULT_OK,intent);
                         }
+
                         finish();
 
                     })

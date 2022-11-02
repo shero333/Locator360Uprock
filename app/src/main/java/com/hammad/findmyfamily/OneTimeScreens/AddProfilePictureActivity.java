@@ -166,6 +166,23 @@ public class AddProfilePictureActivity extends AppCompatActivity {
     }
 
     //take image from camera
+    private File createImageFile() throws IOException {
+
+        // Create an image file name
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+        String imageFileName = SharedPreference.getFirstNamePref() + "_" + timeStamp ;
+        File storageDir = this.getExternalFilesDir("/Camera Images");
+        File image = File.createTempFile(
+                imageFileName,  /* prefix */
+                ".jpg",         /* suffix */
+                storageDir      /* directory */
+        );
+
+        // Save a file: path for use with ACTION_VIEW intents
+        currentPicturePath = image.getAbsolutePath();
+        return image;
+    }
+
     private void openCamera() {
 
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
@@ -192,23 +209,6 @@ public class AddProfilePictureActivity extends AppCompatActivity {
 
             }
         }
-    }
-
-    private File createImageFile() throws IOException {
-
-        // Create an image file name
-        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-        String imageFileName = SharedPreference.getFirstNamePref() + "_" + timeStamp ;
-        File storageDir = this.getExternalFilesDir("/Camera Images");
-        File image = File.createTempFile(
-                imageFileName,  /* prefix */
-                ".jpg",         /* suffix */
-                storageDir      /* directory */
-        );
-
-        // Save a file: path for use with ACTION_VIEW intents
-        currentPicturePath = image.getAbsolutePath();
-        return image;
     }
 
     //choose image from gallery

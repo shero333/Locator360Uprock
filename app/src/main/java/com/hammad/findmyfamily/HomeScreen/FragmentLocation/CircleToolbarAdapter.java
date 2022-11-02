@@ -60,7 +60,7 @@ public class CircleToolbarAdapter extends RecyclerView.Adapter<CircleToolbarAdap
         }
     }
 
-    public interface OnToolbarCircleClickListener{
+    public interface OnToolbarCircleClickListener {
         void onCircleSelected(int position);
     }
 

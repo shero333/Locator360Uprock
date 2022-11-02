@@ -81,7 +81,9 @@
         android:inputType="number"
         android:padding="@dimen/_5sdp"
         android:maxLength="1"
-        android:gravity="center"/>
+        android:gravity="center"
+        android:autofillHints="@null"
+        android:hint="@null"/>
 
     <EditText
         android:id="@+id/edit_input_2"
@@ -95,7 +97,8 @@
         android:inputType="number"
         android:padding="@dimen/_5sdp"
         android:maxLength="1"
-        android:gravity="center" />
+        android:gravity="center"
+        android:autofillHints="@null"/>
 
     <EditText
         android:id="@+id/edit_input_3"
@@ -109,7 +112,8 @@
         android:inputType="number"
         android:padding="@dimen/_5sdp"
         android:maxLength="1"
-        android:gravity="center"/>
+        android:gravity="center"
+        android:autofillHints="@null"/>
 
     <EditText
         android:id="@+id/edit_input_4"
@@ -123,7 +127,8 @@
         android:inputType="number"
         android:padding="@dimen/_5sdp"
         android:maxLength="1"
-        android:gravity="center"/>
+        android:gravity="center"
+        android:autofillHints="@null"/>
 
     <EditText
         android:id="@+id/edit_input_5"
@@ -137,7 +142,8 @@
         android:inputType="number"
         android:padding="@dimen/_5sdp"
         android:maxLength="1"
-        android:gravity="center"/>
+        android:gravity="center"
+        android:autofillHints="@null"/>
 
     <EditText
         android:id="@+id/edit_input_6"
@@ -151,7 +157,8 @@
         android:inputType="number"
         android:padding="@dimen/_5sdp"
         android:maxLength="1"
-        android:gravity="center" />
+        android:gravity="center"
+        android:autofillHints="@null"/>
 
     <TextView
         android:id="@+id/txt_view_helper_one"

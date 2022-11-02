@@ -55,7 +55,7 @@
         android:imeOptions="actionDone"
         android:inputType="phone"
         android:cursorVisible="true"
-        android:textCursorDrawable="@color/white"
+        android:textCursorDrawable="@drawable/edit_text_cursor_white"
         android:layout_marginStart="@dimen/_5sdp"
         android:textColorHint="@color/white"
         android:textColor="@color/white"

@@ -113,4 +113,5 @@
     <string name="enter_circle_invite_code">Enter Circle Invite code</string>
     <string name="cancel">Cancel</string>
     <string name="join">Join</string>
+    <string name="invite_members_to">Invite members to\n</string>
 </resources>

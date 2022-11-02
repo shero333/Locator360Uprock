@@ -30,7 +30,7 @@
         android:inputType="text"
         android:imeOptions="actionDone"
         android:cursorVisible="true"
-        android:textCursorDrawable="@color/orange"
+        android:textCursorDrawable="@drawable/edit_text_cursor_orange"
         android:padding="@dimen/_10sdp"
         android:autofillHints="@null"
         android:paddingStart="@dimen/_15sdp"

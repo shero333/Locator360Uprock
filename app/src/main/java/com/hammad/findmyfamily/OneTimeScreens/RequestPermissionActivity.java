@@ -18,14 +18,13 @@ public class RequestPermissionActivity extends AppCompatActivity {
 
 
     private static final String TAG = "ACT_REQ_PERM";
-    private ActivityRequestPermissionBinding binding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         //instantiating binding
-        binding = ActivityRequestPermissionBinding.inflate(getLayoutInflater());
+        ActivityRequestPermissionBinding binding = ActivityRequestPermissionBinding.inflate(getLayoutInflater());
         View view = binding.getRoot();
         setContentView(view);
 

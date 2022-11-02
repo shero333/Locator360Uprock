@@ -149,7 +149,7 @@ public class ResetPasswordPhoneActivity extends AppCompatActivity {
         boolean isPhoneNoRegistered = false;
 
         String tempNumber = binding.edtPhoneResetPass.getText().toString().trim();
-        String phoneNo = "";
+        String phoneNo;
 
         if(tempNumber.startsWith("0"))
         {

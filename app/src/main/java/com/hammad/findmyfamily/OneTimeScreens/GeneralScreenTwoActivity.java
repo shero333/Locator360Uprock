@@ -13,14 +13,12 @@ import com.hammad.findmyfamily.databinding.ActivityGeneralScreenTwoBinding;
 
 public class GeneralScreenTwoActivity extends AppCompatActivity {
 
-    private ActivityGeneralScreenTwoBinding binding;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         //initializing view binding
-        binding = ActivityGeneralScreenTwoBinding.inflate(getLayoutInflater());
+        ActivityGeneralScreenTwoBinding binding = ActivityGeneralScreenTwoBinding.inflate(getLayoutInflater());
         View view = binding.getRoot();
         setContentView(view);
 

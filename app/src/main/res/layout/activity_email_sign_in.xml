@@ -31,7 +31,7 @@
         android:background="@drawable/drawable_square_button"
         android:hint="@string/enter_email"
         android:cursorVisible="true"
-        android:textCursorDrawable="@color/orange"
+        android:textCursorDrawable="@drawable/edit_text_cursor_orange"
         android:imeOptions="actionDone"
         android:inputType="textEmailAddress"
         android:textSize="@dimen/_14ssp"

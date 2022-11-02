@@ -34,6 +34,7 @@ public class CreateCircleActivity extends AppCompatActivity {
             //saving the value in shared preference
             SharedPreference.setCircleName(binding.edtTxtCircleName.getText().toString());
 
+            //navigate to next activity
             startActivity(new Intent(this, ShareCircleCodeActivity.class));
         });
     }

@@ -1,12 +1,18 @@
 package com.hammad.findmyfamily.HomeScreen.FragmentLocation.JoinCircle;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.hammad.findmyfamily.OneTimeScreens.JoinCircleActivity;
@@ -144,11 +150,29 @@ public class JoinCircleMainActivity extends AppCompatActivity {
                 Intent intent = new Intent(this, JoinCircleActivity.class);
                 intent.putExtra(Constants.CIRCLE, circleModel);
                 intent.putExtra(Constants.CIRCLE_JOIN_ACT_KEY, false);
-                startActivity(intent);
-                finish();
+                joinCircleResultLauncher.launch(intent);
             }
 
         });
     }
+
+
+    ActivityResultLauncher<Intent> joinCircleResultLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
+
+        if(result.getResultCode() == Activity.RESULT_OK) {
+
+            //when 'joinCircleResultLauncher' is called, we want to navigate back to Location Fragment
+
+            Intent intent = result.getData();
+
+            if(intent != null) {
+                Intent intentToReturn = new Intent();
+                intentToReturn.putExtra(Constants.RETURNED_CIRCLE_NAME,intent.getStringExtra(Constants.RETURNED_CIRCLE_NAME));
+                setResult(Activity.RESULT_OK,intentToReturn);
+                finish();
+            }
+        }
+
+    });
 
 }

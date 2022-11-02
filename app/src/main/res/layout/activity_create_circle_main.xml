@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".HomeScreen.FragmentLocation.CreateCircleMainActivity"
+    tools:context=".HomeScreen.FragmentLocation.CreateCircle.CreateCircleMainActivity"
     android:background="@color/orange">
 
     <androidx.appcompat.widget.Toolbar
@@ -32,7 +32,7 @@
         android:inputType="text"
         android:imeOptions="actionDone"
         android:cursorVisible="true"
-        android:textCursorDrawable="@color/white"
+        android:textCursorDrawable="@drawable/edit_text_cursor_white"
         android:padding="@dimen/_10sdp"
         android:autofillHints="@null"
         android:paddingStart="@dimen/_15sdp"
@@ -54,13 +54,24 @@
         android:layout_height="wrap_content"
         app:layout_constraintWidth_percent="0.8"
         android:background="@drawable/disabled_round_button"
-        android:text="@string/txt_continue"
+        android:text="@string/create_circle"
         android:enabled="false"
         android:textColor="@color/orange"
-        app:layout_constraintVertical_bias="0.5"
+        app:layout_constraintVertical_bias="0.8"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/edt_txt_circle_name"
         app:layout_constraintBottom_toBottomOf="parent"/>
+
+    <ProgressBar
+        android:id="@+id/progress_bar"
+        android:layout_width="@dimen/_50sdp"
+        android:layout_height="@dimen/_50sdp"
+        android:theme="@style/Progress_bar"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:visibility="gone"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

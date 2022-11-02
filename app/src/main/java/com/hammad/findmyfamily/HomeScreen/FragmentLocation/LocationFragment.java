@@ -43,6 +43,8 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.CancellationToken;
 import com.google.android.gms.tasks.OnTokenCanceledListener;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
+import com.hammad.findmyfamily.HomeScreen.FragmentLocation.AddMember.AddMemberActivity;
+import com.hammad.findmyfamily.HomeScreen.FragmentLocation.CreateCircle.CreateCircleMainActivity;
 import com.hammad.findmyfamily.HomeScreen.FragmentLocation.JoinCircle.JoinCircleMainActivity;
 import com.hammad.findmyfamily.Permission.Permissions;
 import com.hammad.findmyfamily.R;
@@ -148,14 +150,11 @@ public class LocationFragment extends Fragment implements OnMapReadyCallback, Ci
         }
     }
 
-    ActivityResultLauncher<Intent> gpsActivityResultLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
-        @Override
-        public void onActivityResult(ActivityResult result) {
-            if (result.getResultCode() == Activity.RESULT_OK) {
+    ActivityResultLauncher<Intent> gpsActivityResultLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
+        if (result.getResultCode() == Activity.RESULT_OK) {
 
-                //get location
-                getLocationThroughLastKnownApproach();
-            }
+            //get location
+            getLocationThroughLastKnownApproach();
         }
     });
 
@@ -393,7 +392,7 @@ public class LocationFragment extends Fragment implements OnMapReadyCallback, Ci
     private void extendedToolbarViewClickListeners() {
 
         //add member click listener
-        binding.toolbarExtendedView.imgViewAddCircleMembers.setOnClickListener(v -> addCircleMember());
+        binding.toolbarExtendedView.imgViewAddCircleMembers.setOnClickListener(v -> addCircleMember(true));
 
         //circle name click listener
         binding.toolbarExtendedView.consCircleName.setOnClickListener(v -> circleShrunkView());
@@ -408,9 +407,40 @@ public class LocationFragment extends Fragment implements OnMapReadyCallback, Ci
         binding.toolbarExtendedView.backgroundOpaqueView.setOnClickListener(v -> circleShrunkView());
     }
 
-    private void addCircleMember() {
-        Toast.makeText(requireContext(), "Add Member", Toast.LENGTH_SHORT).show();
+    //we have add member button in extended toolbar view and bottom navigation as well
+    private void addCircleMember(boolean isToolbarAddMemberBtnClicked) {
+
+        Intent intent = new Intent(getActivity(), AddMemberActivity.class);
+        intent.putExtra(Constants.ADD_MEMBER_BUTTON_CLICKED,isToolbarAddMemberBtnClicked);
+        addMemberResultLauncher.launch(intent);
     }
+
+    ActivityResultLauncher<Intent> addMemberResultLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
+
+        if(result.getResultCode() == Activity.RESULT_OK) {
+
+            Intent intent = result.getData();
+
+            if(intent != null) {
+
+                boolean isToolbarAddMemberBtnClicked = intent.getBooleanExtra(Constants.ADD_MEMBER_BUTTON_CLICKED,false);
+
+                if (isToolbarAddMemberBtnClicked) {
+
+                    //shrunk the extended toolbar view
+                    circleShrunkView();
+
+                    Toast.makeText(getContext(), "Toolbar Clicked", Toast.LENGTH_SHORT).show();
+                }
+                else {
+                    Toast.makeText(getContext(), "Bottom Nav Clicked", Toast.LENGTH_SHORT).show();
+                }
+
+            }
+
+        }
+
+    });
 
     private void circleShrunkView() {
 
@@ -428,12 +458,44 @@ public class LocationFragment extends Fragment implements OnMapReadyCallback, Ci
     }
 
     private void createNewCircle() {
-        startActivity(new Intent(requireActivity(),CreateCircleMainActivity.class));
+        createNewCircleResultLauncher.launch(new Intent(requireActivity(), CreateCircleMainActivity.class));
     }
 
+    ActivityResultLauncher<Intent> createNewCircleResultLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
+
+        if(result.getResultCode() == Activity.RESULT_OK) {
+
+            //shrunk the extended toolbar view
+            circleShrunkView();
+
+            Toast.makeText(getContext(), "Circle Created Successfully.", Toast.LENGTH_SHORT).show();
+
+            //get the latest circle related data and set the newly created circle as selected
+        }
+    });
+
     private void joinCircle() {
-       startActivity(new Intent(requireActivity(), JoinCircleMainActivity.class));
+        joinCircleResultLauncher.launch(new Intent(requireActivity(), JoinCircleMainActivity.class));
     }
+
+    ActivityResultLauncher<Intent> joinCircleResultLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
+
+        if(result.getResultCode() == Activity.RESULT_OK) {
+
+            Intent intent = result.getData();
+
+            if(intent != null) {
+
+                //shrunk the extended toolbar view
+                circleShrunkView();
+
+                Toast.makeText(getContext(), intent.getStringExtra(Constants.RETURNED_CIRCLE_NAME) + " joined.", Toast.LENGTH_SHORT).show();
+
+                //selects the currently joined circle and display related data
+            }
+        }
+
+    });
 
     public void circleExtendedView() {
 
@@ -488,7 +550,7 @@ public class LocationFragment extends Fragment implements OnMapReadyCallback, Ci
     // recyclerview bottom sheet member 'Add new member' click listener
     @Override
     public void onAddNewMemberClicked() {
-        Toast.makeText(requireContext(), "Add new member", Toast.LENGTH_SHORT).show();
+        addCircleMember(false);
     }
 
     // recyclerview bottom sheet member click listener
