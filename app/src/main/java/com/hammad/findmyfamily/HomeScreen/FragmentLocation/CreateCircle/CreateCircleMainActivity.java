@@ -96,7 +96,6 @@ public class CreateCircleMainActivity extends AppCompatActivity {
         circleData.put(Constants.CIRCLE_CODE_EXPIRY_DATE, new Timestamp(new Date()));
         circleData.put(Constants.CIRCLE_MEMBERS, FieldValue.arrayUnion(currentUserEmail));
 
-
         FirebaseFirestore.getInstance().collection(Constants.USERS_COLLECTION)
                 .document(currentUserEmail)
                 .collection(Constants.CIRCLE_COLLECTION)
@@ -113,9 +112,7 @@ public class CreateCircleMainActivity extends AppCompatActivity {
                                 binding.progressBar.setVisibility(View.GONE);
 
                                 //navigating back to location fragment
-                                Intent intentToReturn = new Intent();
-                                setResult(Activity.RESULT_OK,intentToReturn);
-                                finish();
+                                finishCurrentActivity();
 
                             })
                             .addOnFailureListener(e -> {
@@ -134,5 +131,17 @@ public class CreateCircleMainActivity extends AppCompatActivity {
                     Toast.makeText(this, "Error! Failed to create circle.", Toast.LENGTH_LONG).show();
                 });
 
+    }
+
+    private void finishCurrentActivity() {
+
+        Intent intentToReturn = new Intent();
+        setResult(Activity.RESULT_OK,intentToReturn);
+        finish();
+    }
+
+    @Override
+    public void onBackPressed() {
+        finishCurrentActivity();
     }
 }
