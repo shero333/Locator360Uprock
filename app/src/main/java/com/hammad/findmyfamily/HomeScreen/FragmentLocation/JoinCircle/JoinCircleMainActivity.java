@@ -156,7 +156,6 @@ public class JoinCircleMainActivity extends AppCompatActivity {
         });
     }
 
-
     ActivityResultLauncher<Intent> joinCircleResultLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
 
         if(result.getResultCode() == Activity.RESULT_OK) {
@@ -175,4 +174,10 @@ public class JoinCircleMainActivity extends AppCompatActivity {
 
     });
 
+    @Override
+    public void onBackPressed() {
+        Intent intentToReturn = new Intent();
+        setResult(Activity.RESULT_CANCELED,intentToReturn);
+        finish();
+    }
 }

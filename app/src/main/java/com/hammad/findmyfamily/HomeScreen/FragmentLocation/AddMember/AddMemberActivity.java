@@ -56,7 +56,6 @@ public class AddMemberActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        /*super.onBackPressed();*/
         navigateToPreviousActivity();
     }
 }

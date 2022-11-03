@@ -38,9 +38,10 @@ public interface Constants {
      String LOCATION_COLLECTION = "Location";
      String LAT = "lat";
      String LNG = "lng";
-     String LOC_DATE = "loc_date";
-     String LAST_KNOWN_LOCATION = "last_known_location";
-     String BATTERY_STATUS = "battery_status";
+     String LOC_ADDRESS = "loc_address";
+     String IS_PHONE_CHARGING = "is_phone_charging";
+     String BATTERY_PERCENTAGE = "battery_percentage";
+     String IS_POWER_SAVING_ON = "is_power_saving_on";
 
      //variables for inflating different view types in members bottom sheet
      int VIEW_TYPE_BUTTON = 1;
@@ -73,5 +74,7 @@ public interface Constants {
      String RETURNED_CIRCLE_NAME = "circle_name";
 
      String ADD_MEMBER_BUTTON_CLICKED = "button_clicked";
+
+     String IS_CIRCLE_CREATED = "is_circle_created";
 
 }

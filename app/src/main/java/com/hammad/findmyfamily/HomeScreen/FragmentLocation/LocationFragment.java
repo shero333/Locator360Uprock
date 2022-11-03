@@ -12,6 +12,7 @@ import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.PowerManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -40,7 +41,10 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.CancellationToken;
 import com.google.android.gms.tasks.OnTokenCanceledListener;
+import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.hammad.findmyfamily.HomeScreen.FragmentLocation.AddMember.AddMemberActivity;
 import com.hammad.findmyfamily.HomeScreen.FragmentLocation.CreateCircle.CreateCircleMainActivity;
 import com.hammad.findmyfamily.HomeScreen.FragmentLocation.JoinCircle.JoinCircleMainActivity;
@@ -54,10 +58,11 @@ import com.hammad.findmyfamily.databinding.LayoutBottomSheetMapTypeBinding;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
+import java.util.Objects;
 
 public class LocationFragment extends Fragment implements OnMapReadyCallback, CircleToolbarAdapter.OnToolbarCircleClickListener, LocationListener, BottomSheetMemberAdapter.OnAddedMemberClickInterface, BottomSheetMemberAdapter.OnAddNewMemberInterface {
 
@@ -102,6 +107,16 @@ public class LocationFragment extends Fragment implements OnMapReadyCallback, Ci
 
         //setting the toolbar circle recyclerview
         selectCircleRecyclerview();
+
+        PowerManager powerManager = (PowerManager) requireActivity().getSystemService(Context.POWER_SERVICE);
+        if (powerManager.isPowerSaveMode()) {
+            Toast.makeText(getContext(), "ON", Toast.LENGTH_SHORT).show();
+            Log.i(TAG, "power saving on");
+        }
+        else if(!powerManager.isPowerSaveMode()) {
+            Toast.makeText(getContext(), "OFF", Toast.LENGTH_SHORT).show();
+            Log.i(TAG, "power saving off");
+        }
 
         return view;
     }
@@ -257,18 +272,45 @@ public class LocationFragment extends Fragment implements OnMapReadyCallback, Ci
 
         // 60000 milliseconds = 1 minute
         // 1000 milliseconds = 1 second
-        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 60000, 0, this::onLocationChanged);
+        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 60000, 100, this::onLocationChanged);
     }
 
     // LocationListener overridden method
     @Override
     public void onLocationChanged(@NonNull Location location) {
-        Date time = Calendar.getInstance().getTime();
-        Log.i(TAG, "onLocationChanged: ");
-        Log.i(TAG, "time: "+time);
+
+        // saves the location in firebase firestore
+        saveLocationInFirebase(location);
 
         //update the location on map
         updateMapMarker(new LatLng(location.getLatitude(), location.getLongitude()));
+    }
+
+    private void saveLocationInFirebase(Location location) {
+
+        String currentUserEmail = Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getEmail();
+
+        BatteryStatusModelClass batteryStatus = new BatteryStatusModelClass();
+        batteryStatus = Commons.getCurrentBatteryStatus(requireContext());
+
+        // location data
+        Map<String,Object> locData = new HashMap<>();
+
+        locData.put(Constants.LAT,location.getLatitude());
+        locData.put(Constants.LNG,location.getLongitude());
+        locData.put(Constants.LOC_ADDRESS,locationAddress);
+        locData.put(Constants.IS_PHONE_CHARGING,batteryStatus.isCharging());
+        locData.put(Constants.BATTERY_PERCENTAGE,batteryStatus.getBatteryPercentage());
+        locData.put(Constants.IS_POWER_SAVING_ON,batteryStatus.isPowerSavingOn());
+
+        FirebaseFirestore.getInstance().collection(Constants.USERS_COLLECTION)
+                .document(currentUserEmail)
+                .collection(Constants.LOCATION_COLLECTION)
+                .document(String.valueOf(System.currentTimeMillis()))
+                .set(locData)
+                .addOnSuccessListener(unused -> Log.i(TAG, "Firestore location update successful"))
+                .addOnFailureListener(e -> Log.e(TAG, "Error. Firestore location update: "+e.getMessage()));
+
     }
 
     //function for updating the the map marker to new position when location is changed
@@ -277,9 +319,6 @@ public class LocationFragment extends Fragment implements OnMapReadyCallback, Ci
         if (mGoogleMap != null) {
             CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(latLng, 15);
             mGoogleMap.moveCamera(cameraUpdate);
-
-            Log.i(TAG, "updated lat: "+latLng.latitude);
-            Log.i(TAG, "updated lng: "+latLng.longitude);
 
             //setting the map type from preference
             int mapTypePreference = SharedPreference.getMapType();
@@ -314,7 +353,7 @@ public class LocationFragment extends Fragment implements OnMapReadyCallback, Ci
             }
 
             //getting the address of current location
-            Geocoder geocoder = new Geocoder(/*requireContext()*/getContext(), Locale.getDefault());
+            Geocoder geocoder = new Geocoder(requireContext(), Locale.getDefault());
 
             List<Address> addresses = null;
             try {
@@ -328,8 +367,9 @@ public class LocationFragment extends Fragment implements OnMapReadyCallback, Ci
                 locationAddress = addresses.get(0).getAddressLine(0);
             }
 
-            Toast.makeText(requireContext(), locationAddress, Toast.LENGTH_LONG).show();
-
+        }
+        else {
+            Log.i(TAG, "updateMapMarker: map is null");
         }
     }
 
@@ -425,35 +465,27 @@ public class LocationFragment extends Fragment implements OnMapReadyCallback, Ci
 
                 if (isToolbarAddMemberBtnClicked) {
 
-                    //shrunk the extended toolbar view
-                    circleShrunkView();
-
-                    Toast.makeText(getContext(), "Toolbar Clicked", Toast.LENGTH_SHORT).show();
+                    //delay the shrunk to give an animation type look
+                    delayCircleShrunkView();
                 }
                 else {
-                    Toast.makeText(getContext(), "Bottom Nav Clicked", Toast.LENGTH_SHORT).show();
+
+                    //collapse the bottom navigation
+                    new Handler().postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            View bottomSheet = binding.bottomSheetMembers.consBottomSheet;
+                            BottomSheetBehavior<View> bottomSheetBehavior = BottomSheetBehavior.from(bottomSheet);
+                            bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+                        }
+                    },300);
+
                 }
 
             }
-
         }
 
     });
-
-    private void circleShrunkView() {
-
-        //loading the toolbar extended view animations
-        loadAnimations();
-
-        binding.toolbarExtendedView.consCircleSelection.setAnimation(hideToolbarExtAnim);
-
-        //the background of extended view visibility is set to gone to set the hide extended toolbar animation
-        binding.toolbarExtendedView.backgroundOpaqueView.setVisibility(View.GONE);
-
-        //setting visibility to gone after 300 millisecond
-        new Handler().postDelayed(() -> binding.toolbarExtendedView.consCircleSelection.setVisibility(View.GONE), 300);
-
-    }
 
     private void createNewCircle() {
         createNewCircleResultLauncher.launch(new Intent(requireActivity(), CreateCircleMainActivity.class));
@@ -463,12 +495,23 @@ public class LocationFragment extends Fragment implements OnMapReadyCallback, Ci
 
         if(result.getResultCode() == Activity.RESULT_OK) {
 
-            //shrunk the extended toolbar view
-            circleShrunkView();
+            //delay the shrunk to give an animation type look
+            delayCircleShrunkView();
 
-            Toast.makeText(getContext(), "Circle Created Successfully.", Toast.LENGTH_SHORT).show();
+            Intent intent = result.getData();
 
-            //get the latest circle related data and set the newly created circle as selected
+            if(intent != null) {
+
+                boolean isCircleCreated = intent.getBooleanExtra(Constants.IS_CIRCLE_CREATED,false);
+
+                if(isCircleCreated) {
+
+                    Toast.makeText(getContext(), "Circle Created Successfully.", Toast.LENGTH_SHORT).show();
+
+                    //get the latest circle related data and set the newly created circle as selected
+                }
+            }
+
         }
     });
 
@@ -484,16 +527,41 @@ public class LocationFragment extends Fragment implements OnMapReadyCallback, Ci
 
             if(intent != null) {
 
-                //shrunk the extended toolbar view
-                circleShrunkView();
+                //delay the shrunk to give an animation type look
+                delayCircleShrunkView();
 
-                Toast.makeText(getContext(), intent.getStringExtra(Constants.RETURNED_CIRCLE_NAME) + " joined.", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), intent.getStringExtra(Constants.RETURNED_CIRCLE_NAME) + " joined.", Toast.LENGTH_LONG).show();
 
                 //selects the currently joined circle and display related data
             }
         }
+        else if(result.getResultCode() == Activity.RESULT_CANCELED) {
+            //when back pressed is called from 'JoinCircleMainActivity'
+            delayCircleShrunkView();
+        }
 
     });
+
+    //delays the extended toolbar view to give it an animation like flow when Activity Result Launchers are called
+    private void delayCircleShrunkView() {
+
+        new Handler().postDelayed(this::circleShrunkView,300);
+    }
+
+    private void circleShrunkView() {
+
+        //loading the toolbar extended view animations
+        loadAnimations();
+
+        binding.toolbarExtendedView.consCircleSelection.setAnimation(hideToolbarExtAnim);
+
+        //the background of extended view visibility is set to gone to set the hide extended toolbar animation
+        binding.toolbarExtendedView.backgroundOpaqueView.setVisibility(View.GONE);
+
+        //setting visibility to gone after 300 millisecond
+        new Handler().postDelayed(() -> binding.toolbarExtendedView.consCircleSelection.setVisibility(View.GONE), 300);
+
+    }
 
     public void circleExtendedView() {
 

@@ -112,7 +112,7 @@ public class CreateCircleMainActivity extends AppCompatActivity {
                                 binding.progressBar.setVisibility(View.GONE);
 
                                 //navigating back to location fragment
-                                finishCurrentActivity();
+                                finishCurrentActivity(true);
 
                             })
                             .addOnFailureListener(e -> {
@@ -133,15 +133,16 @@ public class CreateCircleMainActivity extends AppCompatActivity {
 
     }
 
-    private void finishCurrentActivity() {
+    private void finishCurrentActivity(boolean isCircleCreated) {
 
         Intent intentToReturn = new Intent();
+        intentToReturn.putExtra(Constants.IS_CIRCLE_CREATED,isCircleCreated);
         setResult(Activity.RESULT_OK,intentToReturn);
         finish();
     }
 
     @Override
     public void onBackPressed() {
-        finishCurrentActivity();
+        finishCurrentActivity(false);
     }
 }

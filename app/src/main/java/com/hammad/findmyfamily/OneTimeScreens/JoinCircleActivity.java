@@ -126,9 +126,6 @@ public class JoinCircleActivity extends AppCompatActivity {
                         //setting the progress bar visibility
                         binding.progressBar.setVisibility(View.GONE);
 
-                        //toast
-                        Toast.makeText(this, "Circle Joined Successfully.", Toast.LENGTH_SHORT).show();
-
                         if(isCalledFromSignUp) {
                             startActivity(new Intent(this, AddProfilePictureActivity.class));
                         }

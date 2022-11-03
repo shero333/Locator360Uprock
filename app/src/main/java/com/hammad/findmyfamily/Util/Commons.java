@@ -1,5 +1,6 @@
 package com.hammad.findmyfamily.Util;
 
+import static android.content.Context.BATTERY_SERVICE;
 import static android.content.Context.LOCATION_SERVICE;
 import static com.hammad.findmyfamily.Util.Constants.USERS_COLLECTION;
 
@@ -16,6 +17,7 @@ import android.graphics.drawable.ColorDrawable;
 import android.location.LocationManager;
 import android.media.ExifInterface;
 import android.net.Uri;
+import android.os.BatteryManager;
 import android.provider.Settings;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -38,6 +40,7 @@ import com.google.firebase.messaging.FirebaseMessaging;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.hammad.findmyfamily.BuildConfig;
+import com.hammad.findmyfamily.HomeScreen.FragmentLocation.BatteryStatusModelClass;
 import com.hammad.findmyfamily.HomeScreen.FragmentLocation.JoinCircle.CircleModel;
 import com.hammad.findmyfamily.R;
 import com.hammad.findmyfamily.SharedPreference.SharedPreference;
@@ -574,4 +577,14 @@ public class Commons {
 
     }
 
+    public static BatteryStatusModelClass getCurrentBatteryStatus(Context context) {
+
+        BatteryManager batteryManager= (BatteryManager) context.getSystemService(BATTERY_SERVICE);
+
+        boolean isCharging = batteryManager.isCharging();
+        int batteryPercentage = batteryManager.getIntProperty(BatteryManager.BATTERY_PROPERTY_CAPACITY);
+        boolean isPowerSavingModeOn = false;
+
+        return new BatteryStatusModelClass(isCharging,batteryPercentage,isPowerSavingModeOn);
+    }
 }
