@@ -295,7 +295,7 @@ public class LocationFragment extends Fragment implements OnMapReadyCallback, Ci
         locData.put(Constants.BATTERY_PERCENTAGE,batteryStatus.getBatteryPercentage());
 
         FirebaseFirestore.getInstance().collection(Constants.USERS_COLLECTION)
-                .document(currentUserEmail)
+                .document(Objects.requireNonNull(currentUserEmail))
                 .collection(Constants.LOCATION_COLLECTION)
                 .document(String.valueOf(System.currentTimeMillis()))
                 .set(locData)
