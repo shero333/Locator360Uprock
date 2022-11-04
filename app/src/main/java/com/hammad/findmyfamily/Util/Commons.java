@@ -208,7 +208,6 @@ public class Commons {
             buttonSettings.setOnClickListener(v -> {
                 Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
                 gpsListener.getGPSIntent(intent);
-
                 //dismissing the dialog
                 dialog.dismiss();
             });
@@ -583,8 +582,7 @@ public class Commons {
 
         boolean isCharging = batteryManager.isCharging();
         int batteryPercentage = batteryManager.getIntProperty(BatteryManager.BATTERY_PROPERTY_CAPACITY);
-        boolean isPowerSavingModeOn = false;
 
-        return new BatteryStatusModelClass(isCharging,batteryPercentage,isPowerSavingModeOn);
+        return new BatteryStatusModelClass(isCharging,batteryPercentage);
     }
 }

@@ -4,14 +4,10 @@ public class BatteryStatusModelClass {
 
     private boolean isCharging;
     private int batteryPercentage;
-    private boolean isPowerSavingOn;
 
-    public BatteryStatusModelClass() {}
-
-    public BatteryStatusModelClass(boolean isCharging, int batteryPercentage, boolean isPowerSavingOn) {
+    public BatteryStatusModelClass(boolean isCharging, int batteryPercentage) {
         this.isCharging = isCharging;
         this.batteryPercentage = batteryPercentage;
-        this.isPowerSavingOn = isPowerSavingOn;
     }
 
     public boolean isCharging() {
@@ -22,7 +18,4 @@ public class BatteryStatusModelClass {
         return batteryPercentage;
     }
 
-    public boolean isPowerSavingOn() {
-        return isPowerSavingOn;
-    }
 }

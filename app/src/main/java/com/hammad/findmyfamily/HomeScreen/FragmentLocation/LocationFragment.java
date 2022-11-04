@@ -12,7 +12,6 @@ import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.Handler;
-import android.os.PowerManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -31,6 +30,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.gms.location.CurrentLocationRequest;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationListener;
+import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -108,16 +108,6 @@ public class LocationFragment extends Fragment implements OnMapReadyCallback, Ci
         //setting the toolbar circle recyclerview
         selectCircleRecyclerview();
 
-        PowerManager powerManager = (PowerManager) requireActivity().getSystemService(Context.POWER_SERVICE);
-        if (powerManager.isPowerSaveMode()) {
-            Toast.makeText(getContext(), "ON", Toast.LENGTH_SHORT).show();
-            Log.i(TAG, "power saving on");
-        }
-        else if(!powerManager.isPowerSaveMode()) {
-            Toast.makeText(getContext(), "OFF", Toast.LENGTH_SHORT).show();
-            Log.i(TAG, "power saving off");
-        }
-
         return view;
     }
 
@@ -129,7 +119,7 @@ public class LocationFragment extends Fragment implements OnMapReadyCallback, Ci
             mapFragment.getMapAsync(this);
         }
 
-        mLocationClient = new FusedLocationProviderClient(requireContext());
+        mLocationClient = LocationServices.getFusedLocationProviderClient(requireContext());
     }
 
     @Override
@@ -143,19 +133,19 @@ public class LocationFragment extends Fragment implements OnMapReadyCallback, Ci
     @SuppressLint("MissingPermission")
     private void checkLocationPermission() {
 
-        Log.i(TAG, "checkLocationPermission: ");
+        Log.i(TAG, "checkLocationPermission()");
 
         if (Permissions.hasLocationPermission(requireContext())) {
 
             if (Commons.isGpsEnabled(requireActivity(), intent -> gpsActivityResultLauncher.launch(intent))) {
 
-                Log.i(TAG, "gps permission allowed: ");
+                Log.i(TAG, "checkLocationPermission() -> gps permission allowed");
 
                 //get current location
                 getLocationThroughLastKnownApproach();
 
             } else {
-                Log.i(TAG, "Location Frag: has location permission but no GPS");
+                Log.i(TAG, "checkLocationPermission() -> no gps permission allowed");
             }
 
         } else {
@@ -165,7 +155,7 @@ public class LocationFragment extends Fragment implements OnMapReadyCallback, Ci
 
     ActivityResultLauncher<Intent> gpsActivityResultLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
         if (result.getResultCode() == Activity.RESULT_OK) {
-
+            Log.i(TAG, "gpsActivityResultLauncher");
             //get location
             getLocationThroughLastKnownApproach();
         }
@@ -193,7 +183,7 @@ public class LocationFragment extends Fragment implements OnMapReadyCallback, Ci
     @SuppressLint("MissingPermission")
     private void getLocationThroughLastKnownApproach() {
 
-        Log.i(TAG, "getLocationThroughLastKnownApproach: ");
+        Log.i(TAG, "getLocationThroughLastKnownApproach() ");
 
         // this function will call LocationListener overridden method when location changes
         startLocationUpdates();
@@ -202,18 +192,18 @@ public class LocationFragment extends Fragment implements OnMapReadyCallback, Ci
 
             if (task.isSuccessful()) {
 
-                Log.i(TAG, "task successful: ");
+                Log.i(TAG, "getLocationThroughLastKnownApproach() -> task successful: ");
 
                 location = task.getResult();
 
                 if (location != null) {
 
-                    Log.i(TAG, "location != null");
+                    Log.i(TAG, "getLocationThroughLastKnownApproach() -> location != null");
 
                     updateMapMarker(new LatLng(location.getLatitude(), location.getLongitude()));
                 }
                 else {
-                    Log.i(TAG, "location == null");
+                    Log.i(TAG, "getLocationThroughLastKnownApproach() -> location == null");
 
                     /*
                         if task result returned has null location (case like when gps is turned on, it will first return null and after sometime location won't be null)
@@ -229,7 +219,7 @@ public class LocationFragment extends Fragment implements OnMapReadyCallback, Ci
     @SuppressLint("MissingPermission")
     private void getLocationThroughCurrentLocationApproach() {
 
-        Log.i(TAG, "getLocationThroughCurrentLocationApproach: ");
+        Log.i(TAG, "getLocationThroughCurrentLocationApproach()");
 
         CurrentLocationRequest currentLocationRequest = new CurrentLocationRequest.Builder().build();
 
@@ -249,15 +239,18 @@ public class LocationFragment extends Fragment implements OnMapReadyCallback, Ci
         mLocationClient.getCurrentLocation(currentLocationRequest, cancellationToken).addOnCompleteListener(task -> {
 
             if (task.isSuccessful()) {
-                Log.i(TAG, "task successful 2: ");
+                Log.i(TAG, "getLocationThroughCurrentLocationApproach() -> task successful");
 
                 location = task.getResult();
 
                 if (location != null) {
-                    Log.i(TAG, "location != null : 2nd");
+                    Log.i(TAG, "getLocationThroughCurrentLocationApproach() -> location != null");
 
                     // moves marker to the location
                     updateMapMarker(new LatLng(location.getLatitude(), location.getLongitude()));
+                }
+                else if(location == null) {
+                    Log.i(TAG, "getLocationThroughCurrentLocationApproach() -> location == null");
                 }
             }
         });
@@ -290,8 +283,7 @@ public class LocationFragment extends Fragment implements OnMapReadyCallback, Ci
 
         String currentUserEmail = Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getEmail();
 
-        BatteryStatusModelClass batteryStatus = new BatteryStatusModelClass();
-        batteryStatus = Commons.getCurrentBatteryStatus(requireContext());
+        BatteryStatusModelClass batteryStatus = Commons.getCurrentBatteryStatus(requireContext());
 
         // location data
         Map<String,Object> locData = new HashMap<>();
@@ -301,7 +293,6 @@ public class LocationFragment extends Fragment implements OnMapReadyCallback, Ci
         locData.put(Constants.LOC_ADDRESS,locationAddress);
         locData.put(Constants.IS_PHONE_CHARGING,batteryStatus.isCharging());
         locData.put(Constants.BATTERY_PERCENTAGE,batteryStatus.getBatteryPercentage());
-        locData.put(Constants.IS_POWER_SAVING_ON,batteryStatus.isPowerSavingOn());
 
         FirebaseFirestore.getInstance().collection(Constants.USERS_COLLECTION)
                 .document(currentUserEmail)
@@ -367,9 +358,8 @@ public class LocationFragment extends Fragment implements OnMapReadyCallback, Ci
                 locationAddress = addresses.get(0).getAddressLine(0);
             }
 
-        }
-        else {
-            Log.i(TAG, "updateMapMarker: map is null");
+            Toast.makeText(getContext(), locationAddress, Toast.LENGTH_SHORT).show();
+
         }
     }
 
@@ -782,5 +772,4 @@ public class LocationFragment extends Fragment implements OnMapReadyCallback, Ci
         super.onDestroyView();
         binding = null;
     }
-
 }
