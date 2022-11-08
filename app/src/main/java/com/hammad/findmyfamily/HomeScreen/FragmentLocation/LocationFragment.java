@@ -108,6 +108,10 @@ public class LocationFragment extends Fragment implements OnMapReadyCallback, Ci
         //setting the toolbar circle recyclerview
         selectCircleRecyclerview();
 
+        // TODO: 08/11/2022 set the permission & gps dialog 'navigating to apps setting' along with some location permission setting
+        // TODO: 08/11/2022 onProviderDisabled or enabled functions of gps
+
+
         return view;
     }
 
@@ -283,7 +287,7 @@ public class LocationFragment extends Fragment implements OnMapReadyCallback, Ci
 
         String currentUserEmail = Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getEmail();
 
-        BatteryStatusModelClass batteryStatus = Commons.getCurrentBatteryStatus(requireContext());
+        BatteryStatusModelClass batteryStatus = Commons.getCurrentBatteryStatus(getContext());
 
         // location data
         Map<String,Object> locData = new HashMap<>();

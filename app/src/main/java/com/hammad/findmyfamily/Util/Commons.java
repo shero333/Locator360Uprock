@@ -80,6 +80,7 @@ public class Commons {
         }
     }
 
+    @SuppressLint("SimpleDateFormat")
     public static File bitmapToFile(Context context, String currentPicturePath) {
 
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
