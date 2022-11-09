@@ -1,4 +1,4 @@
-package com.hammad.findmyfamily;
+package com.hammad.findmyfamily.WorkManager;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -78,7 +78,7 @@ public class LocationUpdateWorker extends Worker {
                     locData.put(Constants.LAT,location.getLatitude());
                     locData.put(Constants.LNG,location.getLongitude());
                     locData.put(Constants.LOC_ADDRESS,locationAddress);
-                    locData.put(Constants.IS_PHONE_CHARGING,batteryStatus.isCharging());
+                    locData.put(Constants.IS_PHONE_CHARGING,batteryStatus.isCharging() + " worker called");
                     locData.put(Constants.BATTERY_PERCENTAGE,batteryStatus.getBatteryPercentage());
 
                     FirebaseFirestore.getInstance().collection(Constants.USERS_COLLECTION)
@@ -96,7 +96,5 @@ public class LocationUpdateWorker extends Worker {
 
         return null;
     }
-
-
 
 }

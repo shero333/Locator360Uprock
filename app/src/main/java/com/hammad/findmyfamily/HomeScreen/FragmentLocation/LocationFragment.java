@@ -9,6 +9,7 @@ import android.content.pm.PackageManager;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
+import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.Handler;
@@ -26,10 +27,14 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.work.Constraints;
+import androidx.work.ExistingPeriodicWorkPolicy;
+import androidx.work.NetworkType;
+import androidx.work.PeriodicWorkRequest;
+import androidx.work.WorkManager;
 
 import com.google.android.gms.location.CurrentLocationRequest;
 import com.google.android.gms.location.FusedLocationProviderClient;
-import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -53,6 +58,7 @@ import com.hammad.findmyfamily.R;
 import com.hammad.findmyfamily.SharedPreference.SharedPreference;
 import com.hammad.findmyfamily.Util.Commons;
 import com.hammad.findmyfamily.Util.Constants;
+import com.hammad.findmyfamily.WorkManager.LocationUpdateWorker;
 import com.hammad.findmyfamily.databinding.FragmentLocationBinding;
 import com.hammad.findmyfamily.databinding.LayoutBottomSheetMapTypeBinding;
 
@@ -63,6 +69,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
+import java.util.concurrent.TimeUnit;
 
 public class LocationFragment extends Fragment implements OnMapReadyCallback, CircleToolbarAdapter.OnToolbarCircleClickListener, LocationListener, BottomSheetMemberAdapter.OnAddedMemberClickInterface, BottomSheetMemberAdapter.OnAddNewMemberInterface {
 
@@ -111,8 +118,25 @@ public class LocationFragment extends Fragment implements OnMapReadyCallback, Ci
         // TODO: 08/11/2022 set the permission & gps dialog 'navigating to apps setting' along with some location permission setting
         // TODO: 08/11/2022 onProviderDisabled or enabled functions of gps
 
+        //work manager for updating user location every half an hour
+        periodicLocationUpdated();
 
         return view;
+    }
+
+    private void periodicLocationUpdated() {
+
+        Constraints constraints = new Constraints.Builder()
+                .setRequiredNetworkType(NetworkType.CONNECTED)
+                .setRequiresBatteryNotLow(true)
+                .build();
+
+        PeriodicWorkRequest periodicLocationUpdate = new PeriodicWorkRequest.Builder(LocationUpdateWorker.class,1, TimeUnit.HOURS)
+                                                    .setConstraints(constraints).build();
+
+        WorkManager.getInstance(requireContext())
+                .enqueueUniquePeriodicWork("locUpdate", ExistingPeriodicWorkPolicy.KEEP,periodicLocationUpdate);
+
     }
 
     private void initializeMap() {
@@ -269,7 +293,7 @@ public class LocationFragment extends Fragment implements OnMapReadyCallback, Ci
 
         // 60000 milliseconds = 1 minute
         // 1000 milliseconds = 1 second
-        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 60000, 100, this::onLocationChanged);
+        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 60000, 100, this);
     }
 
     // LocationListener overridden method

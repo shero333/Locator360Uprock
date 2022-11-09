@@ -34,6 +34,7 @@ public class HomeActivity extends AppCompatActivity {
         clickListeners();
     }
 
+
     private void clickListeners() {
 
         //constraint location bottom click listener
@@ -93,4 +94,5 @@ public class HomeActivity extends AppCompatActivity {
         replaceFragment(new FragmentSafety());
 
     }
+
 }
