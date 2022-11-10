@@ -33,13 +33,15 @@ public class LocationUpdateWorker extends Worker {
 
     public LocationUpdateWorker(@NonNull Context context, @NonNull WorkerParameters workerParams) {
         super(context, workerParams);
-        this.context = context;
+        //this.context = context;
     }
 
     @SuppressLint("MissingPermission")
     @NonNull
     @Override
     public Result doWork() {
+
+        context = getApplicationContext();
 
         FusedLocationProviderClient mLocationClient = LocationServices.getFusedLocationProviderClient(context);
 
@@ -94,7 +96,6 @@ public class LocationUpdateWorker extends Worker {
 
         });
 
-        return null;
+        return Result.success();
     }
-
 }

@@ -7,17 +7,25 @@ import java.util.List;
 
 public class CircleModel implements Parcelable {
 
-    private String circleId;
-    private String circleOwnerId;
-    private String circleName;
-    private List<String> circleMembersList;
-
+    String circleId;
+    String circleOwnerId;
+    String circleName;
+    List<String> circleMembersList;
+    String circleJoinCode;
 
     public CircleModel(String circleId, String circleOwnerId, String circleName, List<String> circleMembersList) {
         this.circleId = circleId;
         this.circleOwnerId = circleOwnerId;
         this.circleName = circleName;
         this.circleMembersList = circleMembersList;
+    }
+
+    public CircleModel(String circleId, String circleOwnerId, String circleName, List<String> circleMembersList, String circleJoinCode) {
+        this.circleId = circleId;
+        this.circleOwnerId = circleOwnerId;
+        this.circleName = circleName;
+        this.circleMembersList = circleMembersList;
+        this.circleJoinCode = circleJoinCode;
     }
 
     public String getCircleId() {
@@ -34,6 +42,10 @@ public class CircleModel implements Parcelable {
 
     public List<String> getCircleMembersList() {
         return circleMembersList;
+    }
+
+    public String getCircleJoinCode() {
+        return circleJoinCode;
     }
 
     protected CircleModel(Parcel in) {

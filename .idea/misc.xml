@@ -107,7 +107,7 @@
         <entry key="..\:/Hammad/Locator360/app/src/main/res/layout/layout_toolbar.xml" value="0.22" />
         <entry key="..\:/Hammad/Locator360/app/src/main/res/layout/sample.xml" value="0.2046875" />
         <entry key="..\:/Hammad/Locator360/app/src/main/res/layout/screen_welcome.xml" value="0.18333333333333332" />
-        <entry key="..\:/Hammad/Locator360/app/src/main/res/layout/toolbar_list_item.xml" value="0.2046875" />
+        <entry key="..\:/Hammad/Locator360/app/src/main/res/layout/toolbar_list_item.xml" value="0.25" />
         <entry key="..\:/Hammad/Locator360/app/src/main/res/menu/menu_add_contact.xml" value="0.21" />
         <entry key="..\:/Hammad/Locator360/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml" value="0.1515" />
         <entry key="..\:/Hammad/Locator360/app/src/main/res/mipmap-anydpi-v26/ic_launcher_round.xml" value="0.1515" />
@@ -115,7 +115,7 @@
       </map>
     </option>
   </component>
-  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" project-jdk-name="11" project-jdk-type="JavaSDK">
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="Android Studio default JDK" project-jdk-type="JavaSDK">
     <output url="file://$PROJECT_DIR$/build/classes" />
   </component>
   <component name="ProjectType">

@@ -49,9 +49,12 @@ import com.google.android.gms.tasks.OnTokenCanceledListener;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.hammad.findmyfamily.HomeScreen.FragmentLocation.AddMember.AddMemberActivity;
+import com.hammad.findmyfamily.HomeScreen.FragmentLocation.BottomSheetMembers.BottomSheetMemberAdapter;
 import com.hammad.findmyfamily.HomeScreen.FragmentLocation.CreateCircle.CreateCircleMainActivity;
+import com.hammad.findmyfamily.HomeScreen.FragmentLocation.JoinCircle.CircleModel;
 import com.hammad.findmyfamily.HomeScreen.FragmentLocation.JoinCircle.JoinCircleMainActivity;
 import com.hammad.findmyfamily.Permission.Permissions;
 import com.hammad.findmyfamily.R;
@@ -75,9 +78,6 @@ public class LocationFragment extends Fragment implements OnMapReadyCallback, Ci
 
     private static final String TAG = "FRAG_LOCATION";
 
-    //circle list
-    private final List<String> circleStringList = new ArrayList<>();
-
     //show and hide extended toolbar view animations
     Animation showToolbarExtAnim, hideToolbarExtAnim;
 
@@ -93,6 +93,9 @@ public class LocationFragment extends Fragment implements OnMapReadyCallback, Ci
     //recyclerview of extended toolbar
     private RecyclerView circleSelectionRecyclerView;
 
+    // circle list
+    List<CircleModel> circleList = new ArrayList<>();
+
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
@@ -106,6 +109,9 @@ public class LocationFragment extends Fragment implements OnMapReadyCallback, Ci
         //checking location permission
         checkLocationPermission();
 
+        // fetch firebase data
+        getDetailDataFromFirebase();
+
         //recyclerview initialization
         circleSelectionRecyclerView = binding.toolbarExtendedView.recyclerViewCircle;
 
@@ -113,7 +119,7 @@ public class LocationFragment extends Fragment implements OnMapReadyCallback, Ci
         clickListeners();
 
         //setting the toolbar circle recyclerview
-        selectCircleRecyclerview();
+        //selectCircleRecyclerview();
 
         // TODO: 08/11/2022 set the permission & gps dialog 'navigating to apps setting' along with some location permission setting
         // TODO: 08/11/2022 onProviderDisabled or enabled functions of gps
@@ -131,11 +137,11 @@ public class LocationFragment extends Fragment implements OnMapReadyCallback, Ci
                 .setRequiresBatteryNotLow(true)
                 .build();
 
-        PeriodicWorkRequest periodicLocationUpdate = new PeriodicWorkRequest.Builder(LocationUpdateWorker.class,1, TimeUnit.HOURS)
-                                                    .setConstraints(constraints).build();
+        PeriodicWorkRequest periodicLocationUpdate = new PeriodicWorkRequest.Builder(LocationUpdateWorker.class, 1, TimeUnit.HOURS)
+                .setConstraints(constraints).build();
 
-        WorkManager.getInstance(requireContext())
-                .enqueueUniquePeriodicWork("locUpdate", ExistingPeriodicWorkPolicy.KEEP,periodicLocationUpdate);
+        WorkManager.getInstance(requireActivity().getApplicationContext())
+                .enqueueUniquePeriodicWork("locUpdate", ExistingPeriodicWorkPolicy.KEEP, periodicLocationUpdate);
 
     }
 
@@ -143,7 +149,7 @@ public class LocationFragment extends Fragment implements OnMapReadyCallback, Ci
 
         SupportMapFragment mapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(binding.map.getId());
 
-        if(mapFragment != null){
+        if (mapFragment != null) {
             mapFragment.getMapAsync(this);
         }
 
@@ -182,10 +188,13 @@ public class LocationFragment extends Fragment implements OnMapReadyCallback, Ci
     }
 
     ActivityResultLauncher<Intent> gpsActivityResultLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
+        //this condition not called
         if (result.getResultCode() == Activity.RESULT_OK) {
             Log.i(TAG, "gpsActivityResultLauncher");
             //get location
             getLocationThroughLastKnownApproach();
+        } else {
+            Log.i(TAG, "gpsActivityResultLauncher: else called");
         }
     });
 
@@ -229,8 +238,7 @@ public class LocationFragment extends Fragment implements OnMapReadyCallback, Ci
                     Log.i(TAG, "getLocationThroughLastKnownApproach() -> location != null");
 
                     updateMapMarker(new LatLng(location.getLatitude(), location.getLongitude()));
-                }
-                else {
+                } else {
                     Log.i(TAG, "getLocationThroughLastKnownApproach() -> location == null");
 
                     /*
@@ -276,8 +284,7 @@ public class LocationFragment extends Fragment implements OnMapReadyCallback, Ci
 
                     // moves marker to the location
                     updateMapMarker(new LatLng(location.getLatitude(), location.getLongitude()));
-                }
-                else if(location == null) {
+                } else if (location == null) {
                     Log.i(TAG, "getLocationThroughCurrentLocationApproach() -> location == null");
                 }
             }
@@ -311,16 +318,16 @@ public class LocationFragment extends Fragment implements OnMapReadyCallback, Ci
 
         String currentUserEmail = Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getEmail();
 
-        BatteryStatusModelClass batteryStatus = Commons.getCurrentBatteryStatus(getContext());
+        BatteryStatusModelClass batteryStatus = Commons.getCurrentBatteryStatus(requireContext());
 
         // location data
-        Map<String,Object> locData = new HashMap<>();
+        Map<String, Object> locData = new HashMap<>();
 
-        locData.put(Constants.LAT,location.getLatitude());
-        locData.put(Constants.LNG,location.getLongitude());
-        locData.put(Constants.LOC_ADDRESS,locationAddress);
-        locData.put(Constants.IS_PHONE_CHARGING,batteryStatus.isCharging());
-        locData.put(Constants.BATTERY_PERCENTAGE,batteryStatus.getBatteryPercentage());
+        locData.put(Constants.LAT, location.getLatitude());
+        locData.put(Constants.LNG, location.getLongitude());
+        locData.put(Constants.LOC_ADDRESS, locationAddress);
+        locData.put(Constants.IS_PHONE_CHARGING, batteryStatus.isCharging());
+        locData.put(Constants.BATTERY_PERCENTAGE, batteryStatus.getBatteryPercentage());
 
         FirebaseFirestore.getInstance().collection(Constants.USERS_COLLECTION)
                 .document(Objects.requireNonNull(currentUserEmail))
@@ -328,7 +335,7 @@ public class LocationFragment extends Fragment implements OnMapReadyCallback, Ci
                 .document(String.valueOf(System.currentTimeMillis()))
                 .set(locData)
                 .addOnSuccessListener(unused -> Log.i(TAG, "Firestore location update successful"))
-                .addOnFailureListener(e -> Log.e(TAG, "Error. Firestore location update: "+e.getMessage()));
+                .addOnFailureListener(e -> Log.e(TAG, "Error. Firestore location update: " + e.getMessage()));
 
     }
 
@@ -365,7 +372,7 @@ public class LocationFragment extends Fragment implements OnMapReadyCallback, Ci
                     break;
             }
 
-            if(mGoogleMap != null) {
+            if (mGoogleMap != null) {
                 mGoogleMap.addMarker(new MarkerOptions()
                         .position(latLng)
                         .icon(BitmapDescriptorFactory.defaultMarker()));
@@ -377,18 +384,46 @@ public class LocationFragment extends Fragment implements OnMapReadyCallback, Ci
             List<Address> addresses = null;
             try {
                 addresses = geocoder.getFromLocation(location.getLatitude(), location.getLongitude(), 1);
-            }
-            catch (IOException e) {
+            } catch (IOException e) {
                 e.printStackTrace();
             }
 
-            if(addresses != null) {
+            if (addresses != null) {
                 locationAddress = addresses.get(0).getAddressLine(0);
             }
 
             Toast.makeText(getContext(), locationAddress, Toast.LENGTH_SHORT).show();
 
         }
+    }
+
+    private void getDetailDataFromFirebase() {
+
+        //current user email
+        String currentUserEmail = Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getEmail();
+
+        FirebaseFirestore.getInstance().collectionGroup(Constants.CIRCLE_COLLECTION)
+                .whereArrayContains(Constants.CIRCLE_MEMBERS, Objects.requireNonNull(currentUserEmail))
+                .addSnapshotListener((value, error) -> {
+
+                    // setting the list to empty
+                    circleList.clear();
+
+                    if (value != null) {
+
+                        for (DocumentSnapshot doc : value) {
+
+                            circleList.add(new CircleModel(doc.getId(), Objects.requireNonNull(doc.get(Constants.CIRCLE_ADMIN)).toString(),doc.getString(Constants.CIRCLE_NAME),
+                                    (List<String>) doc.get(Constants.CIRCLE_MEMBERS),doc.getString(Constants.CIRCLE_JOIN_CODE)));
+                        }
+
+                        // setting the circle recyclerview
+                        selectCircleRecyclerview();
+                    }
+
+                });
+
+
     }
 
     private void loadAnimations() {
@@ -467,26 +502,25 @@ public class LocationFragment extends Fragment implements OnMapReadyCallback, Ci
     private void addCircleMember(boolean isToolbarAddMemberBtnClicked) {
 
         Intent intent = new Intent(getActivity(), AddMemberActivity.class);
-        intent.putExtra(Constants.ADD_MEMBER_BUTTON_CLICKED,isToolbarAddMemberBtnClicked);
+        intent.putExtra(Constants.ADD_MEMBER_BUTTON_CLICKED, isToolbarAddMemberBtnClicked);
         addMemberResultLauncher.launch(intent);
     }
 
     ActivityResultLauncher<Intent> addMemberResultLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
 
-        if(result.getResultCode() == Activity.RESULT_OK) {
+        if (result.getResultCode() == Activity.RESULT_OK) {
 
             Intent intent = result.getData();
 
-            if(intent != null) {
+            if (intent != null) {
 
-                boolean isToolbarAddMemberBtnClicked = intent.getBooleanExtra(Constants.ADD_MEMBER_BUTTON_CLICKED,false);
+                boolean isToolbarAddMemberBtnClicked = intent.getBooleanExtra(Constants.ADD_MEMBER_BUTTON_CLICKED, false);
 
                 if (isToolbarAddMemberBtnClicked) {
 
                     //delay the shrunk to give an animation type look
                     delayCircleShrunkView();
-                }
-                else {
+                } else {
 
                     //collapse the bottom navigation
                     new Handler().postDelayed(new Runnable() {
@@ -496,7 +530,7 @@ public class LocationFragment extends Fragment implements OnMapReadyCallback, Ci
                             BottomSheetBehavior<View> bottomSheetBehavior = BottomSheetBehavior.from(bottomSheet);
                             bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
                         }
-                    },300);
+                    }, 300);
 
                 }
 
@@ -511,18 +545,18 @@ public class LocationFragment extends Fragment implements OnMapReadyCallback, Ci
 
     ActivityResultLauncher<Intent> createNewCircleResultLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
 
-        if(result.getResultCode() == Activity.RESULT_OK) {
+        if (result.getResultCode() == Activity.RESULT_OK) {
 
             //delay the shrunk to give an animation type look
             delayCircleShrunkView();
 
             Intent intent = result.getData();
 
-            if(intent != null) {
+            if (intent != null) {
 
-                boolean isCircleCreated = intent.getBooleanExtra(Constants.IS_CIRCLE_CREATED,false);
+                boolean isCircleCreated = intent.getBooleanExtra(Constants.IS_CIRCLE_CREATED, false);
 
-                if(isCircleCreated) {
+                if (isCircleCreated) {
 
                     Toast.makeText(getContext(), "Circle Created Successfully.", Toast.LENGTH_SHORT).show();
 
@@ -539,11 +573,11 @@ public class LocationFragment extends Fragment implements OnMapReadyCallback, Ci
 
     ActivityResultLauncher<Intent> joinCircleResultLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
 
-        if(result.getResultCode() == Activity.RESULT_OK) {
+        if (result.getResultCode() == Activity.RESULT_OK) {
 
             Intent intent = result.getData();
 
-            if(intent != null) {
+            if (intent != null) {
 
                 //delay the shrunk to give an animation type look
                 delayCircleShrunkView();
@@ -552,8 +586,7 @@ public class LocationFragment extends Fragment implements OnMapReadyCallback, Ci
 
                 //selects the currently joined circle and display related data
             }
-        }
-        else if(result.getResultCode() == Activity.RESULT_CANCELED) {
+        } else if (result.getResultCode() == Activity.RESULT_CANCELED) {
             //when back pressed is called from 'JoinCircleMainActivity'
             delayCircleShrunkView();
         }
@@ -563,7 +596,7 @@ public class LocationFragment extends Fragment implements OnMapReadyCallback, Ci
     //delays the extended toolbar view to give it an animation like flow when Activity Result Launchers are called
     private void delayCircleShrunkView() {
 
-        new Handler().postDelayed(this::circleShrunkView,300);
+        new Handler().postDelayed(this::circleShrunkView, 300);
     }
 
     private void circleShrunkView() {
@@ -599,14 +632,10 @@ public class LocationFragment extends Fragment implements OnMapReadyCallback, Ci
 
     private void selectCircleRecyclerview() {
 
-        circleStringList.add("Circle 1");
-        circleStringList.add("Circle 2");
-        circleStringList.add("Circle 3");
-
         LinearLayoutManager layoutManager = new LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false);
         circleSelectionRecyclerView.setLayoutManager(layoutManager);
 
-        CircleToolbarAdapter adapterToolbar = new CircleToolbarAdapter(requireContext(), circleStringList, this);
+        CircleToolbarAdapter adapterToolbar = new CircleToolbarAdapter(requireContext(), circleList, this);
         circleSelectionRecyclerView.setAdapter(adapterToolbar);
     }
 
@@ -614,17 +643,17 @@ public class LocationFragment extends Fragment implements OnMapReadyCallback, Ci
     @Override
     public void onCircleSelected(int position) {
 
-        Toast.makeText(requireContext(), circleStringList.get(position), Toast.LENGTH_SHORT).show();
+        Toast.makeText(requireContext(), circleList.get(position).getCircleName(), Toast.LENGTH_SHORT).show();
     }
 
     private void bottomSheetMembers() {
 
-        setBottomSheetRecyclerView();
+        //setBottomSheetMembersRecyclerView();
 
         binding.bottomSheetMembers.consPlaces.setOnClickListener(v -> Toast.makeText(getContext(), "Places", Toast.LENGTH_SHORT).show());
     }
 
-    private void setBottomSheetRecyclerView() {
+    private void setBottomSheetMembersRecyclerView() {
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false);
         binding.bottomSheetMembers.recyclerBottomSheetMember.setLayoutManager(layoutManager);

@@ -2,7 +2,8 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <androidx.constraintlayout.utils.widget.ImageFilterView
         android:id="@+id/img_view_member_profile"
@@ -22,7 +23,9 @@
         android:textAllCaps="true"
         android:textStyle="bold"
         android:textAlignment="center"
-        android:text="J"
+        tools:text="J"
+        android:visibility="gone"
+        tools:visibility="visible"
         android:textColor="@color/white"
         android:textSize="@dimen/_18ssp"
         app:layout_constraintStart_toStartOf="@id/img_view_member_profile"
@@ -37,7 +40,7 @@
         android:textSize="@dimen/_14ssp"
         android:textStyle="bold"
         android:textColor="@color/black"
-        android:text="Jhonny Depp"
+        tools:text="Jhonny Depp"
         android:layout_marginStart="@dimen/_10sdp"
         android:layout_marginEnd="@dimen/_10sdp"
         app:layout_constraintStart_toEndOf="@id/img_view_member_profile"
@@ -59,6 +62,7 @@
             android:layout_width="@dimen/_30sdp"
             android:layout_height="@dimen/_10sdp"
             android:src="@drawable/ic_battery_good"
+            android:contentDescription="@null"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -73,7 +77,7 @@
             android:textStyle="bold"
             android:textSize="@dimen/_9ssp"
             android:textColor="@color/darkGrey"
-            android:text="70%"
+            tools:text="70%"
             android:layout_marginStart="@dimen/_5sdp"
             android:layout_marginTop="@dimen/_5sdp"
             android:layout_marginBottom="@dimen/_5sdp"
@@ -91,8 +95,7 @@
         android:layout_height="wrap_content"
         android:textSize="@dimen/_12ssp"
         android:textColor="#A6000000"
-
-        android:text="Sector E, DHA Rawalpindi, Pakistan"
+        tools:text="Sector E, DHA Rawalpindi, Pakistan"
         android:layout_marginTop="@dimen/_5sdp"
         app:layout_constraintStart_toStartOf="@id/txt_view_member_name"
         app:layout_constraintEnd_toEndOf="@id/cons_battery"
@@ -108,7 +111,7 @@
         app:layout_constraintTop_toBottomOf="@id/txt_view_last_known_address"
         android:textStyle="bold"
         android:textColor="@color/orange"
-        android:text="Last seen: 12:42 PM"
+        tools:text="Last seen: 12:42 PM"
         android:textSize="@dimen/_12ssp"/>
 
     <TextView

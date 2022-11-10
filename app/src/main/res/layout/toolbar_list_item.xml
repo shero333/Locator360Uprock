@@ -45,5 +45,17 @@
         app:layout_constraintTop_toTopOf="@id/img_view_circle_picture"
         app:layout_constraintBottom_toBottomOf="@id/img_view_circle_picture"/>
 
+    <com.google.android.material.imageview.ShapeableImageView
+        android:id="@+id/img_check"
+        android:layout_width="@dimen/_20sdp"
+        android:layout_height="@dimen/_20sdp"
+        android:src="@drawable/ic_check"
+        android:visibility="gone"
+        app:tint="@android:color/holo_green_dark"
+        app:layout_constraintHorizontal_bias="0.96"
+        app:layout_constraintStart_toEndOf="@id/txt_circle_name"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/txt_circle_name"
+        app:layout_constraintBottom_toBottomOf="@id/txt_circle_name"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
