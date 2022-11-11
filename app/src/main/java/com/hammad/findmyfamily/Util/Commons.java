@@ -537,6 +537,7 @@ public class Commons {
         void onCircleAvailability(boolean doesCircleExist, CircleModel circleModel);
     }
 
+    @SuppressWarnings("unchecked")
     public static void checkCircleAvailability(Context context, String enteredInviteCode, OnCircleAvailabilityCheckListener onCircleAvailabilityCheckListener) {
 
         FirebaseFirestore.getInstance().collectionGroup(Constants.CIRCLE_COLLECTION)
@@ -585,5 +586,11 @@ public class Commons {
         int batteryPercentage = batteryManager.getIntProperty(BatteryManager.BATTERY_PROPERTY_CAPACITY);
 
         return new BatteryStatusModelClass(isCharging,batteryPercentage);
+    }
+
+    @SuppressLint("SimpleDateFormat")
+    public static String timeInMilliToDateFormat(String timeInMilliSeconds) {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd MMM yyyy HH:mm aaa");
+        return dateFormat.format(new Date(Long.parseLong(timeInMilliSeconds))).toUpperCase();
     }
 }

@@ -33,7 +33,6 @@ public class LocationUpdateWorker extends Worker {
 
     public LocationUpdateWorker(@NonNull Context context, @NonNull WorkerParameters workerParams) {
         super(context, workerParams);
-        //this.context = context;
     }
 
     @SuppressLint("MissingPermission")
@@ -80,13 +79,14 @@ public class LocationUpdateWorker extends Worker {
                     locData.put(Constants.LAT,location.getLatitude());
                     locData.put(Constants.LNG,location.getLongitude());
                     locData.put(Constants.LOC_ADDRESS,locationAddress);
-                    locData.put(Constants.IS_PHONE_CHARGING,batteryStatus.isCharging() + " worker called");
+                    locData.put(Constants.IS_PHONE_CHARGING,batteryStatus.isCharging());
                     locData.put(Constants.BATTERY_PERCENTAGE,batteryStatus.getBatteryPercentage());
+                    locData.put(Constants.LOC_TIMESTAMP,String.valueOf(System.currentTimeMillis()));
 
                     FirebaseFirestore.getInstance().collection(Constants.USERS_COLLECTION)
                             .document(Objects.requireNonNull(currentUserEmail))
                             .collection(Constants.LOCATION_COLLECTION)
-                            .document(String.valueOf(System.currentTimeMillis()))
+                            .document()
                             .set(locData)
                             .addOnSuccessListener(unused -> Log.i(TAG, "worker called: successful location update."))
                             .addOnFailureListener(e -> Log.e(TAG, "worker called: error -> "+e.getMessage()));

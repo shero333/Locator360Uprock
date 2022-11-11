@@ -41,7 +41,7 @@ public interface Constants {
      String LOC_ADDRESS = "loc_address";
      String IS_PHONE_CHARGING = "is_phone_charging";
      String BATTERY_PERCENTAGE = "battery_percentage";
-     String IS_POWER_SAVING_ON = "is_power_saving_on";
+     String LOC_TIMESTAMP = "loc_timestamp";
 
      //variables for inflating different view types in members bottom sheet
      int VIEW_TYPE_BUTTON = 1;

@@ -100,9 +100,14 @@ public class BottomSheetMemberAdapter extends RecyclerView.Adapter<BottomSheetMe
             // battery percentage
             recyclerViewItemBinding.txtViewBatteryPercentage.setText(String.valueOf(memberItem.getBatteryPercentage()).concat(" %"));
 
-            //time and location address
+            // last known location address
+            recyclerViewItemBinding.txtViewLastKnownAddress.setText(memberItem.getLocationAddress());
 
-            //recyclerViewItemBinding.imgViewMemberProfile.setOnClickListener(v -> addedMemberInterface.onAddedMemberClicked(position));
+            // time stamp
+            recyclerViewItemBinding.txtViewTimestamp.setText(memberItem.getLocationTimestamp());
+
+            // view click listener
+            recyclerViewItemBinding.consMemberBottomSheet.setOnClickListener(v -> addedMemberInterface.onAddedMemberClicked(position));
 
         } else if (getItemViewType(position) == Constants.VIEW_TYPE_BUTTON) {
 
@@ -155,4 +160,5 @@ public class BottomSheetMemberAdapter extends RecyclerView.Adapter<BottomSheetMe
             BottomSheetMemberAdapter.this.addNewMemberBinding = newMemberBinding;
         }
     }
+
 }

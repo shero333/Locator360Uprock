@@ -3,7 +3,8 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools">
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/cons_member_bottom_sheet">
 
     <androidx.constraintlayout.utils.widget.ImageFilterView
         android:id="@+id/img_view_member_profile"
@@ -111,7 +112,7 @@
         app:layout_constraintTop_toBottomOf="@id/txt_view_last_known_address"
         android:textStyle="bold"
         android:textColor="@color/orange"
-        tools:text="Last seen: 12:42 PM"
+        tools:text="@string/last_seen"
         android:textSize="@dimen/_12ssp"/>
 
     <TextView
