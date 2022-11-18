@@ -410,6 +410,7 @@ public class LocationFragment extends Fragment implements OnMapReadyCallback, Ci
                             //setting the circle as default
                             SharedPreference.setCircleId(circleList.get(0).getCircleId());
                             SharedPreference.setCircleName(circleList.get(0).getCircleName());
+                            SharedPreference.setCircleInviteCode(circleList.get(0).getCircleJoinCode());
 
                             // setting the circle name to toolbar & toolbar extended view
                             binding.toolbar.textViewCircleName.setText(SharedPreference.getCircleName());
@@ -608,6 +609,7 @@ public class LocationFragment extends Fragment implements OnMapReadyCallback, Ci
 
                     //delay the shrunk to give an animation type look
                     delayCircleShrunkView();
+
                 } else {
 
                     //collapse the bottom navigation

@@ -113,9 +113,10 @@ public class CreateCircleMainActivity extends AppCompatActivity {
                                 //setting progress bar visibility
                                 binding.progressBar.setVisibility(View.GONE);
 
-                                // setting the circle id & name to shared preference
+                                // setting the circle id, name & join code to shared preference
                                 SharedPreference.setCircleId(documentReference.getId());
                                 SharedPreference.setCircleName(circleName);
+                                SharedPreference.setCircleInviteCode(circleCode);
 
                                 //navigating back to location fragment
                                 finishCurrentActivity(true);
