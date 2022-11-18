@@ -98,4 +98,5 @@ public class LocationUpdateWorker extends Worker {
 
         return Result.success();
     }
+
 }

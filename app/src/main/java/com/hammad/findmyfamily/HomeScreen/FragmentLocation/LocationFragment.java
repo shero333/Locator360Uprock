@@ -6,8 +6,6 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.location.Address;
-import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -46,8 +44,6 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.CancellationToken;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.OnTokenCanceledListener;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
@@ -73,11 +69,9 @@ import com.hammad.findmyfamily.WorkManager.LocationUpdateWorker;
 import com.hammad.findmyfamily.databinding.FragmentLocationBinding;
 import com.hammad.findmyfamily.databinding.LayoutBottomSheetMapTypeBinding;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.TimeUnit;
@@ -94,9 +88,6 @@ public class LocationFragment extends Fragment implements OnMapReadyCallback, Ci
     private FusedLocationProviderClient mLocationClient;
     private GoogleMap mGoogleMap;
     private Location location;
-
-    //string for saving location address
-    private String locationAddress;
 
     //recyclerview of extended toolbar
     private RecyclerView circleSelectionRecyclerView;
@@ -128,9 +119,6 @@ public class LocationFragment extends Fragment implements OnMapReadyCallback, Ci
 
         //items click listener
         clickListeners();
-
-        //setting the toolbar circle recyclerview
-        //selectCircleRecyclerview();
 
         // TODO: 08/11/2022 set the permission & gps dialog 'navigating to apps setting' along with some location permission setting
         // TODO: 08/11/2022 onProviderDisabled or enabled functions of gps
@@ -336,7 +324,7 @@ public class LocationFragment extends Fragment implements OnMapReadyCallback, Ci
 
         locData.put(Constants.LAT, location.getLatitude());
         locData.put(Constants.LNG, location.getLongitude());
-        locData.put(Constants.LOC_ADDRESS, locationAddress);
+        locData.put(Constants.LOC_ADDRESS, Commons.getLocationAddress(requireContext(),location));
         locData.put(Constants.IS_PHONE_CHARGING, batteryStatus.isCharging());
         locData.put(Constants.BATTERY_PERCENTAGE, batteryStatus.getBatteryPercentage());
         locData.put(Constants.LOC_TIMESTAMP,String.valueOf(System.currentTimeMillis()));
@@ -389,23 +377,6 @@ public class LocationFragment extends Fragment implements OnMapReadyCallback, Ci
                         .position(latLng)
                         .icon(BitmapDescriptorFactory.defaultMarker()));
             }
-
-            //getting the address of current location
-            Geocoder geocoder = new Geocoder(requireContext(), Locale.getDefault());
-
-            List<Address> addresses = null;
-            try {
-                addresses = geocoder.getFromLocation(location.getLatitude(), location.getLongitude(), 1);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-
-            if (addresses != null) {
-                locationAddress = addresses.get(0).getAddressLine(0);
-            }
-
-            Toast.makeText(getContext(), locationAddress, Toast.LENGTH_SHORT).show();
-
         }
     }
 
@@ -416,10 +387,12 @@ public class LocationFragment extends Fragment implements OnMapReadyCallback, Ci
         String currentUserEmail = Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getEmail();
 
         FirebaseFirestore.getInstance().collectionGroup(Constants.CIRCLE_COLLECTION)
-                .whereArrayContains(Constants.CIRCLE_MEMBERS, Objects.requireNonNull(currentUserEmail))
+                .whereArrayContains(Constants.CIRCLE_MEMBERS, currentUserEmail)
                 .addSnapshotListener((value, error) -> {
 
-                    // setting the list to empty
+                    Log.i("HELLO_123", "Group Collection Circle called");
+
+                    // clearing the circle list
                     circleList.clear();
 
                     if (value != null) {
@@ -430,31 +403,28 @@ public class LocationFragment extends Fragment implements OnMapReadyCallback, Ci
                                     (List<String>) doc.get(Constants.CIRCLE_MEMBERS),doc.getString(Constants.CIRCLE_JOIN_CODE)));
                         }
 
-
                         if (SharedPreference.getCircleId().equals(Constants.NULL)) {
-
-                            Log.i("HELLO_123", "Constant NUll: ");
-                            Log.i("HELLO_123", "circle list size: "+circleList.size());
 
                             MemberDetail memberDetail = new MemberDetail();
 
                             //setting the circle as default
                             SharedPreference.setCircleId(circleList.get(0).getCircleId());
+                            SharedPreference.setCircleName(circleList.get(0).getCircleName());
+
+                            // setting the circle name to toolbar & toolbar extended view
+                            binding.toolbar.textViewCircleName.setText(SharedPreference.getCircleName());
+                            binding.toolbarExtendedView.txtCircleName.setText(SharedPreference.getCircleName());
 
                             // getting the members
                             for (String memberEmail : circleList.get(0).getCircleMembersList()) {
-
-                                Log.i("HELLO_123", "for loop 0: ");
 
                                 // getting the user info
                                 FirebaseFirestore.getInstance().collection(Constants.USERS_COLLECTION)
                                         .document(memberEmail)
                                         .addSnapshotListener((valueUserInfo, errorUserInfo) -> {
-                                            Log.i("HELLO_123", "user info: "+valueUserInfo.getId());
-                                            /*memberDetail.setMemberFirstName(valueUserInfo.getString(Constants.FIRST_NAME));
+                                            memberDetail.setMemberFirstName(valueUserInfo.getString(Constants.FIRST_NAME));
                                             memberDetail.setMemberLastName(valueUserInfo.getString(Constants.LAST_NAME));
-                                            memberDetail.setMemberImageUrl(valueUserInfo.getString(Constants.IMAGE_PATH));*/
-
+                                            memberDetail.setMemberImageUrl(valueUserInfo.getString(Constants.IMAGE_PATH));
                                         });
 
                                 // getting the last known location details
@@ -463,28 +433,74 @@ public class LocationFragment extends Fragment implements OnMapReadyCallback, Ci
                                         .collection(Constants.LOCATION_COLLECTION)
                                         .orderBy(Constants.LOC_TIMESTAMP, Query.Direction.DESCENDING)
                                         .limit(1)
-                                        .get()
-                                        .addOnSuccessListener(queryDocumentSnapshots -> {
-                                            Log.i("HELLO_123", "loc success: "+queryDocumentSnapshots.size());
-                                        })
-                                        .addOnFailureListener(e -> {
-                                            Log.i("HELLO_123", "loc failure: "+e.getMessage());
-                                        });
+                                        .addSnapshotListener((valueLoc, errorLoc) -> {
+                                            for (DocumentSnapshot doc: valueLoc) {
+                                                memberDetail.setLocationLat((doc.getDouble(Constants.LAT).toString()));
+                                                memberDetail.setLocationLng((doc.getDouble(Constants.LNG).toString()));
+                                                memberDetail.setLocationAddress(doc.getString(Constants.LOC_ADDRESS));
+                                                memberDetail.setLocationTimestamp(doc.getString(Constants.LOC_TIMESTAMP));
+                                                memberDetail.setBatteryPercentage(Math.toIntExact(doc.getLong(Constants.BATTERY_PERCENTAGE)));
+                                                memberDetail.setPhoneCharging(doc.getBoolean(Constants.IS_PHONE_CHARGING));
 
+                                                membersDetailList.add(memberDetail);
+                                            }
+
+                                            // setting the members recyclerview
+                                            setBottomSheetMembersRecyclerView(membersDetailList);
+                                        });
                             }
                         }
                         else if(!SharedPreference.getCircleId().equals(Constants.NULL)) {
 
-                            Log.i("HELLO_123", "Constant NOT NUll: ");
+                            Log.i("HELLO_123", "getDetailDataFromFirebase: else if called");
+                            // setting the circle name to toolbar & toolbar extended view
+                            binding.toolbar.textViewCircleName.setText(SharedPreference.getCircleName());
+                            binding.toolbarExtendedView.txtCircleName.setText(SharedPreference.getCircleName());
 
                             // if preference is not null, it means that any circle is selected as default
                             for (CircleModel circleModel: circleList) {
+                                Log.i("HELLO_123", "outer for called");
                                 if(circleModel.getCircleId().equals(SharedPreference.getCircleId())) {
-
+                                    Log.i("HELLO_123", "inner if called");
                                     for(String memberEmail : circleModel.getCircleMembersList()) {
 
-                                        //getting the data
+                                        //clears the pre-existing members detail list
+                                        membersDetailList.clear();
 
+                                        Log.i("HELLO_123", "inner for called");
+                                        MemberDetail memberDetail = new MemberDetail();
+
+                                        // getting the user info
+                                        FirebaseFirestore.getInstance().collection(Constants.USERS_COLLECTION)
+                                                .document(memberEmail)
+                                                .addSnapshotListener((valueUserInfo, errorUserInfo) -> {
+                                                    memberDetail.setMemberFirstName(valueUserInfo.getString(Constants.FIRST_NAME));
+                                                    memberDetail.setMemberLastName(valueUserInfo.getString(Constants.LAST_NAME));
+                                                    memberDetail.setMemberImageUrl(valueUserInfo.getString(Constants.IMAGE_PATH));
+                                                });
+
+                                        // getting the last known location details
+                                        FirebaseFirestore.getInstance().collection(Constants.USERS_COLLECTION)
+                                                .document(memberEmail)
+                                                .collection(Constants.LOCATION_COLLECTION)
+                                                .orderBy(Constants.LOC_TIMESTAMP, Query.Direction.DESCENDING)
+                                                .limit(1)
+                                                .addSnapshotListener((valueLoc, errorLoc) -> {
+
+                                                    for (DocumentSnapshot doc: valueLoc) {
+                                                        memberDetail.setLocationLat(doc.getDouble(Constants.LAT).toString());
+                                                        memberDetail.setLocationLng(doc.getDouble(Constants.LNG).toString());
+                                                        memberDetail.setLocationAddress(doc.getString(Constants.LOC_ADDRESS));
+                                                        memberDetail.setLocationTimestamp(doc.getString(Constants.LOC_TIMESTAMP));
+                                                        memberDetail.setBatteryPercentage(Math.toIntExact(doc.getLong(Constants.BATTERY_PERCENTAGE)));
+                                                        memberDetail.setPhoneCharging(doc.getBoolean(Constants.IS_PHONE_CHARGING));
+
+                                                        membersDetailList.add(memberDetail);
+                                                    }
+
+                                                    // members recyclerview
+                                                    setBottomSheetMembersRecyclerView(membersDetailList);
+                                                });
                                     }
 
                                     break;
@@ -492,60 +508,11 @@ public class LocationFragment extends Fragment implements OnMapReadyCallback, Ci
                             }
                         }
 
-                        /*// getting the last known location details
-                        for (CircleModel circleModel:circleList) {
-                            Log.i("HELLO_123", "circle name: "+circleModel.getCircleName());
-                            for (String s:circleModel.getCircleMembersList()) {
-                                Log.i("HELLO_123", "member: "+s);
-
-                               *//* FirebaseFirestore.getInstance().collection(Constants.USERS_COLLECTION)
-                                        .document(s)
-                                        .collection(Constants.LOCATION_COLLECTION)
-                                        .orderBy(Constants.LAT, Query.Direction.DESCENDING)
-                                        .limit(1)
-                                        .addSnapshotListener(new EventListener<QuerySnapshot>() {
-                                            @Override
-                                            public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
-
-                                            }
-                                        });*//*
-                                FirebaseFirestore.getInstance().collectionGroup(Constants.USERS_COLLECTION)
-                                        .whereEqualTo(Constants.EMAIL,s)
-                                        *//*.orderBy(Constants.BATTERY_PERCENTAGE, Query.Direction.DESCENDING)
-                                        .limit(1)*//*
-                                        .addSnapshotListener((value1, error1) -> {
-
-                                            if(value1 != null) {
-                                                for(DocumentSnapshot doc: value1) {
-
-                                                    Log.i(TAG, "f name: "+doc.getString(Constants.FIRST_NAME));
-                                                    Log.i(TAG, "l name: "+doc.getString(Constants.LAST_NAME));
-                                                    Log.i(TAG, "image url: "+doc.getString(Constants.IMAGE_PATH));
-
-                                                    Log.i(TAG, "loc id: "+doc.getId());
-                                                    Log.i(TAG, "lat: "+doc.getString(Constants.LAT));
-                                                    Log.i(TAG, "lng: "+doc.getString(Constants.LNG));
-                                                    Log.i(TAG, "last loc: "+doc.getString(Constants.LOC_ADDRESS));
-                                                    Log.i(TAG, "is phone charging: "+doc.getString(Constants.IS_PHONE_CHARGING));
-                                                    Log.i(TAG, "battery: "+doc.getString(Constants.BATTERY_PERCENTAGE));
-                                                }
-                                            }
-                                            else if(value1 == null) {
-                                                Log.i(TAG, "value 1: "+value1);
-                                            }
-
-
-                                            
-                                        });
-                            }
-                        }*/
-
                         // setting the circle recyclerview
                         selectCircleRecyclerview();
                     }
 
                 });
-
 
     }
 
@@ -598,8 +565,6 @@ public class LocationFragment extends Fragment implements OnMapReadyCallback, Ci
     }
 
     private void toolbarChat() {
-        //Toast.makeText(requireContext(), "Chat", Toast.LENGTH_SHORT).show();
-
         Commons.signOut(requireActivity());
     }
 
@@ -681,9 +646,11 @@ public class LocationFragment extends Fragment implements OnMapReadyCallback, Ci
 
                 if (isCircleCreated) {
 
-                    Toast.makeText(getContext(), "Circle Created Successfully.", Toast.LENGTH_SHORT).show();
+                    // setting the newly created circle name to toolbar & extended view
+                    binding.toolbar.textViewCircleName.setText(SharedPreference.getCircleName());
+                    binding.toolbarExtendedView.txtCircleName.setText(SharedPreference.getCircleName());
 
-                    //get the latest circle related data and set the newly created circle as selected
+                    Toast.makeText(requireContext(), "Circle Created Successfully.", Toast.LENGTH_SHORT).show();
                 }
             }
 
@@ -767,20 +734,24 @@ public class LocationFragment extends Fragment implements OnMapReadyCallback, Ci
     public void onCircleSelected(int position) {
 
         Toast.makeText(requireContext(), circleList.get(position).getCircleName(), Toast.LENGTH_SHORT).show();
+
+        // setting the updated circle name to toolbar & extended view
+        binding.toolbar.textViewCircleName.setText(SharedPreference.getCircleName());
+        binding.toolbarExtendedView.txtCircleName.setText(SharedPreference.getCircleName());
+
+        // fetch the updated data from firebase
     }
 
     private void bottomSheetMembers() {
 
-        //setBottomSheetMembersRecyclerView();
-
         binding.bottomSheetMembers.consPlaces.setOnClickListener(v -> Toast.makeText(getContext(), "Places", Toast.LENGTH_SHORT).show());
     }
 
-    private void setBottomSheetMembersRecyclerView() {
+    private void setBottomSheetMembersRecyclerView(List<MemberDetail> memberDetailsList) {
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false);
         binding.bottomSheetMembers.recyclerBottomSheetMember.setLayoutManager(layoutManager);
-        binding.bottomSheetMembers.recyclerBottomSheetMember.setAdapter(new BottomSheetMemberAdapter(requireContext(), membersDetailList, this, this));
+        binding.bottomSheetMembers.recyclerBottomSheetMember.setAdapter(new BottomSheetMemberAdapter(requireContext(), memberDetailsList, this, this));
     }
 
     // recyclerview bottom sheet member 'Add new member' click listener
@@ -792,7 +763,7 @@ public class LocationFragment extends Fragment implements OnMapReadyCallback, Ci
     // recyclerview bottom sheet member click listener
     @Override
     public void onAddedMemberClicked(int position) {
-        Toast.makeText(requireContext(), membersDetailList.get(position).getMemberFirstName(), Toast.LENGTH_SHORT).show();
+        Toast.makeText(requireContext(), membersDetailList.get(position).getLocationLat()+"\n"+membersDetailList.get(position).getLocationLng(), Toast.LENGTH_SHORT).show();
     }
 
     private void bottomSheetMapType() {
@@ -952,4 +923,5 @@ public class LocationFragment extends Fragment implements OnMapReadyCallback, Ci
         super.onDestroyView();
         binding = null;
     }
+
 }

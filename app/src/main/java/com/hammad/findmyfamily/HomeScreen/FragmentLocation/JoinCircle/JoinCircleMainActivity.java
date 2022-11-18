@@ -161,7 +161,6 @@ public class JoinCircleMainActivity extends AppCompatActivity {
         if(result.getResultCode() == Activity.RESULT_OK) {
 
             //when 'joinCircleResultLauncher' is called, we want to navigate back to Location Fragment
-
             Intent intent = result.getData();
 
             if(intent != null) {

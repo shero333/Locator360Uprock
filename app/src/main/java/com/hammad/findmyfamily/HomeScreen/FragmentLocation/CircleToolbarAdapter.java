@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.hammad.findmyfamily.HomeScreen.FragmentLocation.JoinCircle.CircleModel;
 import com.hammad.findmyfamily.R;
+import com.hammad.findmyfamily.SharedPreference.SharedPreference;
 import com.hammad.findmyfamily.databinding.ToolbarListItemBinding;
 
 import java.util.List;
@@ -23,9 +24,9 @@ public class CircleToolbarAdapter extends RecyclerView.Adapter<CircleToolbarAdap
 
     OnToolbarCircleClickListener mOnCircleClickListener;
 
-    private ToolbarListItemBinding listItemBinding;
-
     int selectedItemPosition = -1;
+
+    private ToolbarListItemBinding listItemBinding;
 
     public CircleToolbarAdapter(Context context, List<CircleModel> list, OnToolbarCircleClickListener onToolbarCircleClickListener) {
         this.context = context;
@@ -37,7 +38,7 @@ public class CircleToolbarAdapter extends RecyclerView.Adapter<CircleToolbarAdap
     @Override
     public CircleToolbarAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
 
-        return new ViewHolder(ToolbarListItemBinding.inflate(LayoutInflater.from(context),parent,false));
+        return new ViewHolder(ToolbarListItemBinding.inflate(LayoutInflater.from(context), parent, false));
     }
 
     @Override
@@ -54,8 +55,8 @@ public class CircleToolbarAdapter extends RecyclerView.Adapter<CircleToolbarAdap
         // circle name click listener
         holder.binding.consToolbarListItem.setOnClickListener(v -> {
 
-            listItemBinding.consToolbarListItem.setBackgroundColor(Color.TRANSPARENT);
-            listItemBinding.imgCheck.setVisibility(View.GONE);
+            /*listItemBinding.consToolbarListItem.setBackgroundColor(Color.TRANSPARENT);
+            listItemBinding.imgCheck.setVisibility(View.GONE);*/
 
             if (selectedItemPosition == holder.getAdapterPosition()) {
                 selectedItemPosition = -1;
@@ -68,11 +69,13 @@ public class CircleToolbarAdapter extends RecyclerView.Adapter<CircleToolbarAdap
 
             //interface click listener
             mOnCircleClickListener.onCircleSelected(position);
+
+            // saving updated circle id & name value in shared pref
+            SharedPreference.setCircleId(circleItem.getCircleId());
+            SharedPreference.setCircleName(circleItem.getCircleName());
         });
 
         if (selectedItemPosition == holder.getAdapterPosition()) {
-
-            // saving updated value in shared pref
 
             holder.binding.consToolbarListItem.setBackgroundColor(context.getColor(R.color.grey_bottom));
             holder.binding.imgCheck.setVisibility(View.VISIBLE);
@@ -82,16 +85,25 @@ public class CircleToolbarAdapter extends RecyclerView.Adapter<CircleToolbarAdap
             holder.binding.imgCheck.setVisibility(View.GONE);
         }
 
-        if (circleItem.equals("Circle 2")) {
-            listItemBinding.consToolbarListItem.setBackgroundColor(context.getColor(R.color.grey_bottom));
-            listItemBinding.imgCheck.setVisibility(View.VISIBLE);
+       /* // correct this condition
+        if(circleItem.getCircleId().equals(SharedPreference.getCircleId())) {
+            holder.binding.consToolbarListItem.setBackgroundColor(context.getColor(R.color.grey_bottom));
+            holder.binding.imgCheck.setVisibility(View.VISIBLE);
         }
+        else if(!circleItem.getCircleId().equals(SharedPreference.getCircleId())) {
+            holder.binding.consToolbarListItem.setBackgroundColor(Color.TRANSPARENT);
+            holder.binding.imgCheck.setVisibility(View.GONE);
+        }*/
 
     }
 
     @Override
     public int getItemCount() {
         return circleList.size();
+    }
+
+    public interface OnToolbarCircleClickListener {
+        void onCircleSelected(int position);
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
@@ -103,10 +115,6 @@ public class CircleToolbarAdapter extends RecyclerView.Adapter<CircleToolbarAdap
             this.binding = binding;
             CircleToolbarAdapter.this.listItemBinding = binding;
         }
-    }
-
-    public interface OnToolbarCircleClickListener {
-        void onCircleSelected(int position);
     }
 
 }

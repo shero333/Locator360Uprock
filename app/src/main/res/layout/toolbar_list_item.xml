@@ -51,6 +51,7 @@
         android:layout_height="@dimen/_20sdp"
         android:src="@drawable/ic_check"
         android:visibility="gone"
+        tools:visibility="visible"
         app:tint="@android:color/holo_green_dark"
         app:layout_constraintHorizontal_bias="0.96"
         app:layout_constraintStart_toEndOf="@id/txt_circle_name"

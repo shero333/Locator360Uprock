@@ -16,6 +16,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.hammad.findmyfamily.R;
+import com.hammad.findmyfamily.SharedPreference.SharedPreference;
 import com.hammad.findmyfamily.Util.Commons;
 import com.hammad.findmyfamily.Util.Constants;
 import com.hammad.findmyfamily.databinding.ActivityCreateCircleMainBinding;
@@ -28,6 +29,7 @@ import java.util.Objects;
 public class CreateCircleMainActivity extends AppCompatActivity {
 
     private static final String TAG = "CIRCLE_MAIN";
+
     ActivityCreateCircleMainBinding binding;
 
     @Override
@@ -110,6 +112,10 @@ public class CreateCircleMainActivity extends AppCompatActivity {
 
                                 //setting progress bar visibility
                                 binding.progressBar.setVisibility(View.GONE);
+
+                                // setting the circle id & name to shared preference
+                                SharedPreference.setCircleId(documentReference.getId());
+                                SharedPreference.setCircleName(circleName);
 
                                 //navigating back to location fragment
                                 finishCurrentActivity(true);

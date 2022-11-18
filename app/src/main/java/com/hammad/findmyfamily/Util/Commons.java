@@ -14,6 +14,9 @@ import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.drawable.ColorDrawable;
+import android.location.Address;
+import android.location.Geocoder;
+import android.location.Location;
 import android.location.LocationManager;
 import android.media.ExifInterface;
 import android.net.Uri;
@@ -39,6 +42,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.messaging.FirebaseMessaging;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
+import com.google.type.LatLng;
 import com.hammad.findmyfamily.BuildConfig;
 import com.hammad.findmyfamily.HomeScreen.FragmentLocation.BatteryStatusModelClass;
 import com.hammad.findmyfamily.HomeScreen.FragmentLocation.JoinCircle.CircleModel;
@@ -56,6 +60,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Random;
 
@@ -590,7 +595,27 @@ public class Commons {
 
     @SuppressLint("SimpleDateFormat")
     public static String timeInMilliToDateFormat(String timeInMilliSeconds) {
-        SimpleDateFormat dateFormat = new SimpleDateFormat("dd MMM yyyy HH:mm aaa");
-        return dateFormat.format(new Date(Long.parseLong(timeInMilliSeconds))).toUpperCase();
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd MMM yyyy hh:mm aaa");
+        return dateFormat.format(new Date(Long.parseLong(timeInMilliSeconds)));
+    }
+
+    public static String getLocationAddress(Context context, Location location) {
+        String locationAddress = "";
+
+        //getting the address of current location
+        Geocoder geocoder = new Geocoder(context, Locale.getDefault());
+
+        List<Address> addresses = null;
+        try {
+            addresses = geocoder.getFromLocation(location.getLatitude(), location.getLongitude(), 1);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        if (addresses != null) {
+            locationAddress = addresses.get(0).getAddressLine(0);
+        }
+
+        return locationAddress;
     }
 }

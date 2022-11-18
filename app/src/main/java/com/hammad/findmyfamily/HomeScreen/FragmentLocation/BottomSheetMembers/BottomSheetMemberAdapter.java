@@ -1,6 +1,8 @@
 package com.hammad.findmyfamily.HomeScreen.FragmentLocation.BottomSheetMembers;
 
 import android.content.Context;
+import android.location.Location;
+import android.location.LocationManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.hammad.findmyfamily.R;
+import com.hammad.findmyfamily.Util.Commons;
 import com.hammad.findmyfamily.Util.Constants;
 import com.hammad.findmyfamily.databinding.LayoutAddNewMemberBinding;
 import com.hammad.findmyfamily.databinding.LayoutRecyclerViewBottomSheetBinding;
@@ -36,7 +39,6 @@ public class BottomSheetMemberAdapter extends RecyclerView.Adapter<BottomSheetMe
         this.addNewMemberInterface = onAddNewMemberInterface;
     }
 
-
     @NonNull
     @Override
     public BottomSheetMemberAdapter.MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -52,9 +54,10 @@ public class BottomSheetMemberAdapter extends RecyclerView.Adapter<BottomSheetMe
     @Override
     public void onBindViewHolder(@NonNull BottomSheetMemberAdapter.MyViewHolder holder, int position) {
 
+
         if (getItemViewType(position) == Constants.VIEW_TYPE_ITEM) {
 
-            MemberDetail memberItem = memberDetailList.get(position);
+            MemberDetail memberItem = memberDetailList.get(holder.getAdapterPosition());
 
             // user profile image if any
             if(memberItem.getMemberImageUrl().equals(Constants.NULL)) {
@@ -101,16 +104,26 @@ public class BottomSheetMemberAdapter extends RecyclerView.Adapter<BottomSheetMe
             recyclerViewItemBinding.txtViewBatteryPercentage.setText(String.valueOf(memberItem.getBatteryPercentage()).concat(" %"));
 
             // last known location address
-            recyclerViewItemBinding.txtViewLastKnownAddress.setText(memberItem.getLocationAddress());
+            if(memberItem.getLocationAddress().equals(Constants.NULL)) {
+
+                Location location = new Location(LocationManager.GPS_PROVIDER);
+                location.setLatitude(Double.parseDouble(memberItem.getLocationLat()));
+                location.setLongitude(Double.parseDouble(memberItem.getLocationLng()));
+
+                recyclerViewItemBinding.txtViewLastKnownAddress.setText(Commons.getLocationAddress(context,location));
+            }
+            else if(!memberItem.getLocationAddress().equals(Constants.NULL)) {
+                recyclerViewItemBinding.txtViewLastKnownAddress.setText( memberItem.getLocationAddress());
+            }
 
             // time stamp
-            recyclerViewItemBinding.txtViewTimestamp.setText(memberItem.getLocationTimestamp());
+            recyclerViewItemBinding.txtViewTimestamp.setText(context.getString(R.string.last_seen).concat(" ").concat(Commons.timeInMilliToDateFormat(memberItem.getLocationTimestamp())));
 
             // view click listener
             recyclerViewItemBinding.consMemberBottomSheet.setOnClickListener(v -> addedMemberInterface.onAddedMemberClicked(position));
 
-        } else if (getItemViewType(position) == Constants.VIEW_TYPE_BUTTON) {
-
+        }
+        else if (getItemViewType(position) == Constants.VIEW_TYPE_BUTTON) {
             addNewMemberBinding.consAddNewMember.setOnClickListener(v -> addNewMemberInterface.onAddNewMemberClicked());
         }
 
@@ -134,7 +147,7 @@ public class BottomSheetMemberAdapter extends RecyclerView.Adapter<BottomSheetMe
         void onAddedMemberClicked(int position);
     }
 
-    public class MyViewHolder extends RecyclerView.ViewHolder {
+    public static class MyViewHolder extends RecyclerView.ViewHolder {
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
         }
@@ -148,7 +161,7 @@ public class BottomSheetMemberAdapter extends RecyclerView.Adapter<BottomSheetMe
         public MemberViewHolder(@NonNull LayoutRecyclerViewBottomSheetBinding binding) {
             super(binding.getRoot());
             this.binding = binding;
-            //BottomSheetMemberAdapter.this.recyclerViewItemBinding = binding;
+            BottomSheetMemberAdapter.this.recyclerViewItemBinding = binding;
         }
     }
 
