@@ -13,13 +13,6 @@ public class CircleModel implements Parcelable {
     List<String> circleMembersList;
     String circleJoinCode;
 
-    public CircleModel(String circleId, String circleOwnerId, String circleName, List<String> circleMembersList) {
-        this.circleId = circleId;
-        this.circleOwnerId = circleOwnerId;
-        this.circleName = circleName;
-        this.circleMembersList = circleMembersList;
-    }
-
     public CircleModel(String circleId, String circleOwnerId, String circleName, List<String> circleMembersList, String circleJoinCode) {
         this.circleId = circleId;
         this.circleOwnerId = circleOwnerId;

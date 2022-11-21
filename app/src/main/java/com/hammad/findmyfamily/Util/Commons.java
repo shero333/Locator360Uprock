@@ -42,7 +42,6 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.messaging.FirebaseMessaging;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
-import com.google.type.LatLng;
 import com.hammad.findmyfamily.BuildConfig;
 import com.hammad.findmyfamily.HomeScreen.FragmentLocation.BatteryStatusModelClass;
 import com.hammad.findmyfamily.HomeScreen.FragmentLocation.JoinCircle.CircleModel;
@@ -561,7 +560,7 @@ public class Commons {
                             onCircleAvailabilityCheckListener.onCircleAvailability(true,
                                     new CircleModel(doc.getId(),
                                             doc.getString(Constants.CIRCLE_ADMIN),
-                                            doc.getString(Constants.CIRCLE_NAME),circleMembersList));
+                                            doc.getString(Constants.CIRCLE_NAME),circleMembersList, doc.getString(Constants.CIRCLE_JOIN_CODE)));
                         }
                     }
                     else {

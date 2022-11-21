@@ -18,8 +18,6 @@ import com.hammad.findmyfamily.databinding.ActivityStartScreenBinding;
 
 public class StartScreenActivity extends AppCompatActivity {
 
-    private ActivityStartScreenBinding binding;
-
     private FirebaseFirestore fStore;
 
     @Override
@@ -27,7 +25,7 @@ public class StartScreenActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         //initializing binding
-        binding = ActivityStartScreenBinding.inflate(getLayoutInflater());
+        com.hammad.findmyfamily.databinding.ActivityStartScreenBinding binding = ActivityStartScreenBinding.inflate(getLayoutInflater());
         View view = binding.getRoot();
         setContentView(view);
 

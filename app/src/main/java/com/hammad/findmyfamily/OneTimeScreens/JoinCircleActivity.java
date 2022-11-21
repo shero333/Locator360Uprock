@@ -13,7 +13,6 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.hammad.findmyfamily.HomeScreen.FragmentLocation.JoinCircle.CircleModel;
-import com.hammad.findmyfamily.HomeScreen.HomeActivity;
 import com.hammad.findmyfamily.SharedPreference.SharedPreference;
 import com.hammad.findmyfamily.Util.Constants;
 import com.hammad.findmyfamily.databinding.ActivityJoinCircleBinding;
@@ -125,6 +124,11 @@ public class JoinCircleActivity extends AppCompatActivity {
 
                         //setting the progress bar visibility
                         binding.progressBar.setVisibility(View.GONE);
+
+                        //saving the circle info in shared preference
+                        SharedPreference.setCircleId(circleModel.getCircleId());
+                        SharedPreference.setCircleName(circleModel.getCircleName());
+                        SharedPreference.setCircleInviteCode(circleModel.getCircleJoinCode());
 
                         if(isCalledFromSignUp) {
                             startActivity(new Intent(this, AddProfilePictureActivity.class));

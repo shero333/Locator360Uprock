@@ -21,6 +21,7 @@
     <uses-feature
         android:name="android.hardware.location"
         android:required="true" />
+
     <!--
         This query is used to identify email apps installed in our phone.
          Because on Android 11 and onward package visibility has been limited,

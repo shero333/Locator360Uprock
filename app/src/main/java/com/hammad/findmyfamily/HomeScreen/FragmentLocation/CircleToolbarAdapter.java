@@ -1,5 +1,6 @@
 package com.hammad.findmyfamily.HomeScreen.FragmentLocation;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Color;
 import android.view.LayoutInflater;
@@ -41,6 +42,7 @@ public class CircleToolbarAdapter extends RecyclerView.Adapter<CircleToolbarAdap
         return new ViewHolder(ToolbarListItemBinding.inflate(LayoutInflater.from(context), parent, false));
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     @Override
     public void onBindViewHolder(@NonNull CircleToolbarAdapter.ViewHolder holder, int position) {
 
@@ -55,8 +57,8 @@ public class CircleToolbarAdapter extends RecyclerView.Adapter<CircleToolbarAdap
         // circle name click listener
         holder.binding.consToolbarListItem.setOnClickListener(v -> {
 
-            /*listItemBinding.consToolbarListItem.setBackgroundColor(Color.TRANSPARENT);
-            listItemBinding.imgCheck.setVisibility(View.GONE);*/
+            listItemBinding.consToolbarListItem.setBackgroundColor(Color.TRANSPARENT);
+            listItemBinding.imgCheck.setVisibility(View.GONE);
 
             if (selectedItemPosition == holder.getAdapterPosition()) {
                 selectedItemPosition = -1;
@@ -85,7 +87,7 @@ public class CircleToolbarAdapter extends RecyclerView.Adapter<CircleToolbarAdap
             holder.binding.imgCheck.setVisibility(View.GONE);
         }
 
-       /* // correct this condition
+        // highlight the selected circle
         if(circleItem.getCircleId().equals(SharedPreference.getCircleId())) {
             holder.binding.consToolbarListItem.setBackgroundColor(context.getColor(R.color.grey_bottom));
             holder.binding.imgCheck.setVisibility(View.VISIBLE);
@@ -93,7 +95,7 @@ public class CircleToolbarAdapter extends RecyclerView.Adapter<CircleToolbarAdap
         else if(!circleItem.getCircleId().equals(SharedPreference.getCircleId())) {
             holder.binding.consToolbarListItem.setBackgroundColor(Color.TRANSPARENT);
             holder.binding.imgCheck.setVisibility(View.GONE);
-        }*/
+        }
 
     }
 

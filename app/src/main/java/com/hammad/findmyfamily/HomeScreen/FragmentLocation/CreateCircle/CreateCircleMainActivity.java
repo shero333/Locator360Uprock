@@ -98,6 +98,7 @@ public class CreateCircleMainActivity extends AppCompatActivity {
         circleData.put(Constants.CIRCLE_CODE_EXPIRY_DATE, new Timestamp(new Date()));
         circleData.put(Constants.CIRCLE_MEMBERS, FieldValue.arrayUnion(currentUserEmail));
 
+
         FirebaseFirestore.getInstance().collection(Constants.USERS_COLLECTION)
                 .document(currentUserEmail)
                 .collection(Constants.CIRCLE_COLLECTION)

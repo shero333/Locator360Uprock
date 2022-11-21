@@ -123,10 +123,35 @@ public class LocationFragment extends Fragment implements OnMapReadyCallback, Ci
         // TODO: 08/11/2022 set the permission & gps dialog 'navigating to apps setting' along with some location permission setting
         // TODO: 08/11/2022 onProviderDisabled or enabled functions of gps
 
-        //work manager for updating user location every half an hour
+        //work manager for updating user location every hour
         periodicLocationUpdated();
 
+        // 3 days = 259200000 milliseconds
+        Log.i("HELLO_123", "current Time: "+Commons.timeInMilliToDateFormat(String.valueOf(System.currentTimeMillis())));
+        long time = System.currentTimeMillis()+259200000;
+        Log.i("HELLO_123", "time after 3 days: "+Commons.timeInMilliToDateFormat(String.valueOf(time)));
+
+        setExpirayDate();
+
         return view;
+    }
+
+    private void setExpirayDate() {
+
+        String email = FirebaseAuth.getInstance().getCurrentUser().getEmail();
+
+        FirebaseFirestore.getInstance().collectionGroup(Constants.CIRCLE_COLLECTION)
+                .whereArrayContains(Constants.CIRCLE_MEMBERS,email)
+                .addSnapshotListener((value, error) -> {
+
+                    for(DocumentSnapshot doc: value) {
+                        Log.i("HELLO_123", "circle id: "+doc.getId());
+                        Log.i("HELLO_123", "circle name: "+doc.getString(Constants.CIRCLE_NAME));
+                        Log.i("HELLO_123", "circle join code: "+doc.getString(Constants.CIRCLE_JOIN_CODE));
+                    }
+
+                });
+
     }
 
     private void periodicLocationUpdated() {
@@ -305,6 +330,7 @@ public class LocationFragment extends Fragment implements OnMapReadyCallback, Ci
     // LocationListener overridden method
     @Override
     public void onLocationChanged(@NonNull Location location) {
+        Log.i(TAG, "onLocationChanged() called");
 
         // saves the location in firebase firestore
         saveLocationInFirebase(location);
@@ -390,10 +416,9 @@ public class LocationFragment extends Fragment implements OnMapReadyCallback, Ci
                 .whereArrayContains(Constants.CIRCLE_MEMBERS, currentUserEmail)
                 .addSnapshotListener((value, error) -> {
 
-                    Log.i("HELLO_123", "Group Collection Circle called");
-
-                    // clearing the circle list
+                    // clearing the circle and members list
                     circleList.clear();
+                    membersDetailList.clear();
 
                     if (value != null) {
 
@@ -453,22 +478,20 @@ public class LocationFragment extends Fragment implements OnMapReadyCallback, Ci
                         }
                         else if(!SharedPreference.getCircleId().equals(Constants.NULL)) {
 
-                            Log.i("HELLO_123", "getDetailDataFromFirebase: else if called");
                             // setting the circle name to toolbar & toolbar extended view
                             binding.toolbar.textViewCircleName.setText(SharedPreference.getCircleName());
                             binding.toolbarExtendedView.txtCircleName.setText(SharedPreference.getCircleName());
 
                             // if preference is not null, it means that any circle is selected as default
                             for (CircleModel circleModel: circleList) {
-                                Log.i("HELLO_123", "outer for called");
                                 if(circleModel.getCircleId().equals(SharedPreference.getCircleId())) {
-                                    Log.i("HELLO_123", "inner if called");
+
+                                    //sets circle name & join code in Shared pref
+                                    SharedPreference.setCircleName(circleModel.getCircleName());
+                                    SharedPreference.setCircleInviteCode(circleModel.getCircleJoinCode());
+
                                     for(String memberEmail : circleModel.getCircleMembersList()) {
 
-                                        //clears the pre-existing members detail list
-                                        membersDetailList.clear();
-
-                                        Log.i("HELLO_123", "inner for called");
                                         MemberDetail memberDetail = new MemberDetail();
 
                                         // getting the user info
@@ -503,8 +526,6 @@ public class LocationFragment extends Fragment implements OnMapReadyCallback, Ci
                                                     setBottomSheetMembersRecyclerView(membersDetailList);
                                                 });
                                     }
-
-                                    break;
                                 }
                             }
                         }
@@ -652,6 +673,9 @@ public class LocationFragment extends Fragment implements OnMapReadyCallback, Ci
                     binding.toolbar.textViewCircleName.setText(SharedPreference.getCircleName());
                     binding.toolbarExtendedView.txtCircleName.setText(SharedPreference.getCircleName());
 
+                    //setting the data
+                    getDetailDataFromFirebase();
+
                     Toast.makeText(requireContext(), "Circle Created Successfully.", Toast.LENGTH_SHORT).show();
                 }
             }
@@ -674,9 +698,13 @@ public class LocationFragment extends Fragment implements OnMapReadyCallback, Ci
                 //delay the shrunk to give an animation type look
                 delayCircleShrunkView();
 
-                Toast.makeText(getContext(), intent.getStringExtra(Constants.RETURNED_CIRCLE_NAME) + " joined.", Toast.LENGTH_LONG).show();
+                //sets the joined circle name onto toolbar & extended toolbar view
+                binding.toolbar.textViewCircleName.setText(SharedPreference.getCircleName());
+                binding.toolbarExtendedView.txtCircleName.setText(SharedPreference.getCircleName());
 
-                //selects the currently joined circle and display related data
+                // setting the data
+                getDetailDataFromFirebase();
+
             }
         } else if (result.getResultCode() == Activity.RESULT_CANCELED) {
             //when back pressed is called from 'JoinCircleMainActivity'
@@ -735,13 +763,20 @@ public class LocationFragment extends Fragment implements OnMapReadyCallback, Ci
     @Override
     public void onCircleSelected(int position) {
 
-        Toast.makeText(requireContext(), circleList.get(position).getCircleName(), Toast.LENGTH_SHORT).show();
-
         // setting the updated circle name to toolbar & extended view
         binding.toolbar.textViewCircleName.setText(SharedPreference.getCircleName());
         binding.toolbarExtendedView.txtCircleName.setText(SharedPreference.getCircleName());
 
-        // fetch the updated data from firebase
+        // setting the values to shared preference
+        SharedPreference.setCircleId(circleList.get(position).getCircleId());
+        SharedPreference.setCircleName(circleList.get(position).getCircleName());
+        SharedPreference.setCircleInviteCode(circleList.get(position).getCircleJoinCode());
+
+        //clears the members list
+        membersDetailList.clear();
+
+        //get the details of particular circle
+        getDetailDataFromFirebase();
     }
 
     private void bottomSheetMembers() {
