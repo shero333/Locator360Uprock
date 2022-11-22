@@ -3,6 +3,7 @@ package com.hammad.findmyfamily.HomeScreen.FragmentLocation.BottomSheetMembers;
 import android.content.Context;
 import android.location.Location;
 import android.location.LocationManager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -65,6 +66,13 @@ public class BottomSheetMemberAdapter extends RecyclerView.Adapter<BottomSheetMe
                 // make visible the name's first character text view
                 recyclerViewItemBinding.txtViewMemberFirstChar.setVisibility(View.VISIBLE);
                 recyclerViewItemBinding.txtViewMemberFirstChar.setText(String.valueOf(memberItem.getMemberFirstName().charAt(0)));
+
+                if(holder.getAdapterPosition() % 2 == 0) {
+                    recyclerViewItemBinding.imgViewMemberProfile.setImageResource(R.drawable.drawable_no_member_profile);
+                }
+                else if(holder.getAdapterPosition() % 2 != 0) {
+                    recyclerViewItemBinding.imgViewMemberProfile.setImageResource(R.drawable.drawable_no_group_icon);
+                }
 
             }
             else if(!memberItem.getMemberImageUrl().equals(Constants.NULL)) {

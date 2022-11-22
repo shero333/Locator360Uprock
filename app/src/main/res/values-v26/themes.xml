@@ -3,5 +3,6 @@
 
     <style name="AutoFillHintStyle">
         <item name="android:autofilledHighlight">@color/white</item>
+        <item name="android:textStyle">bold</item>
     </style>
 </resources>

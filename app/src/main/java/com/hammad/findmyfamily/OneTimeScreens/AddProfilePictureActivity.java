@@ -5,6 +5,7 @@ import static com.hammad.findmyfamily.Util.Constants.REQUEST_CODE_CAMERA;
 import static com.hammad.findmyfamily.Util.Constants.REQUEST_CODE_STORAGE;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -108,7 +109,6 @@ public class AddProfilePictureActivity extends AppCompatActivity {
             //requesting the Gallery permission
             Permissions.getStoragePermission(this);
         }
-
     }
 
     @Override
@@ -332,7 +332,7 @@ public class AddProfilePictureActivity extends AppCompatActivity {
         if (currentPicturePath.length() > 0) {
             binding.btnContAddProfilePic.setEnabled(true);
             binding.btnContAddProfilePic.setBackgroundResource(R.drawable.white_rounded_button);
-            binding.btnContAddProfilePic.setTextColor(getResources().getColor(R.color.orange));
+            binding.btnContAddProfilePic.setTextColor(getColor(R.color.orange));
         }
     }
 

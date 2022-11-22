@@ -11,7 +11,6 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.google.firebase.Timestamp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -21,7 +20,6 @@ import com.hammad.findmyfamily.Util.Commons;
 import com.hammad.findmyfamily.Util.Constants;
 import com.hammad.findmyfamily.databinding.ActivityCreateCircleMainBinding;
 
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -94,10 +92,8 @@ public class CreateCircleMainActivity extends AppCompatActivity {
         circleData.put(Constants.CIRCLE_NAME, circleName);
         circleData.put(Constants.CIRCLE_JOIN_CODE, circleCode);
         circleData.put(Constants.CIRCLE_ADMIN, currentUserEmail);
-        circleData.put(Constants.CIRCLE_TIME_STAMP, new Timestamp(new Date()));
-        circleData.put(Constants.CIRCLE_CODE_EXPIRY_DATE, new Timestamp(new Date()));
+        circleData.put(Constants.CIRCLE_CODE_EXPIRY_DATE, String.valueOf(System.currentTimeMillis()+259200000)); // 259200000 milliseconds = 3 days.
         circleData.put(Constants.CIRCLE_MEMBERS, FieldValue.arrayUnion(currentUserEmail));
-
 
         FirebaseFirestore.getInstance().collection(Constants.USERS_COLLECTION)
                 .document(currentUserEmail)

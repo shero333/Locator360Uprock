@@ -33,7 +33,6 @@ import androidx.appcompat.widget.AppCompatButton;
 import androidx.constraintlayout.utils.widget.ImageFilterView;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
-import com.google.firebase.Timestamp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -336,8 +335,7 @@ public class Commons {
                     circleData.put(Constants.CIRCLE_NAME, SharedPreference.getCircleName());
                     circleData.put(Constants.CIRCLE_JOIN_CODE, SharedPreference.getCircleInviteCode());
                     circleData.put(Constants.CIRCLE_ADMIN, SharedPreference.getEmailPref());
-                    circleData.put(Constants.CIRCLE_TIME_STAMP, new Timestamp(new Date()));
-                    circleData.put(Constants.CIRCLE_CODE_EXPIRY_DATE, new Timestamp(new Date()));
+                    circleData.put(Constants.CIRCLE_CODE_EXPIRY_DATE, String.valueOf(System.currentTimeMillis()+259200000)); // 259200000 milliseconds = 3 days
                     circleData.put(Constants.CIRCLE_MEMBERS, FieldValue.arrayUnion(SharedPreference.getEmailPref()));
 
                     dr.set(userInfo);

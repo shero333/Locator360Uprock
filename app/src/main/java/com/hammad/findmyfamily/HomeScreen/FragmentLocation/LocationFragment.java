@@ -22,7 +22,6 @@ import android.widget.Toast;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -49,11 +48,8 @@ import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.Query;
-import com.google.firebase.firestore.QuerySnapshot;
 import com.hammad.findmyfamily.HomeScreen.FragmentLocation.AddMember.AddMemberActivity;
 import com.hammad.findmyfamily.HomeScreen.FragmentLocation.BottomSheetMembers.BottomSheetMemberAdapter;
 import com.hammad.findmyfamily.HomeScreen.FragmentLocation.BottomSheetMembers.MemberDetail;
@@ -65,6 +61,7 @@ import com.hammad.findmyfamily.R;
 import com.hammad.findmyfamily.SharedPreference.SharedPreference;
 import com.hammad.findmyfamily.Util.Commons;
 import com.hammad.findmyfamily.Util.Constants;
+import com.hammad.findmyfamily.WorkManager.CircleExpiryDateWorker;
 import com.hammad.findmyfamily.WorkManager.LocationUpdateWorker;
 import com.hammad.findmyfamily.databinding.FragmentLocationBinding;
 import com.hammad.findmyfamily.databinding.LayoutBottomSheetMapTypeBinding;
@@ -125,33 +122,11 @@ public class LocationFragment extends Fragment implements OnMapReadyCallback, Ci
 
         //work manager for updating user location every hour
         periodicLocationUpdated();
-
-        // 3 days = 259200000 milliseconds
-        Log.i("HELLO_123", "current Time: "+Commons.timeInMilliToDateFormat(String.valueOf(System.currentTimeMillis())));
-        long time = System.currentTimeMillis()+259200000;
-        Log.i("HELLO_123", "time after 3 days: "+Commons.timeInMilliToDateFormat(String.valueOf(time)));
-
-        setExpirayDate();
+        
+        //work manager for checking circle code expiry date every 8 hours
+        periodicCircleCodeChecker();
 
         return view;
-    }
-
-    private void setExpirayDate() {
-
-        String email = FirebaseAuth.getInstance().getCurrentUser().getEmail();
-
-        FirebaseFirestore.getInstance().collectionGroup(Constants.CIRCLE_COLLECTION)
-                .whereArrayContains(Constants.CIRCLE_MEMBERS,email)
-                .addSnapshotListener((value, error) -> {
-
-                    for(DocumentSnapshot doc: value) {
-                        Log.i("HELLO_123", "circle id: "+doc.getId());
-                        Log.i("HELLO_123", "circle name: "+doc.getString(Constants.CIRCLE_NAME));
-                        Log.i("HELLO_123", "circle join code: "+doc.getString(Constants.CIRCLE_JOIN_CODE));
-                    }
-
-                });
-
     }
 
     private void periodicLocationUpdated() {
@@ -161,12 +136,26 @@ public class LocationFragment extends Fragment implements OnMapReadyCallback, Ci
                 .setRequiresBatteryNotLow(true)
                 .build();
 
-        PeriodicWorkRequest periodicLocationUpdate = new PeriodicWorkRequest.Builder(LocationUpdateWorker.class, 1, TimeUnit.HOURS)
+        PeriodicWorkRequest periodicLocationUpdateRequest = new PeriodicWorkRequest.Builder(LocationUpdateWorker.class, 1, TimeUnit.HOURS)
                 .setConstraints(constraints).build();
 
         WorkManager.getInstance(requireActivity().getApplicationContext())
-                .enqueueUniquePeriodicWork("locUpdate", ExistingPeriodicWorkPolicy.KEEP, periodicLocationUpdate);
+                .enqueueUniquePeriodicWork("locUpdate", ExistingPeriodicWorkPolicy.KEEP, periodicLocationUpdateRequest);
 
+    }
+
+    private void periodicCircleCodeChecker() {
+
+        Constraints constraints = new Constraints.Builder()
+                .setRequiredNetworkType(NetworkType.CONNECTED)
+                .setRequiresBatteryNotLow(true)
+                .build();
+
+        PeriodicWorkRequest periodicCircleCodeRequest = new PeriodicWorkRequest.Builder(CircleExpiryDateWorker.class,8,TimeUnit.HOURS)
+                .setConstraints(constraints).build();
+
+        WorkManager.getInstance(requireActivity().getApplicationContext())
+                .enqueueUniquePeriodicWork("cirlceInfoUpdate",ExistingPeriodicWorkPolicy.KEEP,periodicCircleCodeRequest);
     }
 
     private void initializeMap() {
@@ -442,7 +431,8 @@ public class LocationFragment extends Fragment implements OnMapReadyCallback, Ci
                             binding.toolbarExtendedView.txtCircleName.setText(SharedPreference.getCircleName());
 
                             // getting the members
-                            for (String memberEmail : circleList.get(0).getCircleMembersList()) {
+                            for (String memberEmail : circleList.get(0).getCircleMembersList())
+                            {
 
                                 // getting the user info
                                 FirebaseFirestore.getInstance().collection(Constants.USERS_COLLECTION)
@@ -483,7 +473,8 @@ public class LocationFragment extends Fragment implements OnMapReadyCallback, Ci
                             binding.toolbarExtendedView.txtCircleName.setText(SharedPreference.getCircleName());
 
                             // if preference is not null, it means that any circle is selected as default
-                            for (CircleModel circleModel: circleList) {
+                            for (CircleModel circleModel: circleList)
+                            {
                                 if(circleModel.getCircleId().equals(SharedPreference.getCircleId())) {
 
                                     //sets circle name & join code in Shared pref

@@ -29,6 +29,7 @@ import java.util.Objects;
 public class LocationUpdateWorker extends Worker {
 
     private static final String TAG = "LOC_WORKER_CLASS";
+
     Context context;
 
     public LocationUpdateWorker(@NonNull Context context, @NonNull WorkerParameters workerParams) {
