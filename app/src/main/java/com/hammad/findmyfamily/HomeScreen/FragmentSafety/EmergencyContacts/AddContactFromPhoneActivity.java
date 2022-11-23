@@ -13,26 +13,32 @@ import androidx.core.view.MenuItemCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.hammad.findmyfamily.R;
-import com.hammad.findmyfamily.databinding.ActivityAddContactBinding;
+import com.hammad.findmyfamily.databinding.ActivityAddContactFromPhoneBinding;
 
-public class AddContactActivity extends AppCompatActivity implements ContactAdapter.OnAddContactListener {
+public class AddContactFromPhoneActivity extends AppCompatActivity implements ContactAdapter.OnAddContactListener {
 
-    ActivityAddContactBinding binding;
+    ActivityAddContactFromPhoneBinding binding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         //initializing binding
-        binding = ActivityAddContactBinding.inflate(getLayoutInflater());
+        binding = ActivityAddContactFromPhoneBinding.inflate(getLayoutInflater());
         View view = binding.getRoot();
         setContentView(view);
 
         //toolbar back button
-        binding.toolbarAddContact.setNavigationOnClickListener(view1 -> onBackPressed());
+        binding.toolbarAddContact.setNavigationOnClickListener(v -> onBackPressed());
+
+        getPhoneContactsList();
 
         // recyclerview add contacts
-        setRecyclerview();
+        //setRecyclerview();
+    }
+
+    private void getPhoneContactsList() {
+
     }
 
     @Override

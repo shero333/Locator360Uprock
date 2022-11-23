@@ -24,6 +24,7 @@ public interface Constants {
      int REQUEST_CODE_CAMERA = 1;
      int REQUEST_CODE_LOCATION = 2;
      int REQUEST_CODE_STORAGE = 3;
+     int REQUEST_CODE_CONTACTS = 4;
 
      //for circle
      String CIRCLE_COLLECTION = "Circle";
@@ -32,7 +33,6 @@ public interface Constants {
      String CIRCLE_CODE_EXPIRY_DATE = "code_expiry_date";
      String CIRCLE_MEMBERS = "circle_members";
      String CIRCLE_ADMIN = "circle_admin";
-     String CIRCLE_TIME_STAMP = "time_stamp";
 
      //for location
      String LOCATION_COLLECTION = "Location";

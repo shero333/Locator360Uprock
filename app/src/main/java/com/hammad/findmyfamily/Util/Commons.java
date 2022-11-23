@@ -44,10 +44,12 @@ import com.google.firebase.storage.StorageReference;
 import com.hammad.findmyfamily.BuildConfig;
 import com.hammad.findmyfamily.HomeScreen.FragmentLocation.BatteryStatusModelClass;
 import com.hammad.findmyfamily.HomeScreen.FragmentLocation.JoinCircle.CircleModel;
+import com.hammad.findmyfamily.HomeScreen.FragmentSafety.EmergencyContacts.AddContactManuallyActivity;
 import com.hammad.findmyfamily.R;
 import com.hammad.findmyfamily.SharedPreference.SharedPreference;
 import com.hammad.findmyfamily.StartScreen.StartScreenActivity;
 import com.hammad.findmyfamily.databinding.LayoutCameraDialogBinding;
+import com.hammad.findmyfamily.databinding.LayoutDialogAddEmergncyContactBinding;
 import com.hammad.findmyfamily.databinding.LayoutGalleryDialogBinding;
 
 import java.io.ByteArrayOutputStream;
@@ -615,4 +617,38 @@ public class Commons {
 
         return locationAddress;
     }
+
+    public static void addEmergencyContactDialog(Activity activity,OnSuccessListenerInterface onSuccessListenerInterface) {
+
+        Dialog addContactsDialog = new Dialog(activity);
+
+        LayoutDialogAddEmergncyContactBinding dialogBinding = LayoutDialogAddEmergncyContactBinding.inflate(LayoutInflater.from(activity));
+        addContactsDialog.setContentView(dialogBinding.getRoot());
+
+        //dialog add from contact button click listener
+        dialogBinding.btnSelectFromContact.setOnClickListener(view -> {
+            onSuccessListenerInterface.onSuccess(true);
+            addContactsDialog.dismiss();
+        });
+
+        //add contact manually
+        dialogBinding.txtAddManually.setOnClickListener(view -> {
+            activity.startActivity(new Intent(activity, AddContactManuallyActivity.class));
+            addContactsDialog.dismiss();
+        });
+
+        //setting the transparent background
+        addContactsDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+
+        //this sets the width of dialog to 90%
+        DisplayMetrics displayMetrics = new DisplayMetrics();
+        activity.getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+        int width = (int) (displayMetrics.widthPixels * 0.9);
+
+        //setting the width and height of alert dialog
+        addContactsDialog.getWindow().setLayout(width, ConstraintLayout.LayoutParams.WRAP_CONTENT);
+
+        addContactsDialog.show();
+    }
+
 }

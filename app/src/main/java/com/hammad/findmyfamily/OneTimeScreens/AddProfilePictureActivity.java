@@ -5,7 +5,6 @@ import static com.hammad.findmyfamily.Util.Constants.REQUEST_CODE_CAMERA;
 import static com.hammad.findmyfamily.Util.Constants.REQUEST_CODE_STORAGE;
 
 import android.Manifest;
-import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;

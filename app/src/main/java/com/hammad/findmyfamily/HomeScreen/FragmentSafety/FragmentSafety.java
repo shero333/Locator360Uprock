@@ -10,7 +10,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
-import com.hammad.findmyfamily.HomeScreen.FragmentSafety.EmergencyContacts.EmergencyContactsLandingActivity;
+import com.hammad.findmyfamily.HomeScreen.FragmentSafety.EmergencyContacts.EmergencyContactLandingActivity;
 import com.hammad.findmyfamily.databinding.FragmentSafetyBinding;
 
 public class FragmentSafety extends Fragment {
@@ -28,7 +28,7 @@ public class FragmentSafety extends Fragment {
         binding.consHelpAlert.setOnClickListener(v -> Toast.makeText(requireContext(), "Help Alert", Toast.LENGTH_SHORT).show());
 
         //add emergency contact click listener
-        binding.btnAddEmergencyContact.setOnClickListener(v -> startActivity(new Intent(requireActivity(), EmergencyContactsLandingActivity.class)));
+        binding.btnAddEmergencyContact.setOnClickListener(v -> startActivity(new Intent(requireActivity(), EmergencyContactLandingActivity.class)));
 
         return view;
     }

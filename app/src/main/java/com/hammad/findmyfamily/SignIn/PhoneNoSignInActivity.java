@@ -34,7 +34,7 @@ public class PhoneNoSignInActivity extends AppCompatActivity {
 
     private String countryCode;
 
-    //variables for for verifying whether entered number is valid or not
+    //variables for verifying whether entered number is valid or not
     private PhoneNumberUtil.PhoneNumberType isMobile = null;
     private boolean isPhoneNoValid = false;
 

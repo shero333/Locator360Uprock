@@ -14,6 +14,7 @@
         <entry key="..\:/Hammad/Locator360/app/src/main/res/drawable/dotted_line.xml" value="0.22" />
         <entry key="..\:/Hammad/Locator360/app/src/main/res/drawable/drawable_circle_iamge.xml" value="0.1535" />
         <entry key="..\:/Hammad/Locator360/app/src/main/res/drawable/drawable_circle_safety_frag.xml" value="0.1475" />
+        <entry key="..\:/Hammad/Locator360/app/src/main/res/drawable/drawable_contact_state_list.xml" value="0.16" />
         <entry key="..\:/Hammad/Locator360/app/src/main/res/drawable/drawable_grey_bottom.xml" value="0.154" />
         <entry key="..\:/Hammad/Locator360/app/src/main/res/drawable/drawable_line_bottom_sheet.xml" value="0.1675" />
         <entry key="..\:/Hammad/Locator360/app/src/main/res/drawable/drawable_no_group_icon.xml" value="0.154" />
@@ -52,6 +53,7 @@
         <entry key="..\:/Hammad/Locator360/app/src/main/res/drawable/white_rectangle_outline.xml" value="0.1535" />
         <entry key="..\:/Hammad/Locator360/app/src/main/res/drawable/white_rounded_button.xml" value="0.155" />
         <entry key="..\:/Hammad/Locator360/app/src/main/res/layout/activity_add_contact.xml" value="0.25" />
+        <entry key="..\:/Hammad/Locator360/app/src/main/res/layout/activity_add_contact_from_phone.xml" value="0.25" />
         <entry key="..\:/Hammad/Locator360/app/src/main/res/layout/activity_add_contact_manually.xml" value="0.25" />
         <entry key="..\:/Hammad/Locator360/app/src/main/res/layout/activity_add_emergency_contact.xml" value="0.22" />
         <entry key="..\:/Hammad/Locator360/app/src/main/res/layout/activity_add_group_icon.xml" value="0.2" />
@@ -64,7 +66,9 @@
         <entry key="..\:/Hammad/Locator360/app/src/main/res/layout/activity_create_password.xml" value="0.22" />
         <entry key="..\:/Hammad/Locator360/app/src/main/res/layout/activity_email_sign_in.xml" value="0.2" />
         <entry key="..\:/Hammad/Locator360/app/src/main/res/layout/activity_email_sign_up.xml" value="0.18" />
-        <entry key="..\:/Hammad/Locator360/app/src/main/res/layout/activity_emergency_contacts_landing.xml" value="0.27291666666666664" />
+        <entry key="..\:/Hammad/Locator360/app/src/main/res/layout/activity_emergency_contact_dashboard.xml" value="0.25" />
+        <entry key="..\:/Hammad/Locator360/app/src/main/res/layout/activity_emergency_contact_landing.xml" value="0.27291666666666664" />
+        <entry key="..\:/Hammad/Locator360/app/src/main/res/layout/activity_emergency_contacts_landing.xml" value="0.22" />
         <entry key="..\:/Hammad/Locator360/app/src/main/res/layout/activity_enter_password_sign_in.xml" value="0.22" />
         <entry key="..\:/Hammad/Locator360/app/src/main/res/layout/activity_forget_password.xml" value="0.2046875" />
         <entry key="..\:/Hammad/Locator360/app/src/main/res/layout/activity_general_screen_one.xml" value="0.2" />

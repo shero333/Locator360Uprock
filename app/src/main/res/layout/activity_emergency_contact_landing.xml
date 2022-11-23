@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".HomeScreen.FragmentSafety.EmergencyContacts.EmergencyContactsLandingActivity">
+    tools:context=".HomeScreen.FragmentSafety.EmergencyContacts.EmergencyContactLandingActivity">
 
     <com.google.android.material.imageview.ShapeableImageView
         android:id="@+id/img"
@@ -23,7 +23,7 @@
         android:textColor="@color/black"
         android:textStyle="bold"
         android:textAlignment="center"
-        android:text="Add emergency contact\nto your circle?"
+        android:text="@string/add_emergency_contact_nto_your_circle"
         android:textSize="@dimen/_16ssp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

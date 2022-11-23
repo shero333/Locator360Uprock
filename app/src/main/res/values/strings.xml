@@ -116,4 +116,6 @@
     <string name="invite_members_to">Invite members to</string>
     <string name="last_seen">Last seen:</string>
     <string name="phone_number">Phone Number</string>
+    <string name="save">Save</string>
+    <string name="add_emergency_contact_nto_your_circle">Add emergency contact\nto your circle?</string>
 </resources>

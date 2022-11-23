@@ -13,7 +13,7 @@ import com.hammad.findmyfamily.Util.Constants;
 public class Permissions {
 
     public static boolean hasCameraPermission(Context context){
-        String permission = "Manifest.permission.CAMERA";
+        String permission = Manifest.permission.CAMERA;
 
         return context.checkCallingOrSelfPermission(permission) == PackageManager.PERMISSION_GRANTED;
     }
@@ -47,6 +47,17 @@ public class Permissions {
     public static void getLocationPermission(Activity activity){
         String[] permissions = {Manifest.permission.ACCESS_COARSE_LOCATION,Manifest.permission.ACCESS_FINE_LOCATION,Manifest.permission.ACCESS_BACKGROUND_LOCATION};
         activity.requestPermissions(permissions, Constants.REQUEST_CODE_LOCATION);
+    }
+
+    public static boolean hasContactPermission(Context context) {
+
+        String permission = Manifest.permission.READ_CONTACTS;
+
+        return context.checkCallingOrSelfPermission(permission) == PackageManager.PERMISSION_GRANTED;
+    }
+
+    public static void getContactPermission(Activity activity) {
+        activity.requestPermissions(new String[]{Manifest.permission.READ_CONTACTS},Constants.REQUEST_CODE_CONTACTS);
     }
 
 }

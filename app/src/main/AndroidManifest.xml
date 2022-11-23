@@ -21,7 +21,6 @@
     <uses-feature
         android:name="android.hardware.location"
         android:required="true" />
-
     <!--
         This query is used to identify email apps installed in our phone.
          Because on Android 11 and onward package visibility has been limited,
@@ -55,6 +54,9 @@
         android:theme="@style/Theme.Locator360"
         tools:targetApi="31">
         <activity
+            android:name=".HomeScreen.FragmentSafety.EmergencyContacts.EmergencyContactDashboardActivity"
+            android:exported="false" />
+        <activity
             android:name=".HomeScreen.FragmentLocation.AddMember.AddMemberActivity"
             android:exported="false" />
         <activity
@@ -66,15 +68,15 @@
             android:exported="false" />
         <activity
             android:name=".HomeScreen.FragmentSafety.EmergencyContacts.AddContactManuallyActivity"
-            android:exported="false" />
+            android:exported="false"/>
         <activity
-            android:name=".HomeScreen.FragmentSafety.EmergencyContacts.AddContactActivity"
+            android:name=".HomeScreen.FragmentSafety.EmergencyContacts.AddContactFromPhoneActivity"
             android:exported="false" />
         <activity
             android:name=".ResetPassword.ByEmail.CheckEmailActivity"
             android:exported="false" />
         <activity
-            android:name=".HomeScreen.FragmentSafety.EmergencyContacts.EmergencyContactsLandingActivity"
+            android:name=".HomeScreen.FragmentSafety.EmergencyContacts.EmergencyContactLandingActivity"
             android:exported="false" />
         <activity
             android:name=".ResetPassword.ByPhoneNo.CreateNewPasswordActivity"
@@ -173,7 +175,6 @@
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyBE9d03i-pCJMyNCOgwL298fVvJeeCetOw" />
-
     </application>
 
 </manifest>
