@@ -1,6 +1,10 @@
-package com.hammad.findmyfamily.HomeScreen.FragmentSafety.EmergencyContacts;
+package com.hammad.findmyfamily.HomeScreen.FragmentSafety.EmergencyContacts.ContactsFromPhone;
 
+import android.content.ContentResolver;
+import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -15,9 +19,14 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import com.hammad.findmyfamily.R;
 import com.hammad.findmyfamily.databinding.ActivityAddContactFromPhoneBinding;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class AddContactFromPhoneActivity extends AppCompatActivity implements ContactAdapter.OnAddContactListener {
 
     ActivityAddContactFromPhoneBinding binding;
+
+    List<ContactModel> phoneContactList = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,13 +40,51 @@ public class AddContactFromPhoneActivity extends AppCompatActivity implements Co
         //toolbar back button
         binding.toolbarAddContact.setNavigationOnClickListener(v -> onBackPressed());
 
+        //getting contacts from phone
         getPhoneContactsList();
-
-        // recyclerview add contacts
-        //setRecyclerview();
     }
 
     private void getPhoneContactsList() {
+
+        String id,rawId,contactName,contactNumber;
+
+        Uri uri = ContactsContract.CommonDataKinds.Phone.CONTENT_URI;
+        String sortOrder = ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME;
+
+        ContentResolver contentResolver = getContentResolver();
+
+        Cursor cursor = contentResolver.query(uri,null,null,null,sortOrder);
+
+        if(cursor.getCount() > 0) {
+            while (cursor.moveToNext()) {
+
+                id = cursor.getString(cursor.getColumnIndexOrThrow(ContactsContract.CommonDataKinds.Phone.CONTACT_ID));
+                rawId = cursor.getString(cursor.getColumnIndexOrThrow(ContactsContract.CommonDataKinds.Phone.RAW_CONTACT_ID));
+
+                if(id.equals(rawId))
+                {
+                    contactName = cursor.getString(cursor.getColumnIndexOrThrow(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME));
+                    contactNumber = cursor.getString(cursor.getColumnIndexOrThrow(ContactsContract.CommonDataKinds.Phone.NUMBER));
+
+                    phoneContactList.add(new ContactModel(id,contactName,contactNumber));
+                }
+            }
+        }
+
+        cursor.close();
+
+        if(phoneContactList.size() > 0) {
+
+            //setting the recyclerview
+            setRecyclerview();
+
+            //setting the no contacts found view visibility to gone
+            binding.txtNoContacts.setVisibility(View.GONE);
+        }
+        else if(phoneContactList.size() == 0) {
+            binding.txtNoContacts.setVisibility(View.VISIBLE);
+            binding.recyclerAddContact.setVisibility(View.GONE);
+        }
 
     }
 
@@ -72,7 +119,7 @@ public class AddContactFromPhoneActivity extends AppCompatActivity implements Co
         LinearLayoutManager layoutManager = new LinearLayoutManager(this,LinearLayoutManager.VERTICAL,false);
         binding.recyclerAddContact.setLayoutManager(layoutManager);
 
-        ContactAdapter contactAdapter = new ContactAdapter(this,this);
+        ContactAdapter contactAdapter = new ContactAdapter(this,phoneContactList,this);
         binding.recyclerAddContact.setAdapter(contactAdapter);
 
     }

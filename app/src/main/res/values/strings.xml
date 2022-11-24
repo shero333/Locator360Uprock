@@ -118,4 +118,6 @@
     <string name="phone_number">Phone Number</string>
     <string name="save">Save</string>
     <string name="add_emergency_contact_nto_your_circle">Add emergency contact\nto your circle?</string>
+    <string name="add">add</string>
+    <string name="no_contacts_found">No Contacts Found</string>
 </resources>

@@ -70,7 +70,7 @@
             android:name=".HomeScreen.FragmentSafety.EmergencyContacts.AddContactManuallyActivity"
             android:exported="false"/>
         <activity
-            android:name=".HomeScreen.FragmentSafety.EmergencyContacts.AddContactFromPhoneActivity"
+            android:name=".HomeScreen.FragmentSafety.EmergencyContacts.ContactsFromPhone.AddContactFromPhoneActivity"
             android:exported="false" />
         <activity
             android:name=".ResetPassword.ByEmail.CheckEmailActivity"

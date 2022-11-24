@@ -651,4 +651,22 @@ public class Commons {
         addContactsDialog.show();
     }
 
+    public static String getContactLetters(String name) {
+        String letters = "";
+
+        for (int i = 0; i < name.length(); i++) {
+            letters = Character.toString(name.charAt(0));
+
+            if (Character.isWhitespace(name.charAt(i)) || Character.isSpaceChar(name.charAt(i))) {
+                letters = letters.concat(Character.toString(name.charAt(i + 1)));
+                break;
+            }
+        }
+
+        return letters;
+    }
+
+    public static int randomColor() {
+        return Color.argb(255, new Random().nextInt(256),new Random().nextInt(256),new Random().nextInt(256));
+    }
 }

@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".HomeScreen.FragmentSafety.EmergencyContacts.AddContactFromPhoneActivity">
+    tools:context=".HomeScreen.FragmentSafety.EmergencyContacts.ContactsFromPhone.AddContactFromPhoneActivity">
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar_add_contact"
@@ -32,5 +32,19 @@
         app:layout_constraintBottom_toBottomOf="parent"
         tools:listitem="@layout/add_contact_list_item"
         tools:itemCount="3"/>
+
+    <TextView
+        android:id="@+id/txt_no_contacts"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/no_contacts_found"
+        android:textSize="@dimen/_22ssp"
+        android:textStyle="bold"
+        android:textColor="@color/orange"
+        android:visibility="gone"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,18 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/constraint_contact"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:ignore="UseCompatTextViewDrawableXml">
 
     <TextView
         android:id="@+id/txt_contact_letters"
         android:layout_width="@dimen/_50sdp"
         android:layout_height="@dimen/_50sdp"
         android:background="@drawable/drawable_circle_safety_frag"
-        android:backgroundTint="@color/grey"
         android:text="@string/cn"
-        android:textColor="@color/black"
+        tools:backgroundTint="@color/orange"
+        android:textColor="@color/white"
         android:textSize="@dimen/_12ssp"
         android:textStyle="bold"
         android:textAllCaps="true"
@@ -30,7 +32,6 @@
         android:layout_height="wrap_content"
         android:text="@string/contact_name"
         android:textSize="@dimen/_12ssp"
-        android:minLines="2"
         android:textColor="@color/black"
         android:textStyle="bold"
         android:layout_marginStart="@dimen/_20sdp"
@@ -56,16 +57,19 @@
         android:id="@+id/txt_contact_status"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/added"
+        android:text="@string/add"
         android:textAllCaps="true"
         android:textColor="@color/orange"
         android:textStyle="bold"
+        android:drawableStart="@drawable/ic_add"
+        android:drawablePadding="@dimen/_5sdp"
+        app:drawableTint="@color/orange"
         android:textSize="@dimen/_12ssp"
         android:gravity="center_vertical"
-        android:layout_marginEnd="@dimen/_10sdp"
+        android:layout_marginEnd="@dimen/_15sdp"
         app:layout_constraintTop_toTopOf="@id/txt_contact_letters"
         app:layout_constraintBottom_toBottomOf="@id/txt_contact_letters"
-        app:layout_constraintEnd_toEndOf="parent"/>
+        app:layout_constraintEnd_toEndOf="parent" />
 
     <TextView
         android:layout_width="0dp"

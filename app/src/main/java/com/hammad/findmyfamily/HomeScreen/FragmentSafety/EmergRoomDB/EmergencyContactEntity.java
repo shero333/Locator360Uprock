@@ -17,8 +17,8 @@ public class EmergencyContactEntity implements Serializable {
     @ColumnInfo(name = Constants.OWNER_EMAIL)
     private String ownerEmail;
 
-    @ColumnInfo(name = Constants.OWNER_PHONE_NO)
-    private String OwnerPhoneNo;
+    @ColumnInfo(name = Constants.CONTACT_ID)
+    private String contactId;
 
     @ColumnInfo(name = Constants.CONTACT_NAME)
     private String contactName;
@@ -31,11 +31,12 @@ public class EmergencyContactEntity implements Serializable {
 
     public EmergencyContactEntity() {}
 
-    public EmergencyContactEntity(String ownerEmail, String ownerPhoneNo, String contactName, String contactNo, boolean isContactApproved) {
+    public EmergencyContactEntity(String ownerEmail, String contactId, String contactName, String contactNo, boolean isContactApproved) {
         this.ownerEmail = ownerEmail;
-        OwnerPhoneNo = ownerPhoneNo;
+        //this.OwnerPhoneNo = ownerPhoneNo;
+        this.contactId = contactId;
         this.contactName = contactName;
-        ContactNo = contactNo;
+        this.ContactNo = contactNo;
         this.isContactApproved = isContactApproved;
     }
 
@@ -55,12 +56,12 @@ public class EmergencyContactEntity implements Serializable {
         this.ownerEmail = ownerEmail;
     }
 
-    public String getOwnerPhoneNo() {
-        return OwnerPhoneNo;
+    public String getContactId() {
+        return contactId;
     }
 
-    public void setOwnerPhoneNo(String ownerPhoneNo) {
-        OwnerPhoneNo = ownerPhoneNo;
+    public void setContactId(String contactId) {
+        this.contactId = contactId;
     }
 
     public String getContactName() {
