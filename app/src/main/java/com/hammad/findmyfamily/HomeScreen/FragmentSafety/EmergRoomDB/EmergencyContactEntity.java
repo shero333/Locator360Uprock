@@ -33,7 +33,6 @@ public class EmergencyContactEntity implements Serializable {
 
     public EmergencyContactEntity(String ownerEmail, String contactId, String contactName, String contactNo, boolean isContactApproved) {
         this.ownerEmail = ownerEmail;
-        //this.OwnerPhoneNo = ownerPhoneNo;
         this.contactId = contactId;
         this.contactName = contactName;
         this.ContactNo = contactNo;

@@ -32,7 +32,7 @@ public abstract class RoomDBHelper extends RoomDatabase {
     static final Migration MIGRATION_1_2 = new Migration(1,2) {
         @Override
         public void migrate(@NonNull SupportSQLiteDatabase database) {
-            database.execSQL("ALTER TABLE FindMyFamily_db ADD "+Constants.CONTACT_ID + " LONG");
+            database.execSQL("ALTER TABLE FindMyFamily_db ADD "+Constants.CONTACT_ID + " STRING");
         }
     };
 

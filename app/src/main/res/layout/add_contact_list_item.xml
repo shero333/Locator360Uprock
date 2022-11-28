@@ -47,11 +47,9 @@
         android:textColor="@color/black"
         android:textStyle="bold"
         android:layout_marginStart="@dimen/_20sdp"
-        android:layout_marginTop="@dimen/_5sdp"
+        android:layout_marginTop="@dimen/_8sdp"
         app:layout_constraintStart_toEndOf="@id/txt_contact_letters"
-        app:layout_constraintTop_toBottomOf="@id/txt_contact_name"
-        app:layout_constraintBottom_toBottomOf="@id/txt_contact_letters"/>
-
+        app:layout_constraintTop_toBottomOf="@id/txt_contact_name" />
 
     <TextView
         android:id="@+id/txt_contact_status"
@@ -75,11 +73,11 @@
         android:layout_width="0dp"
         android:layout_height="@dimen/_2sdp"
         app:layout_constraintWidth_percent="0.95"
-        android:layout_marginTop="@dimen/_10sdp"
+        android:layout_marginTop="@dimen/_15sdp"
         android:layout_marginBottom="@dimen/_10sdp"
         android:background="@drawable/drawable_line_bottom_sheet"
         android:backgroundTint="@color/orange"
-        app:layout_constraintTop_toBottomOf="@id/txt_contact_letters"
+        app:layout_constraintTop_toBottomOf="@id/txt_contact_no"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"/>

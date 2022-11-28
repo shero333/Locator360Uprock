@@ -5,28 +5,35 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.ContactsContract;
+import android.text.InputType;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SearchView;
-import androidx.core.view.MenuItemCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.hammad.findmyfamily.HomeScreen.FragmentSafety.EmergRoomDB.EmergencyContactEntity;
+import com.hammad.findmyfamily.HomeScreen.FragmentSafety.EmergRoomDB.RoomDBHelper;
 import com.hammad.findmyfamily.R;
 import com.hammad.findmyfamily.databinding.ActivityAddContactFromPhoneBinding;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class AddContactFromPhoneActivity extends AppCompatActivity implements ContactAdapter.OnAddContactListener {
 
     ActivityAddContactFromPhoneBinding binding;
 
     List<ContactModel> phoneContactList = new ArrayList<>();
+
+    ContactAdapter contactAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,6 +43,9 @@ public class AddContactFromPhoneActivity extends AppCompatActivity implements Co
         binding = ActivityAddContactFromPhoneBinding.inflate(getLayoutInflater());
         View view = binding.getRoot();
         setContentView(view);
+
+        // setting the action bar
+        setSupportActionBar(binding.toolbarAddContact);
 
         //toolbar back button
         binding.toolbarAddContact.setNavigationOnClickListener(v -> onBackPressed());
@@ -55,6 +65,7 @@ public class AddContactFromPhoneActivity extends AppCompatActivity implements Co
 
         Cursor cursor = contentResolver.query(uri,null,null,null,sortOrder);
 
+        // set the missing contacts issue
         if(cursor.getCount() > 0) {
             while (cursor.moveToNext()) {
 
@@ -97,7 +108,11 @@ public class AddContactFromPhoneActivity extends AppCompatActivity implements Co
 
         //menu item
         MenuItem menuItem = menu.findItem(R.id.search_view);
-        androidx.appcompat.widget.SearchView searchView = (androidx.appcompat.widget.SearchView) MenuItemCompat.getActionView(menuItem);
+        androidx.appcompat.widget.SearchView searchView = (androidx.appcompat.widget.SearchView) menuItem.getActionView();
+
+        //setting the options to done on soft keyboard so that it can disappears
+        searchView.setImeOptions(EditorInfo.IME_ACTION_DONE);
+        searchView.setInputType(InputType.TYPE_CLASS_TEXT);
 
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
@@ -107,6 +122,7 @@ public class AddContactFromPhoneActivity extends AppCompatActivity implements Co
 
             @Override
             public boolean onQueryTextChange(String newText) {
+                contactAdapter.getFilter().filter(newText);
                 return false;
             }
         });
@@ -119,7 +135,7 @@ public class AddContactFromPhoneActivity extends AppCompatActivity implements Co
         LinearLayoutManager layoutManager = new LinearLayoutManager(this,LinearLayoutManager.VERTICAL,false);
         binding.recyclerAddContact.setLayoutManager(layoutManager);
 
-        ContactAdapter contactAdapter = new ContactAdapter(this,phoneContactList,this);
+        contactAdapter = new ContactAdapter(this,phoneContactList,this);
         binding.recyclerAddContact.setAdapter(contactAdapter);
 
     }
@@ -127,6 +143,17 @@ public class AddContactFromPhoneActivity extends AppCompatActivity implements Co
     // Contact Adapter click listener
     @Override
     public void onAddContactClick(int position) {
-        Toast.makeText(this, "Item: "+position, Toast.LENGTH_SHORT).show();
+
+        String currentUserEmail = Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser().getEmail());
+
+        ContactModel contactItem = phoneContactList.get(position);
+
+        //saving data in database
+        RoomDBHelper.getInstance(this)
+                    .emergencyContactDao()
+                    .addContact(new EmergencyContactEntity(currentUserEmail, contactItem.getContactId(),contactItem.getContactName(),contactItem.getContactNumber(),false));
+
+        Toast.makeText(this, "Emergency Contact Added.", Toast.LENGTH_LONG).show();
+        //send approval sms screen
     }
 }

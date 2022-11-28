@@ -120,4 +120,5 @@
     <string name="add_emergency_contact_nto_your_circle">Add emergency contact\nto your circle?</string>
     <string name="add">add</string>
     <string name="no_contacts_found">No Contacts Found</string>
+    <string name="approval_pending">Approval Pending</string>
 </resources>
