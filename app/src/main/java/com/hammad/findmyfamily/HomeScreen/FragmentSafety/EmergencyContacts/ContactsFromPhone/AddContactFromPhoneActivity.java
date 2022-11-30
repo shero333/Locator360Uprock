@@ -1,6 +1,7 @@
 package com.hammad.findmyfamily.HomeScreen.FragmentSafety.EmergencyContacts.ContactsFromPhone;
 
 import android.content.ContentResolver;
+import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
@@ -11,7 +12,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SearchView;
@@ -20,7 +20,11 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import com.google.firebase.auth.FirebaseAuth;
 import com.hammad.findmyfamily.HomeScreen.FragmentSafety.EmergRoomDB.EmergencyContactEntity;
 import com.hammad.findmyfamily.HomeScreen.FragmentSafety.EmergRoomDB.RoomDBHelper;
+import com.hammad.findmyfamily.HomeScreen.FragmentSafety.EmergencyContacts.Dashboard.EmergencyContactDashboardActivity;
 import com.hammad.findmyfamily.R;
+import com.hammad.findmyfamily.SharedPreference.SharedPreference;
+import com.hammad.findmyfamily.Util.Commons;
+import com.hammad.findmyfamily.Util.Constants;
 import com.hammad.findmyfamily.databinding.ActivityAddContactFromPhoneBinding;
 
 import java.util.ArrayList;
@@ -151,9 +155,21 @@ public class AddContactFromPhoneActivity extends AppCompatActivity implements Co
         //saving data in database
         RoomDBHelper.getInstance(this)
                     .emergencyContactDao()
-                    .addContact(new EmergencyContactEntity(currentUserEmail, contactItem.getContactId(),contactItem.getContactName(),contactItem.getContactNumber(),false));
+                    .addContact(new EmergencyContactEntity(currentUserEmail, contactItem.getContactId(),contactItem.getContactName(),contactItem.getContactNumber()));
 
-        Toast.makeText(this, "Emergency Contact Added.", Toast.LENGTH_LONG).show();
-        //send approval sms screen
+        //updating status in shared preference
+        SharedPreference.setEmergencyContactsStatus(true);
+
+        // is full name shared pref is null, gets the current user full name from firebase
+        if(SharedPreference.getFullName().equals(Constants.NULL)) {
+            Commons.currentUserFullName();
+        }
+
+        //navigates to next activity
+        Intent intent = new Intent(this, EmergencyContactDashboardActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+        intent.putExtra(Constants.PHONE_NO,contactItem.getContactNumber());
+        startActivity(intent);
+
     }
 }

@@ -1,20 +1,29 @@
-package com.hammad.findmyfamily.HomeScreen.FragmentSafety.EmergencyContacts;
+package com.hammad.findmyfamily.HomeScreen.FragmentSafety.EmergencyContacts.ContactsManually;
 
+import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.i18n.phonenumbers.NumberParseException;
 import com.google.i18n.phonenumbers.PhoneNumberUtil;
 import com.google.i18n.phonenumbers.Phonenumber;
+import com.hammad.findmyfamily.HomeScreen.FragmentSafety.EmergRoomDB.EmergencyContactEntity;
+import com.hammad.findmyfamily.HomeScreen.FragmentSafety.EmergRoomDB.RoomDBHelper;
+import com.hammad.findmyfamily.HomeScreen.FragmentSafety.EmergencyContacts.Dashboard.EmergencyContactDashboardActivity;
 import com.hammad.findmyfamily.R;
+import com.hammad.findmyfamily.SharedPreference.SharedPreference;
+import com.hammad.findmyfamily.Util.Commons;
+import com.hammad.findmyfamily.Util.Constants;
 import com.hammad.findmyfamily.databinding.ActivityAddContactManuallyBinding;
+
+import java.util.Random;
 
 public class AddContactManuallyActivity extends AppCompatActivity {
 
@@ -26,6 +35,10 @@ public class AddContactManuallyActivity extends AppCompatActivity {
     //variables for verifying whether entered number is valid or not
     private PhoneNumberUtil.PhoneNumberType isMobile = null;
     private boolean isPhoneNoValid = false;
+
+    //variables for generating random contact id
+    int range = 10000;
+    int min = 1000;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -172,7 +185,31 @@ public class AddContactManuallyActivity extends AppCompatActivity {
             phoneNo = phoneNo.concat(tempNumber);
         }
 
-        Toast.makeText(this, "Phone No: "+phoneNo+"\nF Name: "+firstName+"\nL Name: "+lastName, Toast.LENGTH_LONG).show();
+        // for manual contact saving, we will generate a random contact id
+        Random random = new Random();
+        int randomContactId = random.nextInt(range) + min;
 
+        String contactName = firstName.concat(" ").concat(lastName);
+
+        String currentUserEmail = FirebaseAuth.getInstance().getCurrentUser().getEmail();
+
+        //saving contact in DB
+        RoomDBHelper.getInstance(this)
+                .emergencyContactDao()
+                .addContact(new EmergencyContactEntity(currentUserEmail,String.valueOf(randomContactId),contactName,phoneNo));
+
+        //updating shared preference value
+        SharedPreference.setEmergencyContactsStatus(true);
+
+        // is full name shared pref is null, gets the current user full name from firebase
+        if(SharedPreference.getFullName().equals(Constants.NULL)) {
+            Commons.currentUserFullName();
+        }
+
+        //navigates to next activity
+        Intent intent = new Intent(this, EmergencyContactDashboardActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+        intent.putExtra(Constants.PHONE_NO,phoneNo);
+        startActivity(intent);
     }
 }

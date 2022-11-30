@@ -10,7 +10,10 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
-import com.hammad.findmyfamily.HomeScreen.FragmentSafety.EmergencyContacts.EmergencyContactLandingActivity;
+import com.hammad.findmyfamily.HomeScreen.FragmentSafety.EmergencyContacts.Dashboard.EmergencyContactDashboardActivity;
+import com.hammad.findmyfamily.HomeScreen.FragmentSafety.EmergencyContacts.LandingActivity.EmergencyContactLandingActivity;
+import com.hammad.findmyfamily.SharedPreference.SharedPreference;
+import com.hammad.findmyfamily.Util.Commons;
 import com.hammad.findmyfamily.databinding.FragmentSafetyBinding;
 
 public class FragmentSafety extends Fragment {
@@ -28,16 +31,25 @@ public class FragmentSafety extends Fragment {
         binding.consHelpAlert.setOnClickListener(v -> Toast.makeText(requireContext(), "Help Alert", Toast.LENGTH_SHORT).show());
 
         //add emergency contact click listener
-        binding.btnAddEmergencyContact.setOnClickListener(v -> startActivity(new Intent(requireActivity(), EmergencyContactLandingActivity.class)));
+        binding.btnAddEmergencyContact.setOnClickListener(v -> {
+
+            // if any contact is added in DB, then Dashboard activity is called. Else, Contact Landing Activity is called
+            if(SharedPreference.getEmergencyContactsStatus()) {
+                Intent intent = new Intent(requireActivity(), EmergencyContactDashboardActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                startActivity(intent);
+            }
+            else if(!SharedPreference.getEmergencyContactsStatus()) {
+                Intent intent =new Intent(requireActivity(), EmergencyContactLandingActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+                startActivity(intent);
+            }
+        });
+
+        // saving current user full name in shared pref
+        Commons.currentUserFullName();
 
         return view;
-    }
-
-
-    @Override
-    public void onResume() {
-        super.onResume();
-
     }
 
     //nullifying binding instance on view destroying

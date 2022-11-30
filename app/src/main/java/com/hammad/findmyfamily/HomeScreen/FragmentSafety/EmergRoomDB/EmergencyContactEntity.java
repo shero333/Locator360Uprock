@@ -8,7 +8,7 @@ import com.hammad.findmyfamily.Util.Constants;
 
 import java.io.Serializable;
 
-@Entity (tableName = Constants.EMERGENCY_CONTACT)
+@Entity (tableName = Constants.EMERG_CONTACT_TABLE_NAME)
 public class EmergencyContactEntity implements Serializable {
 
     @PrimaryKey(autoGenerate = true)
@@ -26,17 +26,17 @@ public class EmergencyContactEntity implements Serializable {
     @ColumnInfo(name = Constants.CONTACT_NO)
     private String ContactNo;
 
-    @ColumnInfo(name = Constants.IS_CONTACT_APPROVED)
-    private boolean isContactApproved;
+    /*@ColumnInfo(name = Constants.IS_CONTACT_APPROVED)
+    private boolean isContactApproved;*/
 
     public EmergencyContactEntity() {}
 
-    public EmergencyContactEntity(String ownerEmail, String contactId, String contactName, String contactNo, boolean isContactApproved) {
+    public EmergencyContactEntity(String ownerEmail, String contactId, String contactName, String contactNo/*, boolean isContactApproved*/) {
         this.ownerEmail = ownerEmail;
         this.contactId = contactId;
         this.contactName = contactName;
         this.ContactNo = contactNo;
-        this.isContactApproved = isContactApproved;
+        //this.isContactApproved = isContactApproved;
     }
 
     public int getId() {
@@ -79,11 +79,11 @@ public class EmergencyContactEntity implements Serializable {
         ContactNo = contactNo;
     }
 
-    public boolean isContactApproved() {
+   /* public boolean isContactApproved() {
         return isContactApproved;
     }
 
     public void setContactApproved(boolean contactApproved) {
         isContactApproved = contactApproved;
-    }
+    }*/
 }

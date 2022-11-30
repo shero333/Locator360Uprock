@@ -106,11 +106,11 @@ public class SharedPreference {
         return sharedPreference.getString(Constants.CURRENT_CIRCLE, Constants.NULL);
     }
 
-    public static void setEmergencyContactStatus(boolean isContactAdded) {
+    public static void setEmergencyContactsStatus(boolean isContactAdded) {
         sharedPreference.edit().putBoolean(Constants.ARE_EMERG_CONTACTS_ADDED,isContactAdded).apply();
     }
 
-    public static boolean getEmergencyContactStatus() {
+    public static boolean getEmergencyContactsStatus() {
         return sharedPreference.getBoolean(Constants.ARE_EMERG_CONTACTS_ADDED,false);
     }
 
@@ -120,6 +120,14 @@ public class SharedPreference {
 
     public static String getCircleId() {
         return sharedPreference.getString(Constants.CIRCLE_ID, NULL);
+    }
+
+    public static void setFullName(String fullName) {
+        sharedPreference.edit().putString(Constants.FULL_NAME,fullName).apply();
+    }
+
+    public static String getFullName() {
+        return sharedPreference.getString(Constants.FULL_NAME, NULL);
     }
 
 }

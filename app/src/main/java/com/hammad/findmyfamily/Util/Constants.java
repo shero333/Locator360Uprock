@@ -56,7 +56,7 @@ public interface Constants {
 
      String ARE_EMERG_CONTACTS_ADDED = "are_emerg_contacts_added";
 
-     String EMERGENCY_CONTACT = "emergency_contact";
+     String EMERG_CONTACT_TABLE_NAME = "emergency_contact";
      String CONTACT_NAME = "contact_name";
      String CONTACT_NO = "contact_no";
      String IS_CONTACT_APPROVED = "is_contact_approved";
@@ -76,5 +76,7 @@ public interface Constants {
      String ADD_MEMBER_BUTTON_CLICKED = "button_clicked";
 
      String IS_CIRCLE_CREATED = "is_circle_created";
+
+     String FULL_NAME = "full_name";
 
 }

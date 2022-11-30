@@ -44,7 +44,7 @@ import com.google.firebase.storage.StorageReference;
 import com.hammad.findmyfamily.BuildConfig;
 import com.hammad.findmyfamily.HomeScreen.FragmentLocation.BatteryStatusModelClass;
 import com.hammad.findmyfamily.HomeScreen.FragmentLocation.JoinCircle.CircleModel;
-import com.hammad.findmyfamily.HomeScreen.FragmentSafety.EmergencyContacts.AddContactManuallyActivity;
+import com.hammad.findmyfamily.HomeScreen.FragmentSafety.EmergencyContacts.ContactsManually.AddContactManuallyActivity;
 import com.hammad.findmyfamily.R;
 import com.hammad.findmyfamily.SharedPreference.SharedPreference;
 import com.hammad.findmyfamily.StartScreen.StartScreenActivity;
@@ -633,7 +633,10 @@ public class Commons {
 
         //add contact manually
         dialogBinding.txtAddManually.setOnClickListener(view -> {
-            activity.startActivity(new Intent(activity, AddContactManuallyActivity.class));
+            Intent intent = new Intent(activity, AddContactManuallyActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+            intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+            activity.startActivity(intent);
             addContactsDialog.dismiss();
         });
 
@@ -668,5 +671,25 @@ public class Commons {
 
     public static int randomColor() {
         return Color.argb(255, new Random().nextInt(256),new Random().nextInt(256),new Random().nextInt(256));
+    }
+
+    public static void sendEmergencyContactInvitation(Context context,String phoneNumber) {
+        Uri smsUri = Uri.parse("smsto:"+phoneNumber);
+        Intent intent = new Intent(Intent.ACTION_SENDTO,smsUri);
+        intent.addCategory(Intent.CATEGORY_DEFAULT);
+        intent.putExtra("sms_body",SharedPreference.getFullName() + " added you as Emergency contact on Find My Family app.\n" +
+                "You can download " + context.getString(R.string.app_name)+" from link below:\n\n"+
+                "https://play.google.com/store/apps/details?id=" + BuildConfig.APPLICATION_ID);
+        context.startActivity(intent);
+    }
+
+    public static void currentUserFullName() {
+         FirebaseFirestore.getInstance().collection(USERS_COLLECTION)
+                .document(FirebaseAuth.getInstance().getCurrentUser().getEmail())
+                .get()
+                .addOnSuccessListener(doc -> {
+                    //saving full name in shared preference
+                    SharedPreference.setFullName(doc.getString(Constants.FIRST_NAME).concat(" ".concat(doc.getString(Constants.LAST_NAME))));
+                });
     }
 }
