@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -28,7 +27,7 @@ public class FragmentSafety extends Fragment {
         View view = binding.getRoot();
 
         //help alert click listener
-        binding.consHelpAlert.setOnClickListener(v -> Toast.makeText(requireContext(), "Help Alert", Toast.LENGTH_SHORT).show());
+        binding.consHelpAlert.setOnClickListener(v -> startActivity(new Intent(requireActivity(),EmergencySOSActivity.class)));
 
         //add emergency contact click listener
         binding.btnAddEmergencyContact.setOnClickListener(v -> {
