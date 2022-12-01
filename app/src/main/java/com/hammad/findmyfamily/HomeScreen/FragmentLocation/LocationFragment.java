@@ -328,6 +328,7 @@ public class LocationFragment extends Fragment implements OnMapReadyCallback, Ci
         updateMapMarker(new LatLng(location.getLatitude(), location.getLongitude()));
     }
 
+
     private void saveLocationInFirebase(Location location) {
 
         String currentUserEmail = Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getEmail();

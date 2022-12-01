@@ -121,4 +121,11 @@
     <string name="add">add</string>
     <string name="no_contacts_found">No Contacts Found</string>
     <string name="approval_pending">Approval Pending</string>
+    <string name="sending_emergency_alert">Sending\nEmergency Alert</string>
+    <string name="sos_will_be_sent_once_timer_goes_off">SOS will be sent once timer goes off</string>
+    <string name="tap_the_timer_to_stop">Tap the timer to stop</string>
+    <string name="seconds">Seconds</string>
+    <string name="timer_start">00 : 10</string>
+    <string name="time_start_with_zero">00 :</string>
+    <string name="time_start">00 : 0</string>
 </resources>
