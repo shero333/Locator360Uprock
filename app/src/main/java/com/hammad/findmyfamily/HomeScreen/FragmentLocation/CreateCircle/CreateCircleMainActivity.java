@@ -1,5 +1,7 @@
 package com.hammad.findmyfamily.HomeScreen.FragmentLocation.CreateCircle;
 
+import static com.hammad.findmyfamily.Util.Constants.USERS_COLLECTION;
+
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -92,6 +94,7 @@ public class CreateCircleMainActivity extends AppCompatActivity {
         circleData.put(Constants.CIRCLE_NAME, circleName);
         circleData.put(Constants.CIRCLE_JOIN_CODE, circleCode);
         circleData.put(Constants.CIRCLE_ADMIN, currentUserEmail);
+        circleData.put(Constants.CIRCLE_ID,null);
         circleData.put(Constants.CIRCLE_CODE_EXPIRY_DATE, String.valueOf(System.currentTimeMillis()+259200000)); // 259200000 milliseconds = 3 days.
         circleData.put(Constants.CIRCLE_MEMBERS, FieldValue.arrayUnion(currentUserEmail));
 
@@ -100,6 +103,13 @@ public class CreateCircleMainActivity extends AppCompatActivity {
                 .collection(Constants.CIRCLE_COLLECTION)
                 .add(circleData)
                 .addOnSuccessListener(documentReference -> {
+
+                    //add the created circle id as field in same circle document
+                    FirebaseFirestore.getInstance().collection(USERS_COLLECTION)
+                            .document(currentUserEmail)
+                            .collection(Constants.CIRCLE_COLLECTION)
+                            .document(documentReference.getId())
+                            .update(Constants.CIRCLE_ID,documentReference.getId());
 
                     //saving the newly created circle document id in User collection
                     FirebaseFirestore.getInstance().collection(Constants.USERS_COLLECTION)

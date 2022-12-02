@@ -3,17 +3,18 @@ package com.hammad.findmyfamily.HomeScreen.FragmentSafety;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.location.Location;
-import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.telephony.SmsManager;
+import android.util.Log;
 import android.view.View;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.hammad.findmyfamily.HomeScreen.FragmentSafety.EmergRoomDB.EmergencyContactEntity;
 import com.hammad.findmyfamily.HomeScreen.FragmentSafety.EmergRoomDB.RoomDBHelper;
 import com.hammad.findmyfamily.R;
@@ -22,16 +23,21 @@ import com.hammad.findmyfamily.Util.Commons;
 import com.hammad.findmyfamily.Util.Constants;
 import com.hammad.findmyfamily.databinding.ActivityEmergencySosBinding;
 
+import java.util.ArrayList;
 import java.util.List;
 
-public class EmergencySOSActivity extends AppCompatActivity implements LocationListener {
+public class EmergencySOSActivity extends AppCompatActivity {
 
+    private static final String TAG = "EMERG_SOS_ACT";
     ActivityEmergencySosBinding binding;
     CountDownTimer countDownTimer;
 
     boolean isSosTriggerClicked = false;
 
     List<EmergencyContactEntity> emergencyContactList;
+
+    // circle members fcm token list
+    List<String> fcmTokenList = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,8 +50,8 @@ public class EmergencySOSActivity extends AppCompatActivity implements LocationL
 
         //emergency contacts list
         emergencyContactList = RoomDBHelper.getInstance(this)
-                                .emergencyContactDao()
-                                .getEmergencyContactsList(FirebaseAuth.getInstance().getCurrentUser().getEmail());
+                .emergencyContactDao()
+                .getEmergencyContactsList(FirebaseAuth.getInstance().getCurrentUser().getEmail());
 
         // triggering SOS
         triggerSOS();
@@ -57,22 +63,20 @@ public class EmergencySOSActivity extends AppCompatActivity implements LocationL
     private void triggerSOS() {
 
         // starts the count-down
-        if(!isSosTriggerClicked)
-        {
+        if (!isSosTriggerClicked) {
             //setting the 'isSosTriggerClicked' to true
             isSosTriggerClicked = true;
 
-            countDownTimer = new CountDownTimer(10000,1000) {
+            countDownTimer = new CountDownTimer(10000, 1000) {
                 @Override
                 public void onTick(long l) {
 
-                    if(l == 10000) {
-                        binding.txtTimer.setText(getString(R.string.time_start_with_zero).concat(" ".concat(String.valueOf(l/1000))));
-                    }
-                    else {
+                    if (l == 10000) {
+                        binding.txtTimer.setText(getString(R.string.time_start_with_zero).concat(" ".concat(String.valueOf(l / 1000))));
+                    } else {
 
                         //setting the count down
-                        binding.txtTimer.setText(getString(R.string.time_start).concat(String.valueOf(l/1000)));
+                        binding.txtTimer.setText(getString(R.string.time_start).concat(String.valueOf(l / 1000)));
 
                         //setting txt helper stop timer visibility to VISIBLE
                         binding.txtHelperStopTimer.setVisibility(View.VISIBLE);
@@ -93,9 +97,7 @@ public class EmergencySOSActivity extends AppCompatActivity implements LocationL
                 }
             }.start();
 
-        }
-        else if(isSosTriggerClicked)
-        {
+        } else if (isSosTriggerClicked) {
             //setting the 'isSosTriggerClicked' to false
             isSosTriggerClicked = false;
 
@@ -114,7 +116,7 @@ public class EmergencySOSActivity extends AppCompatActivity implements LocationL
     private void sendEmergencyDetails() {
 
         // is full name shared pref is null, gets the current user full name from firebase
-        if(SharedPreference.getFullName().equals(Constants.NULL)) {
+        if (SharedPreference.getFullName().equals(Constants.NULL)) {
             Commons.currentUserFullName();
         }
 
@@ -141,18 +143,73 @@ public class EmergencySOSActivity extends AppCompatActivity implements LocationL
         SmsManager smsManager = SmsManager.getDefault();
 
         //send message to all emergency contacts
-        for (EmergencyContactEntity emergContact: emergencyContactList) {
-            smsManager.sendTextMessage(emergContact.getContactNo(),null,messageBody,null,null);
+        for (EmergencyContactEntity emergContact : emergencyContactList) {
+            smsManager.sendTextMessage(emergContact.getContactNo(), null, messageBody, null, null);
         }
 
     }
 
+    @SuppressWarnings("unchecked")
     private void sendSOSThroughFirebase() {
 
-        //gets the current circle id
-        List<String> currentCircleMembersList;
+        //list of circle members
+        List<String> circleMemberList = new ArrayList<>();
+
+        //current user email
+        String currentUserEmail = FirebaseAuth.getInstance().getCurrentUser().getEmail();
 
         //gets the current cirlce members and their fcm tokens
+        FirebaseFirestore.getInstance().collectionGroup(Constants.CIRCLE_COLLECTION)
+                .whereEqualTo(Constants.CIRCLE_ID, SharedPreference.getCircleId())
+                .get()
+                .addOnSuccessListener(querySnapshot -> {
+
+                    for (DocumentSnapshot doc : querySnapshot) {
+                        ArrayList<String> list = (ArrayList<String>) doc.get(Constants.CIRCLE_MEMBERS);
+                        circleMemberList.addAll(list);
+                    }
+
+                    // get the fcm tokens of circle members
+                    for(int i = 0; i < circleMemberList.size(); i++) {
+
+                        /*
+                            this variable temporarily saves the current for loop index number.
+                            if the value is equal to last index, then fcm cloud message function is called
+                        */
+                        int loopCurrentIndexValue = i;
+
+                        FirebaseFirestore.getInstance().collection(Constants.USERS_COLLECTION)
+                                .document(circleMemberList.get(i))
+                                .get()
+                                .addOnSuccessListener(documentSnapshot -> {
+
+                                    if(!circleMemberList.get(loopCurrentIndexValue).equals(currentUserEmail)) {
+                                        String fcmToken = documentSnapshot.getString(Constants.FCM_TOKEN);
+
+                                        if (!fcmToken.equals(Constants.NULL)) {
+                                            fcmTokenList.add(fcmToken);
+                                        }
+                                    }
+
+                                    // if current loop iteration is last, then the fcm cloud message notification function is called
+                                    if(loopCurrentIndexValue == (circleMemberList.size() - 1)) {
+                                        triggerFirebaseCloudMessage();
+                                    }
+
+                                });
+                    }
+
+                })
+                .addOnFailureListener(e -> Log.i(TAG, "failed to get circle members: " + e.getMessage()));
+    }
+
+    private void triggerFirebaseCloudMessage() {
+        Log.i(TAG, "triggerFirebaseCloudMessage");
+        Log.i(TAG, "token list size: "+fcmTokenList.size());
+
+        for(String token: fcmTokenList) {
+            Log.i(TAG, "token:\n: "+token);
+        }
     }
 
     @SuppressLint("MissingPermission")
@@ -161,10 +218,5 @@ public class EmergencySOSActivity extends AppCompatActivity implements LocationL
         LocationManager locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
 
         return locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER); // returns current location
-    }
-
-    @Override
-    public void onLocationChanged(@NonNull Location location) {
-
     }
 }

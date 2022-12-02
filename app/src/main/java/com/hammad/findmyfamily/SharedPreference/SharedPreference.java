@@ -98,14 +98,6 @@ public class SharedPreference {
         return sharedPreference.getInt(Constants.MAP_TYPE,0);
     }
 
-    public static void setCurrentCircleStatus(String circleId) {
-        sharedPreference.edit().putString(Constants.CURRENT_CIRCLE,circleId).apply();
-    }
-
-    public static String getCurrentCircleStatus() {
-        return sharedPreference.getString(Constants.CURRENT_CIRCLE, Constants.NULL);
-    }
-
     public static void setEmergencyContactsStatus(boolean isContactAdded) {
         sharedPreference.edit().putBoolean(Constants.ARE_EMERG_CONTACTS_ADDED,isContactAdded).apply();
     }

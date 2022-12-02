@@ -434,7 +434,6 @@ public class LocationFragment extends Fragment implements OnMapReadyCallback, Ci
                             // getting the members
                             for (String memberEmail : circleList.get(0).getCircleMembersList())
                             {
-
                                 // getting the user info
                                 FirebaseFirestore.getInstance().collection(Constants.USERS_COLLECTION)
                                         .document(memberEmail)

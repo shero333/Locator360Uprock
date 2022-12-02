@@ -337,6 +337,7 @@ public class Commons {
                     circleData.put(Constants.CIRCLE_NAME, SharedPreference.getCircleName());
                     circleData.put(Constants.CIRCLE_JOIN_CODE, SharedPreference.getCircleInviteCode());
                     circleData.put(Constants.CIRCLE_ADMIN, SharedPreference.getEmailPref());
+                    circleData.put(Constants.CIRCLE_ID,null);
                     circleData.put(Constants.CIRCLE_CODE_EXPIRY_DATE, String.valueOf(System.currentTimeMillis()+259200000)); // 259200000 milliseconds = 3 days
                     circleData.put(Constants.CIRCLE_MEMBERS, FieldValue.arrayUnion(SharedPreference.getEmailPref()));
 
@@ -351,6 +352,13 @@ public class Commons {
 
                                 DocumentReference documentRefCircleId = FirebaseFirestore.getInstance().collection(USERS_COLLECTION)
                                         .document(SharedPreference.getEmailPref());
+
+                                //add the created circle id as field in same circle document
+                                FirebaseFirestore.getInstance().collection(USERS_COLLECTION)
+                                                .document(SharedPreference.getEmailPref())
+                                                .collection(Constants.CIRCLE_COLLECTION)
+                                                .document(documentReference.getId())
+                                                .update(Constants.CIRCLE_ID,documentReference.getId());
 
                                 documentRefCircleId.update(Constants.CIRCLE_IDS, FieldValue.arrayUnion(documentReference.getId()))
                                         .addOnSuccessListener(unused -> {
