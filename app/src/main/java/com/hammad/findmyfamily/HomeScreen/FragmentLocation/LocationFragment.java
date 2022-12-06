@@ -322,25 +322,25 @@ public class LocationFragment extends Fragment implements OnMapReadyCallback, Ci
         Log.i(TAG, "onLocationChanged() called");
 
         // saves the location in firebase firestore
-        saveLocationInFirebase(location);
+        saveLocationInFirebase(location,getContext());
 
         //update the location on map
         updateMapMarker(new LatLng(location.getLatitude(), location.getLongitude()));
     }
 
 
-    private void saveLocationInFirebase(Location location) {
+    private void saveLocationInFirebase(Location location,Context context) {
 
         String currentUserEmail = Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getEmail();
 
-        BatteryStatusModelClass batteryStatus = Commons.getCurrentBatteryStatus(requireContext());
+        BatteryStatusModelClass batteryStatus = Commons.getCurrentBatteryStatus(context);
 
         // location data
         Map<String, Object> locData = new HashMap<>();
 
         locData.put(Constants.LAT, location.getLatitude());
         locData.put(Constants.LNG, location.getLongitude());
-        locData.put(Constants.LOC_ADDRESS, Commons.getLocationAddress(requireContext(),location));
+        locData.put(Constants.LOC_ADDRESS, Commons.getLocationAddress(context,location));
         locData.put(Constants.IS_PHONE_CHARGING, batteryStatus.isCharging());
         locData.put(Constants.BATTERY_PERCENTAGE, batteryStatus.getBatteryPercentage());
         locData.put(Constants.LOC_TIMESTAMP,String.valueOf(System.currentTimeMillis()));
@@ -777,7 +777,7 @@ public class LocationFragment extends Fragment implements OnMapReadyCallback, Ci
 
     private void setBottomSheetMembersRecyclerView(List<MemberDetail> memberDetailsList) {
 
-        LinearLayoutManager layoutManager = new LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
         binding.bottomSheetMembers.recyclerBottomSheetMember.setLayoutManager(layoutManager);
         binding.bottomSheetMembers.recyclerBottomSheetMember.setAdapter(new BottomSheetMemberAdapter(requireContext(), memberDetailsList, this, this));
     }

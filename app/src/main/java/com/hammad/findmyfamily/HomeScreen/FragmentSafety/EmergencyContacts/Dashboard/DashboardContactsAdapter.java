@@ -7,7 +7,7 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.hammad.findmyfamily.HomeScreen.FragmentSafety.EmergRoomDB.EmergencyContactEntity;
+import com.hammad.findmyfamily.HomeScreen.FragmentSafety.EmergencyRoomDB.EmergencyContactEntity;
 
 import java.util.List;
 

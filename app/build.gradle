@@ -3,6 +3,7 @@ plugins {
 
     // Firebase plugin
     id 'com.google.gms.google-services'
+    id 'com.google.android.libraries.mapsplatform.secrets-gradle-plugin'
 }
 
 android {
@@ -30,6 +31,9 @@ android {
     }
     viewBinding{
         enabled = true
+    }
+    buildFeatures {
+        viewBinding true
     }
 }
 
@@ -92,4 +96,7 @@ dependencies {
 
     // work manager
     implementation "androidx.work:work-runtime:$work_version"
+
+    //volley dependency
+    implementation 'com.android.volley:volley:1.2.1'
 }

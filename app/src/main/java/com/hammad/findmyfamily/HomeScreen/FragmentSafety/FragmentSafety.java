@@ -11,6 +11,7 @@ import androidx.fragment.app.Fragment;
 
 import com.hammad.findmyfamily.HomeScreen.FragmentSafety.EmergencyContacts.Dashboard.EmergencyContactDashboardActivity;
 import com.hammad.findmyfamily.HomeScreen.FragmentSafety.EmergencyContacts.LandingActivity.EmergencyContactLandingActivity;
+import com.hammad.findmyfamily.HomeScreen.FragmentSafety.EmergencySOS.EmergencySOSActivity;
 import com.hammad.findmyfamily.SharedPreference.SharedPreference;
 import com.hammad.findmyfamily.Util.Commons;
 import com.hammad.findmyfamily.databinding.FragmentSafetyBinding;
@@ -27,7 +28,7 @@ public class FragmentSafety extends Fragment {
         View view = binding.getRoot();
 
         //help alert click listener
-        binding.consHelpAlert.setOnClickListener(v -> startActivity(new Intent(requireActivity(),EmergencySOSActivity.class)));
+        binding.consHelpAlert.setOnClickListener(v -> startActivity(new Intent(requireActivity(), EmergencySOSActivity.class)));
 
         //add emergency contact click listener
         binding.btnAddEmergencyContact.setOnClickListener(v -> {

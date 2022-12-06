@@ -1,4 +1,4 @@
-package com.hammad.findmyfamily.HomeScreen.FragmentSafety;
+package com.hammad.findmyfamily.HomeScreen.FragmentSafety.EmergencySOS;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -12,23 +12,31 @@ import android.view.View;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.android.volley.Request;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.hammad.findmyfamily.HomeScreen.FragmentSafety.EmergRoomDB.EmergencyContactEntity;
-import com.hammad.findmyfamily.HomeScreen.FragmentSafety.EmergRoomDB.RoomDBHelper;
+import com.hammad.findmyfamily.HomeScreen.FragmentSafety.EmergencyRoomDB.EmergencyContactEntity;
+import com.hammad.findmyfamily.HomeScreen.FragmentSafety.EmergencyRoomDB.RoomDBHelper;
 import com.hammad.findmyfamily.R;
 import com.hammad.findmyfamily.SharedPreference.SharedPreference;
 import com.hammad.findmyfamily.Util.Commons;
 import com.hammad.findmyfamily.Util.Constants;
 import com.hammad.findmyfamily.databinding.ActivityEmergencySosBinding;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class EmergencySOSActivity extends AppCompatActivity {
 
     private static final String TAG = "EMERG_SOS_ACT";
+
     ActivityEmergencySosBinding binding;
     CountDownTimer countDownTimer;
 
@@ -38,6 +46,10 @@ public class EmergencySOSActivity extends AppCompatActivity {
 
     // circle members fcm token list
     List<String> fcmTokenList = new ArrayList<>();
+
+    JSONObject jsonNotification = new JSONObject();
+    JSONObject jsonData = new JSONObject();
+    JSONObject jsonObjectMain = new JSONObject();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,6 +76,7 @@ public class EmergencySOSActivity extends AppCompatActivity {
 
         // starts the count-down
         if (!isSosTriggerClicked) {
+
             //setting the 'isSosTriggerClicked' to true
             isSosTriggerClicked = true;
 
@@ -127,7 +140,7 @@ public class EmergencySOSActivity extends AppCompatActivity {
         sendSOSThroughFirebase();
 
         //finish the current activity
-        //finish();
+        finish();
     }
 
     private void sendSOSTextMessage() {
@@ -204,11 +217,49 @@ public class EmergencySOSActivity extends AppCompatActivity {
     }
 
     private void triggerFirebaseCloudMessage() {
-        Log.i(TAG, "triggerFirebaseCloudMessage");
-        Log.i(TAG, "token list size: "+fcmTokenList.size());
+
+        Location location = getCurrentLocation();
 
         for(String token: fcmTokenList) {
-            Log.i(TAG, "token:\n: "+token);
+            try {
+
+                String currentUserFullName = SharedPreference.getFullName();
+
+                String notificationBody = currentUserFullName.concat(" ").concat(getString(R.string.sos_body));
+
+                // setting the json
+                jsonObjectMain.put(Constants.FCM_TO,token);
+
+                jsonNotification.put(Constants.FCM_TITLE,getString(R.string.sos_title));
+                jsonNotification.put(Constants.FCM_BODY,notificationBody);
+
+                jsonObjectMain.put(Constants.FCM_NOTIFICATION, jsonNotification);
+
+                jsonData.put(Constants.FCM_LAT,location.getLatitude());
+                jsonData.put(Constants.FCM_LNG,location.getLongitude());
+
+                jsonObjectMain.put(Constants.FCM_DATA,jsonData);
+
+               //object request
+                JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST,Constants.FCM_BASE_URL, jsonObjectMain,
+                        response -> Log.i(TAG, "json request successful"),
+                        error -> Log.e(TAG, "json error: "+error.getMessage())) {
+                    @Override
+                    public Map<String, String> getHeaders() {
+                        Map<String,String> params = new HashMap<>();
+                        params.put(Constants.FCM_HEADER_AUTH,"key="+Constants.FCM_SERVER_KEY);
+                        params.put(Constants.CONTENT_TYPE_KEY,Constants.CONTENT_TYPE);
+                        return params;
+                    }
+                };
+
+                // volley instance
+                VolleySingleton.getInstance(this).addToRequestQueue(jsonObjectRequest);
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
         }
     }
 

@@ -39,6 +39,7 @@
         <entry key="..\:/Hammad/Locator360/app/src/main/res/drawable/ic_error.xml" value="0.1675" />
         <entry key="..\:/Hammad/Locator360/app/src/main/res/drawable/ic_launcher_background.xml" value="0.1475" />
         <entry key="..\:/Hammad/Locator360/app/src/main/res/drawable/ic_search.xml" value="0.151" />
+        <entry key="..\:/Hammad/Locator360/app/src/main/res/drawable/ic_test.xml" value="0.137" />
         <entry key="..\:/Hammad/Locator360/app/src/main/res/drawable/layout_toolbar.xml" value="0.154" />
         <entry key="..\:/Hammad/Locator360/app/src/main/res/drawable/orange_border_pin.xml" value="0.1655" />
         <entry key="..\:/Hammad/Locator360/app/src/main/res/drawable/orange_rounded_button.xml" value="0.155" />
@@ -70,6 +71,7 @@
         <entry key="..\:/Hammad/Locator360/app/src/main/res/layout/activity_emergency_contact_dashboard.xml" value="0.25" />
         <entry key="..\:/Hammad/Locator360/app/src/main/res/layout/activity_emergency_contact_landing.xml" value="0.22" />
         <entry key="..\:/Hammad/Locator360/app/src/main/res/layout/activity_emergency_contacts_landing.xml" value="0.22" />
+        <entry key="..\:/Hammad/Locator360/app/src/main/res/layout/activity_emergency_location.xml" value="0.25" />
         <entry key="..\:/Hammad/Locator360/app/src/main/res/layout/activity_emergency_sos.xml" value="0.25" />
         <entry key="..\:/Hammad/Locator360/app/src/main/res/layout/activity_emergency_sosactivity.xml" value="0.25" />
         <entry key="..\:/Hammad/Locator360/app/src/main/res/layout/activity_enter_password_sign_in.xml" value="0.22" />
@@ -82,6 +84,7 @@
         <entry key="..\:/Hammad/Locator360/app/src/main/res/layout/activity_join_circle_main.xml" value="0.25" />
         <entry key="..\:/Hammad/Locator360/app/src/main/res/layout/activity_join_group.xml" value="0.18" />
         <entry key="..\:/Hammad/Locator360/app/src/main/res/layout/activity_main.xml" value="0.27291666666666664" />
+        <entry key="..\:/Hammad/Locator360/app/src/main/res/layout/activity_maps.xml" value="0.2111111111111111" />
         <entry key="..\:/Hammad/Locator360/app/src/main/res/layout/activity_name_sign_up.xml" value="0.18" />
         <entry key="..\:/Hammad/Locator360/app/src/main/res/layout/activity_otp.xml" value="0.25" />
         <entry key="..\:/Hammad/Locator360/app/src/main/res/layout/activity_password_sign_in.xml" value="0.2046875" />

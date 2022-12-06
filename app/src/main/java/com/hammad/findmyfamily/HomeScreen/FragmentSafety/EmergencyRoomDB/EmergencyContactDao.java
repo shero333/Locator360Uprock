@@ -1,4 +1,4 @@
-package com.hammad.findmyfamily.HomeScreen.FragmentSafety.EmergRoomDB;
+package com.hammad.findmyfamily.HomeScreen.FragmentSafety.EmergencyRoomDB;
 
 import static androidx.room.OnConflictStrategy.REPLACE;
 

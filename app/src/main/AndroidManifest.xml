@@ -11,6 +11,7 @@
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_CONTACTS" />
+    <uses-permission android:name="android.permission.SEND_SMS"/>
 
     <uses-feature
         android:name="android.hardware.location.gps"
@@ -53,8 +54,12 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Locator360"
         tools:targetApi="31">
+
         <activity
-            android:name=".HomeScreen.FragmentSafety.EmergencySOSActivity"
+            android:name=".HomeScreen.FragmentSafety.EmergencySOS.EmergencyLocationActivity"
+            android:exported="false" />
+        <activity
+            android:name=".HomeScreen.FragmentSafety.EmergencySOS.EmergencySOSActivity"
             android:exported="false" />
         <activity
             android:name=".HomeScreen.FragmentSafety.EmergencyContacts.Dashboard.EmergencyContactDashboardActivity"
@@ -161,6 +166,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
         <activity
             android:name=".ResetPassword.ByEmail.ResetPasswordEmailActivity"
             android:exported="false"
@@ -175,6 +181,18 @@
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/file_paths" />
         </provider>
+
+        <service
+            android:name=".HomeScreen.FragmentSafety.EmergencySOS.FirebaseEmergNotificationService"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+            </intent-filter>
+        </service>
+
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_icon"
+            android:resource="@drawable/emerg_sos_icon" />
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"
