@@ -21,6 +21,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.hammad.findmyfamily.HomeScreen.HomeActivity;
+import com.hammad.findmyfamily.R;
 import com.hammad.findmyfamily.StartScreen.StartScreenActivity;
 import com.hammad.findmyfamily.Util.Constants;
 import com.hammad.findmyfamily.databinding.ActivityEmergencyLocationBinding;
@@ -97,12 +98,20 @@ public class EmergencyLocationActivity extends AppCompatActivity implements OnMa
 
                 LatLng latLng = new LatLng(lat,lng);
 
-                CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(latLng, 15);
+                //animate to the current lat lng
+                mGoogleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng,18));
+
+                CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(latLng, 18);
                 mGoogleMap.moveCamera(cameraUpdate);
 
-                mGoogleMap.addMarker(new MarkerOptions()
-                        .position(latLng)
-                        .icon(BitmapDescriptorFactory.defaultMarker()));
+                MarkerOptions markerOptions = new MarkerOptions();
+
+                markerOptions.position(latLng)
+                             .icon(BitmapDescriptorFactory.fromResource(R.drawable.marker_icon))
+                             .title("Test Title")
+                             .anchor((float) 0.5,(float) 0.5);
+
+                mGoogleMap.addMarker(markerOptions);
             }
         }
     }

@@ -30,7 +30,6 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import androidx.appcompat.widget.AppCompatButton;
-import androidx.constraintlayout.utils.widget.ImageFilterView;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -180,15 +179,16 @@ public class Commons {
     }
 
     @SuppressLint("MissingPermission")
-    public static boolean isGpsEnabled(Activity activity, GetGPSListener gpsListener) {
+    public static /*boolean*/void isGpsEnabled(Activity activity, OnSuccessListenerInterface onSuccessListenerInterface) {
 
         LocationManager locationManager = (LocationManager) activity.getSystemService(LOCATION_SERVICE);
 
         boolean isGpsProviderEnabled = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
 
         if (isGpsProviderEnabled) {
-            return true;
+            onSuccessListenerInterface.onSuccess(true);
         } else {
+
             Dialog dialog = new Dialog(activity);
             dialog.setContentView(R.layout.layout_gps_dialog);
 
@@ -204,25 +204,20 @@ public class Commons {
             dialog.getWindow().setLayout(width, ConstraintLayout.LayoutParams.WRAP_CONTENT);
 
             //click listener initialization
-            ImageFilterView filterViewExitDialog = dialog.findViewById(R.id.img_cancel_dialog);
-            AppCompatButton buttonSettings = dialog.findViewById(R.id.btn_settings);
-
-            //exit dialog click listener
-            filterViewExitDialog.setOnClickListener(v -> dialog.dismiss());
+            AppCompatButton buttonSettings = dialog.findViewById(R.id.btn_settings_gps);
 
             //go to settings click listener
             buttonSettings.setOnClickListener(v -> {
-                Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
-                gpsListener.getGPSIntent(intent);
+                onSuccessListenerInterface.onSuccess(false);
                 //dismissing the dialog
                 dialog.dismiss();
             });
 
-            dialog.setCancelable(true);
+            dialog.setCancelable(false);
             dialog.show();
 
-            return false;
         }
+        /*return false;*/
     }
 
     public static void navigateToAppSettings(Context context) {
@@ -252,6 +247,7 @@ public class Commons {
             dialog.dismiss();
         });
 
+        dialog.setCancelable(false);
         dialog.show();
     }
 
@@ -483,10 +479,6 @@ public class Commons {
     // interface for handling the success scenarios in sign up, sign in, and FCM token deletion
     public interface OnSuccessListenerInterface {
         void onSuccess(boolean isSuccessful);
-    }
-
-    public interface GetGPSListener {
-        void getGPSIntent(Intent intent);
     }
 
     public static void signIn(Context context, String password, OnSuccessListenerInterface onSuccessListenerInterface) {

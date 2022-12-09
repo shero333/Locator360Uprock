@@ -44,7 +44,8 @@
             android:padding="@dimen/_5sdp"
             android:translationY="-10dp"
             app:layout_anchor="@id/bottom_sheet_members"
-            app:layout_anchorGravity="start">
+            app:layout_anchorGravity="start"
+            android:visibility="gone">
 
             <ImageView
                 android:id="@+id/img_check_in"

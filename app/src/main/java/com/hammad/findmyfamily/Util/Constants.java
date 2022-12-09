@@ -26,6 +26,7 @@ public interface Constants {
     int REQUEST_CODE_STORAGE = 3;
     int REQUEST_CODE_CONTACTS = 4;
     int REQUEST_CODE_SEND_SMS = 5;
+    int REQUEST_CODE_GPS = 6;
 
     //for circle
     String CIRCLE_COLLECTION = "Circle";

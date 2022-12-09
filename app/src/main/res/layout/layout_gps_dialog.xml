@@ -5,27 +5,18 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@drawable/round_dialog_corners">
 
-    <androidx.constraintlayout.utils.widget.ImageFilterView
-        android:id="@+id/img_cancel_dialog"
-        android:layout_width="@dimen/_30sdp"
-        android:layout_height="@dimen/_30sdp"
-        app:srcCompat="@drawable/ic_cancel"
-        android:layout_margin="@dimen/_5sdp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"/>
-
     <TextView
         android:id="@+id/title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/_15sdp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/img_cancel_dialog"
         android:text="@string/title_gps_dialog"
         android:textStyle="bold"
-        android:textSize="@dimen/_18ssp"
-        android:textColor="@color/orange"/>
+        android:textSize="@dimen/_22ssp"
+        android:textColor="@color/orange"
+        android:layout_marginTop="@dimen/_10sdp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
 
     <TextView
         android:id="@+id/sub_title"
@@ -37,18 +28,17 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/title"
         android:textColor="#99000000"
-        android:textStyle="bold"
-        android:textSize="@dimen/_14ssp"
+        android:textSize="@dimen/_16ssp"
         android:text="@string/sub_title_gps_dialog"
         android:textAlignment="center"/>
 
     <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/btn_settings"
+        android:id="@+id/btn_settings_gps"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         app:layout_constraintWidth_percent="0.8"
         android:background="@drawable/orange_rounded_button"
-        android:text="@string/go_to_settings"
+        android:text="@string/turn_on_gps"
         android:textColor="@color/white"
         android:layout_marginTop="@dimen/_20sdp"
         android:layout_marginBottom="@dimen/_10sdp"

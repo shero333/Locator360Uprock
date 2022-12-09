@@ -1,10 +1,13 @@
 package com.hammad.findmyfamily.HomeScreen.FragmentLocation;
 
+import static android.app.Activity.RESULT_OK;
+
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentSender;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationListener;
@@ -31,9 +34,15 @@ import androidx.work.NetworkType;
 import androidx.work.PeriodicWorkRequest;
 import androidx.work.WorkManager;
 
+import com.google.android.gms.common.api.ApiException;
+import com.google.android.gms.common.api.ResolvableApiException;
 import com.google.android.gms.location.CurrentLocationRequest;
 import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.location.LocationSettingsRequest;
+import com.google.android.gms.location.LocationSettingsResponse;
+import com.google.android.gms.location.LocationSettingsStatusCodes;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -44,6 +53,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.CancellationToken;
 import com.google.android.gms.tasks.OnTokenCanceledListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.firebase.auth.FirebaseAuth;
@@ -117,9 +127,6 @@ public class LocationFragment extends Fragment implements OnMapReadyCallback, Ci
         //items click listener
         clickListeners();
 
-        // TODO: 08/11/2022 set the permission & gps dialog 'navigating to apps setting' along with some location permission setting
-        // TODO: 08/11/2022 onProviderDisabled or enabled functions of gps
-
         //work manager for updating user location every hour
         periodicLocationUpdated();
         
@@ -184,32 +191,102 @@ public class LocationFragment extends Fragment implements OnMapReadyCallback, Ci
 
         if (Permissions.hasLocationPermission(requireContext())) {
 
-            if (Commons.isGpsEnabled(requireActivity(), intent -> gpsActivityResultLauncher.launch(intent))) {
+            Log.i(TAG, "app has location permission");
 
-                Log.i(TAG, "checkLocationPermission() -> gps permission allowed");
+            Commons.isGpsEnabled(requireActivity(), isSuccessful -> {
 
-                //get current location
-                getLocationThroughLastKnownApproach();
+                Log.i(TAG, "isGpsEnabled() called");
 
-            } else {
-                Log.i(TAG, "checkLocationPermission() -> no gps permission allowed");
-            }
+                if (isSuccessful) {
+                    Log.i(TAG, "gps already enabled");
+                    //fetch the location
+                    getLocationThroughLastKnownApproach();
+                } else if (!isSuccessful) {
+                    Log.i(TAG, "gps not enabled");
+                    //displays the built in dialog
+                    googleDefaultGPSDialog();
+                }
+            });
 
-        } else {
+        }
+        else {
             requestPermissions(new String[]{Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_BACKGROUND_LOCATION}, Constants.REQUEST_CODE_LOCATION);
         }
     }
 
-    ActivityResultLauncher<Intent> gpsActivityResultLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
-        //this condition not called
-        if (result.getResultCode() == Activity.RESULT_OK) {
-            Log.i(TAG, "gpsActivityResultLauncher");
-            //get location
-            getLocationThroughLastKnownApproach();
-        } else {
-            Log.i(TAG, "gpsActivityResultLauncher: else called");
+    private void googleDefaultGPSDialog() {
+
+        LocationRequest locationRequest = LocationRequest.create();
+        locationRequest.setInterval(5000).setFastestInterval(3000)
+                .setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+
+        LocationSettingsRequest.Builder locationBuilder = new LocationSettingsRequest.Builder()
+                .addLocationRequest(locationRequest)
+                .setAlwaysShow(true);
+
+        Task<LocationSettingsResponse> responseTask = LocationServices.getSettingsClient(getActivity().getApplicationContext())
+                                                        .checkLocationSettings(locationBuilder.build());
+
+        responseTask.addOnCompleteListener(task -> {
+
+            try {
+                LocationSettingsResponse response = task.getResult(ApiException.class);
+
+                // gps is already enabled
+                Log.i(TAG, "googleDefaultGPSDialog: gps is already enabled");
+
+            }
+            catch (ApiException e) {
+
+                if (e.getStatusCode() == LocationSettingsStatusCodes.RESOLUTION_REQUIRED) {
+                    Log.i(TAG, "googleDefaultGPSDialog: RESOLUTION_REQUIRED");
+                    ResolvableApiException resolvableApiException = (ResolvableApiException) e;
+
+                    try {
+                        Log.i(TAG, "googleDefaultGPSDialog: try block");
+                        //startIntentSenderForResult();
+                        resolvableApiException.startResolutionForResult(getActivity(), Constants.REQUEST_CODE_GPS);
+                    } catch (IntentSender.SendIntentException ex) {
+                        ex.printStackTrace();
+                        Log.i(TAG, "googleDefaultGPSDialog error: "+ex.getMessage());
+                    }
+                }
+            }
+
+        });
+
+    }
+
+    //for reference startActivity for result
+    // https://stackoverflow.com/questions/40110823/start-resolution-for-result-in-a-fragment
+    // https://blog.ldtalentwork.com/2020/07/26/how-to-show-enable-location-dialog-without-navigating-to-settings-page-like-google-maps-in-android/
+
+
+    /*@Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        //super.onActivityResult(requestCode, resultCode, data);
+
+        Log.i(TAG, "onActivityResult: ");
+
+        if(requestCode == Constants.REQUEST_CODE_GPS) {
+            if(resultCode == RESULT_OK) {
+                Log.i(TAG, "gps permission allowed");
+                //fetch the location
+            }
+            else if(resultCode == RESULT_CANCELED) {
+                Log.i(TAG, "gps permission denied");
+                //show the dialog again
+                Commons.isGpsEnabled(requireActivity(), isSuccessful -> {
+
+                    if(!isSuccessful) {
+                        Log.i(TAG, "gps not enabled = inner onActivityResult");
+                        //displays the built in dialog
+                        googleDefaultGPSDialog();
+                    }
+                });
+            }
         }
-    });
+    }*/
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
@@ -218,6 +295,7 @@ public class LocationFragment extends Fragment implements OnMapReadyCallback, Ci
         if (requestCode == Constants.REQUEST_CODE_LOCATION) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
 
+                Log.i(TAG, "onRequestPermissionsResult: permission granted");
                 //getting the current location
                 checkLocationPermission();
 
@@ -225,6 +303,7 @@ public class LocationFragment extends Fragment implements OnMapReadyCallback, Ci
 
                 //navigate to app settings screen
                 Commons.locationPermissionDialog(requireActivity());
+                Log.i(TAG, "onRequestPermissionsResult: permission denied");
             }
         }
 
@@ -250,7 +329,7 @@ public class LocationFragment extends Fragment implements OnMapReadyCallback, Ci
 
                     Log.i(TAG, "getLocationThroughLastKnownApproach() -> location != null");
 
-                    updateMapMarker(new LatLng(location.getLatitude(), location.getLongitude()));
+                    //updateMapMarker(new LatLng(location.getLatitude(), location.getLongitude()));
                 } else {
                     Log.i(TAG, "getLocationThroughLastKnownApproach() -> location == null");
 
@@ -296,9 +375,7 @@ public class LocationFragment extends Fragment implements OnMapReadyCallback, Ci
                     Log.i(TAG, "getLocationThroughCurrentLocationApproach() -> location != null");
 
                     // moves marker to the location
-                    updateMapMarker(new LatLng(location.getLatitude(), location.getLongitude()));
-                } else if (location == null) {
-                    Log.i(TAG, "getLocationThroughCurrentLocationApproach() -> location == null");
+                    //updateMapMarker(new LatLng(location.getLatitude(), location.getLongitude()));
                 }
             }
         });
@@ -308,26 +385,27 @@ public class LocationFragment extends Fragment implements OnMapReadyCallback, Ci
     @SuppressLint("MissingPermission")
     private void startLocationUpdates() {
 
+        Log.i(TAG, "startLocationUpdates()");
+
         //location manager method
         LocationManager locationManager = (LocationManager) requireActivity().getSystemService(Context.LOCATION_SERVICE);
 
         // 60000 milliseconds = 1 minute
         // 1000 milliseconds = 1 second
-        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 600000, 100, this);
+        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 60000, 0, this);
     }
 
     // LocationListener overridden method
     @Override
     public void onLocationChanged(@NonNull Location location) {
-        Log.i(TAG, "onLocationChanged() called");
+        Log.i(TAG, "onLocationChanged()");
 
         // saves the location in firebase firestore
         saveLocationInFirebase(location,getContext());
 
         //update the location on map
-        updateMapMarker(new LatLng(location.getLatitude(), location.getLongitude()));
+        //updateMapMarker(new LatLng(location.getLatitude(), location.getLongitude()));
     }
-
 
     private void saveLocationInFirebase(Location location,Context context) {
 
@@ -609,7 +687,7 @@ public class LocationFragment extends Fragment implements OnMapReadyCallback, Ci
 
     ActivityResultLauncher<Intent> addMemberResultLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
 
-        if (result.getResultCode() == Activity.RESULT_OK) {
+        if (result.getResultCode() == RESULT_OK) {
 
             Intent intent = result.getData();
 
@@ -647,7 +725,7 @@ public class LocationFragment extends Fragment implements OnMapReadyCallback, Ci
 
     ActivityResultLauncher<Intent> createNewCircleResultLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
 
-        if (result.getResultCode() == Activity.RESULT_OK) {
+        if (result.getResultCode() == RESULT_OK) {
 
             //delay the shrunk to give an animation type look
             delayCircleShrunkView();
@@ -680,7 +758,7 @@ public class LocationFragment extends Fragment implements OnMapReadyCallback, Ci
 
     ActivityResultLauncher<Intent> joinCircleResultLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
 
-        if (result.getResultCode() == Activity.RESULT_OK) {
+        if (result.getResultCode() == RESULT_OK) {
 
             Intent intent = result.getData();
 

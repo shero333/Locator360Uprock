@@ -63,8 +63,9 @@
     <string name="join_circle">join circle</string>
     <string name="circle_name">Circle Name</string>
     <string name="title_gps_dialog">Turn on GPS</string>
-    <string name="sub_title_gps_dialog">Your GPS setting must be turned on for Find my Family to work. Please turn on your GPS from settings</string>
-    <string name="go_to_settings">Go to Settings</string>
+    <string name="sub_title_gps_dialog">Your GPS setting must be turned on for Find my Family to work. Please turn on your GPS</string>
+    <string name="turn_on_gps">Turn On GPS</string>
+    <string name="go_to_settings">Go To Settings</string>
     <string name="title_location_dialog">Find my Family only works correctly if it\n access location \'\'All the time\'\'</string>
     <string name="str_1">1. In Find My Family info, click <b>Permissions</b></string>
     <string name="str_2">2. Click on <b>Location permission</b></string>
