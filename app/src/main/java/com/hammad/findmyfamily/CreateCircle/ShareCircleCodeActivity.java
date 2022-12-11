@@ -7,6 +7,7 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.hammad.findmyfamily.BuildConfig;
 import com.hammad.findmyfamily.OneTimeScreens.AddProfilePictureActivity;
 import com.hammad.findmyfamily.SharedPreference.SharedPreference;
 import com.hammad.findmyfamily.Util.Commons;
@@ -50,7 +51,14 @@ public class ShareCircleCodeActivity extends AppCompatActivity {
 
     //this function will have to implement the Firebase dynamic link
     private void shareCircleCode() {
-        Toast.makeText(this, "Share Code", Toast.LENGTH_SHORT).show();
+
+        Intent intent = new Intent(Intent.ACTION_SEND);
+        intent.setType("text/plain");
+        String body = "You're invited to join circle on Find My Family.\nCircle Name: "+SharedPreference.getCircleName()+"\nJoin Code: "+SharedPreference.getCircleInviteCode()
+                +"\n\nHaven't download this application yet? Download now from:\n\n"+
+                "https://play.google.com/store/apps/details?id=" + BuildConfig.APPLICATION_ID;
+        intent.putExtra(Intent.EXTRA_TEXT, body);
+        startActivity(Intent.createChooser(intent, "Share via"));
     }
 
 }

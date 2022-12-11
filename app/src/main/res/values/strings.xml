@@ -133,4 +133,10 @@
     <string name="sos_body"> needs your help. Tap to view current Location</string>
     <string name="emergency_location">Emergency Location</string>
     <string name="title_activity_maps">MapsActivity</string>
+    <string name="send_sms_permission">SMS Permission</string>
+    <string name="sub_title_send_sms_dialog">SMS permission is required to send live location message to added emergency contact(s) when Emergency SOS is triggered</string>
+    <string name="allow_permission">Allow Permission</string>
+    <string name="deny">Deny</string>
+    <string name="resend_invite">Resend Invite</string>
+    <string name="delete">Delete</string>
 </resources>

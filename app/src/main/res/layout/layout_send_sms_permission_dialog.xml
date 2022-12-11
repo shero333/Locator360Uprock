@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@drawable/round_dialog_corners">
+
+    <TextView
+        android:id="@+id/title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/send_sms_permission"
+        android:textStyle="bold"
+        android:textSize="@dimen/_22ssp"
+        android:textColor="@color/orange"
+        android:layout_marginTop="@dimen/_10sdp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
+
+    <TextView
+        android:id="@+id/sub_title"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintWidth_percent="0.85"
+        android:layout_marginTop="@dimen/_15sdp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/title"
+        android:textColor="#99000000"
+        android:textSize="@dimen/_16ssp"
+        android:text="@string/sub_title_send_sms_dialog"
+        android:textAlignment="center"/>
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btn_allow_permission"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintWidth_percent="0.8"
+        android:background="@drawable/orange_rounded_button"
+        android:text="@string/allow_permission"
+        android:textColor="@color/white"
+        android:layout_marginTop="@dimen/_20sdp"
+        android:layout_marginBottom="@dimen/_10sdp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/sub_title" />
+
+    <TextView
+        android:id="@+id/deny_permission"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/deny"
+        android:textStyle="bold"
+        android:textAlignment="center"
+        android:textColor="@color/orange"
+        android:textSize="@dimen/_14ssp"
+        android:padding="@dimen/_10sdp"
+        android:layout_marginTop="@dimen/_10sdp"
+        android:layout_marginBottom="@dimen/_5sdp"
+        app:layout_constraintStart_toStartOf="@id/btn_allow_permission"
+        app:layout_constraintEnd_toEndOf="@id/btn_allow_permission"
+        app:layout_constraintTop_toBottomOf="@id/btn_allow_permission"
+        app:layout_constraintBottom_toBottomOf="parent"/>
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -179,7 +179,7 @@ public class Commons {
     }
 
     @SuppressLint("MissingPermission")
-    public static /*boolean*/void isGpsEnabled(Activity activity, OnSuccessListenerInterface onSuccessListenerInterface) {
+    public static void isGpsEnabled(Activity activity, OnSuccessListenerInterface onSuccessListenerInterface) {
 
         LocationManager locationManager = (LocationManager) activity.getSystemService(LOCATION_SERVICE);
 
@@ -217,7 +217,6 @@ public class Commons {
             dialog.show();
 
         }
-        /*return false;*/
     }
 
     public static void navigateToAppSettings(Context context) {
@@ -692,4 +691,5 @@ public class Commons {
                     SharedPreference.setFullName(doc.getString(Constants.FIRST_NAME).concat(" ".concat(doc.getString(Constants.LAST_NAME))));
                 });
     }
+
 }

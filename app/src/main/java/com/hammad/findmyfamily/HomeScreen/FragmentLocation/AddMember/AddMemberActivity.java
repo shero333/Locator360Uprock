@@ -4,10 +4,10 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.hammad.findmyfamily.BuildConfig;
 import com.hammad.findmyfamily.SharedPreference.SharedPreference;
 import com.hammad.findmyfamily.Util.Constants;
 import com.hammad.findmyfamily.databinding.ActivityAddMemberBinding;
@@ -41,7 +41,7 @@ public class AddMemberActivity extends AppCompatActivity {
         setCircleCode();
 
         //share invite code click listener
-        binding.btnShareCode.setOnClickListener(v -> Toast.makeText(this, "Share Code", Toast.LENGTH_SHORT).show());
+        binding.btnShareCode.setOnClickListener(v -> shareCircleCode());
     }
 
     private void getIntentData() {
@@ -74,5 +74,15 @@ public class AddMemberActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         navigateToPreviousActivity();
+    }
+
+    private void shareCircleCode() {
+        Intent intent = new Intent(Intent.ACTION_SEND);
+        intent.setType("text/plain");
+        String body = "You're invited to join circle on Find My Family.\nCircle Name: "+SharedPreference.getCircleName()+"\nJoin Code: "+SharedPreference.getCircleInviteCode()
+                +"\n\nHaven't download this application yet? Download now from:\n\n"+
+                "https://play.google.com/store/apps/details?id=" + BuildConfig.APPLICATION_ID;
+        intent.putExtra(Intent.EXTRA_TEXT, body);
+        startActivity(Intent.createChooser(intent, "Share via"));
     }
 }

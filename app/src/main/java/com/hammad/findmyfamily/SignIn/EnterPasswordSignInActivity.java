@@ -32,7 +32,7 @@ public class EnterPasswordSignInActivity extends AppCompatActivity {
         setContentView(view);
 
         //setting the user's first name saved in preference from list
-        binding.txtUsername.append(" " + SharedPreference.getFirstNamePref() + "?");
+        //binding.txtUsername.append(" " + SharedPreference.getFirstNamePref() + "?");
 
         //TextWatcher
         binding.edtPasswordSignIn.addTextChangedListener(passwordTextWatcher);
@@ -44,7 +44,7 @@ public class EnterPasswordSignInActivity extends AppCompatActivity {
         binding.txtForgetPassword.setOnClickListener(v -> startActivity(new Intent(this, ResetPasswordEmailActivity.class)));
 
         //if the first name retrieved against phone number is incorrect, then moves onto the account verification activity
-        binding.txtUsername.setOnClickListener(v -> Toast.makeText(this, "Verifying Account Details", Toast.LENGTH_SHORT).show());
+        //binding.txtUsername.setOnClickListener(v -> Toast.makeText(this, "Verifying Account Details", Toast.LENGTH_SHORT).show());
     }
 
     private final TextWatcher passwordTextWatcher = new TextWatcher() {

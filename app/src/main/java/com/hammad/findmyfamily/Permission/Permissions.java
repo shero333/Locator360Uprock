@@ -1,7 +1,6 @@
 package com.hammad.findmyfamily.Permission;
 
 import static com.hammad.findmyfamily.Util.Constants.REQUEST_CODE_CAMERA;
-import static com.hammad.findmyfamily.Util.Constants.REQUEST_CODE_SEND_SMS;
 import static com.hammad.findmyfamily.Util.Constants.REQUEST_CODE_STORAGE;
 
 import android.Manifest;
@@ -61,14 +60,9 @@ public class Permissions {
         activity.requestPermissions(new String[]{Manifest.permission.READ_CONTACTS},Constants.REQUEST_CODE_CONTACTS);
     }
 
-    private static boolean hasSmsPermission(Context context) {
+    public static boolean hasSmsPermission(Context context) {
         String permission = Manifest.permission.SEND_SMS;
         return context.checkCallingOrSelfPermission(permission)  == PackageManager.PERMISSION_GRANTED;
-    }
-
-    private static void getSmsPermission(Activity activity) {
-        activity.requestPermissions(new String[]{Manifest.permission.SEND_SMS},REQUEST_CODE_SEND_SMS);
-
     }
 
 }
