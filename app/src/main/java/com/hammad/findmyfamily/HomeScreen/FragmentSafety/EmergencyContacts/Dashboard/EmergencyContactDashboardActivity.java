@@ -9,23 +9,29 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.hammad.findmyfamily.HomeScreen.FragmentSafety.EmergencyContacts.ContactsFromPhone.AddContactFromPhoneActivity;
 import com.hammad.findmyfamily.HomeScreen.FragmentSafety.EmergencyRoomDB.EmergencyContactEntity;
 import com.hammad.findmyfamily.HomeScreen.FragmentSafety.EmergencyRoomDB.RoomDBHelper;
-import com.hammad.findmyfamily.HomeScreen.FragmentSafety.EmergencyContacts.ContactsFromPhone.AddContactFromPhoneActivity;
 import com.hammad.findmyfamily.Permission.Permissions;
+import com.hammad.findmyfamily.SharedPreference.SharedPreference;
 import com.hammad.findmyfamily.Util.Commons;
 import com.hammad.findmyfamily.Util.Constants;
 import com.hammad.findmyfamily.databinding.ActivityEmergencyContactDashboardBinding;
 
+import java.util.ArrayList;
 import java.util.List;
 
-public class EmergencyContactDashboardActivity extends AppCompatActivity {
+public class EmergencyContactDashboardActivity extends AppCompatActivity implements DashboardContactsAdapter.OnAddedContactListener {
 
     private static final String TAG = "EMERG_CON_DASH";
 
     ActivityEmergencyContactDashboardBinding binding;
+
+    List<EmergencyContactEntity> emergencyContactList = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,10 +45,8 @@ public class EmergencyContactDashboardActivity extends AppCompatActivity {
         //when a new emergency contact is added, the invitation sms will be triggered from this function
         getIntentData();
 
-        // get added emergency contacts list
-        getEmergencyContactListFromDB();
-
-        binding.btnAddContact.setOnClickListener(v -> Commons.addEmergencyContactDialog(this, isSuccessful -> {
+        // add new contact click listener
+        binding.btnAddNewContact.setOnClickListener(v -> Commons.addEmergencyContactDialog(this, isSuccessful -> {
 
             if (Permissions.hasContactPermission(this)) {
                 navigateToNextActivity();
@@ -51,6 +55,15 @@ public class EmergencyContactDashboardActivity extends AppCompatActivity {
             }
         }));
 
+        //back pressed
+        binding.toolbarContactDashboard.setNavigationOnClickListener(v -> onBackPressed());
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        // get added emergency contacts list
+        getEmergencyContactListFromDB();
     }
 
     private void getIntentData() {
@@ -68,13 +81,37 @@ public class EmergencyContactDashboardActivity extends AppCompatActivity {
 
     private void getEmergencyContactListFromDB() {
 
-        List<EmergencyContactEntity> emergencyContactList = RoomDBHelper.getInstance(this)
-                .emergencyContactDao()
-                .getEmergencyContactsList(FirebaseAuth.getInstance().getCurrentUser().getEmail());
+         emergencyContactList = RoomDBHelper.getInstance(this).emergencyContactDao()
+                                .getEmergencyContactsList(FirebaseAuth.getInstance().getCurrentUser().getEmail());
+
+         //if added contacts list is zero, then added contacts status is set to false.
+         if(emergencyContactList.size() == 0) {
+             SharedPreference.setEmergencyContactsStatus(false);
+
+             //finish this activity
+             finish();
+         }
 
         // setting the list to recyclerview
+        RecyclerView.LayoutManager layoutManager = new GridLayoutManager(this,2);
 
+        binding.recyclerAddedContact.setLayoutManager(layoutManager);
+
+        DashboardContactsAdapter adapter = new DashboardContactsAdapter(this,emergencyContactList,this);
+        binding.recyclerAddedContact.setAdapter(adapter);
     }
+
+    // recyclerview item click
+    @Override
+    public void onAddedContact(int position) {
+
+        EmergencyContactEntity contactItem = emergencyContactList.get(position);
+
+        Intent intent = new Intent(this,ContactDetailActivity.class);
+        intent.putExtra(Constants.CONTACT_KEY,new ParcelableContactModel(contactItem.getOwnerEmail(),contactItem.getContactId(),contactItem.getContactName(),contactItem.getContactNo()));
+        startActivity(intent);
+    }
+
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {

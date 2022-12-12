@@ -139,4 +139,5 @@
     <string name="deny">Deny</string>
     <string name="resend_invite">Resend Invite</string>
     <string name="delete">Delete</string>
+    <string name="add_new_contact">Add New Contact</string>
 </resources>

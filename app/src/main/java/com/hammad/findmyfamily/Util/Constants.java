@@ -99,4 +99,6 @@ public interface Constants {
 
     String IS_APP_IN_FOREGROUND = "is_app_in_foreground";
 
+    String CONTACT_KEY = "contact_key";
+
 }

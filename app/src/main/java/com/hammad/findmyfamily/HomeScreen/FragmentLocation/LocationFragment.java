@@ -61,6 +61,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
+import com.hammad.findmyfamily.Application.App;
 import com.hammad.findmyfamily.HomeScreen.FragmentLocation.AddMember.AddMemberActivity;
 import com.hammad.findmyfamily.HomeScreen.FragmentLocation.BottomSheetMembers.BottomSheetMemberAdapter;
 import com.hammad.findmyfamily.HomeScreen.FragmentLocation.BottomSheetMembers.MemberDetail;
@@ -196,8 +197,6 @@ public class LocationFragment extends Fragment implements OnMapReadyCallback, Ci
 
             Commons.isGpsEnabled(requireActivity(), isSuccessful -> {
 
-                Log.i(TAG, "isGpsEnabled() called");
-
                 if (isSuccessful) {
                     Log.i(TAG, "gps already enabled");
                     //fetch the location
@@ -252,8 +251,7 @@ public class LocationFragment extends Fragment implements OnMapReadyCallback, Ci
 
     }
 
-    ActivityResultLauncher<IntentSenderRequest> gpsResultLauncher =
-            registerForActivityResult(new ActivityResultContracts.StartIntentSenderForResult(), result -> {
+    ActivityResultLauncher<IntentSenderRequest> gpsResultLauncher = registerForActivityResult(new ActivityResultContracts.StartIntentSenderForResult(), result -> {
 
                 if(result.getResultCode() == RESULT_OK) {
                     Log.i(TAG, "gps permission allowed");
@@ -385,13 +383,15 @@ public class LocationFragment extends Fragment implements OnMapReadyCallback, Ci
         Log.i(TAG, "onLocationChanged()");
 
         // saves the location in firebase firestore
-        saveLocationInFirebase(location,getContext());
+        saveLocationInFirebase(location);
 
         //update the location on map
         //updateMapMarker(new LatLng(location.getLatitude(), location.getLongitude()));
     }
 
-    private void saveLocationInFirebase(Location location,Context context) {
+    private void saveLocationInFirebase(Location location) {
+
+        Context context = App.getAppContext();
 
         String currentUserEmail = Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getEmail();
 
@@ -460,6 +460,7 @@ public class LocationFragment extends Fragment implements OnMapReadyCallback, Ci
 
     @SuppressWarnings("unchecked")
     private void getDetailDataFromFirebase() {
+        Log.i("HELLO_123", "getDetailDataFromFirebase()");
 
         //current user email
         String currentUserEmail = Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getEmail();
@@ -467,6 +468,8 @@ public class LocationFragment extends Fragment implements OnMapReadyCallback, Ci
         FirebaseFirestore.getInstance().collectionGroup(Constants.CIRCLE_COLLECTION)
                 .whereArrayContains(Constants.CIRCLE_MEMBERS, currentUserEmail)
                 .addSnapshotListener((value, error) -> {
+
+                    Log.i("HELLO_123", "main collection group (CIRCLE COLLECTION)");
 
                     // clearing the circle and members list
                     circleList.clear();
@@ -481,6 +484,8 @@ public class LocationFragment extends Fragment implements OnMapReadyCallback, Ci
                         }
 
                         if (SharedPreference.getCircleId().equals(Constants.NULL)) {
+
+                            Log.i("HELLO_123", "if condition is called");
 
                             MemberDetail memberDetail = new MemberDetail();
 
@@ -530,6 +535,7 @@ public class LocationFragment extends Fragment implements OnMapReadyCallback, Ci
                         }
                         else if(!SharedPreference.getCircleId().equals(Constants.NULL)) {
 
+                            Log.i("HELLO_123", "else if condition is called");
                             // setting the circle name to toolbar & toolbar extended view
                             binding.toolbar.textViewCircleName.setText(SharedPreference.getCircleName());
                             binding.toolbarExtendedView.txtCircleName.setText(SharedPreference.getCircleName());
@@ -545,12 +551,15 @@ public class LocationFragment extends Fragment implements OnMapReadyCallback, Ci
 
                                     for(String memberEmail : circleModel.getCircleMembersList()) {
 
+                                        Log.i("HELLO_123", "member list loop");
+
                                         MemberDetail memberDetail = new MemberDetail();
 
                                         // getting the user info
                                         FirebaseFirestore.getInstance().collection(Constants.USERS_COLLECTION)
                                                 .document(memberEmail)
                                                 .addSnapshotListener((valueUserInfo, errorUserInfo) -> {
+                                                    Log.i("HELLO_123", "user collection called: ");
                                                     memberDetail.setMemberFirstName(valueUserInfo.getString(Constants.FIRST_NAME));
                                                     memberDetail.setMemberLastName(valueUserInfo.getString(Constants.LAST_NAME));
                                                     memberDetail.setMemberImageUrl(valueUserInfo.getString(Constants.IMAGE_PATH));
@@ -564,7 +573,15 @@ public class LocationFragment extends Fragment implements OnMapReadyCallback, Ci
                                                 .limit(1)
                                                 .addSnapshotListener((valueLoc, errorLoc) -> {
 
+                                                    //clearing the member details list, so that when location changes,
+                                                    // there's no repetition in list
+                                                    //membersDetailList.clear();
+
+                                                    Log.i("HELLO_123", "location collection called: ");
+
                                                     for (DocumentSnapshot doc: valueLoc) {
+                                                        Log.i("HELLO_123", "location collection for loop");
+
                                                         memberDetail.setLocationLat(doc.getDouble(Constants.LAT).toString());
                                                         memberDetail.setLocationLng(doc.getDouble(Constants.LNG).toString());
                                                         memberDetail.setLocationAddress(doc.getString(Constants.LOC_ADDRESS));
@@ -636,11 +653,12 @@ public class LocationFragment extends Fragment implements OnMapReadyCallback, Ci
 
     private void toolbarSettings() {
 
-        Toast.makeText(requireContext(), "Settings", Toast.LENGTH_SHORT).show();
+        //Toast.makeText(requireContext(), "Settings", Toast.LENGTH_SHORT).show();
+        Commons.signOut(requireActivity());
     }
 
     private void toolbarChat() {
-        Commons.signOut(requireActivity());
+
     }
 
     private void extendedToolbarViewClickListeners() {
@@ -839,9 +857,13 @@ public class LocationFragment extends Fragment implements OnMapReadyCallback, Ci
 
     private void setBottomSheetMembersRecyclerView(List<MemberDetail> memberDetailsList) {
 
-        LinearLayoutManager layoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
-        binding.bottomSheetMembers.recyclerBottomSheetMember.setLayoutManager(layoutManager);
-        binding.bottomSheetMembers.recyclerBottomSheetMember.setAdapter(new BottomSheetMemberAdapter(requireContext(), memberDetailsList, this, this));
+        //purpose of this condition is to remove null pointer exception. (If you're in Safety Fragment & location changes)
+        if(getContext() != null)
+        {
+            LinearLayoutManager layoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
+            binding.bottomSheetMembers.recyclerBottomSheetMember.setLayoutManager(layoutManager);
+            binding.bottomSheetMembers.recyclerBottomSheetMember.setAdapter(new BottomSheetMemberAdapter(requireContext(), memberDetailsList, this, this));
+        }
     }
 
     // recyclerview bottom sheet member 'Add new member' click listener

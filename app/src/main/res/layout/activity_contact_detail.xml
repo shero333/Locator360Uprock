@@ -25,7 +25,7 @@
             android:layout_height="@dimen/_70sdp"
             android:background="@drawable/drawable_circle_safety_frag"
             android:text="@string/cn"
-            tools:backgroundTint="@color/grey_bottom"
+            android:backgroundTint="@color/grey_bottom"
             android:textColor="@color/white"
             android:textSize="@dimen/_16ssp"
             android:textStyle="bold"
@@ -83,6 +83,7 @@
         app:layout_constraintTop_toBottomOf="@id/cons_contact" />
 
     <TextView
+        android:id="@+id/delete_contact"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/delete"

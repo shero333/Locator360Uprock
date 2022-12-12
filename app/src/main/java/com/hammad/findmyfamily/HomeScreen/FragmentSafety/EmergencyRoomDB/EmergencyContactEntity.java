@@ -26,17 +26,13 @@ public class EmergencyContactEntity implements Serializable {
     @ColumnInfo(name = Constants.CONTACT_NO)
     private String ContactNo;
 
-    /*@ColumnInfo(name = Constants.IS_CONTACT_APPROVED)
-    private boolean isContactApproved;*/
-
     public EmergencyContactEntity() {}
 
-    public EmergencyContactEntity(String ownerEmail, String contactId, String contactName, String contactNo/*, boolean isContactApproved*/) {
+    public EmergencyContactEntity(String ownerEmail, String contactId, String contactName, String contactNo) {
         this.ownerEmail = ownerEmail;
         this.contactId = contactId;
         this.contactName = contactName;
         this.ContactNo = contactNo;
-        //this.isContactApproved = isContactApproved;
     }
 
     public int getId() {
@@ -78,12 +74,4 @@ public class EmergencyContactEntity implements Serializable {
     public void setContactNo(String contactNo) {
         ContactNo = contactNo;
     }
-
-   /* public boolean isContactApproved() {
-        return isContactApproved;
-    }
-
-    public void setContactApproved(boolean contactApproved) {
-        isContactApproved = contactApproved;
-    }*/
 }

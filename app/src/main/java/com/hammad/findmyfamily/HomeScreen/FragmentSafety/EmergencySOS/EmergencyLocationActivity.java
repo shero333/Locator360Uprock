@@ -3,8 +3,12 @@ package com.hammad.findmyfamily.HomeScreen.FragmentSafety.EmergencySOS;
 import static com.hammad.findmyfamily.Util.Constants.USERS_COLLECTION;
 
 import android.content.Intent;
+import android.location.Location;
+import android.location.LocationManager;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -16,13 +20,16 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.hammad.findmyfamily.Application.App;
 import com.hammad.findmyfamily.HomeScreen.HomeActivity;
 import com.hammad.findmyfamily.R;
 import com.hammad.findmyfamily.StartScreen.StartScreenActivity;
+import com.hammad.findmyfamily.Util.Commons;
 import com.hammad.findmyfamily.Util.Constants;
 import com.hammad.findmyfamily.databinding.ActivityEmergencyLocationBinding;
 
@@ -99,19 +106,30 @@ public class EmergencyLocationActivity extends AppCompatActivity implements OnMa
                 LatLng latLng = new LatLng(lat,lng);
 
                 //animate to the current lat lng
-                mGoogleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng,18));
+                mGoogleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng,16));
 
-                CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(latLng, 18);
+                CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(latLng, 16);
                 mGoogleMap.moveCamera(cameraUpdate);
 
                 MarkerOptions markerOptions = new MarkerOptions();
 
+                Location location = new Location(LocationManager.GPS_PROVIDER);
+                location.setLatitude(lat);
+                location.setLongitude(lng);
+
                 markerOptions.position(latLng)
                              .icon(BitmapDescriptorFactory.fromResource(R.drawable.marker_icon))
-                             .title("Test Title")
                              .anchor((float) 0.5,(float) 0.5);
 
                 mGoogleMap.addMarker(markerOptions);
+
+                mGoogleMap.setOnMarkerClickListener(marker -> {
+                    //setting the address to textview
+                    binding.txtLocAddress.setVisibility(View.VISIBLE);
+                    binding.txtLocAddress.setText(Commons.getLocationAddress(this,location));
+                    return false;
+                });
+
             }
         }
     }

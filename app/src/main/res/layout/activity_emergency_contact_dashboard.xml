@@ -6,37 +6,43 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".HomeScreen.FragmentSafety.EmergencyContacts.Dashboard.EmergencyContactDashboardActivity">
 
-
-    <TextView
-        android:id="@+id/txt_title"
-        android:layout_width="wrap_content"
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar_contact_dashboard"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textStyle="bold"
-        android:textSize="@dimen/_18ssp"
-        android:text="Dummy Added Contact Screen"
+        android:background="@color/orange"
+        app:navigationIcon="@drawable/ic_arrow_back"
+        app:title="Emergency Contacts"
+        app:titleTextColor="@color/white"
+        android:paddingStart="@dimen/_5sdp"
+        android:paddingEnd="@dimen/_5sdp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"/>
+        app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycler_added_contact"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/_30sdp"
-        tools:listitem="@layout/add_contact_list_item"
-        tools:itemCount="3"
-        app:layout_constraintTop_toBottomOf="@id/txt_title"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"/>
-
-    <Button
-        android:id="@+id/btn_add_contact"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Add New contact"
-        android:layout_marginTop="@dimen/_40sdp"
+        android:layout_height="0dp"
+        android:layout_marginTop="@dimen/_10sdp"
+        android:layout_marginBottom="@dimen/_10sdp"
+        tools:listitem="@layout/layout_added_contact_item"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/recycler_added_contact"/>
+        app:layout_constraintTop_toBottomOf="@id/toolbar_contact_dashboard"
+        app:layout_constraintBottom_toTopOf="@id/btn_add_new_contact"/>
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btn_add_new_contact"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintWidth_percent="0.8"
+        android:background="@drawable/orange_rounded_button"
+        android:text="@string/add_new_contact"
+        android:textColor="@color/white"
+        app:layout_constraintVertical_bias="0.8"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

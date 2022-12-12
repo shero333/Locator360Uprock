@@ -134,7 +134,7 @@ public class EmergencySOSActivity extends AppCompatActivity {
         }
 
         //send sms to emergency contacts through
-        //sendSOSTextMessage();
+        sendSOSTextMessage();
 
         //send firebase notification to circle members
         sendSOSThroughFirebase();
