@@ -19,6 +19,7 @@
 
     <color name="holo_red_dark">#FFCC0000</color>
     <color name="holo_green_dark">#FF669900</color>
+    <color name="blue_chat">#016BFD</color>
 
 
 </resources>

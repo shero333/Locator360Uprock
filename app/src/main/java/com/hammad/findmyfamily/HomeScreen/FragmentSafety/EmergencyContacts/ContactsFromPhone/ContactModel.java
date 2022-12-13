@@ -6,6 +6,8 @@ public class ContactModel {
     private String contactName;
     private String contactNumber;
 
+    public ContactModel() {}
+
     public ContactModel(String contactId, String contactName, String contactNumber) {
         this.contactId = contactId;
         this.contactName = contactName;
@@ -24,4 +26,15 @@ public class ContactModel {
         return contactNumber;
     }
 
+    public void setContactId(String contactId) {
+        this.contactId = contactId;
+    }
+
+    public void setContactName(String contactName) {
+        this.contactName = contactName;
+    }
+
+    public void setContactNumber(String contactNumber) {
+        this.contactNumber = contactNumber;
+    }
 }

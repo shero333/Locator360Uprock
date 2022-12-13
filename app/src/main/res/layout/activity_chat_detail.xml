@@ -21,8 +21,8 @@
 
         <TextView
             android:id="@+id/txt_back_pressed"
-            android:layout_width="@dimen/_25sdp"
-            android:layout_height="@dimen/_25sdp"
+            android:layout_width="@dimen/_20sdp"
+            android:layout_height="@dimen/_20sdp"
             android:background="@drawable/ic_back_arrow"
             android:layout_marginStart="@dimen/_15sdp"
             app:layout_constraintStart_toStartOf="parent"
@@ -31,8 +31,8 @@
 
         <androidx.constraintlayout.utils.widget.ImageFilterView
             android:id="@+id/profile_img"
-            android:layout_width="@dimen/_60sdp"
-            android:layout_height="@dimen/_60sdp"
+            android:layout_width="@dimen/_50sdp"
+            android:layout_height="@dimen/_50sdp"
             android:src="@drawable/background_start_screen"
             app:roundPercent="1"
             android:scaleType="centerCrop"
@@ -50,7 +50,7 @@
             android:textStyle="bold"
             android:textColor="@color/black"
             android:textSize="@dimen/_18ssp"
-            android:layout_marginStart="@dimen/_15sdp"
+            android:layout_marginStart="@dimen/_10sdp"
             app:layout_constraintStart_toEndOf="@id/profile_img"
             app:layout_constraintTop_toTopOf="@id/profile_img"
             app:layout_constraintBottom_toBottomOf="@id/profile_img"/>
@@ -109,6 +109,14 @@
         android:visibility="gone"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/cons_top"
+        app:layout_constraintBottom_toTopOf="@id/cons_bottom"/>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recycler_view_chat"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        tools:listitem="@layout/layout_messages_item"
         app:layout_constraintTop_toBottomOf="@id/cons_top"
         app:layout_constraintBottom_toTopOf="@id/cons_bottom"/>
 

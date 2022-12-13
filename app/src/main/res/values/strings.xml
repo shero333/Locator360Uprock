@@ -149,4 +149,7 @@
     <string name="no_messages_yet">No messages yet...</string>
     <string name="txt_content_no_messages">Send a message or reply\nwith a greeting sticker\nbelow!</string>
     <string name="message">Message...</string>
+    <string name="can_you_please_share_your_current_location">Can you please share your current location?</string>
+    <string name="_4_30_pm">4:30 PM</string>
+    <string name="okay_sure">okay. Sure</string>
 </resources>

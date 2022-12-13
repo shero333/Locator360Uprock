@@ -18,9 +18,9 @@ import androidx.appcompat.widget.SearchView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.hammad.findmyfamily.HomeScreen.FragmentSafety.EmergencyContacts.Dashboard.EmergencyContactDashboardActivity;
 import com.hammad.findmyfamily.HomeScreen.FragmentSafety.EmergencyRoomDB.EmergencyContactEntity;
 import com.hammad.findmyfamily.HomeScreen.FragmentSafety.EmergencyRoomDB.RoomDBHelper;
-import com.hammad.findmyfamily.HomeScreen.FragmentSafety.EmergencyContacts.Dashboard.EmergencyContactDashboardActivity;
 import com.hammad.findmyfamily.R;
 import com.hammad.findmyfamily.SharedPreference.SharedPreference;
 import com.hammad.findmyfamily.Util.Commons;
@@ -38,6 +38,8 @@ public class AddContactFromPhoneActivity extends AppCompatActivity implements Co
     List<ContactModel> phoneContactList = new ArrayList<>();
 
     ContactAdapter contactAdapter;
+
+    ContactModel contactModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,7 +62,7 @@ public class AddContactFromPhoneActivity extends AppCompatActivity implements Co
 
     private void getPhoneContactsList() {
 
-        String id,rawId,contactName,contactNumber;
+        String contactId,contactName,contactNumber;
 
         Uri uri = ContactsContract.CommonDataKinds.Phone.CONTENT_URI;
         String sortOrder = ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME;
@@ -73,16 +75,18 @@ public class AddContactFromPhoneActivity extends AppCompatActivity implements Co
         if(cursor.getCount() > 0) {
             while (cursor.moveToNext()) {
 
-                id = cursor.getString(cursor.getColumnIndexOrThrow(ContactsContract.CommonDataKinds.Phone.CONTACT_ID));
-                rawId = cursor.getString(cursor.getColumnIndexOrThrow(ContactsContract.CommonDataKinds.Phone.RAW_CONTACT_ID));
+                contactModel = new ContactModel();
 
-                if(id.equals(rawId))
-                {
-                    contactName = cursor.getString(cursor.getColumnIndexOrThrow(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME));
-                    contactNumber = cursor.getString(cursor.getColumnIndexOrThrow(ContactsContract.CommonDataKinds.Phone.NUMBER));
+                contactId = cursor.getString(cursor.getColumnIndexOrThrow(ContactsContract.CommonDataKinds.Phone.CONTACT_ID));
+                contactName = cursor.getString(cursor.getColumnIndexOrThrow(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME));
+                contactNumber = cursor.getString(cursor.getColumnIndexOrThrow(ContactsContract.CommonDataKinds.Phone.NUMBER));
 
-                    phoneContactList.add(new ContactModel(id,contactName,contactNumber));
-                }
+                contactModel.setContactId(contactId);
+                contactModel.setContactName(contactName);
+                contactModel.setContactNumber(contactNumber);
+
+                //remove duplicates
+                removeDuplicateContacts();
             }
         }
 
@@ -101,6 +105,28 @@ public class AddContactFromPhoneActivity extends AppCompatActivity implements Co
             binding.recyclerAddContact.setVisibility(View.GONE);
         }
 
+    }
+
+    private void removeDuplicateContacts() {
+        int flag = 0;
+
+        if (phoneContactList.size() == 0) {
+            phoneContactList.add(contactModel);
+        }
+
+        for (int i = 0; i < phoneContactList.size(); i++) {
+
+            if (phoneContactList.get(i).getContactId().equals(contactModel.getContactId())) {
+                flag = 0;
+                break;
+            } else {
+                flag = 1;
+            }
+        }
+
+        if (flag == 1) {
+            phoneContactList.add(contactModel);
+        }
     }
 
     @Override
