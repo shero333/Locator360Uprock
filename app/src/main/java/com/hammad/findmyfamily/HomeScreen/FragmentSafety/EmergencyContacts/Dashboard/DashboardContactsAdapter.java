@@ -2,7 +2,6 @@ package com.hammad.findmyfamily.HomeScreen.FragmentSafety.EmergencyContacts.Dash
 
 import android.content.Context;
 import android.view.LayoutInflater;
-import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;

@@ -38,4 +38,10 @@
         <item name="colorControlActivated">@color/white</item>
     </style>
 
+    <!-- Animation for profile image dialog preview -->
+    <style name="SlidingDialogAnimation">
+        <item name="android:windowEnterAnimation">@android:anim/slide_in_left</item>
+        <item name="android:windowExitAnimation">@android:anim/slide_out_right</item>
+    </style>
+
 </resources>

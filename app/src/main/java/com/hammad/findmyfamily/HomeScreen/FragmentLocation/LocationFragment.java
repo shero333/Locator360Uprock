@@ -65,6 +65,7 @@ import com.hammad.findmyfamily.Application.App;
 import com.hammad.findmyfamily.HomeScreen.FragmentLocation.AddMember.AddMemberActivity;
 import com.hammad.findmyfamily.HomeScreen.FragmentLocation.BottomSheetMembers.BottomSheetMemberAdapter;
 import com.hammad.findmyfamily.HomeScreen.FragmentLocation.BottomSheetMembers.MemberDetail;
+import com.hammad.findmyfamily.HomeScreen.FragmentLocation.Chat.ChatDashboardActivity;
 import com.hammad.findmyfamily.HomeScreen.FragmentLocation.CreateCircle.CreateCircleMainActivity;
 import com.hammad.findmyfamily.HomeScreen.FragmentLocation.JoinCircle.CircleModel;
 import com.hammad.findmyfamily.HomeScreen.FragmentLocation.JoinCircle.JoinCircleMainActivity;
@@ -658,7 +659,7 @@ public class LocationFragment extends Fragment implements OnMapReadyCallback, Ci
     }
 
     private void toolbarChat() {
-
+        startActivity(new Intent(getActivity(), ChatDashboardActivity.class));
     }
 
     private void extendedToolbarViewClickListeners() {
