@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/cons_contact"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -11,7 +12,7 @@
         android:layout_width="@dimen/_70sdp"
         android:layout_height="@dimen/_70sdp"
         android:background="@drawable/drawable_circle_safety_frag"
-        android:backgroundTint="@color/orange"
+        tools:backgroundTint="@color/orange"
         android:text="@string/cn"
         android:textStyle="bold"
         android:textSize="@dimen/_16ssp"
@@ -73,6 +74,5 @@
         app:layout_constraintTop_toTopOf="@id/txt_user_name"
         app:layout_constraintBottom_toBottomOf="@id/txt_user_name"
         app:layout_constraintEnd_toEndOf="parent"/>
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>

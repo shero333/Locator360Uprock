@@ -155,11 +155,13 @@ public class EmergencySOSActivity extends AppCompatActivity {
 
         SmsManager smsManager = SmsManager.getDefault();
 
-        //send message to all emergency contacts
-        for (EmergencyContactEntity emergContact : emergencyContactList) {
-            smsManager.sendTextMessage(emergContact.getContactNo(), null, messageBody, null, null);
-        }
+        if(emergencyContactList.size() > 0) {
 
+            //send message to all emergency contacts
+            for (EmergencyContactEntity emergContact : emergencyContactList) {
+                smsManager.sendTextMessage(emergContact.getContactNo(), null, messageBody, null, null);
+            }
+        }
     }
 
     @SuppressWarnings("unchecked")

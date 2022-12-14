@@ -50,6 +50,7 @@ import com.hammad.findmyfamily.StartScreen.StartScreenActivity;
 import com.hammad.findmyfamily.databinding.LayoutCameraDialogBinding;
 import com.hammad.findmyfamily.databinding.LayoutDialogAddEmergncyContactBinding;
 import com.hammad.findmyfamily.databinding.LayoutGalleryDialogBinding;
+import com.hammad.findmyfamily.databinding.LayoutProgressDialogBinding;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -690,6 +691,28 @@ public class Commons {
                     //saving full name in shared preference
                     SharedPreference.setFullName(doc.getString(Constants.FIRST_NAME).concat(" ".concat(doc.getString(Constants.LAST_NAME))));
                 });
+    }
+
+    public static Dialog progressDialog(Activity activity) {
+
+        Dialog dialog = new Dialog(activity);
+
+        LayoutProgressDialogBinding binding = LayoutProgressDialogBinding.inflate(activity.getLayoutInflater());
+        dialog.setContentView(binding.getRoot());
+
+        //setting the transparent background
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+
+        //this sets the width of dialog to 70%
+        DisplayMetrics displayMetrics = new DisplayMetrics();
+        activity.getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+        int width = (int) (displayMetrics.widthPixels * 0.7);
+
+        //setting the width and height of alert dialog
+        dialog.getWindow().setLayout(width, ConstraintLayout.LayoutParams.WRAP_CONTENT);
+        dialog.setCancelable(false);
+        dialog.show();
+        return dialog;
     }
 
 }

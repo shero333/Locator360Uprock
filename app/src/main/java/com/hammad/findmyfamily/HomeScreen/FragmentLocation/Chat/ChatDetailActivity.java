@@ -10,15 +10,20 @@ import android.view.inputmethod.EditorInfo;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.bumptech.glide.Glide;
 import com.hammad.findmyfamily.R;
 import com.hammad.findmyfamily.databinding.ActivityChatDetailBinding;
 import com.hammad.findmyfamily.databinding.LayoutChatImageDialogBinding;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class ChatDetailActivity extends AppCompatActivity {
 
     ActivityChatDetailBinding binding;
+    List<String> messagesList = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,6 +33,8 @@ public class ChatDetailActivity extends AppCompatActivity {
         binding = ActivityChatDetailBinding.inflate(getLayoutInflater());
         View view = binding.getRoot();
         setContentView(view);
+        // messages list
+        getMessagesList();
 
         // back pressed
         binding.txtBackPressed.setOnClickListener(v -> onBackPressed());
@@ -44,6 +51,25 @@ public class ChatDetailActivity extends AppCompatActivity {
             }
             return false;
         });
+
+    }
+
+    private void getMessagesList() {
+
+        if(messagesList.size() > 0) {
+
+            //recyclerview messages
+            setRecyclerView();
+
+            //no messages layout visibility to gone
+            binding.noMessage.consNoMessages.setVisibility(View.GONE);
+            binding.recyclerViewChat.setVisibility(View.VISIBLE);
+        }
+        else if(messagesList.size() == 0) {
+
+            binding.recyclerViewChat.setVisibility(View.GONE);
+            binding.noMessage.consNoMessages.setVisibility(View.VISIBLE);
+        }
     }
 
     private void profileImageDialog() {
@@ -59,19 +85,29 @@ public class ChatDetailActivity extends AppCompatActivity {
              .load(R.drawable.background_start_screen)
              .into(binding.imagePreview);
 
+
         //setting the animation
         dialog.getWindow().getAttributes().windowAnimations=R.style.SlidingDialogAnimation;
 
-        //this sets the width of dialog to 90%
+        //this sets the width & height of dialog to 70%
         DisplayMetrics displayMetrics = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
-        int width = (int) (displayMetrics.widthPixels * 0.8);
-        int height = (int) (displayMetrics.heightPixels * 0.8);
+        int width = (int) (displayMetrics.widthPixels * 0.7);
+        int height = (int) (displayMetrics.heightPixels * 0.7);
 
         //setting the width and height of alert dialog
         dialog.getWindow().setLayout(width, height);
 
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         dialog.show();
+    }
+
+    private void setRecyclerView() {
+
+        LinearLayoutManager layoutManager = new LinearLayoutManager(this,LinearLayoutManager.VERTICAL,false);
+        binding.recyclerViewChat.setLayoutManager(layoutManager);
+
+        ChatMessageAdapter adapter = new ChatMessageAdapter(this,messagesList);
+        binding.recyclerViewChat.setAdapter(adapter);
     }
 }

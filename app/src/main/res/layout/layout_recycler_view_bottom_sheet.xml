@@ -12,6 +12,7 @@
         android:layout_height="@dimen/_60sdp"
         android:src="@drawable/drawable_no_member_profile"
         app:roundPercent="1"
+        android:scaleType="centerCrop"
         android:layout_marginStart="@dimen/_10sdp"
         android:layout_marginTop="@dimen/_10sdp"
         app:layout_constraintStart_toStartOf="parent"

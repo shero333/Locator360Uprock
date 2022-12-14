@@ -90,23 +90,23 @@ public class LocationFragment extends Fragment implements OnMapReadyCallback, Ci
 
     private static final String TAG = "FRAG_LOCATION";
 
+    private FragmentLocationBinding binding;
+
     //show and hide extended toolbar view animations
     Animation showToolbarExtAnim, hideToolbarExtAnim;
-
-    private FragmentLocationBinding binding;
 
     private FusedLocationProviderClient mLocationClient;
     private GoogleMap mGoogleMap;
     private Location location;
-
-    //recyclerview of extended toolbar
-    private RecyclerView circleSelectionRecyclerView;
 
     // circle list
     List<CircleModel> circleList = new ArrayList<>();
 
     // user detail list including last know location, battery status, personal info etc
     List<MemberDetail> membersDetailList = new ArrayList<>();
+
+    //recyclerview of extended toolbar
+    private RecyclerView circleSelectionRecyclerView;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -132,7 +132,7 @@ public class LocationFragment extends Fragment implements OnMapReadyCallback, Ci
 
         //work manager for updating user location every hour
         periodicLocationUpdated();
-        
+
         //work manager for checking circle code expiry date every 8 hours
         periodicCircleCodeChecker();
 
@@ -161,11 +161,11 @@ public class LocationFragment extends Fragment implements OnMapReadyCallback, Ci
                 .setRequiresBatteryNotLow(true)
                 .build();
 
-        PeriodicWorkRequest periodicCircleCodeRequest = new PeriodicWorkRequest.Builder(CircleExpiryDateWorker.class,8,TimeUnit.HOURS)
+        PeriodicWorkRequest periodicCircleCodeRequest = new PeriodicWorkRequest.Builder(CircleExpiryDateWorker.class, 8, TimeUnit.HOURS)
                 .setConstraints(constraints).build();
 
         WorkManager.getInstance(requireActivity().getApplicationContext())
-                .enqueueUniquePeriodicWork("circleInfoUpdate",ExistingPeriodicWorkPolicy.KEEP,periodicCircleCodeRequest);
+                .enqueueUniquePeriodicWork("circleInfoUpdate", ExistingPeriodicWorkPolicy.KEEP, periodicCircleCodeRequest);
     }
 
     private void initializeMap() {
@@ -185,7 +185,23 @@ public class LocationFragment extends Fragment implements OnMapReadyCallback, Ci
 
         //when this listener is called, the live location icon visibility will be set to VISIBLE
         mGoogleMap.setOnCameraMoveListener(() -> binding.consLiveLoc.setVisibility(View.VISIBLE));
-    }
+    }    ActivityResultLauncher<IntentSenderRequest> gpsResultLauncher = registerForActivityResult(new ActivityResultContracts.StartIntentSenderForResult(), result -> {
+
+        if (result.getResultCode() == RESULT_OK) {
+            Log.i(TAG, "gps permission allowed");
+            //fetch the location
+        } else {
+            //show the dialog again
+            Commons.isGpsEnabled(requireActivity(), isSuccessful -> {
+
+                if (!isSuccessful) {
+                    Log.i(TAG, "gps permission denied");
+                    //displays the built in dialog
+                    googleDefaultGPSDialog();
+                }
+            });
+        }
+    });
 
     @SuppressLint({"MissingPermission", "InlinedApi"})
     private void checkLocationPermission() {
@@ -209,8 +225,7 @@ public class LocationFragment extends Fragment implements OnMapReadyCallback, Ci
                 }
             });
 
-        }
-        else {
+        } else {
             requestPermissions(new String[]{Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_BACKGROUND_LOCATION}, Constants.REQUEST_CODE_LOCATION);
         }
     }
@@ -226,7 +241,7 @@ public class LocationFragment extends Fragment implements OnMapReadyCallback, Ci
                 .setAlwaysShow(true);
 
         Task<LocationSettingsResponse> responseTask = LocationServices.getSettingsClient(getActivity().getApplicationContext())
-                                                        .checkLocationSettings(locationBuilder.build());
+                .checkLocationSettings(locationBuilder.build());
 
         responseTask.addOnCompleteListener(task -> {
 
@@ -236,8 +251,7 @@ public class LocationFragment extends Fragment implements OnMapReadyCallback, Ci
                 // gps is already enabled
                 Log.i(TAG, "googleDefaultGPSDialog: gps is already enabled");
 
-            }
-            catch (ApiException e) {
+            } catch (ApiException e) {
 
                 if (e.getStatusCode() == LocationSettingsStatusCodes.RESOLUTION_REQUIRED) {
                     Log.i(TAG, "googleDefaultGPSDialog: catch block");
@@ -251,25 +265,6 @@ public class LocationFragment extends Fragment implements OnMapReadyCallback, Ci
         });
 
     }
-
-    ActivityResultLauncher<IntentSenderRequest> gpsResultLauncher = registerForActivityResult(new ActivityResultContracts.StartIntentSenderForResult(), result -> {
-
-                if(result.getResultCode() == RESULT_OK) {
-                    Log.i(TAG, "gps permission allowed");
-                    //fetch the location
-                }
-                else {
-                    //show the dialog again
-                    Commons.isGpsEnabled(requireActivity(), isSuccessful -> {
-
-                        if(!isSuccessful) {
-                            Log.i(TAG, "gps permission denied");
-                            //displays the built in dialog
-                            googleDefaultGPSDialog();
-                        }
-                    });
-                }
-    });
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
@@ -403,10 +398,10 @@ public class LocationFragment extends Fragment implements OnMapReadyCallback, Ci
 
         locData.put(Constants.LAT, location.getLatitude());
         locData.put(Constants.LNG, location.getLongitude());
-        locData.put(Constants.LOC_ADDRESS, Commons.getLocationAddress(context,location));
+        locData.put(Constants.LOC_ADDRESS, Commons.getLocationAddress(context, location));
         locData.put(Constants.IS_PHONE_CHARGING, batteryStatus.isCharging());
         locData.put(Constants.BATTERY_PERCENTAGE, batteryStatus.getBatteryPercentage());
-        locData.put(Constants.LOC_TIMESTAMP,String.valueOf(System.currentTimeMillis()));
+        locData.put(Constants.LOC_TIMESTAMP, String.valueOf(System.currentTimeMillis()));
 
         FirebaseFirestore.getInstance().collection(Constants.USERS_COLLECTION)
                 .document(Objects.requireNonNull(currentUserEmail))
@@ -480,8 +475,8 @@ public class LocationFragment extends Fragment implements OnMapReadyCallback, Ci
 
                         for (DocumentSnapshot doc : value) {
 
-                            circleList.add(new CircleModel(doc.getId(), Objects.requireNonNull(doc.get(Constants.CIRCLE_ADMIN)).toString(),doc.getString(Constants.CIRCLE_NAME),
-                                    (List<String>) doc.get(Constants.CIRCLE_MEMBERS),doc.getString(Constants.CIRCLE_JOIN_CODE)));
+                            circleList.add(new CircleModel(doc.getId(), Objects.requireNonNull(doc.get(Constants.CIRCLE_ADMIN)).toString(), doc.getString(Constants.CIRCLE_NAME),
+                                    (List<String>) doc.get(Constants.CIRCLE_MEMBERS), doc.getString(Constants.CIRCLE_JOIN_CODE)));
                         }
 
                         if (SharedPreference.getCircleId().equals(Constants.NULL)) {
@@ -495,13 +490,14 @@ public class LocationFragment extends Fragment implements OnMapReadyCallback, Ci
                             SharedPreference.setCircleName(circleList.get(0).getCircleName());
                             SharedPreference.setCircleInviteCode(circleList.get(0).getCircleJoinCode());
 
-                            // setting the circle name to toolbar & toolbar extended view
-                            binding.toolbar.textViewCircleName.setText(SharedPreference.getCircleName());
-                            binding.toolbarExtendedView.txtCircleName.setText(SharedPreference.getCircleName());
+                            if (getContext() != null) {
+                                // setting the circle name to toolbar & toolbar extended view
+                                binding.toolbar.textViewCircleName.setText(SharedPreference.getCircleName());
+                                binding.toolbarExtendedView.txtCircleName.setText(SharedPreference.getCircleName());
+                            }
 
                             // getting the members
-                            for (String memberEmail : circleList.get(0).getCircleMembersList())
-                            {
+                            for (String memberEmail : circleList.get(0).getCircleMembersList()) {
                                 // getting the user info
                                 FirebaseFirestore.getInstance().collection(Constants.USERS_COLLECTION)
                                         .document(memberEmail)
@@ -518,7 +514,7 @@ public class LocationFragment extends Fragment implements OnMapReadyCallback, Ci
                                         .orderBy(Constants.LOC_TIMESTAMP, Query.Direction.DESCENDING)
                                         .limit(1)
                                         .addSnapshotListener((valueLoc, errorLoc) -> {
-                                            for (DocumentSnapshot doc: valueLoc) {
+                                            for (DocumentSnapshot doc : valueLoc) {
                                                 memberDetail.setLocationLat((doc.getDouble(Constants.LAT).toString()));
                                                 memberDetail.setLocationLng((doc.getDouble(Constants.LNG).toString()));
                                                 memberDetail.setLocationAddress(doc.getString(Constants.LOC_ADDRESS));
@@ -533,24 +529,25 @@ public class LocationFragment extends Fragment implements OnMapReadyCallback, Ci
                                             setBottomSheetMembersRecyclerView(membersDetailList);
                                         });
                             }
-                        }
-                        else if(!SharedPreference.getCircleId().equals(Constants.NULL)) {
+                        } else if (!SharedPreference.getCircleId().equals(Constants.NULL)) {
 
                             Log.i("HELLO_123", "else if condition is called");
+
                             // setting the circle name to toolbar & toolbar extended view
-                            binding.toolbar.textViewCircleName.setText(SharedPreference.getCircleName());
-                            binding.toolbarExtendedView.txtCircleName.setText(SharedPreference.getCircleName());
+                            if (getContext() != null) {
+                                binding.toolbar.textViewCircleName.setText(SharedPreference.getCircleName());
+                                binding.toolbarExtendedView.txtCircleName.setText(SharedPreference.getCircleName());
+                            }
 
                             // if preference is not null, it means that any circle is selected as default
-                            for (CircleModel circleModel: circleList)
-                            {
-                                if(circleModel.getCircleId().equals(SharedPreference.getCircleId())) {
+                            for (CircleModel circleModel : circleList) {
+                                if (circleModel.getCircleId().equals(SharedPreference.getCircleId())) {
 
                                     //sets circle name & join code in Shared pref
                                     SharedPreference.setCircleName(circleModel.getCircleName());
                                     SharedPreference.setCircleInviteCode(circleModel.getCircleJoinCode());
 
-                                    for(String memberEmail : circleModel.getCircleMembersList()) {
+                                    for (String memberEmail : circleModel.getCircleMembersList()) {
 
                                         Log.i("HELLO_123", "member list loop");
 
@@ -580,7 +577,7 @@ public class LocationFragment extends Fragment implements OnMapReadyCallback, Ci
 
                                                     Log.i("HELLO_123", "location collection called: ");
 
-                                                    for (DocumentSnapshot doc: valueLoc) {
+                                                    for (DocumentSnapshot doc : valueLoc) {
                                                         Log.i("HELLO_123", "location collection for loop");
 
                                                         memberDetail.setLocationLat(doc.getDouble(Constants.LAT).toString());
@@ -824,11 +821,13 @@ public class LocationFragment extends Fragment implements OnMapReadyCallback, Ci
 
     private void selectCircleRecyclerview() {
 
-        LinearLayoutManager layoutManager = new LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false);
-        circleSelectionRecyclerView.setLayoutManager(layoutManager);
+        if(getContext() != null) {
+            LinearLayoutManager layoutManager = new LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false);
+            circleSelectionRecyclerView.setLayoutManager(layoutManager);
 
-        CircleToolbarAdapter adapterToolbar = new CircleToolbarAdapter(requireContext(), circleList, this);
-        circleSelectionRecyclerView.setAdapter(adapterToolbar);
+            CircleToolbarAdapter adapterToolbar = new CircleToolbarAdapter(requireContext(), circleList, this);
+            circleSelectionRecyclerView.setAdapter(adapterToolbar);
+        }
     }
 
     //toolbar circle name recyclerview click listener
@@ -859,8 +858,7 @@ public class LocationFragment extends Fragment implements OnMapReadyCallback, Ci
     private void setBottomSheetMembersRecyclerView(List<MemberDetail> memberDetailsList) {
 
         //purpose of this condition is to remove null pointer exception. (If you're in Safety Fragment & location changes)
-        if(getContext() != null)
-        {
+        if (getContext() != null) {
             LinearLayoutManager layoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
             binding.bottomSheetMembers.recyclerBottomSheetMember.setLayoutManager(layoutManager);
             binding.bottomSheetMembers.recyclerBottomSheetMember.setAdapter(new BottomSheetMemberAdapter(requireContext(), memberDetailsList, this, this));
@@ -876,7 +874,7 @@ public class LocationFragment extends Fragment implements OnMapReadyCallback, Ci
     // recyclerview bottom sheet member click listener
     @Override
     public void onAddedMemberClicked(int position) {
-        Toast.makeText(requireContext(), membersDetailList.get(position).getLocationLat()+"\n"+membersDetailList.get(position).getLocationLng(), Toast.LENGTH_SHORT).show();
+        Toast.makeText(requireContext(), membersDetailList.get(position).getLocationLat() + "\n" + membersDetailList.get(position).getLocationLng(), Toast.LENGTH_SHORT).show();
     }
 
     private void bottomSheetMapType() {
@@ -1036,5 +1034,7 @@ public class LocationFragment extends Fragment implements OnMapReadyCallback, Ci
         super.onDestroyView();
         binding = null;
     }
+
+
 
 }

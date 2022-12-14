@@ -3,12 +3,16 @@ package com.hammad.findmyfamily.HomeScreen.FragmentLocation.Chat;
 import android.content.Context;
 import android.content.res.ColorStateList;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
+import com.hammad.findmyfamily.HomeScreen.FragmentLocation.Chat.Model.UserInfo;
 import com.hammad.findmyfamily.Util.Commons;
+import com.hammad.findmyfamily.Util.Constants;
 import com.hammad.findmyfamily.databinding.LayoutChatItemBinding;
 
 import java.util.List;
@@ -17,9 +21,9 @@ public class ChatDashboardAdapter extends RecyclerView.Adapter<ChatDashboardAdap
 
     Context context;
     OnChatMemberListener onChatMemberListener;
-    List<String> membersList;
+    List<UserInfo> membersList;
 
-    public ChatDashboardAdapter(Context context,List<String> list,OnChatMemberListener onChatMemberListener) {
+    public ChatDashboardAdapter(Context context,List<UserInfo> list,OnChatMemberListener onChatMemberListener) {
         this.context = context;
         this.onChatMemberListener = onChatMemberListener;
         membersList = list;
@@ -34,8 +38,27 @@ public class ChatDashboardAdapter extends RecyclerView.Adapter<ChatDashboardAdap
     @Override
     public void onBindViewHolder(@NonNull ChatDashboardAdapter.ChatViewHolder holder, int position) {
 
+        UserInfo item = membersList.get(position);
+
         //random color on profile image background
         holder.binding.profileImgBackground.setBackgroundTintList(ColorStateList.valueOf(Commons.randomColor()));
+
+        //profile image (if any)
+        if(item.getUserImageURL().equals(Constants.NULL)) {
+            holder.binding.profileImg.setVisibility(View.GONE);
+            holder.binding.profileImgBackground.setText(Commons.getContactLetters(item.getUserFullName()));
+        }
+        else if(!item.getUserImageURL().equals(Constants.NULL)) {
+            holder.binding.profileImg.setVisibility(View.VISIBLE);
+
+            Glide
+                 .with(context)
+                 .load(item.getUserImageURL())
+                 .into(holder.binding.profileImg);
+        }
+
+        // contact name
+        holder.binding.txtUserName.setText(item.getUserFullName());
 
         //interface click listener
         holder.binding.consContact.setOnClickListener(v -> onChatMemberListener.onChatMemberClick(position));

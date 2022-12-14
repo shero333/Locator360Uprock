@@ -2,7 +2,8 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_marginBottom="@dimen/_5sdp">
 
     <TextView
         android:id="@+id/text_message_received"
@@ -14,7 +15,7 @@
         android:textSize="@dimen/_13ssp"
         android:text="@string/can_you_please_share_your_current_location"
         android:background="@drawable/drawable_message_received"
-        android:layout_marginTop="@dimen/_10sdp"
+        android:layout_marginTop="@dimen/_5sdp"
         app:layout_constraintHorizontal_bias="0.1"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -30,7 +31,7 @@
         android:layout_marginTop="@dimen/_3sdp"
         android:textColor="#80000000"
         app:layout_constraintStart_toStartOf="@id/text_message_received"
-        app:layout_constraintTop_toBottomOf="@id/text_message_received" />
+        app:layout_constraintTop_toBottomOf="@id/text_message_received"/>
 
     <TextView
         android:id="@+id/text_message_send"
@@ -56,8 +57,10 @@
         android:text="@string/_4_30_pm"
         android:layout_marginEnd="@dimen/_5sdp"
         android:layout_marginTop="@dimen/_3sdp"
+        android:layout_marginBottom="@dimen/_5sdp"
         android:textColor="#80000000"
         app:layout_constraintEnd_toEndOf="@id/text_message_send"
-        app:layout_constraintTop_toBottomOf="@id/text_message_send" />
+        app:layout_constraintTop_toBottomOf="@id/text_message_send"
+        app:layout_constraintBottom_toBottomOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
