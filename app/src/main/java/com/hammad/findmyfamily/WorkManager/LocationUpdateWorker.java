@@ -15,7 +15,7 @@ import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.hammad.findmyfamily.HomeScreen.FragmentLocation.BatteryStatusModelClass;
+import com.hammad.findmyfamily.HomeScreen.FragmentLocation.Battery.BatteryStatusModelClass;
 import com.hammad.findmyfamily.Util.Commons;
 import com.hammad.findmyfamily.Util.Constants;
 

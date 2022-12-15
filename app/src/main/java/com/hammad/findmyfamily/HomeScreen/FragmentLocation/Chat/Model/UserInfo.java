@@ -1,13 +1,14 @@
 package com.hammad.findmyfamily.HomeScreen.FragmentLocation.Chat.Model;
 
-public class UserInfo {
+import android.os.Parcel;
+import android.os.Parcelable;
+
+public class UserInfo implements Parcelable {
 
     private String userId;
     private String userToken;
     private String userFullName;
     private String userImageURL;
-
-    public UserInfo() {}
 
     public UserInfo(String userId, String userToken, String userFullName, String userImageURL) {
         this.userId = userId;
@@ -16,35 +17,51 @@ public class UserInfo {
         this.userImageURL = userImageURL;
     }
 
-    public String getUserId() {
-        return userId;
+    protected UserInfo(Parcel in) {
+        userId = in.readString();
+        userToken = in.readString();
+        userFullName = in.readString();
+        userImageURL = in.readString();
     }
 
-    public void setUserId(String userId) {
-        this.userId = userId;
+    public static final Creator<UserInfo> CREATOR = new Creator<UserInfo>() {
+        @Override
+        public UserInfo createFromParcel(Parcel in) {
+            return new UserInfo(in);
+        }
+
+        @Override
+        public UserInfo[] newArray(int size) {
+            return new UserInfo[size];
+        }
+    };
+
+    public String getUserId() {
+        return userId;
     }
 
     public String getUserToken() {
         return userToken;
     }
 
-    public void setUserToken(String userToken) {
-        this.userToken = userToken;
-    }
-
     public String getUserFullName() {
         return userFullName;
-    }
-
-    public void setUserFullName(String userFullName) {
-        this.userFullName = userFullName;
     }
 
     public String getUserImageURL() {
         return userImageURL;
     }
 
-    public void setUserImageURL(String userImageURL) {
-        this.userImageURL = userImageURL;
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel parcel, int i) {
+        parcel.writeString(userId);
+        parcel.writeString(userToken);
+        parcel.writeString(userFullName);
+        parcel.writeString(userImageURL);
     }
 }

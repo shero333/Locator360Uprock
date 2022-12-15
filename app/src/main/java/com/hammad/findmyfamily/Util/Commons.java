@@ -41,7 +41,7 @@ import com.google.firebase.messaging.FirebaseMessaging;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.hammad.findmyfamily.BuildConfig;
-import com.hammad.findmyfamily.HomeScreen.FragmentLocation.BatteryStatusModelClass;
+import com.hammad.findmyfamily.HomeScreen.FragmentLocation.Battery.BatteryStatusModelClass;
 import com.hammad.findmyfamily.HomeScreen.FragmentLocation.JoinCircle.CircleModel;
 import com.hammad.findmyfamily.HomeScreen.FragmentSafety.EmergencyContacts.ContactsManually.AddContactManuallyActivity;
 import com.hammad.findmyfamily.R;
@@ -713,6 +713,18 @@ public class Commons {
         dialog.setCancelable(false);
         dialog.show();
         return dialog;
+    }
+
+    @SuppressLint("SimpleDateFormat")
+    public static String dateFromTimeInMilli(String timeInMilliSeconds) {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd MMM yyyy");
+        return dateFormat.format(new Date(Long.parseLong(String.valueOf(timeInMilliSeconds))));
+    }
+
+    @SuppressLint("SimpleDateFormat")
+    public static String timeFromTimeInMilli(String timeInMilliSeconds) {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("hh:mm aaa");
+        return dateFormat.format(new Date(Long.parseLong(String.valueOf(timeInMilliSeconds))));
     }
 
 }

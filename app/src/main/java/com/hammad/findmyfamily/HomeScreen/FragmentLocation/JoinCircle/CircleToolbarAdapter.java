@@ -1,4 +1,4 @@
-package com.hammad.findmyfamily.HomeScreen.FragmentLocation;
+package com.hammad.findmyfamily.HomeScreen.FragmentLocation.JoinCircle;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -10,7 +10,6 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.hammad.findmyfamily.HomeScreen.FragmentLocation.JoinCircle.CircleModel;
 import com.hammad.findmyfamily.R;
 import com.hammad.findmyfamily.SharedPreference.SharedPreference;
 import com.hammad.findmyfamily.databinding.ToolbarListItemBinding;

@@ -1,6 +1,5 @@
 package com.hammad.findmyfamily.HomeScreen.FragmentLocation.Chat;
 
-import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
@@ -15,7 +14,6 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.hammad.findmyfamily.HomeScreen.FragmentLocation.Chat.Model.UserInfo;
-import com.hammad.findmyfamily.Util.Commons;
 import com.hammad.findmyfamily.Util.Constants;
 import com.hammad.findmyfamily.databinding.ActivityChatDashboardBinding;
 
@@ -36,8 +34,8 @@ public class ChatDashboardActivity extends AppCompatActivity implements ChatDash
     //members list
     List<String> circleMembersList = new ArrayList<>();
 
-    //progress dialog
-    Dialog progressDialog;
+    //adapter
+    ChatDashboardAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,15 +46,11 @@ public class ChatDashboardActivity extends AppCompatActivity implements ChatDash
         View view = binding.getRoot();
         setContentView(view);
 
-        //initialize dialog
-        progressDialog = Commons.progressDialog(this);
-
         // edit text search
         binding.editTextSearch.addTextChangedListener(searchMemberTextWatcher);
 
         //get the circle members list
         getCirclesMemberList();
-
     }
 
     private final TextWatcher searchMemberTextWatcher = new TextWatcher() {
@@ -67,7 +61,7 @@ public class ChatDashboardActivity extends AppCompatActivity implements ChatDash
 
         @Override
         public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
+            adapter.getMembersFilter().filter(charSequence.toString());
         }
 
         @Override
@@ -94,15 +88,15 @@ public class ChatDashboardActivity extends AppCompatActivity implements ChatDash
                             circleMembersList.addAll(members);
                         }
 
+                        // removes all the occurrences of current user email (if any) from list
+                        circleMembersList.removeAll(Collections.singleton(currentUserEmail));
+
                         if(circleMembersList.size() > 0) {
 
                             //hides the no members view
                             binding.consNoMembers.setVisibility(View.GONE);
 
                             binding.recyclerView.setVisibility(View.VISIBLE);
-
-                            // removes all the occurrences of current user email (if any) from list
-                            circleMembersList.removeAll(Collections.singleton(currentUserEmail));
 
                             // retrieve the details of all members
                             for(int i=0; i < circleMembersList.size(); i++) {
@@ -120,19 +114,11 @@ public class ChatDashboardActivity extends AppCompatActivity implements ChatDash
 
                                             //setting recyclerview
                                             if(loopIndex == circleMembersList.size() -1 ) {
-                                                // remove progress dialog
-                                                progressDialog.dismiss();
-
                                                 //recyclerview
                                                 setRecyclerView(membersInfoList);
                                             }
                                         })
-                                        .addOnFailureListener(e -> {
-                                            Log.e(TAG, "error getting member details: " + e.getMessage());
-
-                                            //removes the progress dialog
-                                            progressDialog.dismiss();
-                                        });
+                                        .addOnFailureListener(e -> Log.e(TAG, "error getting member details: " + e.getMessage()));
                             }
                         }
                         else if(circleMembersList.size() == 0) {
@@ -144,11 +130,7 @@ public class ChatDashboardActivity extends AppCompatActivity implements ChatDash
                     }
 
                 })
-                .addOnFailureListener(e -> {
-                    Log.e(TAG, "error getting members list:" + e.getMessage());
-                    //remove the progress dialog
-                    progressDialog.dismiss();
-                });
+                .addOnFailureListener(e -> Log.e(TAG, "error getting members list:" + e.getMessage()));
 
     }
 
@@ -157,13 +139,18 @@ public class ChatDashboardActivity extends AppCompatActivity implements ChatDash
         LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         binding.recyclerView.setLayoutManager(layoutManager);
 
-        ChatDashboardAdapter adapter = new ChatDashboardAdapter(this, membersInfoList, this);
+        adapter = new ChatDashboardAdapter(this, membersInfoList, this);
         binding.recyclerView.setAdapter(adapter);
     }
 
     //member click listener
     @Override
     public void onChatMemberClick(int position) {
-        startActivity(new Intent(this, ChatDetailActivity.class));
+
+        Intent intent = new Intent(this, ChatDetailActivity.class);
+        intent.putExtra(Constants.KEY_USER_INFO,membersInfoList.get(position));
+        startActivity(intent);
+
     }
+
 }

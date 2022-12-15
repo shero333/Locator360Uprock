@@ -101,4 +101,6 @@ public interface Constants {
 
     String CONTACT_KEY = "contact_key";
 
+    String KEY_USER_INFO = "key_user_info";
+
 }

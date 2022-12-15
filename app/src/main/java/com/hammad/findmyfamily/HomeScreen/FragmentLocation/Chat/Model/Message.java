@@ -1,6 +1,7 @@
 package com.hammad.findmyfamily.HomeScreen.FragmentLocation.Chat.Model;
 
 public class Message {
+
     private String senderId;
     private String receiverId;
     private String messageText;

@@ -1,4 +1,4 @@
-package com.hammad.findmyfamily.HomeScreen.FragmentLocation;
+package com.hammad.findmyfamily.HomeScreen.FragmentLocation.Battery;
 
 public class BatteryStatusModelClass {
 

@@ -14,7 +14,7 @@
         android:text="@string/no_messages_yet"
         android:textStyle="bold"
         android:textColor="@color/black"
-        android:textSize="@dimen/_22ssp"
+        android:textSize="@dimen/_18ssp"
         android:layout_marginTop="@dimen/_10sdp"
         app:layout_constraintStart_toStartOf="@id/txt_content"
         app:layout_constraintEnd_toEndOf="@id/txt_content"
@@ -24,7 +24,7 @@
         android:id="@+id/txt_content"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="@dimen/_20ssp"
+        android:textSize="@dimen/_16ssp"
         android:textColor="#99000000"
         android:textAlignment="center"
         android:text="@string/txt_content_no_messages"
@@ -36,8 +36,8 @@
 
     <com.google.android.material.imageview.ShapeableImageView
         android:id="@+id/icon"
-        android:layout_width="@dimen/_100sdp"
-        android:layout_height="@dimen/_100sdp"
+        android:layout_width="@dimen/_80sdp"
+        android:layout_height="@dimen/_80sdp"
         android:src="@drawable/ic_hand"
         android:layout_marginTop="@dimen/_10sdp"
         app:layout_constraintStart_toStartOf="parent"

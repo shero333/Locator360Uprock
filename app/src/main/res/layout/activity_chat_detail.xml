@@ -33,7 +33,7 @@
             android:id="@+id/profile_img"
             android:layout_width="@dimen/_50sdp"
             android:layout_height="@dimen/_50sdp"
-            android:src="@drawable/background_start_screen"
+            tools:src="@drawable/ic_launcher_background"
             app:roundPercent="1"
             android:scaleType="centerCrop"
             android:layout_marginStart="@dimen/_5sdp"
@@ -42,14 +42,27 @@
             app:layout_constraintBottom_toBottomOf="parent"/>
 
         <TextView
+            android:id="@+id/txt_name_first_char"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/_14ssp"
+            tools:text="CN"
+            android:textColor="@color/white"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="@id/profile_img"
+            app:layout_constraintEnd_toEndOf="@id/profile_img"
+            app:layout_constraintTop_toTopOf="@id/profile_img"
+            app:layout_constraintBottom_toBottomOf="@id/profile_img"/>
+
+        <TextView
             android:id="@+id/txt_user_name"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            app:layout_constraintWidth_percent="0.5"
+            app:layout_constraintWidth_percent="0.6"
             android:text="@string/contact_name"
             android:textStyle="bold"
             android:textColor="@color/black"
-            android:textSize="@dimen/_18ssp"
+            android:textSize="@dimen/_16ssp"
             android:layout_marginStart="@dimen/_10sdp"
             app:layout_constraintStart_toEndOf="@id/profile_img"
             app:layout_constraintTop_toTopOf="@id/profile_img"
@@ -69,11 +82,13 @@
         android:paddingBottom="@dimen/_20sdp">
 
         <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/cons_message"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             app:layout_constraintWidth_percent="0.85"
             android:background="@drawable/drawable_round_no_padding"
             android:backgroundTint="#80E3E1E1"
+            app:layout_constraintHorizontal_bias="0.2"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
@@ -88,7 +103,7 @@
                 android:textColor="@color/black"
                 android:hint="@string/message"
                 android:textColorHint="#B3000000"
-                android:imeOptions="actionSend"
+                android:imeOptions="actionDone"
                 android:paddingStart="@dimen/_15sdp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -99,14 +114,26 @@
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/img_view_send_message"
+            android:layout_width="@dimen/_25sdp"
+            android:layout_height="@dimen/_25sdp"
+            android:src="@drawable/ic_send"
+            android:layout_marginStart="@dimen/_10sdp"
+            android:layout_marginEnd="@dimen/_10sdp"
+            app:layout_constraintStart_toEndOf="@id/cons_message"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@id/cons_message"
+            app:layout_constraintBottom_toBottomOf="@id/cons_message"/>
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <include
-        android:id="@+id/no_message"
+        android:visibility="gone"
+        android:id="@+id/layout_no_messages"
         layout="@layout/layout_no_messages"
         android:layout_height="wrap_content"
         android:layout_width="wrap_content"
-        android:visibility="gone"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/cons_top"
