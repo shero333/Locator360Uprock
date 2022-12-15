@@ -13,20 +13,28 @@ import android.text.style.ClickableSpan;
 import android.text.style.ForegroundColorSpan;
 import android.util.Log;
 import android.view.View;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.i18n.phonenumbers.NumberParseException;
 import com.google.i18n.phonenumbers.PhoneNumberUtil;
 import com.google.i18n.phonenumbers.Phonenumber;
 import com.hammad.findmyfamily.R;
-import com.hammad.findmyfamily.SharedPreference.SharedPreference;
 import com.hammad.findmyfamily.ResetPassword.ByPhoneNo.OTPActivity;
+import com.hammad.findmyfamily.SharedPreference.SharedPreference;
 import com.hammad.findmyfamily.Util.Constants;
 import com.hammad.findmyfamily.databinding.ActivityPhoneNoSignUpBinding;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class PhoneNoSignUpActivity extends AppCompatActivity {
+
+    private static final String TAG = "ERROR_PHONE_SIGN_UP";
 
     private ActivityPhoneNoSignUpBinding binding;
 
@@ -38,6 +46,10 @@ public class PhoneNoSignUpActivity extends AppCompatActivity {
     private PhoneNumberUtil.PhoneNumberType isMobile = null;
     private boolean isPhoneNoValid = false;
 
+    //already existed phone numbers
+    List<String> membersPhoneNumberList = new ArrayList<>();
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -46,6 +58,9 @@ public class PhoneNoSignUpActivity extends AppCompatActivity {
         binding = ActivityPhoneNoSignUpBinding.inflate(getLayoutInflater());
         View view=binding.getRoot();
         setContentView(view);
+
+        //get registered users phone number list
+        getRegisteredPhoneNoList();
 
         //getting the privacy policy text from string resource
         privacyPolicyText=getString(R.string.privacy_policy_phone_sign_up);
@@ -60,6 +75,19 @@ public class PhoneNoSignUpActivity extends AppCompatActivity {
         setHyperLink();
 
         binding.btnContPhoneSignUp.setOnClickListener(v -> buttonClickListener());
+    }
+
+    private void getRegisteredPhoneNoList() {
+
+        FirebaseFirestore.getInstance().collection(Constants.USERS_COLLECTION)
+                .get()
+                .addOnSuccessListener(queryDocumentSnapshots -> {
+                    for(DocumentSnapshot doc: queryDocumentSnapshots) {
+                        membersPhoneNumberList.add(doc.getString(Constants.PHONE_NO));
+                    }
+                })
+                .addOnFailureListener(e -> Log.e(TAG, "error getting registered phone number list: " + e.getMessage()));
+
     }
 
     private void pickCountryCode() {
@@ -165,7 +193,7 @@ public class PhoneNoSignUpActivity extends AppCompatActivity {
 
         } catch (NumberParseException e) {
             e.printStackTrace();
-            Log.e("ERROR_PHONE_SIGN_UP", "NumberParseException: " + e.getMessage());
+            Log.e(TAG, "NumberParseException: " + e.getMessage());
         }
     }
 
@@ -188,12 +216,28 @@ public class PhoneNoSignUpActivity extends AppCompatActivity {
             phoneNo = phoneNo.concat(tempNumber);
         }
 
-        //saving the entered phone number in preference
-        SharedPreference.setPhoneNoPref(phoneNo);
+        boolean doesPhoneNoAlreadyExist = false;
 
-        //navigates to the OTP activity
-        Intent intent = new Intent(this, OTPActivity.class);
-        intent.putExtra(Constants.OTP_ACT_KEY,true);
-        startActivity(intent);
+        for (int i = 0; i < membersPhoneNumberList.size(); i++) {
+
+            if (membersPhoneNumberList.get(i).equals(phoneNo)) {
+                doesPhoneNoAlreadyExist = true;
+                break;
+            }
+        }
+
+        if(doesPhoneNoAlreadyExist) {
+            Toast.makeText(this, R.string.phone_no_already_registered, Toast.LENGTH_LONG).show();
+        }
+        else {
+
+            //saving the entered phone number in preference
+            SharedPreference.setPhoneNoPref(phoneNo);
+
+            //navigates to the OTP activity
+            Intent intent = new Intent(this, OTPActivity.class);
+            intent.putExtra(Constants.OTP_ACT_KEY,true);
+            startActivity(intent);
+        }
     }
 }

@@ -156,4 +156,5 @@
     <string name="title_no_member">No Messages Yet</string>
     <string name="sub_title_no_members">No Members. Add member in circle and start chatting</string>
     <string name="date">date</string>
+    <string name="phone_no_already_registered">Phone Number already registered.</string>
 </resources>

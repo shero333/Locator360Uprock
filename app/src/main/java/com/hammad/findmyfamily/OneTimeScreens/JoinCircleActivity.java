@@ -22,6 +22,7 @@ import java.util.Objects;
 public class JoinCircleActivity extends AppCompatActivity {
 
     private static final String TAG = "JOIN_CIRCLE";
+
     private ActivityJoinCircleBinding binding;
 
     // boolean for differentiating whether activity is called from home fragment or from sign up act

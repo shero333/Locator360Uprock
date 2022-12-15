@@ -4,7 +4,6 @@ import static com.hammad.findmyfamily.Util.Constants.USERS_COLLECTION;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -54,6 +53,7 @@ public class StartScreenActivity extends AppCompatActivity {
     }
 
     private void conditionCheck() {
+
         Intent intent = getIntent();
 
         if(intent.getExtras() != null) {
@@ -66,6 +66,12 @@ public class StartScreenActivity extends AppCompatActivity {
                 sosEmergIntent.putExtra(Constants.IS_APP_IN_FOREGROUND,false);
                 startActivity(sosEmergIntent);
                 finish();
+            }
+            else {
+                if(FirebaseAuth.getInstance().getCurrentUser() != null)
+                {
+                    checkCurrentLoginStatus(FirebaseAuth.getInstance().getCurrentUser().getEmail());
+                }
             }
         }
         else {
