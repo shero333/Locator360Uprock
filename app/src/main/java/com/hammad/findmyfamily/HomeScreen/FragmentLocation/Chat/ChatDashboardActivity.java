@@ -46,11 +46,11 @@ public class ChatDashboardActivity extends AppCompatActivity implements ChatDash
         View view = binding.getRoot();
         setContentView(view);
 
-        // edit text search
-        binding.editTextSearch.addTextChangedListener(searchMemberTextWatcher);
-
         //get the circle members list
         getCirclesMemberList();
+
+        // edit text search
+        binding.editTextSearch.addTextChangedListener(searchMemberTextWatcher);
     }
 
     private final TextWatcher searchMemberTextWatcher = new TextWatcher() {
@@ -145,10 +145,11 @@ public class ChatDashboardActivity extends AppCompatActivity implements ChatDash
 
     //member click listener
     @Override
-    public void onChatMemberClick(int position) {
+    public void onChatMemberClick(int position,int randomColor) {
 
         Intent intent = new Intent(this, ChatDetailActivity.class);
         intent.putExtra(Constants.KEY_USER_INFO,membersInfoList.get(position));
+        intent.putExtra(Constants.RANDOM_COLOR,randomColor);
         startActivity(intent);
 
     }

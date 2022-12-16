@@ -50,8 +50,11 @@ public class ChatDashboardAdapter extends RecyclerView.Adapter<ChatDashboardAdap
 
         UserInfo item = membersList.get(position);
 
+        // this random color is also set to the background in ChatDetailActivity if profile image url is null
+        int randomColor = Commons.randomColor();
+
         //random color on profile image background
-        holder.binding.profileImgBackground.setBackgroundTintList(ColorStateList.valueOf(Commons.randomColor()));
+        holder.binding.profileImgBackground.setBackgroundTintList(ColorStateList.valueOf(randomColor));
 
         //profile image (if any)
         if(item.getUserImageURL().equals(Constants.NULL)) {
@@ -84,7 +87,7 @@ public class ChatDashboardAdapter extends RecyclerView.Adapter<ChatDashboardAdap
         holder.binding.imgViewUserSignedOut.setOnClickListener(v -> Toast.makeText(context, "User is signed out.", Toast.LENGTH_SHORT).show());
 
         //interface click listener
-        holder.binding.consContact.setOnClickListener(v -> onChatMemberListener.onChatMemberClick(position));
+        holder.binding.consContact.setOnClickListener(v -> onChatMemberListener.onChatMemberClick(position,randomColor));
     }
 
     @Override
@@ -104,7 +107,7 @@ public class ChatDashboardAdapter extends RecyclerView.Adapter<ChatDashboardAdap
     }
 
     public interface OnChatMemberListener {
-        void onChatMemberClick(int position);
+        void onChatMemberClick(int position,int randomColor);
     }
 
     public Filter getMembersFilter() {

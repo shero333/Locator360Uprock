@@ -9,9 +9,11 @@ import androidx.room.RoomDatabase;
 import androidx.room.migration.Migration;
 import androidx.sqlite.db.SupportSQLiteDatabase;
 
+import com.hammad.findmyfamily.HomeScreen.FragmentLocation.Chat.DB.MessageDao;
+import com.hammad.findmyfamily.HomeScreen.FragmentLocation.Chat.DB.MessageEntity;
 import com.hammad.findmyfamily.Util.Constants;
 
-@Database(entities = {EmergencyContactEntity.class},version = 2,exportSchema = false)
+@Database(entities = {EmergencyContactEntity.class, MessageEntity.class},version = 3,exportSchema = false)
 public abstract class RoomDBHelper extends RoomDatabase {
 
     private static RoomDBHelper instance;
@@ -21,7 +23,7 @@ public abstract class RoomDBHelper extends RoomDatabase {
         if(instance == null) {
             instance = Room.databaseBuilder(context,RoomDBHelper.class, Constants.DATABASE_NAME)
                     .allowMainThreadQueries()
-                    .addMigrations(MIGRATION_1_2)
+                    .addMigrations(MIGRATION_1_2,MIGRATION_2_3)
                     .fallbackToDestructiveMigration()
                     .build();
         }
@@ -36,6 +38,20 @@ public abstract class RoomDBHelper extends RoomDatabase {
         }
     };
 
+    static final Migration MIGRATION_2_3 = new Migration(2,3) {
+        @Override
+        public void migrate(@NonNull SupportSQLiteDatabase database) {
+            database.execSQL("CREATE TABLE " +Constants.TABLE_MESSAGES +"("+Constants.ID+"  INTEGER PRIMARY KEY," +
+                    ""+Constants.OWNER_EMAIL+" TEXT,"+
+                    ""+Constants.SENDER_ID+" TEXT," +
+                    ""+Constants.RECEIVER_ID+" TEXT," +
+                    ""+Constants.MESSAGE+" TEXT," +
+                    ""+Constants.TIMESTAMP+" TEXT "+")");
+        }
+    };
+
     public abstract EmergencyContactDao emergencyContactDao();
+
+    public abstract MessageDao messageDao();
 
 }

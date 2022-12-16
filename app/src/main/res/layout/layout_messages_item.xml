@@ -19,18 +19,17 @@
 
     <TextView
         android:id="@+id/text_message_received"
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintWidth_percent="0.6"
+        android:maxWidth="@dimen/_250sdp"
         android:padding="@dimen/_10sdp"
         android:textColor="@color/black"
         android:textSize="@dimen/_13ssp"
         android:text="@string/can_you_please_share_your_current_location"
         android:background="@drawable/drawable_message_received"
         android:layout_marginTop="@dimen/_5sdp"
-        app:layout_constraintHorizontal_bias="0.1"
+        android:layout_marginStart="@dimen/_10sdp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/txt_date"/>
 
     <TextView
@@ -49,15 +48,14 @@
         android:id="@+id/text_message_send"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintWidth_percent="0.6"
+        android:maxWidth="@dimen/_250sdp"
         android:padding="@dimen/_10sdp"
         android:textColor="@color/white"
         android:textSize="@dimen/_13ssp"
         android:text="@string/okay_sure"
         android:background="@drawable/drawable_message_send"
         android:layout_marginTop="@dimen/_5sdp"
-        app:layout_constraintHorizontal_bias="0.9"
-        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginEnd="@dimen/_10sdp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/timestamp_message_received"/>
 

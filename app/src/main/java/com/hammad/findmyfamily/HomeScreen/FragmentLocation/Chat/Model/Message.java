@@ -2,18 +2,26 @@ package com.hammad.findmyfamily.HomeScreen.FragmentLocation.Chat.Model;
 
 public class Message {
 
+    private String senderName;
     private String senderId;
     private String receiverId;
     private String messageText;
     private String messageTimestamp;
 
-    public Message() {}
-
-    public Message(String senderId, String receiverId, String messageText, String messageTimestamp) {
+    public Message(String senderName,String senderId, String receiverId, String messageText, String messageTimestamp) {
+        this.senderName = senderName;
         this.senderId = senderId;
         this.receiverId = receiverId;
         this.messageText = messageText;
         this.messageTimestamp = messageTimestamp;
+    }
+
+    public String getSenderName() {
+        return senderName;
+    }
+
+    public void setSenderName(String senderName) {
+        this.senderName = senderName;
     }
 
     public String getSenderId() {

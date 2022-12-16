@@ -147,4 +147,14 @@
         app:layout_constraintTop_toBottomOf="@id/cons_top"
         app:layout_constraintBottom_toTopOf="@id/cons_bottom"/>
 
+    <ProgressBar
+        android:id="@+id/progress_send_message"
+        android:layout_width="@dimen/_40sdp"
+        android:layout_height="@dimen/_40sdp"
+        android:layout_marginBottom="@dimen/_10sdp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/cons_bottom"
+        android:visibility="gone"/>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -8,6 +8,7 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 
@@ -28,6 +29,12 @@ public class FirebaseEmergNotificationService extends FirebaseMessagingService {
 
             String title = remoteMessage.getNotification().getTitle();
             String body = remoteMessage.getNotification().getBody();
+
+            Log.i("TRY_123", "name: "+title);
+            Log.i("TRY_123", "message: "+body);
+            Log.i("TRY_123", "from: "+remoteMessage.getData().get(Constants.SENDER_ID));
+            Log.i("TRY_123", "to: "+remoteMessage.getData().get(Constants.RECEIVER_ID));
+            Log.i("TRY_123", "timeStamp: "+remoteMessage.getData().get(Constants.TIMESTAMP));
 
             //moves to the next activity with data (location coordinates)
             Intent intent = new Intent(this, EmergencyLocationActivity.class);

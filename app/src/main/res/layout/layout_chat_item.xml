@@ -78,6 +78,7 @@
         app:layout_constraintBottom_toBottomOf="@id/txt_user_name" />
 
     <TextView
+        android:visibility="gone"
         android:id="@+id/txt_last_message_date"
         android:layout_width="0dp"
         android:layout_height="wrap_content"

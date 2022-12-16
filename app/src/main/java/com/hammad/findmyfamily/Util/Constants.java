@@ -103,4 +103,14 @@ public interface Constants {
 
     String KEY_USER_INFO = "key_user_info";
 
+    String RANDOM_COLOR = "random_color";
+
+    String TABLE_MESSAGES = "message_table";
+
+    //for messages tables
+    String SENDER_ID = "sender_id";
+    String RECEIVER_ID = "receiver_id";
+    String MESSAGE = "message";
+    String TIMESTAMP = "timestamp";
+
 }

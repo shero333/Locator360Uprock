@@ -6,16 +6,22 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
+import com.android.volley.Request;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.bumptech.glide.Glide;
 import com.google.firebase.auth.FirebaseAuth;
+import com.hammad.findmyfamily.HomeScreen.FragmentLocation.Chat.DB.MessageEntity;
 import com.hammad.findmyfamily.HomeScreen.FragmentLocation.Chat.Model.Message;
 import com.hammad.findmyfamily.HomeScreen.FragmentLocation.Chat.Model.UserInfo;
+import com.hammad.findmyfamily.HomeScreen.FragmentSafety.EmergencyRoomDB.RoomDBHelper;
+import com.hammad.findmyfamily.HomeScreen.FragmentSafety.EmergencySOS.VolleySingleton;
 import com.hammad.findmyfamily.R;
 import com.hammad.findmyfamily.SharedPreference.SharedPreference;
 import com.hammad.findmyfamily.Util.Commons;
@@ -23,10 +29,17 @@ import com.hammad.findmyfamily.Util.Constants;
 import com.hammad.findmyfamily.databinding.ActivityChatDetailBinding;
 import com.hammad.findmyfamily.databinding.LayoutChatImageDialogBinding;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class ChatDetailActivity extends AppCompatActivity {
+
+    private static final String TAG = "CHAT_DETAIL_ACT";
 
     ActivityChatDetailBinding binding;
 
@@ -35,6 +48,11 @@ public class ChatDetailActivity extends AppCompatActivity {
     String senderId, receiverId, fcmToken, senderName, imageUrl;
 
     ChatAdapter chatAdapter;
+
+    //for sending message
+    JSONObject jsonNotification = new JSONObject();
+    JSONObject jsonData = new JSONObject();
+    JSONObject jsonObjectMain = new JSONObject();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,7 +63,7 @@ public class ChatDetailActivity extends AppCompatActivity {
         View view = binding.getRoot();
         setContentView(view);
 
-        // send full name
+        // sender full name
         Commons.currentUserFullName();
 
         // get user info intent
@@ -55,7 +73,7 @@ public class ChatDetailActivity extends AppCompatActivity {
         setRecyclerView();
 
         // messages list
-        //getMessagesList();
+        getMessagesList();
 
         // back pressed
         binding.txtBackPressed.setOnClickListener(v -> onBackPressed());
@@ -68,25 +86,16 @@ public class ChatDetailActivity extends AppCompatActivity {
         // message send click listener
         binding.imgViewSendMessage.setOnClickListener(v -> {
 
-            messagesList.add(new Message(senderId,receiverId,binding.editTextMessage.getText().toString(),String.valueOf(System.currentTimeMillis())));
+            String message = binding.editTextMessage.getText().toString();
+            String timeStamp = String.valueOf(System.currentTimeMillis());
 
-            //clears the edit text
-            binding.editTextMessage.setText("");
+            if(binding.recyclerViewChat.getVisibility() == View.GONE) {
+                binding.recyclerViewChat.setVisibility(View.VISIBLE);
+                binding.layoutNoMessages.consNoMessages.setVisibility(View.GONE);
+            }
 
-            //more recyclerview to the newly added item position
-            changeAdapterPosition();
-        });
-
-        // contact name click listener
-        binding.txtUserName.setOnClickListener(v -> {
-
-            messagesList.add(new Message(receiverId,senderId,binding.editTextMessage.getText().toString(),String.valueOf(System.currentTimeMillis())));
-
-            //clears the edit text
-            binding.editTextMessage.setText("");
-
-            //more recyclerview to the newly added item position
-            changeAdapterPosition();
+            //send message
+            sendMessage(message,timeStamp);
         });
 
     }
@@ -98,6 +107,7 @@ public class ChatDetailActivity extends AppCompatActivity {
         if (intent != null) {
 
             UserInfo userInfo = intent.getParcelableExtra(Constants.KEY_USER_INFO);
+            int randColorFromPrevAct = intent.getIntExtra(Constants.RANDOM_COLOR,-1);
 
             receiverId = userInfo.getUserId();
             fcmToken = userInfo.getUserToken();
@@ -112,7 +122,7 @@ public class ChatDetailActivity extends AppCompatActivity {
             binding.txtUserName.setText(userInfo.getUserFullName());
 
             if (imageUrl.equals(Constants.NULL)) {
-                binding.profileImg.setBackgroundColor(Commons.randomColor());
+                binding.profileImg.setBackgroundColor(randColorFromPrevAct);
                 binding.txtNameFirstChar.setText(String.valueOf(userInfo.getUserFullName().charAt(0)));
                 binding.txtNameFirstChar.setVisibility(View.VISIBLE);
             } else if (!imageUrl.equals(Constants.NULL)) {
@@ -130,17 +140,15 @@ public class ChatDetailActivity extends AppCompatActivity {
 
     private void getMessagesList() {
 
+        //get the messages from SQLite (if any)
+
         if (messagesList.size() > 0) {
-
-            //recyclerview messages
-            setRecyclerView();
-
             //no messages layout visibility to gone
             binding.layoutNoMessages.consNoMessages.setVisibility(View.GONE);
             binding.recyclerViewChat.setVisibility(View.VISIBLE);
         }
         else if (messagesList.size() == 0) {
-
+            //no messages layout visibility to VISIBLE
             binding.recyclerViewChat.setVisibility(View.GONE);
             binding.layoutNoMessages.consNoMessages.setVisibility(View.VISIBLE);
         }
@@ -190,5 +198,86 @@ public class ChatDetailActivity extends AppCompatActivity {
 
         chatAdapter = new ChatAdapter(this, messagesList);
         binding.recyclerViewChat.setAdapter(chatAdapter);
+    }
+
+    private void sendMessage(String message, String timeStamp) {
+
+        // setting the json
+        try {
+
+            //setting the send message progress bar to VISIBLE
+            binding.progressSendMessage.setVisibility(View.VISIBLE);
+
+            jsonObjectMain.put(Constants.FCM_TO,fcmToken);
+
+            jsonNotification.put(Constants.FCM_TITLE,SharedPreference.getFullName());
+            jsonNotification.put(Constants.FCM_BODY,message);
+
+
+            jsonObjectMain.put(Constants.FCM_NOTIFICATION,jsonNotification);
+
+            jsonData.put(Constants.SENDER_ID,senderId);
+            jsonData.put(Constants.RECEIVER_ID,receiverId);
+            jsonData.put(Constants.TIMESTAMP,timeStamp);
+
+            jsonObjectMain.put(Constants.FCM_DATA,jsonData);
+
+            //object request
+            JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST,Constants.FCM_BASE_URL, jsonObjectMain,
+                    response -> {
+                        Log.i(TAG, "json send message request successful");
+
+                        //setting the send message progress bar to GONE
+                        binding.progressSendMessage.setVisibility(View.GONE);
+
+                        // add the new message in message list
+                        messagesList.add(new Message(SharedPreference.getFullName(),senderId,receiverId,message,timeStamp));
+
+                        //clears the edit text
+                        binding.editTextMessage.getText().clear();
+
+                        //more recyclerview to the newly added item position
+                        changeAdapterPosition();
+
+                        //saves the message in db
+                        //saveMessageToDatabase(message,timeStamp);
+                    },
+                    error -> {
+                        Log.e(TAG, "json message send error: "+error.getMessage());
+
+                        //setting the send message progress bar to GONE
+                        binding.progressSendMessage.setVisibility(View.GONE);
+
+                        Toast.makeText(this, "Error! Failed to send message.", Toast.LENGTH_LONG).show();
+                    }) {
+                @Override
+                public Map<String, String> getHeaders() {
+                    Map<String,String> params = new HashMap<>();
+                    params.put(Constants.FCM_HEADER_AUTH,"key="+Constants.FCM_SERVER_KEY);
+                    params.put(Constants.CONTENT_TYPE_KEY,Constants.CONTENT_TYPE);
+                    return params;
+                }
+            };
+
+            // volley instance
+            VolleySingleton.getInstance(this).addToRequestQueue(jsonObjectRequest);
+
+        }
+        catch (JSONException e) {
+            e.printStackTrace();
+
+            //setting the send message progress bar to GONE
+            binding.progressSendMessage.setVisibility(View.GONE);
+
+            Toast.makeText(this, "Failed to send message.", Toast.LENGTH_LONG).show();
+        }
+
+    }
+
+    private void saveMessageToDatabase(String message, String timeStamp) {
+
+        RoomDBHelper.getInstance(this)
+                .messageDao()
+                .saveMessage(new MessageEntity(senderId,senderId,receiverId,message,timeStamp));
     }
 }

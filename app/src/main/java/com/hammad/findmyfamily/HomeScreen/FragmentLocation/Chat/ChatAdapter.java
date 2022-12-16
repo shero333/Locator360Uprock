@@ -20,6 +20,8 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.MessageViewHol
     Context context;
     List<Message> messageList;
 
+    String date = "";
+
     public ChatAdapter(Context context, List<Message> messageList) {
         this.context = context;
         this.messageList = messageList;
@@ -39,8 +41,16 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.MessageViewHol
 
         String email = FirebaseAuth.getInstance().getCurrentUser().getEmail();
 
-        //date
+        date = Commons.dateFromTimeInMilli(messageItem.getMessageTimestamp());
+
+
+        /*if(date.equals(Commons.dateFromTimeInMilli(messageItem.getMessageTimestamp()))) {
+            holder.binding.txtDate.setVisibility(View.GONE);
+        }
+        else if(!date.equals(Commons.dateFromTimeInMilli(messageItem.getMessageTimestamp()))) {
+            holder.binding.txtDate.setVisibility(View.VISIBLE);*/
         holder.binding.txtDate.setText(Commons.dateFromTimeInMilli(messageItem.getMessageTimestamp()));
+        //}
 
         // message send
         if (messageItem.getSenderId().equals(email)) {
@@ -50,8 +60,7 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.MessageViewHol
 
             //message received visibility to GONE
             holder.binding.consGroupReceiveMessage.setVisibility(View.GONE);
-        }
-        else if (messageItem.getReceiverId().equals(email)) {
+        } else if (messageItem.getReceiverId().equals(email)) {
 
             holder.binding.textMessageReceived.setText(messageItem.getMessageText());
             holder.binding.timestampMessageReceived.setText(Commons.timeFromTimeInMilli(String.valueOf(System.currentTimeMillis())));
