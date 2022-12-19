@@ -1,6 +1,7 @@
 package com.hammad.findmyfamily.HomeScreen.FragmentLocation.Chat;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -57,8 +58,10 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.MessageViewHol
         // message send
         if (messageItem.getSenderId().equals(email)) {
 
+            Log.i("TRY_123", "message send view: "+messageItem.getSenderId());
+
             holder.binding.textMessageSend.setText(messageItem.getMessage());
-            holder.binding.timestampMessageSend.setText(Commons.timeFromTimeInMilli(String.valueOf(System.currentTimeMillis())));
+            holder.binding.timestampMessageSend.setText(Commons.timeFromTimeInMilli(String.valueOf(messageItem.getTimestamp())));
 
             //message received visibility to GONE
             holder.binding.consGroupReceiveMessage.setVisibility(View.GONE);
@@ -66,8 +69,10 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.MessageViewHol
         }
         else if (messageItem.getReceiverId().equals(email)) {
 
+            Log.i("TRY_123", "message receive view: "+messageItem.getReceiverId());
+
             holder.binding.textMessageReceived.setText(messageItem.getMessage());
-            holder.binding.timestampMessageReceived.setText(Commons.timeFromTimeInMilli(String.valueOf(System.currentTimeMillis())));
+            holder.binding.timestampMessageReceived.setText(Commons.timeFromTimeInMilli(String.valueOf(messageItem.getTimestamp())));
 
             //message send visibility to GONE
             holder.binding.consGroupSendMessage.setVisibility(View.GONE);

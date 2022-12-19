@@ -79,7 +79,7 @@
             app:layout_constraintWidth_percent="0.9"
             android:layout_height="@dimen/_1sdp"
             android:background="@drawable/drawable_line_bottom_sheet"
-            android:backgroundTint="#4D687384"
+            android:backgroundTint="#33687384"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"/>

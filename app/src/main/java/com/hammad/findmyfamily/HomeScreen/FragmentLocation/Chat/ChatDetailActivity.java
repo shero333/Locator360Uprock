@@ -144,9 +144,14 @@ public class ChatDetailActivity extends AppCompatActivity {
 
     private void getMessagesList() {
 
+        Log.i("TRY_123", "sender id: "+senderId);
+        Log.i("TRY_123", "receiver id: "+receiverId);
+
         //get the messages from SQLite (if any)
         RoomDBHelper.getInstance(this)
-                .messageDao().getMessagesList(receiverId,senderId).observe(this,list -> {
+                .messageDao().getMessagesList(senderId,receiverId).observe(this,list -> {
+
+                    Log.i("TRY_123", "getMessagesList: "+list.size());
 
                     /*if (list.size() > 0) {
                         //no messages layout visibility to gone
@@ -164,6 +169,9 @@ public class ChatDetailActivity extends AppCompatActivity {
 
                     chatAdapter = new ChatAdapter(this, list);
                     binding.recyclerViewChat.setAdapter(chatAdapter);
+
+                    //scrolls to new position
+                    changeAdapterPosition(list);
                 });
 
         /*if (messagesList.size() > 0) {
@@ -178,9 +186,9 @@ public class ChatDetailActivity extends AppCompatActivity {
         }*/
     }
 
-    private void changeAdapterPosition() {
+    private void changeAdapterPosition(List<MessageEntity> list) {
 
-        int newPosition = messagesList.size() - 1;
+        int newPosition = list.size() - 1;
         chatAdapter.notifyItemInserted(newPosition);
         binding.recyclerViewChat.scrollToPosition(newPosition);
     }

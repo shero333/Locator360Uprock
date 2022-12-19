@@ -654,6 +654,8 @@ public class LocationFragment extends Fragment implements OnMapReadyCallback, Ci
 
     private void toolbarSettings() {
         startActivity(new Intent(getActivity(), SettingsActivity.class));
+        //slide up animation of Settings activity
+        getActivity().overridePendingTransition(R.anim.slide_up,R.anim.no_animation);
     }
 
     private void toolbarChat() {

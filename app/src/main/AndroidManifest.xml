@@ -55,6 +55,20 @@
         android:theme="@style/Theme.Locator360"
         tools:targetApi="31">
         <activity
+            android:name=".HomeScreen.FragmentLocation.Settings.CircleManagementActivity"
+            android:exported="false">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
+            android:name=".HomeScreen.FragmentLocation.Settings.AccountActivity"
+            android:exported="false">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
             android:name=".HomeScreen.FragmentLocation.Settings.SettingsActivity"
             android:exported="false" />
         <activity
@@ -204,10 +218,11 @@
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
         </service>
-
-        <!--<meta-data
+        <!--
+<meta-data
             android:name="com.google.firebase.messaging.default_notification_icon"
-            android:resource="@drawable/emerg_sos_icon" />-->
+            android:resource="@drawable/emerg_sos_icon" />
+        -->
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyBE9d03i-pCJMyNCOgwL298fVvJeeCetOw" />
