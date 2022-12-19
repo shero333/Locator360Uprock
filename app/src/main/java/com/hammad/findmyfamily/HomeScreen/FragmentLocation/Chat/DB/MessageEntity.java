@@ -14,9 +14,6 @@ public class MessageEntity implements Serializable {
     @PrimaryKey(autoGenerate = true)
     private int id;
 
-    @ColumnInfo(name = Constants.OWNER_EMAIL)
-    private String ownerEmail;
-
     @ColumnInfo(name = Constants.SENDER_ID)
     private String senderId;
 
@@ -29,8 +26,7 @@ public class MessageEntity implements Serializable {
     @ColumnInfo(name = Constants.TIMESTAMP)
     private String timestamp;
 
-    public MessageEntity(String ownerEmail, String senderId, String receiverId, String message, String timestamp) {
-        this.ownerEmail = ownerEmail;
+    public MessageEntity(String senderId, String receiverId, String message, String timestamp) {
         this.senderId = senderId;
         this.receiverId = receiverId;
         this.message = message;
@@ -43,14 +39,6 @@ public class MessageEntity implements Serializable {
 
     public void setId(int id) {
         this.id = id;
-    }
-
-    public String getOwnerEmail() {
-        return ownerEmail;
-    }
-
-    public void setOwnerEmail(String ownerEmail) {
-        this.ownerEmail = ownerEmail;
     }
 
     public String getSenderId() {

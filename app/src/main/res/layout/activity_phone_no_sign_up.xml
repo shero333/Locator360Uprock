@@ -63,7 +63,9 @@
         style="@style/AutoFillHintStyle"
         app:layout_constraintStart_toEndOf="@id/country_code_picker"
         app:layout_constraintTop_toTopOf="@id/country_code_picker"
-        app:layout_constraintBottom_toBottomOf="@id/country_code_picker"/>
+        app:layout_constraintBottom_toBottomOf="@id/country_code_picker"
+        tools:ignore="TextFields"
+        android:importantForAutofill="no" />
 
     <TextView
         android:id="@+id/txt_privacy_policy"

@@ -9,7 +9,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.firebase.auth.FirebaseAuth;
-import com.hammad.findmyfamily.HomeScreen.FragmentLocation.Chat.Model.Message;
+import com.hammad.findmyfamily.HomeScreen.FragmentLocation.Chat.DB.MessageEntity;
 import com.hammad.findmyfamily.Util.Commons;
 import com.hammad.findmyfamily.databinding.LayoutMessagesItemBinding;
 
@@ -18,11 +18,13 @@ import java.util.List;
 public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.MessageViewHolder> {
 
     Context context;
-    List<Message> messageList;
+    List<MessageEntity> messageList;
+
+    // MessageEntity
 
     String date = "";
 
-    public ChatAdapter(Context context, List<Message> messageList) {
+    public ChatAdapter(Context context, List<MessageEntity> messageList) {
         this.context = context;
         this.messageList = messageList;
     }
@@ -37,11 +39,11 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.MessageViewHol
     public void onBindViewHolder(@NonNull ChatAdapter.MessageViewHolder holder, int position) {
 
         //message item
-        Message messageItem = messageList.get(position);
+        MessageEntity messageItem = messageList.get(position);
 
         String email = FirebaseAuth.getInstance().getCurrentUser().getEmail();
 
-        date = Commons.dateFromTimeInMilli(messageItem.getMessageTimestamp());
+        date = Commons.dateFromTimeInMilli(messageItem.getTimestamp());
 
 
         /*if(date.equals(Commons.dateFromTimeInMilli(messageItem.getMessageTimestamp()))) {
@@ -49,24 +51,27 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.MessageViewHol
         }
         else if(!date.equals(Commons.dateFromTimeInMilli(messageItem.getMessageTimestamp()))) {
             holder.binding.txtDate.setVisibility(View.VISIBLE);*/
-        holder.binding.txtDate.setText(Commons.dateFromTimeInMilli(messageItem.getMessageTimestamp()));
+        holder.binding.txtDate.setText(Commons.dateFromTimeInMilli(messageItem.getTimestamp()));
         //}
 
         // message send
         if (messageItem.getSenderId().equals(email)) {
 
-            holder.binding.textMessageSend.setText(messageItem.getMessageText());
+            holder.binding.textMessageSend.setText(messageItem.getMessage());
             holder.binding.timestampMessageSend.setText(Commons.timeFromTimeInMilli(String.valueOf(System.currentTimeMillis())));
 
             //message received visibility to GONE
             holder.binding.consGroupReceiveMessage.setVisibility(View.GONE);
-        } else if (messageItem.getReceiverId().equals(email)) {
+            holder.binding.consGroupSendMessage.setVisibility(View.VISIBLE);
+        }
+        else if (messageItem.getReceiverId().equals(email)) {
 
-            holder.binding.textMessageReceived.setText(messageItem.getMessageText());
+            holder.binding.textMessageReceived.setText(messageItem.getMessage());
             holder.binding.timestampMessageReceived.setText(Commons.timeFromTimeInMilli(String.valueOf(System.currentTimeMillis())));
 
             //message send visibility to GONE
             holder.binding.consGroupSendMessage.setVisibility(View.GONE);
+            holder.binding.consGroupReceiveMessage.setVisibility(View.VISIBLE);
         }
     }
 

@@ -73,6 +73,7 @@ import com.hammad.findmyfamily.HomeScreen.FragmentLocation.JoinCircle.CircleTool
 import com.hammad.findmyfamily.HomeScreen.FragmentLocation.JoinCircle.JoinCircleMainActivity;
 import com.hammad.findmyfamily.Permission.Permissions;
 import com.hammad.findmyfamily.R;
+import com.hammad.findmyfamily.HomeScreen.FragmentLocation.Settings.SettingsActivity;
 import com.hammad.findmyfamily.SharedPreference.SharedPreference;
 import com.hammad.findmyfamily.Util.Commons;
 import com.hammad.findmyfamily.Util.Constants;
@@ -652,9 +653,7 @@ public class LocationFragment extends Fragment implements OnMapReadyCallback, Ci
     }
 
     private void toolbarSettings() {
-
-        //Toast.makeText(requireContext(), "Settings", Toast.LENGTH_SHORT).show();
-        Commons.signOut(requireActivity());
+        startActivity(new Intent(getActivity(), SettingsActivity.class));
     }
 
     private void toolbarChat() {
@@ -1036,7 +1035,4 @@ public class LocationFragment extends Fragment implements OnMapReadyCallback, Ci
         super.onDestroyView();
         binding = null;
     }
-
-
-
 }

@@ -18,7 +18,6 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.bumptech.glide.Glide;
 import com.google.firebase.auth.FirebaseAuth;
 import com.hammad.findmyfamily.HomeScreen.FragmentLocation.Chat.DB.MessageEntity;
-import com.hammad.findmyfamily.HomeScreen.FragmentLocation.Chat.Model.Message;
 import com.hammad.findmyfamily.HomeScreen.FragmentLocation.Chat.Model.UserInfo;
 import com.hammad.findmyfamily.HomeScreen.FragmentSafety.EmergencyRoomDB.RoomDBHelper;
 import com.hammad.findmyfamily.HomeScreen.FragmentSafety.EmergencySOS.VolleySingleton;
@@ -43,9 +42,11 @@ public class ChatDetailActivity extends AppCompatActivity {
 
     ActivityChatDetailBinding binding;
 
-    List<Message> messagesList = new ArrayList<>();
+    List<MessageEntity> messagesList = new ArrayList<>();
 
-    String senderId, receiverId, fcmToken, senderName, imageUrl;
+    String senderId, fcmToken, senderName, imageUrl;
+
+    static String receiverId;
 
     ChatAdapter chatAdapter;
 
@@ -53,6 +54,8 @@ public class ChatDetailActivity extends AppCompatActivity {
     JSONObject jsonNotification = new JSONObject();
     JSONObject jsonData = new JSONObject();
     JSONObject jsonObjectMain = new JSONObject();
+
+    static boolean isActivityActive = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,7 +73,7 @@ public class ChatDetailActivity extends AppCompatActivity {
         getUserInfoIntent();
 
         //recyclerview messages
-        setRecyclerView();
+        //setRecyclerView();
 
         // messages list
         getMessagesList();
@@ -125,7 +128,8 @@ public class ChatDetailActivity extends AppCompatActivity {
                 binding.profileImg.setBackgroundColor(randColorFromPrevAct);
                 binding.txtNameFirstChar.setText(String.valueOf(userInfo.getUserFullName().charAt(0)));
                 binding.txtNameFirstChar.setVisibility(View.VISIBLE);
-            } else if (!imageUrl.equals(Constants.NULL)) {
+            }
+            else if (!imageUrl.equals(Constants.NULL)) {
                 binding.txtNameFirstChar.setVisibility(View.GONE);
 
                 //loading the image
@@ -141,8 +145,28 @@ public class ChatDetailActivity extends AppCompatActivity {
     private void getMessagesList() {
 
         //get the messages from SQLite (if any)
+        RoomDBHelper.getInstance(this)
+                .messageDao().getMessagesList(receiverId,senderId).observe(this,list -> {
 
-        if (messagesList.size() > 0) {
+                    /*if (list.size() > 0) {
+                        //no messages layout visibility to gone
+                        binding.layoutNoMessages.consNoMessages.setVisibility(View.GONE);
+                        binding.recyclerViewChat.setVisibility(View.VISIBLE);
+                    }
+                    else if (list.size() == 0) {
+                        //no messages layout visibility to VISIBLE
+                        binding.recyclerViewChat.setVisibility(View.GONE);
+                        binding.layoutNoMessages.consNoMessages.setVisibility(View.VISIBLE);
+                    }
+*/
+                    LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
+                    binding.recyclerViewChat.setLayoutManager(layoutManager);
+
+                    chatAdapter = new ChatAdapter(this, list);
+                    binding.recyclerViewChat.setAdapter(chatAdapter);
+                });
+
+        /*if (messagesList.size() > 0) {
             //no messages layout visibility to gone
             binding.layoutNoMessages.consNoMessages.setVisibility(View.GONE);
             binding.recyclerViewChat.setVisibility(View.VISIBLE);
@@ -151,7 +175,7 @@ public class ChatDetailActivity extends AppCompatActivity {
             //no messages layout visibility to VISIBLE
             binding.recyclerViewChat.setVisibility(View.GONE);
             binding.layoutNoMessages.consNoMessages.setVisibility(View.VISIBLE);
-        }
+        }*/
     }
 
     private void changeAdapterPosition() {
@@ -231,16 +255,16 @@ public class ChatDetailActivity extends AppCompatActivity {
                         binding.progressSendMessage.setVisibility(View.GONE);
 
                         // add the new message in message list
-                        messagesList.add(new Message(SharedPreference.getFullName(),senderId,receiverId,message,timeStamp));
+                        //messagesList.add(new Message(SharedPreference.getFullName(),senderId,receiverId,message,timeStamp));
 
                         //clears the edit text
                         binding.editTextMessage.getText().clear();
 
                         //more recyclerview to the newly added item position
-                        changeAdapterPosition();
+                        //changeAdapterPosition();
 
                         //saves the message in db
-                        //saveMessageToDatabase(message,timeStamp);
+                        saveMessageToDatabase(message,timeStamp);
                     },
                     error -> {
                         Log.e(TAG, "json message send error: "+error.getMessage());
@@ -278,6 +302,22 @@ public class ChatDetailActivity extends AppCompatActivity {
 
         RoomDBHelper.getInstance(this)
                 .messageDao()
-                .saveMessage(new MessageEntity(senderId,senderId,receiverId,message,timeStamp));
+                .saveMessage(new MessageEntity(senderId,receiverId,message,timeStamp));
+    }
+
+    public static boolean isOnline(String senderId) {
+        return isActivityActive && senderId.equals(receiverId);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        isActivityActive = true;
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        isActivityActive = false;
     }
 }

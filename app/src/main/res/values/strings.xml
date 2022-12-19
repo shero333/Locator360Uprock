@@ -157,4 +157,8 @@
     <string name="sub_title_no_members">No Members. Add member in circle and start chatting</string>
     <string name="date">date</string>
     <string name="phone_no_already_registered">Phone Number already registered.</string>
+    <string name="personal_data">Personal Data</string>
+    <string name="circle_management">Circle Management</string>
+    <string name="about">About</string>
+    <string name="sign_out">Sign Out</string>
 </resources>

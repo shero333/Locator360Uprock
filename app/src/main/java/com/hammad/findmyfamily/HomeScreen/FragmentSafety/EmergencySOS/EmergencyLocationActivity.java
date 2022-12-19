@@ -6,9 +6,7 @@ import android.content.Intent;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -20,12 +18,10 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.hammad.findmyfamily.Application.App;
 import com.hammad.findmyfamily.HomeScreen.HomeActivity;
 import com.hammad.findmyfamily.R;
 import com.hammad.findmyfamily.StartScreen.StartScreenActivity;
@@ -169,7 +165,6 @@ public class EmergencyLocationActivity extends AppCompatActivity implements OnMa
             startActivity(new Intent(this,StartScreenActivity.class));
             finish();
         }
-
 
     }
 }

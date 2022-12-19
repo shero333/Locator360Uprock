@@ -14,6 +14,8 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.hammad.findmyfamily.HomeScreen.FragmentLocation.Chat.Model.UserInfo;
+import com.hammad.findmyfamily.SignIn.model.User;
+import com.hammad.findmyfamily.Util.Commons;
 import com.hammad.findmyfamily.Util.Constants;
 import com.hammad.findmyfamily.databinding.ActivityChatDashboardBinding;
 
@@ -122,6 +124,7 @@ public class ChatDashboardActivity extends AppCompatActivity implements ChatDash
                             }
                         }
                         else if(circleMembersList.size() == 0) {
+
                             //show the no members view
                             binding.consNoMembers.setVisibility(View.VISIBLE);
 
@@ -141,6 +144,22 @@ public class ChatDashboardActivity extends AppCompatActivity implements ChatDash
 
         adapter = new ChatDashboardAdapter(this, membersInfoList, this);
         binding.recyclerView.setAdapter(adapter);
+
+        //if the activity is called from notification
+        Intent intent = getIntent();
+        if(intent.getStringExtra(Constants.SENDER_ID) != null) {
+
+            for(int i=0; i < membersInfoList.size(); i++) {
+                if(intent.getStringExtra(Constants.SENDER_ID).equals(membersInfoList.get(i).getUserId())) {
+
+                    Intent chatIntent = new Intent(this, ChatDetailActivity.class);
+                    intent.putExtra(Constants.KEY_USER_INFO,membersInfoList.get(i));
+                    intent.putExtra(Constants.RANDOM_COLOR, Commons.randomColor());
+                    startActivity(chatIntent);
+                }
+            }
+
+        }
     }
 
     //member click listener
@@ -151,7 +170,6 @@ public class ChatDashboardActivity extends AppCompatActivity implements ChatDash
         intent.putExtra(Constants.KEY_USER_INFO,membersInfoList.get(position));
         intent.putExtra(Constants.RANDOM_COLOR,randomColor);
         startActivity(intent);
-
     }
 
 }
