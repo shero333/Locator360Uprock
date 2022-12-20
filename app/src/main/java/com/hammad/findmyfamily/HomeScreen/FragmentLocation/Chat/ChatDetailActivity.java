@@ -1,5 +1,7 @@
 package com.hammad.findmyfamily.HomeScreen.FragmentLocation.Chat;
 
+import static com.hammad.findmyfamily.Util.Constants.USERS_COLLECTION;
+
 import android.app.Dialog;
 import android.content.Intent;
 import android.graphics.Color;
@@ -17,12 +19,16 @@ import com.android.volley.Request;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.bumptech.glide.Glide;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.hammad.findmyfamily.HomeScreen.FragmentLocation.Chat.DB.MessageEntity;
 import com.hammad.findmyfamily.HomeScreen.FragmentLocation.Chat.Model.UserInfo;
 import com.hammad.findmyfamily.HomeScreen.FragmentSafety.EmergencyRoomDB.RoomDBHelper;
 import com.hammad.findmyfamily.HomeScreen.FragmentSafety.EmergencySOS.VolleySingleton;
+import com.hammad.findmyfamily.HomeScreen.HomeActivity;
 import com.hammad.findmyfamily.R;
 import com.hammad.findmyfamily.SharedPreference.SharedPreference;
+import com.hammad.findmyfamily.StartScreen.StartScreenActivity;
 import com.hammad.findmyfamily.Util.Commons;
 import com.hammad.findmyfamily.Util.Constants;
 import com.hammad.findmyfamily.databinding.ActivityChatDetailBinding;
@@ -31,7 +37,6 @@ import com.hammad.findmyfamily.databinding.LayoutChatImageDialogBinding;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -41,8 +46,6 @@ public class ChatDetailActivity extends AppCompatActivity {
     private static final String TAG = "CHAT_DETAIL_ACT";
 
     ActivityChatDetailBinding binding;
-
-    List<MessageEntity> messagesList = new ArrayList<>();
 
     String senderId, fcmToken, senderName, imageUrl;
 
@@ -56,6 +59,9 @@ public class ChatDetailActivity extends AppCompatActivity {
     JSONObject jsonObjectMain = new JSONObject();
 
     static boolean isActivityActive = true;
+
+    // boolean for checking whether this activity was opened when app is in foreground or background
+    private boolean isAppInForeground;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,14 +78,16 @@ public class ChatDetailActivity extends AppCompatActivity {
         // get user info intent
         getUserInfoIntent();
 
-        //recyclerview messages
-        //setRecyclerView();
-
         // messages list
         getMessagesList();
 
-        // back pressed
-        binding.txtBackPressed.setOnClickListener(v -> onBackPressed());
+        // tool back pressed
+        if(isAppInForeground) {
+            binding.txtBackPressed.setOnClickListener(v -> checkCurrentLoginStatus());
+        }
+        else if(!isAppInForeground) {
+            binding.txtBackPressed.setOnClickListener(v -> navigateToStartScreen());
+        }
 
         // image profile click listener (pops up as dialog)
         if (!imageUrl.equals(Constants.NULL)) {
@@ -90,7 +98,6 @@ public class ChatDetailActivity extends AppCompatActivity {
         binding.imgViewSendMessage.setOnClickListener(v -> {
 
             String message = binding.editTextMessage.getText().toString();
-            String timeStamp = String.valueOf(System.currentTimeMillis());
 
             if(binding.recyclerViewChat.getVisibility() == View.GONE) {
                 binding.recyclerViewChat.setVisibility(View.VISIBLE);
@@ -98,7 +105,7 @@ public class ChatDetailActivity extends AppCompatActivity {
             }
 
             //send message
-            sendMessage(message,timeStamp);
+            sendMessage(message);
         });
 
     }
@@ -111,6 +118,8 @@ public class ChatDetailActivity extends AppCompatActivity {
 
             UserInfo userInfo = intent.getParcelableExtra(Constants.KEY_USER_INFO);
             int randColorFromPrevAct = intent.getIntExtra(Constants.RANDOM_COLOR,-1);
+
+            isAppInForeground = intent.getBooleanExtra(Constants.IS_APP_IN_FOREGROUND,true);
 
             receiverId = userInfo.getUserId();
             fcmToken = userInfo.getUserToken();
@@ -144,46 +153,31 @@ public class ChatDetailActivity extends AppCompatActivity {
 
     private void getMessagesList() {
 
-        Log.i("TRY_123", "sender id: "+senderId);
-        Log.i("TRY_123", "receiver id: "+receiverId);
-
         //get the messages from SQLite (if any)
         RoomDBHelper.getInstance(this)
                 .messageDao().getMessagesList(senderId,receiverId).observe(this,list -> {
 
-                    Log.i("TRY_123", "getMessagesList: "+list.size());
-
-                    /*if (list.size() > 0) {
+                    if (list.size() > 0) {
                         //no messages layout visibility to gone
                         binding.layoutNoMessages.consNoMessages.setVisibility(View.GONE);
                         binding.recyclerViewChat.setVisibility(View.VISIBLE);
+
+                        LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, true/*false*/);
+                        binding.recyclerViewChat.setLayoutManager(layoutManager);
+
+                        chatAdapter = new ChatAdapter(this, list);
+                        binding.recyclerViewChat.setAdapter(chatAdapter);
+
+                        //scrolls to new position
+                        changeAdapterPosition(list);
+
                     }
                     else if (list.size() == 0) {
                         //no messages layout visibility to VISIBLE
                         binding.recyclerViewChat.setVisibility(View.GONE);
                         binding.layoutNoMessages.consNoMessages.setVisibility(View.VISIBLE);
                     }
-*/
-                    LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
-                    binding.recyclerViewChat.setLayoutManager(layoutManager);
-
-                    chatAdapter = new ChatAdapter(this, list);
-                    binding.recyclerViewChat.setAdapter(chatAdapter);
-
-                    //scrolls to new position
-                    changeAdapterPosition(list);
                 });
-
-        /*if (messagesList.size() > 0) {
-            //no messages layout visibility to gone
-            binding.layoutNoMessages.consNoMessages.setVisibility(View.GONE);
-            binding.recyclerViewChat.setVisibility(View.VISIBLE);
-        }
-        else if (messagesList.size() == 0) {
-            //no messages layout visibility to VISIBLE
-            binding.recyclerViewChat.setVisibility(View.GONE);
-            binding.layoutNoMessages.consNoMessages.setVisibility(View.VISIBLE);
-        }*/
     }
 
     private void changeAdapterPosition(List<MessageEntity> list) {
@@ -223,19 +217,12 @@ public class ChatDetailActivity extends AppCompatActivity {
         dialog.show();
     }
 
-    private void setRecyclerView() {
-
-        LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
-        binding.recyclerViewChat.setLayoutManager(layoutManager);
-
-        chatAdapter = new ChatAdapter(this, messagesList);
-        binding.recyclerViewChat.setAdapter(chatAdapter);
-    }
-
-    private void sendMessage(String message, String timeStamp) {
+    private void sendMessage(String message) {
 
         // setting the json
         try {
+
+            String timeStamp = String.valueOf(System.currentTimeMillis());
 
             //setting the send message progress bar to VISIBLE
             binding.progressSendMessage.setVisibility(View.VISIBLE);
@@ -262,14 +249,8 @@ public class ChatDetailActivity extends AppCompatActivity {
                         //setting the send message progress bar to GONE
                         binding.progressSendMessage.setVisibility(View.GONE);
 
-                        // add the new message in message list
-                        //messagesList.add(new Message(SharedPreference.getFullName(),senderId,receiverId,message,timeStamp));
-
                         //clears the edit text
                         binding.editTextMessage.getText().clear();
-
-                        //more recyclerview to the newly added item position
-                        //changeAdapterPosition();
 
                         //saves the message in db
                         saveMessageToDatabase(message,timeStamp);
@@ -327,5 +308,41 @@ public class ChatDetailActivity extends AppCompatActivity {
     protected void onPause() {
         super.onPause();
         isActivityActive = false;
+    }
+
+    @Override
+    public void onBackPressed() {
+        if(isAppInForeground) {
+            checkCurrentLoginStatus();
+        }
+        else if(!isAppInForeground) {
+            navigateToStartScreen();
+        }
+
+    }
+
+    private void navigateToStartScreen() {
+        startActivity(new Intent(this, StartScreenActivity.class));
+        finish();
+    }
+
+    private void checkCurrentLoginStatus() {
+        if(FirebaseAuth.getInstance().getCurrentUser() != null)
+        {
+            String email = FirebaseAuth.getInstance().getCurrentUser().getEmail();
+
+            DocumentReference documentReference = FirebaseFirestore.getInstance().collection(USERS_COLLECTION).document(email);
+
+            documentReference.get().addOnSuccessListener(documentSnapshot -> {
+
+                startActivity(new Intent(this, HomeActivity.class));
+                finish();
+            });
+        }
+        else if(FirebaseAuth.getInstance().getCurrentUser() == null) {
+            startActivity(new Intent(this,StartScreenActivity.class));
+            finish();
+        }
+
     }
 }

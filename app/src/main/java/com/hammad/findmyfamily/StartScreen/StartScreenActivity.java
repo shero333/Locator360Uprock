@@ -11,10 +11,13 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.hammad.findmyfamily.HomeScreen.FragmentLocation.Chat.ChatDetailActivity;
+import com.hammad.findmyfamily.HomeScreen.FragmentLocation.Chat.Model.UserInfo;
 import com.hammad.findmyfamily.HomeScreen.FragmentSafety.EmergencySOS.EmergencyLocationActivity;
 import com.hammad.findmyfamily.HomeScreen.HomeActivity;
 import com.hammad.findmyfamily.SignIn.PhoneNoSignInActivity;
 import com.hammad.findmyfamily.SignUp.PhoneNoSignUpActivity;
+import com.hammad.findmyfamily.Util.Commons;
 import com.hammad.findmyfamily.Util.Constants;
 import com.hammad.findmyfamily.databinding.ActivityStartScreenBinding;
 
@@ -66,6 +69,26 @@ public class StartScreenActivity extends AppCompatActivity {
                 sosEmergIntent.putExtra(Constants.IS_APP_IN_FOREGROUND,false);
                 startActivity(sosEmergIntent);
                 finish();
+            }
+            else if(intent.getExtras().getString(Constants.SENDER_ID) != null)
+            {
+
+                FirebaseFirestore.getInstance().collection(Constants.USERS_COLLECTION)
+                        .document(intent.getStringExtra(Constants.SENDER_ID))
+                        .get()
+                        .addOnSuccessListener(doc -> {
+
+                            String fullName = doc.getString(Constants.FIRST_NAME).concat(" ").concat(doc.getString(Constants.LAST_NAME));
+
+                            UserInfo userInfo = new UserInfo(doc.getId(),doc.getString(Constants.FCM_TOKEN),fullName, doc.getString(Constants.IMAGE_PATH));
+
+                            Intent chatIntent = new Intent(this, ChatDetailActivity.class);
+                            chatIntent.putExtra(Constants.KEY_USER_INFO,userInfo);
+                            chatIntent.putExtra(Constants.IS_APP_IN_FOREGROUND,false);
+                            chatIntent.putExtra(Constants.RANDOM_COLOR, Commons.randomColor());
+                            startActivity(chatIntent);
+                            finish();
+                        });
             }
             else {
                 if(FirebaseAuth.getInstance().getCurrentUser() != null)

@@ -26,6 +26,8 @@ public class MessageEntity implements Serializable {
     @ColumnInfo(name = Constants.TIMESTAMP)
     private String timestamp;
 
+    public MessageEntity() {}
+
     public MessageEntity(String senderId, String receiverId, String message, String timestamp) {
         this.senderId = senderId;
         this.receiverId = receiverId;

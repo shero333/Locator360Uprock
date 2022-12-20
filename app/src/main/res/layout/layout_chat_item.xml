@@ -14,7 +14,7 @@
         android:layout_height="@dimen/_60sdp"
         android:background="@drawable/drawable_circle_safety_frag"
         tools:backgroundTint="@color/orange"
-        android:text="@string/cn"
+        tools:text="@string/cn"
         android:textStyle="bold"
         android:textSize="@dimen/_16ssp"
         android:textColor="@color/white"

@@ -8,7 +8,6 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
-import android.util.Log;
 
 import androidx.annotation.NonNull;
 
@@ -28,13 +27,9 @@ public class FirebaseEmergNotificationService extends FirebaseMessagingService {
     @Override
     public void onMessageReceived(@NonNull RemoteMessage remoteMessage) {
         super.onMessageReceived(remoteMessage);
-        Log.i("TRY_123", "onMessageReceived: ");
+
 
         if (remoteMessage.getNotification() != null) {
-
-            Log.i("TRY_123", "remote message not null");
-            Log.i("TRY_123", "sender id: "+remoteMessage.getData().get(Constants.SENDER_ID));
-            Log.i("TRY_123", "receiver id: "+remoteMessage.getData().get(Constants.RECEIVER_ID));
 
             String title = remoteMessage.getNotification().getTitle();
             String body = remoteMessage.getNotification().getBody();
@@ -86,7 +81,6 @@ public class FirebaseEmergNotificationService extends FirebaseMessagingService {
             }
             else if (remoteMessage.getData().get(Constants.SENDER_ID) != null && remoteMessage.getData().get(Constants.RECEIVER_ID) != null)
             {
-                Log.i("TRY_123", "onMessageReceived: ELSE IF called");
                 String senderId,receiverId,message,timestamp;
 
                 senderId = remoteMessage.getData().get(Constants.SENDER_ID);
@@ -97,12 +91,12 @@ public class FirebaseEmergNotificationService extends FirebaseMessagingService {
                 // this indicates that the user is still in chat detail activity, and updates the messages list
                 if (!ChatDetailActivity.isOnline(remoteMessage.getData().get(Constants.SENDER_ID)))
                 {
-                    Log.i("TRY_123", "if called");
                     //saves the notification in DB
                     saveMessageToDatabase(senderId,receiverId,message,timestamp);
 
                     Intent intent = new Intent(this, ChatDashboardActivity.class);
                     intent.putExtra(Constants.SENDER_ID, remoteMessage.getData().get(Constants.SENDER_ID));
+                    intent.putExtra(Constants.IS_APP_IN_FOREGROUND, true);
 
                     PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, flag);
 
@@ -128,23 +122,9 @@ public class FirebaseEmergNotificationService extends FirebaseMessagingService {
 
                 }
                 else {
-                    Log.i("TRY_123", "else called");
-
                     //only saves in DB
                     saveMessageToDatabase(senderId,receiverId,message,timestamp);
                 }
-
-                /*//dummy cond
-                if (remoteMessage.getData().get(Constants.SENDER_ID) != null) {
-                    if (!ChatDetailActivity.isOnline(remoteMessage.getData().get(Constants.SENDER_ID))) {
-                        //generate notification and saves in DB
-                        Log.i("TRY_123", "if called: ");
-                    } else {
-                        Log.i("TRY_123", "else called: ");
-                        //only saves in DB
-                    }
-                }*/
-
             }
         }
     }

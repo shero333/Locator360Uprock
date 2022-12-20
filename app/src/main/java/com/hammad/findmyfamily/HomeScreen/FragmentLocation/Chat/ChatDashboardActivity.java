@@ -14,7 +14,6 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.hammad.findmyfamily.HomeScreen.FragmentLocation.Chat.Model.UserInfo;
-import com.hammad.findmyfamily.SignIn.model.User;
 import com.hammad.findmyfamily.Util.Commons;
 import com.hammad.findmyfamily.Util.Constants;
 import com.hammad.findmyfamily.databinding.ActivityChatDashboardBinding;
@@ -145,7 +144,7 @@ public class ChatDashboardActivity extends AppCompatActivity implements ChatDash
         adapter = new ChatDashboardAdapter(this, membersInfoList, this);
         binding.recyclerView.setAdapter(adapter);
 
-        //if the activity is called from notification
+        //if the activity is called from notification in case a new message is received
         Intent intent = getIntent();
         if(intent.getStringExtra(Constants.SENDER_ID) != null) {
 
@@ -153,12 +152,12 @@ public class ChatDashboardActivity extends AppCompatActivity implements ChatDash
                 if(intent.getStringExtra(Constants.SENDER_ID).equals(membersInfoList.get(i).getUserId())) {
 
                     Intent chatIntent = new Intent(this, ChatDetailActivity.class);
-                    intent.putExtra(Constants.KEY_USER_INFO,membersInfoList.get(i));
-                    intent.putExtra(Constants.RANDOM_COLOR, Commons.randomColor());
+                    chatIntent.putExtra(Constants.KEY_USER_INFO,membersInfoList.get(i));
+                    chatIntent.putExtra(Constants.IS_APP_IN_FOREGROUND,intent.getBooleanExtra(Constants.IS_APP_IN_FOREGROUND,true));
+                    chatIntent.putExtra(Constants.RANDOM_COLOR, Commons.randomColor());
                     startActivity(chatIntent);
                 }
             }
-
         }
     }
 
@@ -168,6 +167,7 @@ public class ChatDashboardActivity extends AppCompatActivity implements ChatDash
 
         Intent intent = new Intent(this, ChatDetailActivity.class);
         intent.putExtra(Constants.KEY_USER_INFO,membersInfoList.get(position));
+        intent.putExtra(Constants.IS_APP_IN_FOREGROUND,true);
         intent.putExtra(Constants.RANDOM_COLOR,randomColor);
         startActivity(intent);
     }

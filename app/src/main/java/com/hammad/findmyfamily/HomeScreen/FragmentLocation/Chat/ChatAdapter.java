@@ -20,10 +20,7 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.MessageViewHol
 
     Context context;
     List<MessageEntity> messageList;
-
-    // MessageEntity
-
-    String date = "";
+    String date = "18 Dec 2022";
 
     public ChatAdapter(Context context, List<MessageEntity> messageList) {
         this.context = context;
@@ -40,25 +37,25 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.MessageViewHol
     public void onBindViewHolder(@NonNull ChatAdapter.MessageViewHolder holder, int position) {
 
         //message item
-        MessageEntity messageItem = messageList.get(position);
+        MessageEntity messageItem = messageList.get(holder.getAdapterPosition());
 
         String email = FirebaseAuth.getInstance().getCurrentUser().getEmail();
 
-        date = Commons.dateFromTimeInMilli(messageItem.getTimestamp());
-
-
-        /*if(date.equals(Commons.dateFromTimeInMilli(messageItem.getMessageTimestamp()))) {
+        //Log.i("TRY_123", "date: "+date);
+        if(date.equals(Commons.dateFromTimeInMilli(messageItem.getTimestamp()))) {
+            Log.i("TRY_123", "date if called: "+messageItem.getMessage());
             holder.binding.txtDate.setVisibility(View.GONE);
         }
-        else if(!date.equals(Commons.dateFromTimeInMilli(messageItem.getMessageTimestamp()))) {
-            holder.binding.txtDate.setVisibility(View.VISIBLE);*/
-        holder.binding.txtDate.setText(Commons.dateFromTimeInMilli(messageItem.getTimestamp()));
-        //}
+        else if(!date.equals(Commons.dateFromTimeInMilli(messageItem.getTimestamp()))) {
+            Log.i("TRY_123", "date else if called: "+messageItem.getMessage());
+            date = Commons.dateFromTimeInMilli(messageItem.getTimestamp());
+
+            holder.binding.txtDate.setVisibility(View.VISIBLE);
+            holder.binding.txtDate.setText(date);
+        }
 
         // message send
         if (messageItem.getSenderId().equals(email)) {
-
-            Log.i("TRY_123", "message send view: "+messageItem.getSenderId());
 
             holder.binding.textMessageSend.setText(messageItem.getMessage());
             holder.binding.timestampMessageSend.setText(Commons.timeFromTimeInMilli(String.valueOf(messageItem.getTimestamp())));
@@ -68,8 +65,6 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.MessageViewHol
             holder.binding.consGroupSendMessage.setVisibility(View.VISIBLE);
         }
         else if (messageItem.getReceiverId().equals(email)) {
-
-            Log.i("TRY_123", "message receive view: "+messageItem.getReceiverId());
 
             holder.binding.textMessageReceived.setText(messageItem.getMessage());
             holder.binding.timestampMessageReceived.setText(Commons.timeFromTimeInMilli(String.valueOf(messageItem.getTimestamp())));

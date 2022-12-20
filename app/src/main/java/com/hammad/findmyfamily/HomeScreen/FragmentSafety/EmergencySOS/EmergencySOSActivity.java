@@ -197,7 +197,6 @@ public class EmergencySOSActivity extends AppCompatActivity {
                                 .document(circleMemberList.get(i))
                                 .get()
                                 .addOnSuccessListener(documentSnapshot -> {
-
                                     if(!circleMemberList.get(loopCurrentIndexValue).equals(currentUserEmail)) {
                                         String fcmToken = documentSnapshot.getString(Constants.FCM_TOKEN);
 

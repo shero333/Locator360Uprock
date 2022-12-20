@@ -17,9 +17,14 @@ public interface MessageDao {
     @Insert(onConflict = REPLACE)
     void saveMessage(MessageEntity messageEntity);
 
-    @Query("SELECT * from "+ Constants.TABLE_MESSAGES+" where sender_id= :senderId OR receiver_id= :receiverId OR sender_id= :receiverId OR receiver_id= :senderId ORDER BY timestamp ASC")
-    LiveData<List<MessageEntity>> getMessagesList(/*String ownerEmail,*/ String senderId, String receiverId);
+    @Query("SELECT * from " + Constants.TABLE_MESSAGES + " WHERE sender_id = :senderId AND receiver_id = :receiverId " +
+            "UNION " +
+            "SELECT * from " + Constants.TABLE_MESSAGES + " WHERE sender_id = :receiverId AND receiver_id = :senderId ORDER by timestamp DESC")
+    LiveData<List<MessageEntity>> getMessagesList(String senderId, String receiverId);
 
-    @Query("SELECT timestamp from "+Constants.TABLE_MESSAGES+" where sender_id= :senderId AND receiver_id= :receiverId ORDER BY timestamp DESC")
-    String lastMessageTimestamp(/*String ownerEmail,*/String senderId,String receiverId);
+    @Query("SELECT * from " + Constants.TABLE_MESSAGES + " WHERE sender_id= :senderId AND receiver_id= :receiverId " +
+            "UNION " +
+            "SELECT * from " + Constants.TABLE_MESSAGES + " WHERE sender_id= :receiverId AND receiver_id= :senderId " +
+            "ORDER BY timestamp desc limit 1")
+    MessageEntity lastMessageTimestamp(String senderId,String receiverId);
 }

@@ -114,7 +114,7 @@ public class EmergencyLocationActivity extends AppCompatActivity implements OnMa
                 location.setLongitude(lng);
 
                 markerOptions.position(latLng)
-                             .icon(BitmapDescriptorFactory.fromResource(R.drawable.marker_icon))
+                             .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_marker))
                              .anchor((float) 0.5,(float) 0.5);
 
                 mGoogleMap.addMarker(markerOptions);
