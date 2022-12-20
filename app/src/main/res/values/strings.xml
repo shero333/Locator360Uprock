@@ -161,4 +161,10 @@
     <string name="circle_management">Circle Management</string>
     <string name="about">About</string>
     <string name="sign_out">Sign Out</string>
+    <string name="profile">Profile</string>
+    <string name="account_details">Account Details</string>
+    <string name="account_management">Account Management</string>
+    <string name="edit_phone_number">Edit Phone Number</string>
+    <string name="edit_email_address">Edit Email Address</string>
+    <string name="change_password">Change Password</string>
 </resources>

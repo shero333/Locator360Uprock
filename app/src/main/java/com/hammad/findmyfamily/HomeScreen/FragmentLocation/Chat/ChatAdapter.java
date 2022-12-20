@@ -1,7 +1,6 @@
 package com.hammad.findmyfamily.HomeScreen.FragmentLocation.Chat;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -41,13 +40,10 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.MessageViewHol
 
         String email = FirebaseAuth.getInstance().getCurrentUser().getEmail();
 
-        //Log.i("TRY_123", "date: "+date);
         if(date.equals(Commons.dateFromTimeInMilli(messageItem.getTimestamp()))) {
-            Log.i("TRY_123", "date if called: "+messageItem.getMessage());
             holder.binding.txtDate.setVisibility(View.GONE);
         }
         else if(!date.equals(Commons.dateFromTimeInMilli(messageItem.getTimestamp()))) {
-            Log.i("TRY_123", "date else if called: "+messageItem.getMessage());
             date = Commons.dateFromTimeInMilli(messageItem.getTimestamp());
 
             holder.binding.txtDate.setVisibility(View.VISIBLE);

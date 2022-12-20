@@ -21,21 +21,20 @@
             android:layout_width="@dimen/_60sdp"
             android:layout_height="@dimen/_60sdp"
             app:roundPercent="0.4"
-            android:src="@color/grey"
+            android:src="#0F000000"
             android:scaleType="centerCrop"
             android:layout_marginStart="@dimen/_20sdp"
             android:layout_marginTop="@dimen/_10sdp"
             android:layout_marginBottom="@dimen/_10sdp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            />
+            app:layout_constraintBottom_toBottomOf="parent" />
 
         <TextView
             android:id="@+id/text_user_name_letters"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="@color/white"
+            android:textColor="@color/black"
             tools:text="UN"
             android:textStyle="bold"
             android:textSize="@dimen/_14ssp"
@@ -98,15 +97,14 @@
 
         <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/image_personal_data"
-            android:layout_width="@dimen/_20sdp"
-            android:layout_height="@dimen/_20sdp"
+            android:layout_width="@dimen/_30sdp"
+            android:layout_height="@dimen/_30sdp"
             android:layout_marginStart="@dimen/_15sdp"
             android:layout_marginTop="@dimen/_10sdp"
             android:layout_marginBottom="@dimen/_10sdp"
-            android:background="@color/orange"
+            android:background="#0F000000"
             app:contentPadding="@dimen/_5sdp"
             android:src="@drawable/ic_personal_data"
-            app:tint="@color/white"
             style="@style/Round.Corners"
             android:scaleType="centerInside"
             app:layout_constraintStart_toStartOf="parent"
@@ -114,12 +112,14 @@
             app:layout_constraintBottom_toBottomOf="parent"/>
 
         <TextView
+            android:id="@+id/text_personal_data"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/_20sdp"
+            android:layout_marginStart="@dimen/_10sdp"
             android:text="@string/personal_data"
             android:textColor="@color/black"
-            android:textSize="@dimen/_14ssp"
+            android:textSize="@dimen/_16ssp"
+            android:padding="@dimen/_10sdp"
             app:layout_constraintTop_toTopOf="@id/image_personal_data"
             app:layout_constraintBottom_toBottomOf="@id/image_personal_data"
             app:layout_constraintStart_toEndOf="@id/image_personal_data"/>
@@ -130,8 +130,8 @@
             android:src="@drawable/ic_arrow_forward"
             app:tint="#202020"
             android:layout_marginEnd="@dimen/_15sdp"
-            app:layout_constraintTop_toTopOf="@id/image_personal_data"
-            app:layout_constraintBottom_toBottomOf="@id/image_personal_data"
+            app:layout_constraintTop_toTopOf="@id/text_personal_data"
+            app:layout_constraintBottom_toBottomOf="@id/text_personal_data"
             app:layout_constraintEnd_toEndOf="parent"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
@@ -148,15 +148,14 @@
 
         <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/image_circle_management"
-            android:layout_width="@dimen/_20sdp"
-            android:layout_height="@dimen/_20sdp"
+            android:layout_width="@dimen/_30sdp"
+            android:layout_height="@dimen/_30sdp"
             android:layout_marginStart="@dimen/_15sdp"
             android:layout_marginTop="@dimen/_10sdp"
             android:layout_marginBottom="@dimen/_10sdp"
-            android:background="@color/orange"
+            android:background="#0F000000"
             app:contentPadding="@dimen/_5sdp"
             android:src="@drawable/ic_circle_management"
-            app:tint="@color/white"
             style="@style/Round.Corners"
             android:scaleType="centerInside"
             app:layout_constraintStart_toStartOf="parent"
@@ -164,12 +163,14 @@
             app:layout_constraintBottom_toBottomOf="parent"/>
 
         <TextView
+            android:id="@+id/text_circle_manage"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/_20sdp"
             android:text="@string/circle_management"
             android:textColor="@color/black"
-            android:textSize="@dimen/_14ssp"
+            android:textSize="@dimen/_16ssp"
+            android:padding="@dimen/_10sdp"
             app:layout_constraintTop_toTopOf="@id/image_circle_management"
             app:layout_constraintBottom_toBottomOf="@id/image_circle_management"
             app:layout_constraintStart_toEndOf="@id/image_circle_management"/>
@@ -180,8 +181,8 @@
             android:src="@drawable/ic_arrow_forward"
             app:tint="#202020"
             android:layout_marginEnd="@dimen/_15sdp"
-            app:layout_constraintTop_toTopOf="@id/image_circle_management"
-            app:layout_constraintBottom_toBottomOf="@id/image_circle_management"
+            app:layout_constraintTop_toTopOf="@id/text_circle_manage"
+            app:layout_constraintBottom_toBottomOf="@id/text_circle_manage"
             app:layout_constraintEnd_toEndOf="parent"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
@@ -198,15 +199,14 @@
 
         <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/image_about"
-            android:layout_width="@dimen/_20sdp"
-            android:layout_height="@dimen/_20sdp"
+            android:layout_width="@dimen/_30sdp"
+            android:layout_height="@dimen/_30sdp"
             android:layout_marginStart="@dimen/_15sdp"
             android:layout_marginTop="@dimen/_10sdp"
             android:layout_marginBottom="@dimen/_10sdp"
-            android:background="@color/orange"
+            android:background="#0F000000"
             app:contentPadding="@dimen/_5sdp"
             android:src="@drawable/ic_about"
-            app:tint="@color/white"
             style="@style/Round.Corners"
             android:scaleType="centerInside"
             app:layout_constraintStart_toStartOf="parent"
@@ -214,12 +214,14 @@
             app:layout_constraintBottom_toBottomOf="parent"/>
 
         <TextView
+            android:id="@+id/text_about"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/_20sdp"
             android:text="@string/about"
             android:textColor="@color/black"
-            android:textSize="@dimen/_14ssp"
+            android:textSize="@dimen/_16ssp"
+            android:padding="@dimen/_10sdp"
             app:layout_constraintTop_toTopOf="@id/image_about"
             app:layout_constraintBottom_toBottomOf="@id/image_about"
             app:layout_constraintStart_toEndOf="@id/image_about"/>
@@ -230,8 +232,8 @@
             android:src="@drawable/ic_arrow_forward"
             app:tint="#202020"
             android:layout_marginEnd="@dimen/_15sdp"
-            app:layout_constraintTop_toTopOf="@id/image_about"
-            app:layout_constraintBottom_toBottomOf="@id/image_about"
+            app:layout_constraintTop_toTopOf="@id/text_about"
+            app:layout_constraintBottom_toBottomOf="@id/text_about"
             app:layout_constraintEnd_toEndOf="parent"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
@@ -248,15 +250,14 @@
 
         <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/image_logout"
-            android:layout_width="@dimen/_20sdp"
-            android:layout_height="@dimen/_20sdp"
+            android:layout_width="@dimen/_30sdp"
+            android:layout_height="@dimen/_30sdp"
             android:layout_marginStart="@dimen/_15sdp"
             android:layout_marginTop="@dimen/_10sdp"
             android:layout_marginBottom="@dimen/_10sdp"
-            android:background="@color/orange"
+            android:background="#0F000000"
             app:contentPadding="@dimen/_5sdp"
             android:src="@drawable/ic_sign_out"
-            app:tint="@color/white"
             style="@style/Round.Corners"
             android:scaleType="centerInside"
             app:layout_constraintStart_toStartOf="parent"
@@ -264,12 +265,14 @@
             app:layout_constraintBottom_toBottomOf="parent"/>
 
         <TextView
+            android:id="@+id/text_sign_out"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/_20sdp"
             android:text="@string/sign_out"
             android:textColor="@color/black"
-            android:textSize="@dimen/_14ssp"
+            android:textSize="@dimen/_16ssp"
+            android:padding="@dimen/_10sdp"
             app:layout_constraintTop_toTopOf="@id/image_logout"
             app:layout_constraintBottom_toBottomOf="@id/image_logout"
             app:layout_constraintStart_toEndOf="@id/image_logout"/>
@@ -280,8 +283,8 @@
             android:src="@drawable/ic_arrow_forward"
             app:tint="#202020"
             android:layout_marginEnd="@dimen/_15sdp"
-            app:layout_constraintTop_toTopOf="@id/image_logout"
-            app:layout_constraintBottom_toBottomOf="@id/image_logout"
+            app:layout_constraintTop_toTopOf="@id/text_sign_out"
+            app:layout_constraintBottom_toBottomOf="@id/text_sign_out"
             app:layout_constraintEnd_toEndOf="parent"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
