@@ -152,7 +152,7 @@
     <string name="can_you_please_share_your_current_location">Can you please share your current location?</string>
     <string name="_4_30_pm">4:30 PM</string>
     <string name="okay_sure">okay. Sure</string>
-    <string name="fetching_details">Fetching details...</string>
+    <string name="please_wait">Please wait...</string>
     <string name="title_no_member">No Messages Yet</string>
     <string name="sub_title_no_members">No Members. Add member in circle and start chatting</string>
     <string name="date">date</string>
@@ -167,4 +167,6 @@
     <string name="edit_phone_number">Edit Phone Number</string>
     <string name="edit_email_address">Edit Email Address</string>
     <string name="change_password">Change Password</string>
+    <string name="delete_account">Delete Account</string>
+    <string name="update">update</string>
 </resources>

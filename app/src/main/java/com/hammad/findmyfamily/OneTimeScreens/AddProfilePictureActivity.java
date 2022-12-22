@@ -17,8 +17,11 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.FileProvider;
@@ -203,10 +206,10 @@ public class AddProfilePictureActivity extends AppCompatActivity {
                         "com.hammad.android.findmyfamily",
                         photoFile);
 
-                Log.i("IMAGE_FILE", "uri: " + photoURI);
+                Log.i(TAG, "uri: " + photoURI);
 
                 takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
-                startActivityForResult(takePictureIntent, REQUEST_CODE_CAMERA);
+                cameraResultLauncher.launch(takePictureIntent);
 
             }
         }
@@ -215,7 +218,7 @@ public class AddProfilePictureActivity extends AppCompatActivity {
     //choose image from gallery
     private void openGallery() {
         Intent galleryIntent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-        startActivityForResult(galleryIntent, REQUEST_CODE_STORAGE);
+        galleryResultLauncher.launch(galleryIntent);
     }
 
     private String getPathFromUri(Uri selectionImageUri) {
@@ -226,12 +229,12 @@ public class AddProfilePictureActivity extends AppCompatActivity {
         return cursor.getString(columnIndex);
     }
 
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
+    ActivityResultLauncher<Intent> cameraResultLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(),
+            new ActivityResultCallback<ActivityResult>() {
+        @Override
+        public void onActivityResult(ActivityResult result) {
 
-        if (requestCode == REQUEST_CODE_CAMERA) {
-            if (resultCode == Activity.RESULT_OK) {
+            if(result.getResultCode() == Activity.RESULT_OK) {
 
                 File file = new File(currentPicturePath);
 
@@ -240,11 +243,11 @@ public class AddProfilePictureActivity extends AppCompatActivity {
 
                 //if file (Image) size is greater than 500 KB, it will be compressed. Otherwise, else will be called.
                 if (fileSize > 500) {
-                    File compressedFile = Commons.bitmapToFile(this, currentPicturePath);
+                    File compressedFile = Commons.bitmapToFile(AddProfilePictureActivity.this, currentPicturePath);
 
                     if (compressedFile != null) {
                         Glide
-                                .with(this)
+                                .with(AddProfilePictureActivity.this)
                                 .load(compressedFile)
                                 .into(binding.imgProfile);
 
@@ -261,7 +264,7 @@ public class AddProfilePictureActivity extends AppCompatActivity {
                 else
                 {
                     Glide
-                            .with(this)
+                            .with(AddProfilePictureActivity.this)
                             .load(file)
                             .into(binding.imgProfile);
 
@@ -274,60 +277,66 @@ public class AddProfilePictureActivity extends AppCompatActivity {
 
                 //setting the CONTINUE status (enabled/disabled)
                 continueButtonStatus();
+
             }
         }
+    });
 
-        //selecting image from gallery
-        if (requestCode == REQUEST_CODE_STORAGE) {
-            if (resultCode == Activity.RESULT_OK) {
+    ActivityResultLauncher<Intent> galleryResultLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(),
+            new ActivityResultCallback<ActivityResult>() {
+                @Override
+                public void onActivityResult(ActivityResult result) {
 
-                Uri contentUri = null;
-                if (data != null) {
-                    contentUri = data.getData();
-                }
+                    if(result.getResultCode() == Activity.RESULT_OK) {
 
-                currentPicturePath = getPathFromUri(contentUri);
+                        Uri contentUri = null;
+                        if (result.getData() != null) {
+                            contentUri = result.getData().getData();
+                        }
 
-                File file = new File(currentPicturePath);
+                        currentPicturePath = getPathFromUri(contentUri);
 
-                //file size in KBs
-                float fileSize = file.length() / 1024;
+                        File file = new File(currentPicturePath);
 
-                //if file (Image) size is greater than 500 KB, it will be compressed. Otherwise, else will be called.
-                if (fileSize > 500) {
-                    File compressedFile = Commons.bitmapToFile(this, currentPicturePath);
+                        //file size in KBs
+                        float fileSize = file.length() / 1024;
 
-                    if (compressedFile != null) {
-                        Glide
-                                .with(this)
-                                .load(compressedFile)
-                                .into(binding.imgProfile);
+                        //if file (Image) size is greater than 500 KB, it will be compressed. Otherwise, else will be called.
+                        if (fileSize > 500) {
+                            File compressedFile = Commons.bitmapToFile(AddProfilePictureActivity.this, currentPicturePath);
 
-                        //saving the compressed file path in variable
-                        currentPicturePath = compressedFile.getAbsolutePath();
+                            if (compressedFile != null) {
+                                Glide
+                                        .with(AddProfilePictureActivity.this)
+                                        .load(compressedFile)
+                                        .into(binding.imgProfile);
 
-                        //saving the image name in shared preference
-                        SharedPreference.setImageName(compressedFile.getName());
+                                //saving the compressed file path in variable
+                                currentPicturePath = compressedFile.getAbsolutePath();
+
+                                //saving the image name in shared preference
+                                SharedPreference.setImageName(compressedFile.getName());
+                            }
+                        }
+                        else {
+                            Glide
+                                    .with(AddProfilePictureActivity.this)
+                                    .load(file)
+                                    .into(binding.imgProfile);
+
+                            //saving image name in shared preference
+                            SharedPreference.setImageName(file.getName());
+                        }
+
+                        //saving the image path in shared preference
+                        SharedPreference.setImagePath(currentPicturePath);
+
+                        //setting the CONTINUE status (enabled/disabled)
+                        continueButtonStatus();
+
                     }
                 }
-                else {
-                    Glide
-                            .with(this)
-                            .load(file)
-                            .into(binding.imgProfile);
-
-                    //saving image name in shared preference
-                    SharedPreference.setImageName(file.getName());
-                }
-
-                //saving the image path in shared preference
-                SharedPreference.setImagePath(currentPicturePath);
-
-                //setting the CONTINUE status (enabled/disabled)
-                continueButtonStatus();
-            }
-        }
-    }
+            });
 
     private void continueButtonStatus() {
         if (currentPicturePath.length() > 0) {

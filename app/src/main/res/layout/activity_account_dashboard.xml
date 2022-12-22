@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".HomeScreen.FragmentLocation.Settings.AccountActivity">
+    tools:context=".HomeScreen.FragmentLocation.Settings.Account.AccountDashboardActivity">
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar_account"
@@ -51,7 +51,7 @@
             android:layout_marginStart="@dimen/_10sdp"
             android:background="@color/orange"
             app:roundPercent="1"
-            android:scaleType="centerInside"
+            android:scaleType="centerCrop"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"/>
@@ -73,7 +73,7 @@
             android:id="@+id/text_user_full_name"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="@string/user_name"
+            tools:text="@string/user_name"
             android:textSize="@dimen/_16ssp"
             android:textColor="@color/black"
             android:textStyle="bold"
@@ -127,21 +127,6 @@
         app:layout_constraintStart_toStartOf="@id/text_account_details"
         app:layout_constraintTop_toBottomOf="@id/text_account_details"/>
 
-    <TextView
-        android:id="@+id/text_edit_email"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        app:layout_constraintWidth_percent="0.9"
-        android:text="@string/edit_email_address"
-        android:textColor="@color/black"
-        android:textSize="@dimen/_16ssp"
-        android:paddingTop="@dimen/_8sdp"
-        android:paddingBottom="@dimen/_8sdp"
-        android:drawablePadding="@dimen/_10sdp"
-        app:drawableStartCompat="@drawable/ic_problem"
-        android:layout_marginTop="@dimen/_5sdp"
-        app:layout_constraintStart_toStartOf="@id/text_account_details"
-        app:layout_constraintTop_toBottomOf="@id/text_edit_phone_no"/>
 
     <TextView
         android:id="@+id/text_change_password"
@@ -157,7 +142,7 @@
         app:drawableStartCompat="@drawable/ic_problem"
         android:layout_marginTop="@dimen/_5sdp"
         app:layout_constraintStart_toStartOf="@id/text_account_details"
-        app:layout_constraintTop_toBottomOf="@id/text_edit_email"/>
+        app:layout_constraintTop_toBottomOf="@id/text_edit_phone_no"/>
 
     <TextView
         android:id="@+id/text_bottom_line_2"
@@ -188,7 +173,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         app:layout_constraintWidth_percent="0.9"
-        android:text="@string/change_password"
+        android:text="@string/delete_account"
         android:textColor="@color/black"
         android:textSize="@dimen/_16ssp"
         android:paddingTop="@dimen/_8sdp"

@@ -25,8 +25,6 @@ public interface Constants {
     int REQUEST_CODE_LOCATION = 2;
     int REQUEST_CODE_STORAGE = 3;
     int REQUEST_CODE_CONTACTS = 4;
-    int REQUEST_CODE_SEND_SMS = 5;
-    int REQUEST_CODE_GPS = 6;
 
     //for circle
     String CIRCLE_COLLECTION = "Circle";
@@ -59,7 +57,6 @@ public interface Constants {
     String EMERG_CONTACT_TABLE_NAME = "emergency_contact";
     String CONTACT_NAME = "contact_name";
     String CONTACT_NO = "contact_no";
-    String IS_CONTACT_APPROVED = "is_contact_approved";
     String OWNER_EMAIL = "owner_email";
     String CONTACT_ID = "contact_id";
 
@@ -112,5 +109,7 @@ public interface Constants {
     String RECEIVER_ID = "receiver_id";
     String MESSAGE = "message";
     String TIMESTAMP = "timestamp";
+
+    String USER_INFO = "user_info";
 
 }

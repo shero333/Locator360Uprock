@@ -1,4 +1,4 @@
-package com.hammad.findmyfamily.HomeScreen.FragmentLocation.Settings;
+package com.hammad.findmyfamily.HomeScreen.FragmentLocation.Settings.CircleManagement;
 
 import androidx.appcompat.app.AppCompatActivity;
 

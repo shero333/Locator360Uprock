@@ -42,9 +42,6 @@ public class JoinCircleActivity extends AppCompatActivity {
         //getting intent data
         getIntentData();
 
-        //setting the group icon (if any)
-        //setCircleIcon();
-
         //button cancel click listener
         binding.txtCancel.setOnClickListener(v -> finish());
 
@@ -70,14 +67,6 @@ public class JoinCircleActivity extends AppCompatActivity {
             binding.txtCircleNameFirstChar.setText(String.valueOf(circleModel.getCircleName().charAt(0)));
         }
 
-    }
-
-    private void setCircleIcon() {
-
-        //if circle has any icon, then set that icon.
-
-        //setting the circle first char visibility
-        binding.txtCircleNameFirstChar.setVisibility(View.GONE);
     }
 
     private void joinCircleClickListener() {

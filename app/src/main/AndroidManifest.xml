@@ -55,14 +55,20 @@
         android:theme="@style/Theme.Locator360"
         tools:targetApi="31">
         <activity
-            android:name=".HomeScreen.FragmentLocation.Settings.CircleManagementActivity"
+            android:name=".HomeScreen.FragmentLocation.Settings.Account.UpdatePhoneNoActivity"
+            android:exported="false" />
+        <activity
+            android:name=".HomeScreen.FragmentLocation.Settings.Account.UpdateProfileInfoActivity"
+            android:exported="false" />
+        <activity
+            android:name=".HomeScreen.FragmentLocation.Settings.CircleManagement.CircleManagementActivity"
             android:exported="false">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
         <activity
-            android:name=".HomeScreen.FragmentLocation.Settings.AccountActivity"
+            android:name=".HomeScreen.FragmentLocation.Settings.Account.AccountDashboardActivity"
             android:exported="false">
             <meta-data
                 android:name="android.app.lib_name"

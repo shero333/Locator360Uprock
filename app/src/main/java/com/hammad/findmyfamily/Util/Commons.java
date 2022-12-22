@@ -88,12 +88,10 @@ public class Commons {
     @SuppressLint("SimpleDateFormat")
     public static File bitmapToFile(Context context, String currentPicturePath) {
 
-        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-
         //create a file to write bitmap data
         File file = null;
         try {
-            file = new File(context.getExternalFilesDir("/Compressed Profile Pictures") + File.separator + SharedPreference.getFirstNamePref() + "_profile_" + timeStamp + ".jpg");
+            file = new File(context.getExternalFilesDir("/Compressed Profile Pictures") + File.separator + FirebaseAuth.getInstance().getCurrentUser().getEmail() + ".jpg");
             file.createNewFile();
 
             //Convert bitmap to byte array

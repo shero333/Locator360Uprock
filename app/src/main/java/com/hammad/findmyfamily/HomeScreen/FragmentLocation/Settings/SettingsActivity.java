@@ -1,16 +1,18 @@
 package com.hammad.findmyfamily.HomeScreen.FragmentLocation.Settings;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.bumptech.glide.Glide;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.hammad.findmyfamily.HomeScreen.FragmentLocation.Settings.Account.AccountDashboardActivity;
+import com.hammad.findmyfamily.HomeScreen.FragmentLocation.Settings.CircleManagement.CircleManagementActivity;
 import com.hammad.findmyfamily.R;
 import com.hammad.findmyfamily.Util.Commons;
 import com.hammad.findmyfamily.Util.Constants;
@@ -34,13 +36,13 @@ public class SettingsActivity extends AppCompatActivity {
         getCurrentUserInfo();
 
         // personal data
-        binding.consPersonalData.setOnClickListener(v -> startActivity(new Intent(this,AccountActivity.class)));
+        binding.consPersonalData.setOnClickListener(v -> startActivity(new Intent(this, AccountDashboardActivity.class)));
 
         // circle management
-        binding.consCircleManagement.setOnClickListener(v -> startActivity(new Intent(this,CircleManagementActivity.class)));
+        binding.consCircleManagement.setOnClickListener(v -> startActivity(new Intent(this, CircleManagementActivity.class)));
 
         // about
-        binding.consAbout.setOnClickListener(v -> Toast.makeText(this, "About", Toast.LENGTH_SHORT).show());
+        binding.consAbout.setOnClickListener(v -> viewPrivacyPolicy());
 
         // sign out
         binding.consLogout.setOnClickListener(v -> Commons.signOut(this));
@@ -84,6 +86,12 @@ public class SettingsActivity extends AppCompatActivity {
         // phone number
         binding.textPhoneNo.setText(phoneNo);
 
+    }
+
+    private void viewPrivacyPolicy() {
+        Uri uri = Uri.parse("https://risibleapps.blogspot.com/2022/02/privacy-policy-at-risibleapps-we.html");
+        Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+        startActivity(intent);
     }
 
     @Override
