@@ -1,23 +1,25 @@
 package com.hammad.findmyfamily.ResetPassword.ByPhoneNo;
 
+import android.app.Dialog;
 import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
 
-import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.auth.FirebaseAuth;
+import com.hammad.findmyfamily.HomeScreen.FragmentLocation.Settings.Account.AccountDashboardActivity;
 import com.hammad.findmyfamily.R;
-import com.hammad.findmyfamily.SharedPreference.SharedPreference;
-import com.hammad.findmyfamily.StartScreen.StartScreenActivity;
-import com.hammad.findmyfamily.Util.Constants;
+import com.hammad.findmyfamily.Util.Commons;
 import com.hammad.findmyfamily.databinding.ActivityCreateNewPasswordBinding;
+import com.hammad.findmyfamily.databinding.LayoutRecentAuthenticationBinding;
 
 public class CreateNewPasswordActivity extends AppCompatActivity {
 
@@ -27,6 +29,9 @@ public class CreateNewPasswordActivity extends AppCompatActivity {
 
     //string for saving the entered passwords
     private String strPassword = "", strConfirmPassword = "";
+
+    // dialog
+    Dialog dialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,7 +48,11 @@ public class CreateNewPasswordActivity extends AppCompatActivity {
         binding.edtConfirmPassword.addTextChangedListener(confirmPasswordTextWatcher);
 
         // button reset password click listener
-        binding.btnResetPassword.setOnClickListener(v -> resetPasswordClickListener());
+        binding.btnResetPassword.setOnClickListener(v -> updatePasswordClickListener());
+
+        // re-authenticate dialog (if scenario)
+        reAuthenticateDialog();
+
     }
 
     private final TextWatcher passwordTextWatcher = new TextWatcher() {
@@ -97,6 +106,7 @@ public class CreateNewPasswordActivity extends AppCompatActivity {
         }
 
     };
+
     private final TextWatcher confirmPasswordTextWatcher = new TextWatcher() {
 
         @Override
@@ -157,51 +167,60 @@ public class CreateNewPasswordActivity extends AppCompatActivity {
         setResetPasswordButtonStatus(false, R.drawable.disabled_round_button, getColor(R.color.orange));
     }
 
-    private void resetPasswordClickListener() {
+    private void updatePasswordClickListener() {
 
         //sets progress bar visibility to VISIBLE
         binding.progressBar.setVisibility(View.VISIBLE);
 
-        //update password in firebase
-        FirebaseFirestore.getInstance()
-                .collection(Constants.USERS_COLLECTION)
-                .whereEqualTo(Constants.PHONE_NO, SharedPreference.getPhoneNoPref())
-                .get()
-                .addOnSuccessListener(queryDocumentSnapshots -> {
+        //updates the password with associated account
+        FirebaseAuth.getInstance()
+                    .getCurrentUser()
+                    .updatePassword(strConfirmPassword)
+                    .addOnSuccessListener(unused -> {
 
-                    //gets the registered email
-                    String val = queryDocumentSnapshots.getDocuments().get(0).getString(Constants.EMAIL);
+                        //sets progress bar visibility to GONE
+                        binding.progressBar.setVisibility(View.GONE);
 
-                    //update password value in registered email document
-                    DocumentReference dr = FirebaseFirestore.getInstance().collection(Constants.USERS_COLLECTION).document(val);
+                        Toast.makeText(this, "Password updated successfully.", Toast.LENGTH_SHORT).show();
+                        startActivity(new Intent(this, AccountDashboardActivity.class));
+                        finish();
+                    })
+                    .addOnFailureListener(e -> {
 
-                    dr.update(Constants.PASSWORD, strConfirmPassword)
-                            .addOnSuccessListener(unused -> {
+                        //sets progress bar visibility to GONE
+                        binding.progressBar.setVisibility(View.GONE);
+                        Log.e(TAG, "failed to update password: " + e.getMessage());
 
-                                //sets progress bar visibility to GONE
-                                binding.progressBar.setVisibility(View.GONE);
-
-                                Toast.makeText(this, "Password reset successfully.", Toast.LENGTH_SHORT).show();
-                                startActivity(new Intent(this, StartScreenActivity.class));
-                                finish();
-                            })
-                            .addOnFailureListener(e -> {
-
-                                //sets progress bar visibility to GONE
-                                binding.progressBar.setVisibility(View.GONE);
-
-                                Log.e(TAG, "failed to update password: " + e.getMessage());
-                                Toast.makeText(this, "Error! Failed to Update Password.", Toast.LENGTH_LONG).show();
-                            });
-                })
-                .addOnFailureListener(e -> {
-
-                    //sets progress bar visibility to GONE
-                    binding.progressBar.setVisibility(View.GONE);
-
-                    Log.i(TAG, "cannot find phone no: " + e.getMessage());
-                    Toast.makeText(this, "Error! cannot find Entered Phone Number.", Toast.LENGTH_LONG).show();
-                });
+                        if(e.getMessage().equals(getString(R.string.updated_password_by_phone_no))) {
+                            dialog.show();
+                        }
+                        else {
+                            Toast.makeText(this, "Error! Failed to Update Password.", Toast.LENGTH_LONG).show();
+                        }
+                    });
     }
 
+    private void reAuthenticateDialog() {
+
+        dialog = new Dialog(this);
+
+        LayoutRecentAuthenticationBinding binding = LayoutRecentAuthenticationBinding.inflate(getLayoutInflater());
+        dialog.setContentView(binding.getRoot());
+
+        // button log out click listener
+        binding.btnLogOut.setOnClickListener(v -> Commons.signOut(this));
+
+        // text view cancel
+        binding.textCancel.setOnClickListener(v -> dialog.dismiss());
+
+        //this sets the width of dialog to 90%
+        DisplayMetrics displayMetrics = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+        int width = (int) (displayMetrics.widthPixels * 0.9);
+
+        //setting the width and height of alert dialog
+        dialog.getWindow().setLayout(width, ConstraintLayout.LayoutParams.WRAP_CONTENT);
+        dialog.setCancelable(true);
+        dialog.create();
+    }
 }

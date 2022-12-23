@@ -1,4 +1,5 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools"
+    tools:ignore="TypographyEllipsis">
     <string name="app_name">Find My Family</string>
     <string name="title_start_screen">Share your location with your \n friend and family</string>
     <string name="get_started">Get started</string>
@@ -49,9 +50,9 @@
     <string name="title_screen_one">Add places your friends and\nfamily visit, like Home office</string>
     <string name="title_screen_two">! Join your\ncircle and group now</string>
     <string name="title_screen_two_1">Hello </string>
-    <string name="title_reset_password">Reset password</string>
+    <string name="title_reset_password">Update Password</string>
     <string name="next">Next</string>
-    <string name="sub_title_reset_password">Enter the phone number associated\nwith your account and we\'ll send an\nOTP to reset your password</string>
+    <string name="sub_title_reset_password">Enter the phone number associated\nwith your account and we\'ll send an\nOTP to update your password</string>
     <string name="title_otp">Code Verification</string>
     <string name="sub_title_otp">We have sent an OTP to</string>
     <string name="title_create_new_pass">Create new password</string>
@@ -169,4 +170,16 @@
     <string name="change_password">Change Password</string>
     <string name="delete_account">Delete Account</string>
     <string name="update">update</string>
+    <string name="update_password">Update Password</string>
+    <string name="updated_password_by_phone_no">This operation is sensitive and requires recent authentication. Log in again before retrying this request.</string>
+    <string name="recent_authentication_required">Recent Authentication Required !</string>
+    <string name="sub_title">This operation requires recent authentication. Log in again before retrying this request.</string>
+    <string name="log_out">Log Out</string>
+    <string name="circle_details">Circle Details</string>
+    <string name="edit_circle_name">Edit Circle Name</string>
+    <string name="add_circle_members">Add Circle Members</string>
+    <string name="view_members">View Members</string>
+    <string name="leave_circle">Leave Circle</string>
+    <string name="delete_circle_members">Delete Circle Members</string>
+    <string name="delete_circle">Delete Circle</string>
 </resources>

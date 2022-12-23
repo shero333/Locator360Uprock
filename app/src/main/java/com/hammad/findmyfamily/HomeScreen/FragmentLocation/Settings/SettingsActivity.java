@@ -68,7 +68,7 @@ public class SettingsActivity extends AppCompatActivity {
         // profile image (if any)
         if(imagePath.equals(Constants.NULL)) {
             binding.textUserNameLetters.setVisibility(View.VISIBLE);
-            binding.textUserNameLetters.setText(Commons.getContactLetters(firstName.concat(" ").concat(lastName)));
+            binding.textUserNameLetters.setText(String.valueOf(firstName.charAt(0)));
         }
         else if(!imagePath.equals(Constants.NULL)) {
             binding.textUserNameLetters.setVisibility(View.GONE);

@@ -5,14 +5,12 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.hammad.findmyfamily.HomeScreen.HomeActivity;
 import com.hammad.findmyfamily.R;
 import com.hammad.findmyfamily.ResetPassword.ByEmail.ResetPasswordEmailActivity;
-import com.hammad.findmyfamily.SharedPreference.SharedPreference;
 import com.hammad.findmyfamily.Util.Commons;
 import com.hammad.findmyfamily.databinding.ActivityEnterPasswordSignInBinding;
 

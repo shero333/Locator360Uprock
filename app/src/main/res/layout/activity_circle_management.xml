@@ -20,4 +20,193 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"/>
 
+    <TextView
+        android:id="@+id/text_circle_details"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/circle_details"
+        android:textSize="@dimen/_16ssp"
+        android:textStyle="bold"
+        android:textColor="#80000000"
+        android:layout_marginTop="@dimen/_10sdp"
+        android:layout_marginStart="@dimen/_10sdp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/toolbar_circle_management"/>
+
+    <TextView
+        android:id="@+id/text_circle_name"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintWidth_percent="0.9"
+        android:text="@string/edit_circle_name"
+        android:textColor="@color/black"
+        android:textSize="@dimen/_16ssp"
+        android:paddingTop="@dimen/_8sdp"
+        android:paddingBottom="@dimen/_8sdp"
+        android:drawablePadding="@dimen/_10sdp"
+        app:drawableStartCompat="@drawable/edit_phone_no"
+        android:layout_marginTop="@dimen/_5sdp"
+        app:layout_constraintStart_toStartOf="@id/text_circle_details"
+        app:layout_constraintTop_toBottomOf="@id/text_circle_details"/>
+
+    <TextView
+        android:id="@+id/text_bottom_line_1"
+        android:layout_width="0dp"
+        app:layout_constraintWidth_percent="0.95"
+        android:layout_height="@dimen/_1sdp"
+        android:background="@drawable/drawable_line_bottom_sheet"
+        android:backgroundTint="#33687384"
+        android:layout_marginTop="@dimen/_5sdp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/text_circle_name"/>
+
+    <androidx.constraintlayout.widget.Group
+        android:id="@+id/group_circle_details"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:constraint_referenced_ids="text_circle_details,text_circle_name,text_bottom_line_1"/>
+
+    <TextView
+        android:id="@+id/text_circle_management"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/circle_management"
+        android:textSize="@dimen/_16ssp"
+        android:textStyle="bold"
+        android:textColor="#80000000"
+        android:layout_marginTop="@dimen/_5sdp"
+        android:layout_marginStart="@dimen/_10sdp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/text_bottom_line_1"/>
+
+    <TextView
+        android:id="@+id/text_add_members"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintWidth_percent="0.9"
+        android:text="@string/add_circle_members"
+        android:textColor="@color/black"
+        android:textSize="@dimen/_16ssp"
+        android:paddingTop="@dimen/_8sdp"
+        android:paddingBottom="@dimen/_8sdp"
+        android:drawablePadding="@dimen/_10sdp"
+        app:drawableStartCompat="@drawable/add_button"
+        android:layout_marginTop="@dimen/_5sdp"
+        app:layout_constraintStart_toStartOf="@id/text_circle_management"
+        app:layout_constraintTop_toBottomOf="@id/text_circle_management"/>
+
+    <TextView
+        android:id="@+id/text_bottom_line_2"
+        android:layout_width="0dp"
+        app:layout_constraintWidth_percent="0.95"
+        android:layout_height="@dimen/_1sdp"
+        android:background="@drawable/drawable_line_bottom_sheet"
+        android:backgroundTint="#33687384"
+        android:layout_marginTop="@dimen/_5sdp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/text_add_members"/>
+
+    <TextView
+        android:id="@+id/text_view_members"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintWidth_percent="0.9"
+        android:text="@string/view_members"
+        android:textColor="@color/black"
+        android:textSize="@dimen/_16ssp"
+        android:paddingTop="@dimen/_8sdp"
+        android:paddingBottom="@dimen/_8sdp"
+        android:drawablePadding="@dimen/_10sdp"
+        app:drawableStartCompat="@drawable/view_members"
+        android:layout_marginTop="@dimen/_5sdp"
+        app:layout_constraintStart_toStartOf="@id/text_add_members"
+        app:layout_constraintTop_toBottomOf="@id/text_bottom_line_2"/>
+
+    <TextView
+        android:id="@+id/text_bottom_line_3"
+        android:layout_width="0dp"
+        app:layout_constraintWidth_percent="0.95"
+        android:layout_height="@dimen/_1sdp"
+        android:background="@drawable/drawable_line_bottom_sheet"
+        android:backgroundTint="#33687384"
+        android:layout_marginTop="@dimen/_5sdp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/text_view_members"/>
+
+    <TextView
+        android:id="@+id/text_leave_circle"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintWidth_percent="0.9"
+        android:text="@string/leave_circle"
+        android:textColor="@color/black"
+        android:textSize="@dimen/_16ssp"
+        android:paddingTop="@dimen/_8sdp"
+        android:paddingBottom="@dimen/_8sdp"
+        android:drawablePadding="@dimen/_10sdp"
+        app:drawableStartCompat="@drawable/leave_circle"
+        android:layout_marginTop="@dimen/_5sdp"
+        app:layout_constraintStart_toStartOf="@id/text_add_members"
+        app:layout_constraintTop_toBottomOf="@id/text_bottom_line_3"/>
+
+    <androidx.constraintlayout.widget.Group
+        android:visibility="gone"
+        android:id="@+id/group_not_admin"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:constraint_referenced_ids="text_view_members,text_bottom_line_3, text_leave_circle"/>
+
+    <TextView
+        android:id="@+id/text_delete_members"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintWidth_percent="0.9"
+        android:text="@string/delete_circle_members"
+        android:textColor="@color/black"
+        android:textSize="@dimen/_16ssp"
+        android:paddingTop="@dimen/_8sdp"
+        android:paddingBottom="@dimen/_8sdp"
+        android:drawablePadding="@dimen/_10sdp"
+        app:drawableStartCompat="@drawable/delete_account"
+        android:layout_marginTop="@dimen/_5sdp"
+        app:layout_constraintStart_toStartOf="@id/text_add_members"
+        app:layout_constraintTop_toBottomOf="@id/text_bottom_line_2"/>
+
+    <TextView
+        android:id="@+id/text_bottom_line_4"
+        android:layout_width="0dp"
+        app:layout_constraintWidth_percent="0.95"
+        android:layout_height="@dimen/_1sdp"
+        android:background="@drawable/drawable_line_bottom_sheet"
+        android:backgroundTint="#33687384"
+        android:layout_marginTop="@dimen/_5sdp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/text_delete_members"/>
+
+    <TextView
+        android:id="@+id/text_delete_circle"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintWidth_percent="0.9"
+        android:text="@string/delete_circle"
+        android:textColor="@color/black"
+        android:textSize="@dimen/_16ssp"
+        android:paddingTop="@dimen/_8sdp"
+        android:paddingBottom="@dimen/_8sdp"
+        android:drawablePadding="@dimen/_10sdp"
+        app:drawableStartCompat="@drawable/delete_account"
+        android:layout_marginTop="@dimen/_5sdp"
+        app:layout_constraintStart_toStartOf="@id/text_add_members"
+        app:layout_constraintTop_toBottomOf="@id/text_bottom_line_4"/>
+
+    <androidx.constraintlayout.widget.Group
+        android:id="@+id/group_admin"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:constraint_referenced_ids="text_delete_members,text_bottom_line_4,text_delete_circle"/>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -183,6 +183,7 @@ public class ResetPasswordPhoneActivity extends AppCompatActivity {
             Intent intent = new Intent(this, OTPActivity.class);
             intent.putExtra(Constants.OTP_ACT_KEY,false);
             startActivity(intent);
+            finish();
         }
         else if(!isPhoneNoRegistered) {
             Log.i(TAG, "phone number not registered");

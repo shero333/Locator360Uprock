@@ -104,7 +104,7 @@ public class UpdateProfileInfoActivity extends AppCompatActivity {
                 binding.imageProfile.setBackgroundColor(intent.getIntExtra(Constants.RANDOM_COLOR, -1));
 
                 binding.textNameLetter.setVisibility(View.VISIBLE);
-                binding.textNameLetter.setText(Commons.getContactLetters(userDetail.getFirstName().concat(" ").concat(userDetail.getLastName())));
+                binding.textNameLetter.setText(String.valueOf(userDetail.getFirstName().charAt(0)));
             } else if (!userDetail.getImagePath().equals(Constants.NULL)) {
                 binding.textNameLetter.setVisibility(View.GONE);
 

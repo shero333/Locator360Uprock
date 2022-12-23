@@ -1,5 +1,6 @@
 package com.hammad.findmyfamily.ResetPassword.ByPhoneNo;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -189,11 +190,11 @@ public class OTPActivity extends AppCompatActivity {
             }
             else {
                 startActivity(new Intent(this, CreateNewPasswordActivity.class));
+                finish();
             }
         }
         else if(!enteredOtpCode.equals(code)) {
             Toast.makeText(this, "Error! OTP cannot be verified.", Toast.LENGTH_LONG).show();
-
         }
     }
 
@@ -263,6 +264,7 @@ public class OTPActivity extends AppCompatActivity {
     private void resendOtpCounter() {
 
         new CountDownTimer(60000, 1000) {
+            @SuppressLint("SetTextI18n")
             @Override
             public void onTick(long millisUntilFinished) {
 
