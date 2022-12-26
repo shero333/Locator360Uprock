@@ -5,7 +5,7 @@
     <string name="get_started">Get started</string>
     <string name="helper_text_start_activity">Already have an account?</string>
     <string name="sign_in">Sign in</string>
-    <string name="privacy_policy_phone_sign_up">By signing up you accept our terms of service \n and privacy policy</string>
+    <string name="privacy_policy_phone_sign_up">By signing up you accept privacy policy</string>
     <string name="title_phone_sign_up">Let\'s get started.\nWhat\'s your number?</string>
     <string name="txt_continue">Continue</string>
     <string name="enter_number">Enter Number</string>

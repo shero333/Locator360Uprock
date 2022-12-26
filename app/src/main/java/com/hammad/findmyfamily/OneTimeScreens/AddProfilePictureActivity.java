@@ -1,6 +1,5 @@
 package com.hammad.findmyfamily.OneTimeScreens;
 
-import static com.hammad.findmyfamily.Util.Constants.NULL;
 import static com.hammad.findmyfamily.Util.Constants.REQUEST_CODE_CAMERA;
 import static com.hammad.findmyfamily.Util.Constants.REQUEST_CODE_STORAGE;
 
@@ -242,7 +241,7 @@ public class AddProfilePictureActivity extends AppCompatActivity {
                 float fileSize = file.length() / 1024;
 
                 //if file (Image) size is greater than 500 KB, it will be compressed. Otherwise, else will be called.
-                if (fileSize > 500) {
+                if (fileSize > 300) {
                     File compressedFile = Commons.bitmapToFile(AddProfilePictureActivity.this, currentPicturePath);
 
                     if (compressedFile != null) {
@@ -257,8 +256,6 @@ public class AddProfilePictureActivity extends AppCompatActivity {
                         //deletes the original camera captured image
                         file.delete();
 
-                        //saving image name in shared preference
-                        SharedPreference.setImageName(compressedFile.getName());
                     }
                 }
                 else
@@ -267,13 +264,8 @@ public class AddProfilePictureActivity extends AppCompatActivity {
                             .with(AddProfilePictureActivity.this)
                             .load(file)
                             .into(binding.imgProfile);
-
-                    //saving image name in shared preference
-                    SharedPreference.setImageName(file.getName());
                 }
 
-                //saving the image path in shared preference
-                SharedPreference.setImagePath(currentPicturePath);
 
                 //setting the CONTINUE status (enabled/disabled)
                 continueButtonStatus();
@@ -302,7 +294,7 @@ public class AddProfilePictureActivity extends AppCompatActivity {
                         float fileSize = file.length() / 1024;
 
                         //if file (Image) size is greater than 500 KB, it will be compressed. Otherwise, else will be called.
-                        if (fileSize > 500) {
+                        if (fileSize > 300) {
                             File compressedFile = Commons.bitmapToFile(AddProfilePictureActivity.this, currentPicturePath);
 
                             if (compressedFile != null) {
@@ -313,9 +305,6 @@ public class AddProfilePictureActivity extends AppCompatActivity {
 
                                 //saving the compressed file path in variable
                                 currentPicturePath = compressedFile.getAbsolutePath();
-
-                                //saving the image name in shared preference
-                                SharedPreference.setImageName(compressedFile.getName());
                             }
                         }
                         else {
@@ -323,13 +312,7 @@ public class AddProfilePictureActivity extends AppCompatActivity {
                                     .with(AddProfilePictureActivity.this)
                                     .load(file)
                                     .into(binding.imgProfile);
-
-                            //saving image name in shared preference
-                            SharedPreference.setImageName(file.getName());
                         }
-
-                        //saving the image path in shared preference
-                        SharedPreference.setImagePath(currentPicturePath);
 
                         //setting the CONTINUE status (enabled/disabled)
                         continueButtonStatus();
@@ -347,33 +330,17 @@ public class AddProfilePictureActivity extends AppCompatActivity {
     }
 
     private void skipProfileImage() {
-
-        //setting the null value in image path & image name preference
-        SharedPreference.setImagePath(NULL);
-        SharedPreference.setImageName(NULL);
-
-        Commons.signUp(this, isSuccessful -> {
-
-            if(isSuccessful) {
-                //navigating to next activity
-                startActivity(new Intent(this, RequestPermissionActivity.class));
-            }
-        });
+        //navigating to next activity
+        startActivity(new Intent(this, RequestPermissionActivity.class));
     }
 
     private void continueButtonClickListener() {
 
-        Commons.signUp(this, isSuccessful -> {
+        //uploads the image in background
+        Commons.uploadProfileImage(this,currentPicturePath);
 
-            if(isSuccessful) {
-
-                //uploads the image in background
-                Commons.uploadProfileImage();
-
-                // navigating to next screen
-                startActivity(new Intent(this, RequestPermissionActivity.class));
-            }
-        });
+        // navigating to next screen
+        startActivity(new Intent(this, RequestPermissionActivity.class));
     }
 
     /*private void rxJavaProfilePictureCompression(File file){

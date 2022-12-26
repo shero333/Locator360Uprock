@@ -33,7 +33,6 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.messaging.FirebaseMessaging;
 import com.google.firebase.storage.FirebaseStorage;
@@ -89,7 +88,7 @@ public class Commons {
         //create a file to write bitmap data
         File file = null;
         try {
-            file = new File(context.getExternalFilesDir("/Compressed Profile Pictures") + File.separator + FirebaseAuth.getInstance().getCurrentUser().getEmail() + ".jpg");
+            file = new File(context.getExternalFilesDir("/Compressed Profile Pictures") + File.separator + System.currentTimeMillis() + ".jpg");
             file.createNewFile();
 
             //Convert bitmap to byte array
@@ -265,7 +264,7 @@ public class Commons {
         dialog.show();
     }
 
-    public static void signUp(Context context, OnSuccessListenerInterface onSuccessListenerInterface) {
+    public static void signUp(Context context) {
 
         //initializing Firebase Auth & FireStore
         FirebaseAuth fAuth = FirebaseAuth.getInstance();
@@ -287,56 +286,27 @@ public class Commons {
                     userInfo.put(Constants.LAST_NAME, SharedPreference.getLastNamePref());
                     userInfo.put(Constants.PHONE_NO, SharedPreference.getPhoneNoPref());
                     userInfo.put(Constants.EMAIL, SharedPreference.getEmailPref());
-                    userInfo.put(Constants.IMAGE_NAME, SharedPreference.getImageName());
-                    userInfo.put(Constants.IMAGE_PATH, SharedPreference.getImagePath());
-                    userInfo.put(Constants.FCM_TOKEN, null);
+                    userInfo.put(Constants.IMAGE_PATH, Constants.NULL);
+                    userInfo.put(Constants.FCM_TOKEN, Constants.NULL);
                     userInfo.put(Constants.CIRCLE_IDS, data);
 
-                    //setting the circle info as sub-collection data
-                    Map<String, Object> circleData = new HashMap<>();
+                    // location info fields in 'USER' collection
+                    userInfo.put(Constants.LAT, 0);
+                    userInfo.put(Constants.LNG, 0);
+                    userInfo.put(Constants.LOC_ADDRESS, Constants.NULL);
+                    userInfo.put(Constants.IS_PHONE_CHARGING, false);
+                    userInfo.put(Constants.BATTERY_PERCENTAGE, 0);
+                    userInfo.put(Constants.LOC_TIMESTAMP, Constants.NULL);
 
-                    circleData.put(Constants.CIRCLE_NAME, SharedPreference.getCircleName());
-                    circleData.put(Constants.CIRCLE_JOIN_CODE, SharedPreference.getCircleInviteCode());
-                    circleData.put(Constants.CIRCLE_ADMIN, SharedPreference.getEmailPref());
-                    circleData.put(Constants.CIRCLE_ID,null);
-                    circleData.put(Constants.CIRCLE_CODE_EXPIRY_DATE, String.valueOf(System.currentTimeMillis()+259200000)); // 259200000 milliseconds = 3 days
-                    circleData.put(Constants.CIRCLE_MEMBERS, FieldValue.arrayUnion(SharedPreference.getEmailPref()));
-
-                    dr.set(userInfo);
-                    dr.collection(Constants.CIRCLE_COLLECTION).add(circleData)
-                            .addOnSuccessListener(documentReference -> {
-
-                                /*
-                                    when in 'Circle' sub-collection, a new document is created,
-                                    its id will be stored in 'User' collection document as field. Later this ids will be used to extract Circle info
-                                */
-
-                                DocumentReference documentRefCircleId = FirebaseFirestore.getInstance().collection(USERS_COLLECTION)
-                                        .document(SharedPreference.getEmailPref());
-
-                                //add the created circle id as field in same circle document
-                                FirebaseFirestore.getInstance().collection(USERS_COLLECTION)
-                                                .document(SharedPreference.getEmailPref())
-                                                .collection(Constants.CIRCLE_COLLECTION)
-                                                .document(documentReference.getId())
-                                                .update(Constants.CIRCLE_ID,documentReference.getId());
-
-                                documentRefCircleId.update(Constants.CIRCLE_IDS, FieldValue.arrayUnion(documentReference.getId()))
-                                        .addOnSuccessListener(unused -> {
-                                            Log.i(TAG, "CIRCLE ID: success");
-
-                                            //after sign up, removes the password from shared preference
-                                            SharedPreference.setPasswordPref(Constants.NULL);
-                                        })
-                                        .addOnFailureListener(e -> Log.i(TAG, "CIRCLE ID: failure = "+e.getMessage()));
-
-                            });
+                    dr.set(userInfo)
+                            .addOnSuccessListener(unused -> Log.i(TAG, "info saved successful"))
+                            .addOnFailureListener(e -> Log.e(TAG, "error saving user sign up info: " + e.getMessage()));
 
                     // with sign up, a FCM token will be saved with user for sending Cloud Messages Notification
                     addFCMToken();
 
-                    //calling the SignUpSuccessListener interface
-                    onSuccessListenerInterface.onSuccess(true);
+                    //after sign up, removes the password from shared preference
+                    SharedPreference.setPasswordPref(Constants.NULL);
 
                     Log.i(TAG, "signUp successful: ");
 
@@ -353,44 +323,60 @@ public class Commons {
                 });
     }
 
-    public static void uploadProfileImage() {
+    public static void uploadProfileImage(Activity activity, String currentPicturePath) {
 
-        StorageReference storageReference = FirebaseStorage.getInstance().getReference(Constants.PROFILE_IMAGES);
+        // renaming the file to current user email
+        File oldFile = new File(currentPicturePath);
 
-        StorageReference fileRef = storageReference.child(SharedPreference.getImageName());
+        File destDirectory = activity.getExternalFilesDir("/Renamed Profile Pictures");
 
-        fileRef.putFile(Uri.fromFile(new File(SharedPreference.getImagePath())))
-                .addOnSuccessListener(taskSnapshot -> {
-                    fileRef.getDownloadUrl().addOnSuccessListener(uri -> {
+        File newFile = new File(destDirectory,FirebaseAuth.getInstance().getCurrentUser().getEmail());
+        boolean isFileRenamed = oldFile.renameTo(newFile);
 
-                        //when successful; update the values of image related field
-                        Map<String, Object> imagePropertiesMap = new HashMap<>();
-                        imagePropertiesMap.put(Constants.IMAGE_PATH, uri.toString());
-                        imagePropertiesMap.put(Constants.IMAGE_NAME, SharedPreference.getImageName());
+        // if file is successfully renamed,uploads into Firebase Storage, else error
+        if(isFileRenamed) {
 
-                        FirebaseFirestore.getInstance().collection(USERS_COLLECTION)
-                                .document(SharedPreference.getEmailPref())
-                                .update(imagePropertiesMap)
-                                .addOnSuccessListener(unused -> Log.i(TAG, "update image fields: successful"))
-                                .addOnFailureListener(e -> Log.e(TAG, "update image fields: failed" + e.getMessage()));
+            // saving image in Storage
+            StorageReference storageReference = FirebaseStorage.getInstance().getReference(Constants.PROFILE_IMAGES);
 
+            StorageReference fileRef = storageReference.child(newFile.getName());
+
+            fileRef.putFile(Uri.fromFile(newFile))
+                    .addOnSuccessListener(taskSnapshot -> {
+                        fileRef.getDownloadUrl().addOnSuccessListener(uri -> {
+
+                            //when successful; update the value of image path related field
+                            Map<String, Object> imagePropertiesMap = new HashMap<>();
+
+                            imagePropertiesMap.put(Constants.IMAGE_PATH, uri.toString());
+
+                            FirebaseFirestore.getInstance().collection(USERS_COLLECTION)
+                                    .document(FirebaseAuth.getInstance().getCurrentUser().getEmail())
+                                    .update(imagePropertiesMap)
+                                    .addOnSuccessListener(unused -> Log.i(TAG, "update image fields: successful"))
+                                    .addOnFailureListener(e -> Log.e(TAG, "update image fields: failed" + e.getMessage()));
+
+                        });
+
+                        //setting the value of 'checkFailedStatus' to zero. Because the variable is static and its value can be greater than 0
+                        checkFailedStatus = 0;
+                    })
+                    .addOnFailureListener(e -> {
+                        Log.e(TAG, "Fail to upload image: " + e.getMessage());
+
+                        //incrementing the 'checkFailedStatus' value
+                        checkFailedStatus++;
+
+                        if (checkFailedStatus < 4) {
+
+                            if (checkFailedStatus == 3) checkFailedStatus = 0;
+                            else uploadProfileImage(activity,currentPicturePath);
+                        }
                     });
-
-                    //setting the value of 'checkFailedStatus' to zero. Because the variable is static and its value can be greater than 0
-                    checkFailedStatus = 0;
-                })
-                .addOnFailureListener(e -> {
-                    Log.e(TAG, "Fail to upload image: " + e.getMessage());
-
-                    //incrementing the 'checkFailedStatus' value
-                    checkFailedStatus++;
-
-                    if (checkFailedStatus < 4) {
-
-                        if (checkFailedStatus == 3) checkFailedStatus = 0;
-                        else uploadProfileImage();
-                    }
-                });
+        }
+        else {
+            Log.e(TAG, "COMMONS: failed to rename file uploadProfileImage() function");
+        }
     }
 
     public static void addFCMToken() {

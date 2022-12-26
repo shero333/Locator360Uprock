@@ -120,6 +120,7 @@ public class EmergencyLocationActivity extends AppCompatActivity implements OnMa
                 mGoogleMap.addMarker(markerOptions);
 
                 mGoogleMap.setOnMarkerClickListener(marker -> {
+
                     //setting the address to textview
                     binding.txtLocAddress.setVisibility(View.VISIBLE);
                     binding.txtLocAddress.setText(Commons.getLocationAddress(this,location));

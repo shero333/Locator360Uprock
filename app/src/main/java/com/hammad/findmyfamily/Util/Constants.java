@@ -10,7 +10,6 @@ public interface Constants {
     String EMAIL = "email";
     String PASSWORD = "password";
     String IMAGE_PATH = "image_path";
-    String IMAGE_NAME = "image_name";
     String FCM_TOKEN = "fcm_token";
     String CIRCLE_IDS = "circle_ids";
     String ID = "id";

@@ -22,6 +22,7 @@ public class JoinCircleFirstScreenActivity extends AppCompatActivity {
 
     //List of all edit texts (6 here)
     List<EditText> editTextList = new ArrayList<>();
+
     private ActivityJoinCircleFirstScreenBinding binding;
 
     @Override
@@ -38,6 +39,9 @@ public class JoinCircleFirstScreenActivity extends AppCompatActivity {
 
         //populating the edit texts as invite code view
         populateInviteCodeView();
+
+        // signs up the user the basic info entered till now
+        Commons.signUp(this);
 
         binding.btnSubmit.setOnClickListener(v -> buttonSubmitClickListener());
 
@@ -143,4 +147,5 @@ public class JoinCircleFirstScreenActivity extends AppCompatActivity {
         });
 
     }
+
 }

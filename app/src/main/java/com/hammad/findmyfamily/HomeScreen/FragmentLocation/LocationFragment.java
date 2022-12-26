@@ -53,6 +53,8 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.CancellationToken;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.OnTokenCanceledListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
@@ -71,9 +73,9 @@ import com.hammad.findmyfamily.HomeScreen.FragmentLocation.CreateCircle.CreateCi
 import com.hammad.findmyfamily.HomeScreen.FragmentLocation.JoinCircle.CircleModel;
 import com.hammad.findmyfamily.HomeScreen.FragmentLocation.JoinCircle.CircleToolbarAdapter;
 import com.hammad.findmyfamily.HomeScreen.FragmentLocation.JoinCircle.JoinCircleMainActivity;
+import com.hammad.findmyfamily.HomeScreen.FragmentLocation.Settings.SettingsActivity;
 import com.hammad.findmyfamily.Permission.Permissions;
 import com.hammad.findmyfamily.R;
-import com.hammad.findmyfamily.HomeScreen.FragmentLocation.Settings.SettingsActivity;
 import com.hammad.findmyfamily.SharedPreference.SharedPreference;
 import com.hammad.findmyfamily.Util.Commons;
 import com.hammad.findmyfamily.Util.Constants;
@@ -121,8 +123,15 @@ public class LocationFragment extends Fragment implements OnMapReadyCallback, Ci
         //initializing map
         initializeMap();
 
-        //checking location permission
-        checkLocationPermission();
+        // this condition will save location update to firebase for 1 time throughout the application lifecycle.
+        if(!App.IS_LOCATION_UPDATE_SAVED_TO_FIREBASE) {
+
+            //checking location permission
+            checkLocationPermission();
+
+            // updates the value from false to true
+            App.IS_LOCATION_UPDATE_SAVED_TO_FIREBASE = true;
+        }
 
         // fetch firebase data
         getDetailDataFromFirebase();
@@ -188,7 +197,9 @@ public class LocationFragment extends Fragment implements OnMapReadyCallback, Ci
 
         //when this listener is called, the live location icon visibility will be set to VISIBLE
         mGoogleMap.setOnCameraMoveListener(() -> binding.consLiveLoc.setVisibility(View.VISIBLE));
-    }    ActivityResultLauncher<IntentSenderRequest> gpsResultLauncher = registerForActivityResult(new ActivityResultContracts.StartIntentSenderForResult(), result -> {
+    }
+
+    ActivityResultLauncher<IntentSenderRequest> gpsResultLauncher = registerForActivityResult(new ActivityResultContracts.StartIntentSenderForResult(), result -> {
 
         if (result.getResultCode() == RESULT_OK) {
             Log.i(TAG, "gps permission allowed");
@@ -310,7 +321,9 @@ public class LocationFragment extends Fragment implements OnMapReadyCallback, Ci
 
                     Log.i(TAG, "getLocationThroughLastKnownApproach() -> location != null");
 
-                    //updateMapMarker(new LatLng(location.getLatitude(), location.getLongitude()));
+                    // saves the location update in firebase
+                    saveLocationInFirebase(location);
+
                 } else {
                     Log.i(TAG, "getLocationThroughLastKnownApproach() -> location == null");
 
@@ -355,8 +368,8 @@ public class LocationFragment extends Fragment implements OnMapReadyCallback, Ci
                 if (location != null) {
                     Log.i(TAG, "getLocationThroughCurrentLocationApproach() -> location != null");
 
-                    // moves marker to the location
-                    //updateMapMarker(new LatLng(location.getLatitude(), location.getLongitude()));
+                    // saves the location update in firebase
+                    saveLocationInFirebase(location);
                 }
             }
         });
@@ -383,9 +396,6 @@ public class LocationFragment extends Fragment implements OnMapReadyCallback, Ci
 
         // saves the location in firebase firestore
         saveLocationInFirebase(location);
-
-        //update the location on map
-        //updateMapMarker(new LatLng(location.getLatitude(), location.getLongitude()));
     }
 
     private void saveLocationInFirebase(Location location) {
@@ -406,14 +416,22 @@ public class LocationFragment extends Fragment implements OnMapReadyCallback, Ci
         locData.put(Constants.BATTERY_PERCENTAGE, batteryStatus.getBatteryPercentage());
         locData.put(Constants.LOC_TIMESTAMP, String.valueOf(System.currentTimeMillis()));
 
+        // the location info in LOCATION collection
         FirebaseFirestore.getInstance().collection(Constants.USERS_COLLECTION)
                 .document(Objects.requireNonNull(currentUserEmail))
                 .collection(Constants.LOCATION_COLLECTION)
                 .document()
                 .set(locData)
-                .addOnSuccessListener(unused -> Log.i(TAG, "Firestore location update successful"))
-                .addOnFailureListener(e -> Log.e(TAG, "Error. Firestore location update: " + e.getMessage()));
+                .addOnSuccessListener(unused -> Log.i(TAG, "Firestore location update successful in LOCATION COLLECTION"))
+                .addOnFailureListener(e -> Log.e(TAG, "Error. Firestore location update in LOCATION COLLECTION" + e.getMessage()));
 
+
+        // updates the values of location in USER collection
+        FirebaseFirestore.getInstance().collection(Constants.USERS_COLLECTION)
+                .document(currentUserEmail)
+                .update(locData)
+                .addOnSuccessListener(unused -> Log.i(TAG, " successful location updated in USER collection"))
+                .addOnFailureListener(e -> Log.e(TAG, "error. updating location data in USER collection: "+e.getMessage()));
     }
 
     //function for updating the the map marker to new position when location is changed
@@ -422,6 +440,7 @@ public class LocationFragment extends Fragment implements OnMapReadyCallback, Ci
         if (mGoogleMap != null) {
             CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(latLng, 15);
             mGoogleMap.moveCamera(cameraUpdate);
+            mGoogleMap.animateCamera(cameraUpdate);
 
             //setting the map type from preference
             int mapTypePreference = SharedPreference.getMapType();
@@ -494,6 +513,7 @@ public class LocationFragment extends Fragment implements OnMapReadyCallback, Ci
                             SharedPreference.setCircleInviteCode(circleList.get(0).getCircleJoinCode());
 
                             if (getContext() != null) {
+
                                 // setting the circle name to toolbar & toolbar extended view
                                 binding.toolbar.textViewCircleName.setText(SharedPreference.getCircleName());
                                 binding.toolbarExtendedView.txtCircleName.setText(SharedPreference.getCircleName());
@@ -501,6 +521,7 @@ public class LocationFragment extends Fragment implements OnMapReadyCallback, Ci
 
                             // getting the members
                             for (String memberEmail : circleList.get(0).getCircleMembersList()) {
+
                                 // getting the user info
                                 FirebaseFirestore.getInstance().collection(Constants.USERS_COLLECTION)
                                         .document(memberEmail)
@@ -527,7 +548,6 @@ public class LocationFragment extends Fragment implements OnMapReadyCallback, Ci
 
                                                 membersDetailList.add(memberDetail);
                                             }
-
                                             // setting the members recyclerview
                                             setBottomSheetMembersRecyclerView(membersDetailList);
                                         });
@@ -573,10 +593,6 @@ public class LocationFragment extends Fragment implements OnMapReadyCallback, Ci
                                                 .orderBy(Constants.LOC_TIMESTAMP, Query.Direction.DESCENDING)
                                                 .limit(1)
                                                 .addSnapshotListener((valueLoc, errorLoc) -> {
-
-                                                    //clearing the member details list, so that when location changes,
-                                                    // there's no repetition in list
-                                                    //membersDetailList.clear();
 
                                                     Log.i("HELLO_123", "location collection called: ");
 
@@ -855,7 +871,7 @@ public class LocationFragment extends Fragment implements OnMapReadyCallback, Ci
 
     private void bottomSheetMembers() {
 
-        binding.bottomSheetMembers.consPlaces.setOnClickListener(v -> Toast.makeText(getContext(), "Places", Toast.LENGTH_SHORT).show());
+        //binding.bottomSheetMembers.consPlaces.setOnClickListener(v -> Toast.makeText(getContext(), "Places", Toast.LENGTH_SHORT).show());
     }
 
     private void setBottomSheetMembersRecyclerView(List<MemberDetail> memberDetailsList) {
@@ -1037,4 +1053,5 @@ public class LocationFragment extends Fragment implements OnMapReadyCallback, Ci
         super.onDestroyView();
         binding = null;
     }
+
 }

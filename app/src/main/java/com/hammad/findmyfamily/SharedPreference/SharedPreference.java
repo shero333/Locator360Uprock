@@ -2,7 +2,6 @@ package com.hammad.findmyfamily.SharedPreference;
 
 import static com.hammad.findmyfamily.Util.Constants.EMAIL;
 import static com.hammad.findmyfamily.Util.Constants.FIRST_NAME;
-import static com.hammad.findmyfamily.Util.Constants.IMAGE_PATH;
 import static com.hammad.findmyfamily.Util.Constants.LAST_NAME;
 import static com.hammad.findmyfamily.Util.Constants.NULL;
 import static com.hammad.findmyfamily.Util.Constants.PASSWORD;
@@ -56,22 +55,6 @@ public class SharedPreference {
 
     public static String getPasswordPref(){
         return sharedPreference.getString(PASSWORD,NULL);
-    }
-
-    public static void setImagePath(String imagePath){
-        sharedPreference.edit().putString(Constants.IMAGE_PATH,imagePath).apply();
-    }
-
-    public static String getImagePath() {
-        return sharedPreference.getString(IMAGE_PATH,NULL);
-    }
-
-    public static void setImageName(String imageName){
-        sharedPreference.edit().putString(Constants.IMAGE_NAME,imageName).apply();
-    }
-
-    public static String getImageName(){
-        return sharedPreference.getString(Constants.IMAGE_NAME, NULL);
     }
 
     public static void setCircleName(String circleName){

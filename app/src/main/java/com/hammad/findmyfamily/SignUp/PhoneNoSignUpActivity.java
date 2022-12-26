@@ -71,7 +71,7 @@ public class PhoneNoSignUpActivity extends AppCompatActivity {
         //phone number text watcher
         binding.edtPhoneSignUp.addTextChangedListener(numberTextWatcher);
 
-        //privacy policy and terms of services click listeners
+        //privacy policy click listener
         setHyperLink();
 
         binding.btnContPhoneSignUp.setOnClickListener(v -> buttonClickListener());
@@ -104,15 +104,7 @@ public class PhoneNoSignUpActivity extends AppCompatActivity {
         SpannableString spannableString=new SpannableString(privacyPolicyText);
 
         //color span for hyperlinks
-        ForegroundColorSpan fcsTermsOfServices=new ForegroundColorSpan(Color.BLUE);
         ForegroundColorSpan fcsPrivacyPolicy=new ForegroundColorSpan(Color.BLUE);
-
-        ClickableSpan clickableSpanTermsOfService=new ClickableSpan() {
-            @Override
-            public void onClick(@NonNull View view) {
-                viewTermsOfService();
-            }
-        };
 
         ClickableSpan clickableSpanPrivacyPolicy=new ClickableSpan() {
             @Override
@@ -122,12 +114,10 @@ public class PhoneNoSignUpActivity extends AppCompatActivity {
         };
 
         //for making it clickable
-        spannableString.setSpan(clickableSpanTermsOfService,29,45, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-        spannableString.setSpan(clickableSpanPrivacyPolicy,51,66,Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        spannableString.setSpan(clickableSpanPrivacyPolicy,25,39,Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
 
         //for changing the text color to blue
-        spannableString.setSpan(fcsTermsOfServices,29,45,Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-        spannableString.setSpan(fcsPrivacyPolicy,51,66,Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        spannableString.setSpan(fcsPrivacyPolicy,25,39,Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
 
         binding.txtPrivacyPolicy.setText(spannableString);
         binding.txtPrivacyPolicy.setMovementMethod(LinkMovementMethod.getInstance());
@@ -135,12 +125,6 @@ public class PhoneNoSignUpActivity extends AppCompatActivity {
 
     private void viewPrivacyPolicy() {
         Uri uri = Uri.parse("https://risibleapps.blogspot.com/2022/02/privacy-policy-at-risibleapps-we.html");
-        Intent intent = new Intent(Intent.ACTION_VIEW, uri);
-        startActivity(intent);
-    }
-
-    private void viewTermsOfService() {
-        Uri uri = Uri.parse("https://www.google.com");
         Intent intent = new Intent(Intent.ACTION_VIEW, uri);
         startActivity(intent);
     }

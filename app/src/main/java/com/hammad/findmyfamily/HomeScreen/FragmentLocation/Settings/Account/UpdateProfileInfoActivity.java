@@ -140,8 +140,7 @@ public class UpdateProfileInfoActivity extends AppCompatActivity {
 
     private final TextWatcher firstNameTextWatcher = new TextWatcher() {
         @Override
-        public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-        }
+        public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
 
         @Override
         public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -162,8 +161,7 @@ public class UpdateProfileInfoActivity extends AppCompatActivity {
         }
 
         @Override
-        public void afterTextChanged(Editable editable) {
-        }
+        public void afterTextChanged(Editable editable) {}
     };
 
     private final TextWatcher lastNameTextWatcher = new TextWatcher() {
@@ -232,13 +230,23 @@ public class UpdateProfileInfoActivity extends AppCompatActivity {
         }
         else if(!currentPicturePath.equals(Constants.NULL)) {
 
-            StorageReference storageReference = FirebaseStorage.getInstance().getReference(Constants.PROFILE_IMAGES);
+            // renaming the file to current user email
+            File oldFile = new File(currentPicturePath);
 
-            StorageReference fileRef = storageReference.child(new File(currentPicturePath).getName());
+            File destDirectory = getExternalFilesDir("/Renamed Profile Pictures");
 
-            fileRef.putFile(Uri.fromFile(new File(currentPicturePath)))
-                    .addOnSuccessListener(taskSnapshot -> {
-                        fileRef.getDownloadUrl().addOnSuccessListener(uri -> {
+            File newFile = new File(destDirectory,FirebaseAuth.getInstance().getCurrentUser().getEmail());
+            boolean isFileRenamed = oldFile.renameTo(newFile);
+
+            // if file is successfully renamed,uploads into Firebase Storage, else error
+            if(isFileRenamed) {
+                // uploading image to storage
+                StorageReference storageReference = FirebaseStorage.getInstance().getReference(Constants.PROFILE_IMAGES);
+
+                StorageReference fileRef = storageReference.child(newFile.getName());
+
+                fileRef.putFile(Uri.fromFile(newFile))
+                        .addOnSuccessListener(taskSnapshot -> fileRef.getDownloadUrl().addOnSuccessListener(uri -> {
 
                             data.put(Constants.IMAGE_PATH, uri.toString());
 
@@ -256,13 +264,19 @@ public class UpdateProfileInfoActivity extends AppCompatActivity {
                                         Toast.makeText(this, "Error! Failed to Updated Profile.", Toast.LENGTH_LONG).show();
                                     });
 
+                        }))
+                        .addOnFailureListener(e -> {
+                            dialog.dismiss();
+                            Log.e(TAG, "error updating profile with picture: " + e.getMessage());
+                            Toast.makeText(this, "Error! Failed to Updated Profile.", Toast.LENGTH_LONG).show();
                         });
-                    })
-                    .addOnFailureListener(e -> {
-                        dialog.dismiss();
-                        Log.e(TAG, "error updating profile with picture: " + e.getMessage());
-                        Toast.makeText(this, "Error! Failed to Updated Profile.", Toast.LENGTH_LONG).show();
-                    });
+            }
+            else {
+                Log.e(TAG, "failed to renamed file");
+
+                dialog.dismiss();
+                Toast.makeText(this, "Error! Try again.", Toast.LENGTH_SHORT).show();
+            }
         }
     }
 
@@ -432,7 +446,7 @@ public class UpdateProfileInfoActivity extends AppCompatActivity {
                         float fileSize = file.length() / 1024;
 
                         //if file (Image) size is greater than 500 KB, it will be compressed. Otherwise, else will be called.
-                        if (fileSize > 500) {
+                        if (fileSize > 300) {
                             File compressedFile = Commons.bitmapToFile(UpdateProfileInfoActivity.this, currentPicturePath);
 
                             if (compressedFile != null) {
@@ -469,7 +483,8 @@ public class UpdateProfileInfoActivity extends AppCompatActivity {
                 @Override
                 public void onActivityResult(ActivityResult result) {
 
-                    if (result.getResultCode() == Activity.RESULT_OK) {
+                    if (result.getResultCode() == Activity.RESULT_OK)
+                    {
                         Uri contentUri = null;
                         if (result.getData() != null) {
                             contentUri = result.getData().getData();
@@ -483,13 +498,14 @@ public class UpdateProfileInfoActivity extends AppCompatActivity {
                         float fileSize = file.length() / 1024;
 
                         //if file (Image) size is greater than 500 KB, it will be compressed. Otherwise, else will be called.
-                        if (fileSize > 500) {
+                        if (fileSize > 300) {
                             File compressedFile = Commons.bitmapToFile(UpdateProfileInfoActivity.this, currentPicturePath);
 
                             if (compressedFile != null) {
+
                                 Glide
                                         .with(UpdateProfileInfoActivity.this)
-                                        .load(compressedFile.getAbsolutePath())
+                                        .load(compressedFile)
                                         .into(binding.imageProfile);
 
                                 //saving the compressed file path in variable
@@ -497,13 +513,16 @@ public class UpdateProfileInfoActivity extends AppCompatActivity {
 
                                 //hiding the name characters textview
                                 binding.textNameLetter.setVisibility(View.GONE);
+                                Log.i(TAG, "gallery result launcher IF called: "+currentPicturePath);
                             }
                         }
                         else {
                             Glide
                                     .with(UpdateProfileInfoActivity.this)
-                                    .load(file.getAbsolutePath())
+                                    .load(file)
                                     .into(binding.imageProfile);
+
+                            Log.i(TAG, "gallery result launcher ELSE called: "+currentPicturePath);
 
                             //hiding the name characters textview
                             binding.textNameLetter.setVisibility(View.GONE);

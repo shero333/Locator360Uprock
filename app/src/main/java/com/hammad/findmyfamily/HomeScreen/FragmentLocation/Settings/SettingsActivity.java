@@ -32,9 +32,6 @@ public class SettingsActivity extends AppCompatActivity {
         binding = ActivitySettingsBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        // get the current user info
-        getCurrentUserInfo();
-
         // personal data
         binding.consPersonalData.setOnClickListener(v -> startActivity(new Intent(this, AccountDashboardActivity.class)));
 
@@ -99,5 +96,12 @@ public class SettingsActivity extends AppCompatActivity {
         super.onBackPressed();
         //exit animation activity
         overridePendingTransition(R.anim.no_animation, R.anim.slide_down);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        // get the current user info
+        getCurrentUserInfo();
     }
 }
