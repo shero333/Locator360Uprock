@@ -13,8 +13,10 @@ import android.graphics.Canvas;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
+import android.provider.Settings;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -23,6 +25,8 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Toast;
 
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.IntentSenderRequest;
 import androidx.activity.result.contract.ActivityResultContracts;
@@ -63,6 +67,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.hammad.findmyfamily.Application.App;
+import com.hammad.findmyfamily.BuildConfig;
 import com.hammad.findmyfamily.HomeScreen.FragmentLocation.AddMember.AddMemberActivity;
 import com.hammad.findmyfamily.HomeScreen.FragmentLocation.Battery.BatteryStatusModelClass;
 import com.hammad.findmyfamily.HomeScreen.FragmentLocation.BottomSheetMembers.BottomSheetMemberAdapter;
@@ -293,15 +298,26 @@ public class LocationFragment extends Fragment implements OnMapReadyCallback, Ci
                 //getting the current location
                 checkLocationPermission();
 
-            } else {
+            }
+            else {
 
                 //navigate to app settings screen
                 Commons.locationPermissionDialog(requireActivity());
+               /* Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS, Uri.parse("package:" + BuildConfig.APPLICATION_ID));
+                locationResultLauncher.launch(intent);*/
                 Log.i(TAG, "onRequestPermissionsResult: permission denied");
             }
         }
 
     }
+
+    ActivityResultLauncher<Intent> locationResultLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
+        @Override
+        public void onActivityResult(ActivityResult result) {
+            Log.i(TAG, "onActivityResult: location result launcher");
+            checkLocationPermission();
+        }
+    });
 
     @SuppressLint("MissingPermission")
     private void getLocationThroughLastKnownApproach() {
