@@ -92,6 +92,13 @@ public class LocationUpdateWorker extends Worker {
                             .addOnSuccessListener(unused -> Log.i(TAG, "worker called: successful location update."))
                             .addOnFailureListener(e -> Log.e(TAG, "worker called: error -> "+e.getMessage()));
 
+                    // updates the values of location in USER collection
+                    FirebaseFirestore.getInstance().collection(Constants.USERS_COLLECTION)
+                            .document(currentUserEmail)
+                            .update(locData)
+                            .addOnSuccessListener(unused -> Log.i(TAG, " successful location updated in USER collection"))
+                            .addOnFailureListener(e -> Log.e(TAG, "error. updating location data in USER collection: " + e.getMessage()));
+
                 }
             }
 

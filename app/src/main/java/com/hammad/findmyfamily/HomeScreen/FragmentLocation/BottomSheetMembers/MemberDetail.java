@@ -11,6 +11,7 @@ public class MemberDetail {
     private String locationTimestamp;
     private boolean isPhoneCharging;
     private int batteryPercentage;
+    private String memberEmail;
 
     public MemberDetail() {}
 
@@ -86,4 +87,11 @@ public class MemberDetail {
         this.batteryPercentage = batteryPercentage;
     }
 
+    public String getMemberEmail() {
+        return memberEmail;
+    }
+
+    public void setMemberEmail(String memberEmail) {
+        this.memberEmail = memberEmail;
+    }
 }

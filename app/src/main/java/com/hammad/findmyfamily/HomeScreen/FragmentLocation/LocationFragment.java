@@ -8,6 +8,8 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -53,8 +55,6 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.CancellationToken;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.OnTokenCanceledListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
@@ -62,7 +62,6 @@ import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.Query;
 import com.hammad.findmyfamily.Application.App;
 import com.hammad.findmyfamily.HomeScreen.FragmentLocation.AddMember.AddMemberActivity;
 import com.hammad.findmyfamily.HomeScreen.FragmentLocation.Battery.BatteryStatusModelClass;
@@ -81,6 +80,7 @@ import com.hammad.findmyfamily.Util.Commons;
 import com.hammad.findmyfamily.Util.Constants;
 import com.hammad.findmyfamily.WorkManager.CircleExpiryDateWorker;
 import com.hammad.findmyfamily.WorkManager.LocationUpdateWorker;
+import com.hammad.findmyfamily.databinding.CustomMarkerBinding;
 import com.hammad.findmyfamily.databinding.FragmentLocationBinding;
 import com.hammad.findmyfamily.databinding.LayoutBottomSheetMapTypeBinding;
 
@@ -100,15 +100,17 @@ public class LocationFragment extends Fragment implements OnMapReadyCallback, Ci
     //show and hide extended toolbar view animations
     Animation showToolbarExtAnim, hideToolbarExtAnim;
 
-    private FusedLocationProviderClient mLocationClient;
-    private GoogleMap mGoogleMap;
-    private Location location;
-
     // circle list
     List<CircleModel> circleList = new ArrayList<>();
 
     // user detail list including last know location, battery status, personal info etc
     List<MemberDetail> membersDetailList = new ArrayList<>();
+
+    private FusedLocationProviderClient mLocationClient;
+
+    private GoogleMap mGoogleMap;
+
+    private Location location;
 
     //recyclerview of extended toolbar
     private RecyclerView circleSelectionRecyclerView;
@@ -124,7 +126,7 @@ public class LocationFragment extends Fragment implements OnMapReadyCallback, Ci
         initializeMap();
 
         // this condition will save location update to firebase for 1 time throughout the application lifecycle.
-        if(!App.IS_LOCATION_UPDATE_SAVED_TO_FIREBASE) {
+        if (!App.IS_LOCATION_UPDATE_SAVED_TO_FIREBASE) {
 
             //checking location permission
             checkLocationPermission();
@@ -199,24 +201,6 @@ public class LocationFragment extends Fragment implements OnMapReadyCallback, Ci
         mGoogleMap.setOnCameraMoveListener(() -> binding.consLiveLoc.setVisibility(View.VISIBLE));
     }
 
-    ActivityResultLauncher<IntentSenderRequest> gpsResultLauncher = registerForActivityResult(new ActivityResultContracts.StartIntentSenderForResult(), result -> {
-
-        if (result.getResultCode() == RESULT_OK) {
-            Log.i(TAG, "gps permission allowed");
-            //fetch the location
-        } else {
-            //show the dialog again
-            Commons.isGpsEnabled(requireActivity(), isSuccessful -> {
-
-                if (!isSuccessful) {
-                    Log.i(TAG, "gps permission denied");
-                    //displays the built in dialog
-                    googleDefaultGPSDialog();
-                }
-            });
-        }
-    });
-
     @SuppressLint({"MissingPermission", "InlinedApi"})
     private void checkLocationPermission() {
 
@@ -279,6 +263,24 @@ public class LocationFragment extends Fragment implements OnMapReadyCallback, Ci
         });
 
     }
+
+    ActivityResultLauncher<IntentSenderRequest> gpsResultLauncher = registerForActivityResult(new ActivityResultContracts.StartIntentSenderForResult(), result -> {
+
+        if (result.getResultCode() == RESULT_OK) {
+            Log.i(TAG, "gps permission allowed");
+            //fetch the location
+        } else {
+            //show the dialog again
+            Commons.isGpsEnabled(requireActivity(), isSuccessful -> {
+
+                if (!isSuccessful) {
+                    Log.i(TAG, "gps permission denied");
+                    //displays the built in dialog
+                    googleDefaultGPSDialog();
+                }
+            });
+        }
+    });
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
@@ -425,60 +427,17 @@ public class LocationFragment extends Fragment implements OnMapReadyCallback, Ci
                 .addOnSuccessListener(unused -> Log.i(TAG, "Firestore location update successful in LOCATION COLLECTION"))
                 .addOnFailureListener(e -> Log.e(TAG, "Error. Firestore location update in LOCATION COLLECTION" + e.getMessage()));
 
-
         // updates the values of location in USER collection
         FirebaseFirestore.getInstance().collection(Constants.USERS_COLLECTION)
                 .document(currentUserEmail)
                 .update(locData)
-                .addOnSuccessListener(unused -> Log.i(TAG, " successful location updated in USER collection"))
-                .addOnFailureListener(e -> Log.e(TAG, "error. updating location data in USER collection: "+e.getMessage()));
-    }
+                .addOnSuccessListener(unused -> Log.i("HELLO_123", " successful location updated in USER collection"))
+                .addOnFailureListener(e -> Log.e("HELLO_123", "error. updating location data in USER collection: " + e.getMessage()));
 
-    //function for updating the the map marker to new position when location is changed
-    private void updateMapMarker(LatLng latLng) {
-
-        if (mGoogleMap != null) {
-            CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(latLng, 15);
-            mGoogleMap.moveCamera(cameraUpdate);
-            mGoogleMap.animateCamera(cameraUpdate);
-
-            //setting the map type from preference
-            int mapTypePreference = SharedPreference.getMapType();
-
-            switch (mapTypePreference) {
-
-                case 0:
-                    //map type is default/normal
-                    if (mGoogleMap != null) mGoogleMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
-                    break;
-
-                case 1:
-                    //map type is satellite
-                    if (mGoogleMap != null) mGoogleMap.setMapType(GoogleMap.MAP_TYPE_SATELLITE);
-                    break;
-
-                case 2:
-                    //map type is hybrid
-                    if (mGoogleMap != null) mGoogleMap.setMapType(GoogleMap.MAP_TYPE_HYBRID);
-                    break;
-
-                case 3:
-                    //map type is terrain
-                    if (mGoogleMap != null) mGoogleMap.setMapType(GoogleMap.MAP_TYPE_TERRAIN);
-                    break;
-            }
-
-            if (mGoogleMap != null) {
-                mGoogleMap.addMarker(new MarkerOptions()
-                        .position(latLng)
-                        .icon(BitmapDescriptorFactory.defaultMarker()));
-            }
-        }
     }
 
     @SuppressWarnings("unchecked")
     private void getDetailDataFromFirebase() {
-        Log.i("HELLO_123", "getDetailDataFromFirebase()");
 
         //current user email
         String currentUserEmail = Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getEmail();
@@ -486,8 +445,6 @@ public class LocationFragment extends Fragment implements OnMapReadyCallback, Ci
         FirebaseFirestore.getInstance().collectionGroup(Constants.CIRCLE_COLLECTION)
                 .whereArrayContains(Constants.CIRCLE_MEMBERS, currentUserEmail)
                 .addSnapshotListener((value, error) -> {
-
-                    Log.i("HELLO_123", "main collection group (CIRCLE COLLECTION)");
 
                     // clearing the circle and members list
                     circleList.clear();
@@ -502,10 +459,6 @@ public class LocationFragment extends Fragment implements OnMapReadyCallback, Ci
                         }
 
                         if (SharedPreference.getCircleId().equals(Constants.NULL)) {
-
-                            Log.i("HELLO_123", "if condition is called");
-
-                            MemberDetail memberDetail = new MemberDetail();
 
                             //setting the circle as default
                             SharedPreference.setCircleId(circleList.get(0).getCircleId());
@@ -526,35 +479,53 @@ public class LocationFragment extends Fragment implements OnMapReadyCallback, Ci
                                 FirebaseFirestore.getInstance().collection(Constants.USERS_COLLECTION)
                                         .document(memberEmail)
                                         .addSnapshotListener((valueUserInfo, errorUserInfo) -> {
+
+                                            MemberDetail memberDetail = new MemberDetail();
+
                                             memberDetail.setMemberFirstName(valueUserInfo.getString(Constants.FIRST_NAME));
                                             memberDetail.setMemberLastName(valueUserInfo.getString(Constants.LAST_NAME));
                                             memberDetail.setMemberImageUrl(valueUserInfo.getString(Constants.IMAGE_PATH));
-                                        });
+                                            memberDetail.setMemberEmail(valueUserInfo.getString(Constants.EMAIL));
 
-                                // getting the last known location details
-                                FirebaseFirestore.getInstance().collection(Constants.USERS_COLLECTION)
-                                        .document(memberEmail)
-                                        .collection(Constants.LOCATION_COLLECTION)
-                                        .orderBy(Constants.LOC_TIMESTAMP, Query.Direction.DESCENDING)
-                                        .limit(1)
-                                        .addSnapshotListener((valueLoc, errorLoc) -> {
-                                            for (DocumentSnapshot doc : valueLoc) {
-                                                memberDetail.setLocationLat((doc.getDouble(Constants.LAT).toString()));
-                                                memberDetail.setLocationLng((doc.getDouble(Constants.LNG).toString()));
-                                                memberDetail.setLocationAddress(doc.getString(Constants.LOC_ADDRESS));
-                                                memberDetail.setLocationTimestamp(doc.getString(Constants.LOC_TIMESTAMP));
-                                                memberDetail.setBatteryPercentage(Math.toIntExact(doc.getLong(Constants.BATTERY_PERCENTAGE)));
-                                                memberDetail.setPhoneCharging(doc.getBoolean(Constants.IS_PHONE_CHARGING));
+                                            memberDetail.setLocationLat((valueUserInfo.getDouble(Constants.LAT).toString()));
+                                            memberDetail.setLocationLng((valueUserInfo.getDouble(Constants.LNG).toString()));
+                                            memberDetail.setLocationAddress(valueUserInfo.getString(Constants.LOC_ADDRESS));
+                                            memberDetail.setLocationTimestamp(valueUserInfo.getString(Constants.LOC_TIMESTAMP));
+                                            memberDetail.setBatteryPercentage(Math.toIntExact(valueUserInfo.getLong(Constants.BATTERY_PERCENTAGE)));
+                                            memberDetail.setPhoneCharging(valueUserInfo.getBoolean(Constants.IS_PHONE_CHARGING));
 
+                                            int loopIndex = 0;
+                                            boolean isMemberDataAdded = false;
+
+                                            if (membersDetailList.size() > 0)
+                                            {
+                                                for (int i = 0; i < membersDetailList.size(); i++) {
+                                                    if (membersDetailList.get(i).getMemberEmail().equals(memberEmail)) {
+                                                        loopIndex = i;
+                                                        isMemberDataAdded = false;
+                                                    } else if (!membersDetailList.get(i).getMemberEmail().equals(memberEmail)) {
+                                                        isMemberDataAdded = true;
+                                                    }
+                                                }
+                                            }
+                                            else if (membersDetailList.size() == 0) {
                                                 membersDetailList.add(memberDetail);
                                             }
-                                            // setting the members recyclerview
+
+                                            if (isMemberDataAdded) {
+                                                membersDetailList.add(memberDetail);
+                                            }
+                                            else if (!isMemberDataAdded) {
+                                                membersDetailList.set(loopIndex, memberDetail);
+                                            }
+
+                                            // members recyclerview
                                             setBottomSheetMembersRecyclerView(membersDetailList);
+
                                         });
                             }
-                        } else if (!SharedPreference.getCircleId().equals(Constants.NULL)) {
-
-                            Log.i("HELLO_123", "else if condition is called");
+                        }
+                        else if (!SharedPreference.getCircleId().equals(Constants.NULL)) {
 
                             // setting the circle name to toolbar & toolbar extended view
                             if (getContext() != null) {
@@ -571,46 +542,65 @@ public class LocationFragment extends Fragment implements OnMapReadyCallback, Ci
                                     SharedPreference.setCircleInviteCode(circleModel.getCircleJoinCode());
 
                                     for (String memberEmail : circleModel.getCircleMembersList()) {
-
-                                        Log.i("HELLO_123", "member list loop");
-
-                                        MemberDetail memberDetail = new MemberDetail();
+                                        Log.i("HELLO_123", "for loop member: "+memberEmail);
 
                                         // getting the user info
                                         FirebaseFirestore.getInstance().collection(Constants.USERS_COLLECTION)
                                                 .document(memberEmail)
                                                 .addSnapshotListener((valueUserInfo, errorUserInfo) -> {
-                                                    Log.i("HELLO_123", "user collection called: ");
+                                                    Log.i("HELLO_123", "snapshot listener");
+
+                                                    MemberDetail memberDetail = new MemberDetail();
+
                                                     memberDetail.setMemberFirstName(valueUserInfo.getString(Constants.FIRST_NAME));
                                                     memberDetail.setMemberLastName(valueUserInfo.getString(Constants.LAST_NAME));
                                                     memberDetail.setMemberImageUrl(valueUserInfo.getString(Constants.IMAGE_PATH));
-                                                });
+                                                    memberDetail.setMemberEmail(valueUserInfo.getString(Constants.EMAIL));
 
-                                        // getting the last known location details
-                                        FirebaseFirestore.getInstance().collection(Constants.USERS_COLLECTION)
-                                                .document(memberEmail)
-                                                .collection(Constants.LOCATION_COLLECTION)
-                                                .orderBy(Constants.LOC_TIMESTAMP, Query.Direction.DESCENDING)
-                                                .limit(1)
-                                                .addSnapshotListener((valueLoc, errorLoc) -> {
+                                                    memberDetail.setLocationLat((valueUserInfo.getDouble(Constants.LAT).toString()));
+                                                    memberDetail.setLocationLng((valueUserInfo.getDouble(Constants.LNG).toString()));
+                                                    memberDetail.setLocationAddress(valueUserInfo.getString(Constants.LOC_ADDRESS));
+                                                    memberDetail.setLocationTimestamp(valueUserInfo.getString(Constants.LOC_TIMESTAMP));
+                                                    memberDetail.setBatteryPercentage(Math.toIntExact(valueUserInfo.getLong(Constants.BATTERY_PERCENTAGE)));
+                                                    memberDetail.setPhoneCharging(valueUserInfo.getBoolean(Constants.IS_PHONE_CHARGING));
 
-                                                    Log.i("HELLO_123", "location collection called: ");
+                                                    int loopIndex = 0;
+                                                    boolean isMemberDataAdded = false;
 
-                                                    for (DocumentSnapshot doc : valueLoc) {
-                                                        Log.i("HELLO_123", "location collection for loop");
+                                                    if (membersDetailList.size() > 0)
+                                                    {
+                                                        for (int i = 0; i < membersDetailList.size(); i++) {
 
-                                                        memberDetail.setLocationLat(doc.getDouble(Constants.LAT).toString());
-                                                        memberDetail.setLocationLng(doc.getDouble(Constants.LNG).toString());
-                                                        memberDetail.setLocationAddress(doc.getString(Constants.LOC_ADDRESS));
-                                                        memberDetail.setLocationTimestamp(doc.getString(Constants.LOC_TIMESTAMP));
-                                                        memberDetail.setBatteryPercentage(Math.toIntExact(doc.getLong(Constants.BATTERY_PERCENTAGE)));
-                                                        memberDetail.setPhoneCharging(doc.getBoolean(Constants.IS_PHONE_CHARGING));
+                                                            if(membersDetailList.get(i).getMemberEmail().contains(memberDetail.getMemberEmail())) {
+                                                                membersDetailList.set(i,memberDetail);
+                                                            }
+                                                            else if(!membersDetailList.get(i).getMemberEmail().contains(memberDetail.getMemberEmail())) {
+                                                                membersDetailList.add(memberDetail);
+                                                            }
 
+
+                                                            /*if (membersDetailList.get(i).getMemberEmail().contains(memberEmail)) {
+                                                                loopIndex = i;
+                                                                isMemberDataAdded = false;
+                                                            } else if (!membersDetailList.get(i).getMemberEmail().equals(memberEmail)) {
+                                                                isMemberDataAdded = true;
+                                                            }*/
+
+                                                        }
+                                                    }
+                                                    else if (membersDetailList.size() == 0) {
                                                         membersDetailList.add(memberDetail);
                                                     }
 
+                                                    /*if (isMemberDataAdded) {
+                                                        membersDetailList.add(memberDetail);
+                                                    }
+                                                    else if (!isMemberDataAdded) {
+                                                        membersDetailList.set(loopIndex, memberDetail);
+                                                    }
+
                                                     // members recyclerview
-                                                    setBottomSheetMembersRecyclerView(membersDetailList);
+                                                    setBottomSheetMembersRecyclerView(membersDetailList);*/
                                                 });
                                     }
                                 }
@@ -670,8 +660,9 @@ public class LocationFragment extends Fragment implements OnMapReadyCallback, Ci
 
     private void toolbarSettings() {
         startActivity(new Intent(getActivity(), SettingsActivity.class));
+
         //slide up animation of Settings activity
-        getActivity().overridePendingTransition(R.anim.slide_up,R.anim.no_animation);
+        getActivity().overridePendingTransition(R.anim.slide_up, R.anim.no_animation);
     }
 
     private void toolbarChat() {
@@ -840,7 +831,7 @@ public class LocationFragment extends Fragment implements OnMapReadyCallback, Ci
 
     private void selectCircleRecyclerview() {
 
-        if(getContext() != null) {
+        if (getContext() != null) {
             LinearLayoutManager layoutManager = new LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false);
             circleSelectionRecyclerView.setLayoutManager(layoutManager);
 
@@ -881,7 +872,75 @@ public class LocationFragment extends Fragment implements OnMapReadyCallback, Ci
             LinearLayoutManager layoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
             binding.bottomSheetMembers.recyclerBottomSheetMember.setLayoutManager(layoutManager);
             binding.bottomSheetMembers.recyclerBottomSheetMember.setAdapter(new BottomSheetMemberAdapter(requireContext(), memberDetailsList, this, this));
+
+            // set the markers on map
+            setMarkers(memberDetailsList);
         }
+    }
+
+    private void setMarkers(List<MemberDetail> memberDetailsList) {
+
+        if(mGoogleMap != null) {
+
+            //setting the map type from preference
+            int mapTypePreference = SharedPreference.getMapType();
+
+            switch (mapTypePreference) {
+
+                case 0:
+                    //map type is default/normal
+                    if (mGoogleMap != null) mGoogleMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
+                    break;
+
+                case 1:
+                    //map type is satellite
+                    if (mGoogleMap != null) mGoogleMap.setMapType(GoogleMap.MAP_TYPE_SATELLITE);
+                    break;
+
+                case 2:
+                    //map type is hybrid
+                    if (mGoogleMap != null) mGoogleMap.setMapType(GoogleMap.MAP_TYPE_HYBRID);
+                    break;
+
+                case 3:
+                    //map type is terrain
+                    if (mGoogleMap != null) mGoogleMap.setMapType(GoogleMap.MAP_TYPE_TERRAIN);
+                    break;
+            }
+
+            // removes marker if (any) on map
+            mGoogleMap.clear();
+    
+            for(MemberDetail item : memberDetailsList)
+            {
+                LatLng latLng = new LatLng(Double.parseDouble(item.getLocationLat()) ,Double.parseDouble(item.getLocationLng()));
+
+                CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(latLng, 15);
+                mGoogleMap.moveCamera(cameraUpdate);
+                mGoogleMap.animateCamera(cameraUpdate);
+
+                mGoogleMap.addMarker(new MarkerOptions()
+                        .position(latLng)
+                        .icon(BitmapDescriptorFactory.fromBitmap(getMarkerBitmapFromView(String.valueOf(item.getMemberFirstName().charAt(0)))))
+                        .title(item.getMemberFirstName().concat(" ").concat(item.getMemberLastName()))
+                        .anchor((float) 0.5,(float) 0.5));
+            }
+        }
+
+    }
+
+    private Bitmap getMarkerBitmapFromView(String userNameFirstLetter) {
+
+        CustomMarkerBinding markerBinding = CustomMarkerBinding.inflate(getLayoutInflater());
+        markerBinding.getRoot().measure(0,0);
+        markerBinding.getRoot().layout(0,0,markerBinding.getRoot().getMeasuredWidth(),markerBinding.getRoot().getMeasuredHeight());
+
+        // setting the user first name char
+        markerBinding.textUserNameLetter.setText(userNameFirstLetter);
+
+        Bitmap bitmap = Bitmap.createBitmap(markerBinding.getRoot().getMeasuredWidth(),markerBinding.getRoot().getMeasuredHeight(), Bitmap.Config.ARGB_8888);
+        markerBinding.getRoot().draw(new Canvas(bitmap));
+        return bitmap;
     }
 
     // recyclerview bottom sheet member 'Add new member' click listener
