@@ -436,6 +436,7 @@ public class LocationFragment extends Fragment implements OnMapReadyCallback, Ci
 
     }
 
+    @SuppressLint("NewApi")
     @SuppressWarnings("unchecked")
     private void getDetailDataFromFirebase() {
 
@@ -533,6 +534,7 @@ public class LocationFragment extends Fragment implements OnMapReadyCallback, Ci
                                 binding.toolbarExtendedView.txtCircleName.setText(SharedPreference.getCircleName());
                             }
 
+                            HashMap<String,MemberDetail> hashMap = new HashMap<>();
                             // if preference is not null, it means that any circle is selected as default
                             for (CircleModel circleModel : circleList) {
                                 if (circleModel.getCircleId().equals(SharedPreference.getCircleId())) {
@@ -548,7 +550,7 @@ public class LocationFragment extends Fragment implements OnMapReadyCallback, Ci
                                         FirebaseFirestore.getInstance().collection(Constants.USERS_COLLECTION)
                                                 .document(memberEmail)
                                                 .addSnapshotListener((valueUserInfo, errorUserInfo) -> {
-                                                    Log.i("HELLO_123", "snapshot listener");
+                                                    Log.i("TRY_123", "snapshot listener");
 
                                                     MemberDetail memberDetail = new MemberDetail();
 
@@ -567,7 +569,30 @@ public class LocationFragment extends Fragment implements OnMapReadyCallback, Ci
                                                     int loopIndex = 0;
                                                     boolean isMemberDataAdded = false;
 
-                                                    if (membersDetailList.size() > 0)
+                                                    if(hashMap.containsKey(memberEmail)) {
+                                                        Log.i("TRY_123", "if called: ");
+                                                        hashMap.replace(memberEmail,memberDetail);
+                                                    }
+                                                    else {
+                                                        Log.i("TRY_123", "else called: ");
+                                                        hashMap.put(memberEmail,memberDetail);
+                                                    }
+
+
+                                                    Log.i("TRY_123", "email: "+memberEmail);
+                                                    Log.i("TRY_123", "hashmap size: "+hashMap.size());
+                                                    Log.i("TRY_123", "values size: "+hashMap.values().size());
+
+                                                    for(MemberDetail m : hashMap.values())
+                                                    {
+                                                        Log.i("TRY_123", "hash email: "+m.getMemberEmail());
+                                                        Log.i("TRY_123", "hash lat: "+m.getLocationLat());
+                                                        Log.i("TRY_123", "hash lng: "+m.getLocationLng());
+                                                        Log.i("TRY_123", "hash timestamp: "+Commons.timeInMilliToDateFormat(m.getLocationTimestamp()));
+                                                    }
+
+
+                                                    /*if (membersDetailList.size() > 0)
                                                     {
                                                         for (int i = 0; i < membersDetailList.size(); i++) {
 
@@ -579,18 +604,19 @@ public class LocationFragment extends Fragment implements OnMapReadyCallback, Ci
                                                             }
 
 
-                                                            /*if (membersDetailList.get(i).getMemberEmail().contains(memberEmail)) {
+                                                            *//*if (membersDetailList.get(i).getMemberEmail().contains(memberEmail)) {
                                                                 loopIndex = i;
                                                                 isMemberDataAdded = false;
                                                             } else if (!membersDetailList.get(i).getMemberEmail().equals(memberEmail)) {
                                                                 isMemberDataAdded = true;
-                                                            }*/
+                                                            }*//*
 
                                                         }
                                                     }
-                                                    else if (membersDetailList.size() == 0) {
+                                                    else if (membersDetailList.size() == 0)
+                                                    {
                                                         membersDetailList.add(memberDetail);
-                                                    }
+                                                    }*/
 
                                                     /*if (isMemberDataAdded) {
                                                         membersDetailList.add(memberDetail);
@@ -602,7 +628,10 @@ public class LocationFragment extends Fragment implements OnMapReadyCallback, Ci
                                                     // members recyclerview
                                                     setBottomSheetMembersRecyclerView(membersDetailList);*/
                                                 });
+
                                     }
+
+
                                 }
                             }
                         }
