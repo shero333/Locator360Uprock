@@ -49,7 +49,7 @@
             android:layout_width="@dimen/_65sdp"
             android:layout_height="@dimen/_65sdp"
             android:layout_marginStart="@dimen/_10sdp"
-            android:background="@color/orange"
+            tools:background="@color/orange"
             app:roundPercent="1"
             android:scaleType="centerCrop"
             app:layout_constraintStart_toStartOf="parent"
@@ -183,5 +183,7 @@
         android:layout_marginTop="@dimen/_5sdp"
         app:layout_constraintStart_toStartOf="@id/text_account_details"
         app:layout_constraintTop_toBottomOf="@id/text_account_management"/>
+
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

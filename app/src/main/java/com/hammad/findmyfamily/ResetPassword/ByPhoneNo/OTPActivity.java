@@ -78,7 +78,6 @@ public class OTPActivity extends AppCompatActivity {
 
         //sending the OTP
         sendOTP();
-
     }
 
     private void getIntentData() {

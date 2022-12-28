@@ -25,8 +25,6 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Toast;
 
-import androidx.activity.result.ActivityResult;
-import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.IntentSenderRequest;
 import androidx.activity.result.contract.ActivityResultContracts;
@@ -132,7 +130,6 @@ public class LocationFragment extends Fragment implements OnMapReadyCallback, Ci
 
         // this condition will save location update to firebase for 1 time throughout the application lifecycle.
         if (!App.IS_LOCATION_UPDATE_SAVED_TO_FIREBASE) {
-
             //checking location permission
             checkLocationPermission();
 
@@ -209,20 +206,21 @@ public class LocationFragment extends Fragment implements OnMapReadyCallback, Ci
     @SuppressLint({"MissingPermission", "InlinedApi"})
     private void checkLocationPermission() {
 
-        Log.i(TAG, "checkLocationPermission()");
-
         if (Permissions.hasLocationPermission(requireContext())) {
 
-            Log.i(TAG, "app has location permission");
+            Log.i(TAG, "checkLocationPermission() : app has location permission");
 
             Commons.isGpsEnabled(requireActivity(), isSuccessful -> {
 
                 if (isSuccessful) {
-                    Log.i(TAG, "gps already enabled");
+                    Log.i(TAG, "checkLocationPermission() : gps already enabled");
+
                     //fetch the location
                     getLocationThroughLastKnownApproach();
-                } else if (!isSuccessful) {
-                    Log.i(TAG, "gps not enabled");
+                }
+                else if (!isSuccessful) {
+                    Log.i(TAG, "checkLocationPermission() : gps not enabled");
+
                     //displays the built in dialog
                     googleDefaultGPSDialog();
                 }
@@ -252,19 +250,17 @@ public class LocationFragment extends Fragment implements OnMapReadyCallback, Ci
                 LocationSettingsResponse response = task.getResult(ApiException.class);
 
                 // gps is already enabled
-                Log.i(TAG, "googleDefaultGPSDialog: gps is already enabled");
+                Log.i(TAG, "googleDefaultGPSDialog() : gps is already enabled");
 
-            } catch (ApiException e) {
-
+            }
+            catch (ApiException e) {
                 if (e.getStatusCode() == LocationSettingsStatusCodes.RESOLUTION_REQUIRED) {
-                    Log.i(TAG, "googleDefaultGPSDialog: catch block");
                     ResolvableApiException resolvableApiException = (ResolvableApiException) e;
 
                     IntentSenderRequest intentSenderRequest = new IntentSenderRequest.Builder(resolvableApiException.getResolution()).build();
                     gpsResultLauncher.launch(intentSenderRequest);
                 }
             }
-
         });
 
     }
@@ -272,14 +268,14 @@ public class LocationFragment extends Fragment implements OnMapReadyCallback, Ci
     ActivityResultLauncher<IntentSenderRequest> gpsResultLauncher = registerForActivityResult(new ActivityResultContracts.StartIntentSenderForResult(), result -> {
 
         if (result.getResultCode() == RESULT_OK) {
-            Log.i(TAG, "gps permission allowed");
+            Log.i(TAG, "gpsResultLauncher : gps permission allowed");
             //fetch the location
         } else {
             //show the dialog again
             Commons.isGpsEnabled(requireActivity(), isSuccessful -> {
 
                 if (!isSuccessful) {
-                    Log.i(TAG, "gps permission denied");
+                    Log.i(TAG, "gpsResultLauncher : gps permission denied");
                     //displays the built in dialog
                     googleDefaultGPSDialog();
                 }
@@ -292,31 +288,31 @@ public class LocationFragment extends Fragment implements OnMapReadyCallback, Ci
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
 
         if (requestCode == Constants.REQUEST_CODE_LOCATION) {
-            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED)
+            {
+                Log.i(TAG, "onRequestPermissionsResult() : permission granted");
 
-                Log.i(TAG, "onRequestPermissionsResult: permission granted");
                 //getting the current location
                 checkLocationPermission();
-
             }
-            else {
+            else
+            {
+                Log.i(TAG, "onRequestPermissionsResult() : permission denied");
 
-                //navigate to app settings screen
-                Commons.locationPermissionDialog(requireActivity());
-               /* Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS, Uri.parse("package:" + BuildConfig.APPLICATION_ID));
-                locationResultLauncher.launch(intent);*/
-                Log.i(TAG, "onRequestPermissionsResult: permission denied");
+                //navigate to app settings screen to allow permission from settings
+                Commons.locationPermissionDialog(requireActivity(), isSuccessful -> {
+                    Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS, Uri.parse("package:" + BuildConfig.APPLICATION_ID));
+                    locationResultLauncher.launch(intent);
+                });
             }
         }
-
     }
 
-    ActivityResultLauncher<Intent> locationResultLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
-        @Override
-        public void onActivityResult(ActivityResult result) {
-            Log.i(TAG, "onActivityResult: location result launcher");
-            checkLocationPermission();
-        }
+    ActivityResultLauncher<Intent> locationResultLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
+        Log.i(TAG, "locationResultLauncher: ");
+
+        // checks permission again, if is allowed
+        checkLocationPermission();
     });
 
     @SuppressLint("MissingPermission")
@@ -330,8 +326,6 @@ public class LocationFragment extends Fragment implements OnMapReadyCallback, Ci
         mLocationClient.getLastLocation().addOnCompleteListener(task -> {
 
             if (task.isSuccessful()) {
-
-                Log.i(TAG, "getLocationThroughLastKnownApproach() -> task successful: ");
 
                 location = task.getResult();
 
@@ -379,7 +373,6 @@ public class LocationFragment extends Fragment implements OnMapReadyCallback, Ci
         mLocationClient.getCurrentLocation(currentLocationRequest, cancellationToken).addOnCompleteListener(task -> {
 
             if (task.isSuccessful()) {
-                Log.i(TAG, "getLocationThroughCurrentLocationApproach() -> task successful");
 
                 location = task.getResult();
 
@@ -447,8 +440,8 @@ public class LocationFragment extends Fragment implements OnMapReadyCallback, Ci
         FirebaseFirestore.getInstance().collection(Constants.USERS_COLLECTION)
                 .document(currentUserEmail)
                 .update(locData)
-                .addOnSuccessListener(unused -> Log.i("HELLO_123", " successful location updated in USER collection"))
-                .addOnFailureListener(e -> Log.e("HELLO_123", "error. updating location data in USER collection: " + e.getMessage()));
+                .addOnSuccessListener(unused -> Log.i(TAG, " successful location updated in USER collection"))
+                .addOnFailureListener(e -> Log.e(TAG, "error. updating location data in USER collection: " + e.getMessage()));
 
     }
 
@@ -479,6 +472,7 @@ public class LocationFragment extends Fragment implements OnMapReadyCallback, Ci
 
                             //setting the circle as default
                             SharedPreference.setCircleId(circleList.get(0).getCircleId());
+                            SharedPreference.setCircleAdminId(circleList.get(0).getCircleOwnerId());
                             SharedPreference.setCircleName(circleList.get(0).getCircleName());
                             SharedPreference.setCircleInviteCode(circleList.get(0).getCircleJoinCode());
 
@@ -489,9 +483,12 @@ public class LocationFragment extends Fragment implements OnMapReadyCallback, Ci
                                 binding.toolbarExtendedView.txtCircleName.setText(SharedPreference.getCircleName());
                             }
 
-                            // getting the members
-                            for (String memberEmail : circleList.get(0).getCircleMembersList()) {
+                            // hash map is used here to remove duplication when location data is updated.
+                            HashMap<String,MemberDetail> hashMap = new HashMap<>();
 
+                            // getting the members
+                            for (String memberEmail : circleList.get(0).getCircleMembersList())
+                            {
                                 // getting the user info
                                 FirebaseFirestore.getInstance().collection(Constants.USERS_COLLECTION)
                                         .document(memberEmail)
@@ -511,33 +508,15 @@ public class LocationFragment extends Fragment implements OnMapReadyCallback, Ci
                                             memberDetail.setBatteryPercentage(Math.toIntExact(valueUserInfo.getLong(Constants.BATTERY_PERCENTAGE)));
                                             memberDetail.setPhoneCharging(valueUserInfo.getBoolean(Constants.IS_PHONE_CHARGING));
 
-                                            int loopIndex = 0;
-                                            boolean isMemberDataAdded = false;
-
-                                            if (membersDetailList.size() > 0)
-                                            {
-                                                for (int i = 0; i < membersDetailList.size(); i++) {
-                                                    if (membersDetailList.get(i).getMemberEmail().equals(memberEmail)) {
-                                                        loopIndex = i;
-                                                        isMemberDataAdded = false;
-                                                    } else if (!membersDetailList.get(i).getMemberEmail().equals(memberEmail)) {
-                                                        isMemberDataAdded = true;
-                                                    }
-                                                }
+                                            if(hashMap.containsKey(memberEmail)) {
+                                                hashMap.replace(memberEmail,memberDetail);
                                             }
-                                            else if (membersDetailList.size() == 0) {
-                                                membersDetailList.add(memberDetail);
-                                            }
-
-                                            if (isMemberDataAdded) {
-                                                membersDetailList.add(memberDetail);
-                                            }
-                                            else if (!isMemberDataAdded) {
-                                                membersDetailList.set(loopIndex, memberDetail);
+                                            else {
+                                                hashMap.put(memberEmail,memberDetail);
                                             }
 
                                             // members recyclerview
-                                            setBottomSheetMembersRecyclerView(membersDetailList);
+                                            setBottomSheetMembersRecyclerView(hashMap);
 
                                         });
                             }
@@ -550,24 +529,25 @@ public class LocationFragment extends Fragment implements OnMapReadyCallback, Ci
                                 binding.toolbarExtendedView.txtCircleName.setText(SharedPreference.getCircleName());
                             }
 
+                            // hash map is used here to remove duplication when location data is updated.
                             HashMap<String,MemberDetail> hashMap = new HashMap<>();
-                            // if preference is not null, it means that any circle is selected as default
-                            for (CircleModel circleModel : circleList) {
-                                if (circleModel.getCircleId().equals(SharedPreference.getCircleId())) {
 
+                            // if preference is not null, it means that any circle is selected as default
+                            for (CircleModel circleModel : circleList)
+                            {
+                                if (circleModel.getCircleId().equals(SharedPreference.getCircleId()))
+                                {
                                     //sets circle name & join code in Shared pref
+                                    SharedPreference.setCircleAdminId(circleModel.getCircleOwnerId());
                                     SharedPreference.setCircleName(circleModel.getCircleName());
                                     SharedPreference.setCircleInviteCode(circleModel.getCircleJoinCode());
 
-                                    for (String memberEmail : circleModel.getCircleMembersList()) {
-                                        Log.i("HELLO_123", "for loop member: "+memberEmail);
-
+                                    for (String memberEmail : circleModel.getCircleMembersList())
+                                    {
                                         // getting the user info
                                         FirebaseFirestore.getInstance().collection(Constants.USERS_COLLECTION)
                                                 .document(memberEmail)
                                                 .addSnapshotListener((valueUserInfo, errorUserInfo) -> {
-                                                    Log.i("TRY_123", "snapshot listener");
-
                                                     MemberDetail memberDetail = new MemberDetail();
 
                                                     memberDetail.setMemberFirstName(valueUserInfo.getString(Constants.FIRST_NAME));
@@ -582,72 +562,17 @@ public class LocationFragment extends Fragment implements OnMapReadyCallback, Ci
                                                     memberDetail.setBatteryPercentage(Math.toIntExact(valueUserInfo.getLong(Constants.BATTERY_PERCENTAGE)));
                                                     memberDetail.setPhoneCharging(valueUserInfo.getBoolean(Constants.IS_PHONE_CHARGING));
 
-                                                    int loopIndex = 0;
-                                                    boolean isMemberDataAdded = false;
-
                                                     if(hashMap.containsKey(memberEmail)) {
-                                                        Log.i("TRY_123", "if called: ");
                                                         hashMap.replace(memberEmail,memberDetail);
                                                     }
                                                     else {
-                                                        Log.i("TRY_123", "else called: ");
                                                         hashMap.put(memberEmail,memberDetail);
                                                     }
 
-
-                                                    Log.i("TRY_123", "email: "+memberEmail);
-                                                    Log.i("TRY_123", "hashmap size: "+hashMap.size());
-                                                    Log.i("TRY_123", "values size: "+hashMap.values().size());
-
-                                                    for(MemberDetail m : hashMap.values())
-                                                    {
-                                                        Log.i("TRY_123", "hash email: "+m.getMemberEmail());
-                                                        Log.i("TRY_123", "hash lat: "+m.getLocationLat());
-                                                        Log.i("TRY_123", "hash lng: "+m.getLocationLng());
-                                                        Log.i("TRY_123", "hash timestamp: "+Commons.timeInMilliToDateFormat(m.getLocationTimestamp()));
-                                                    }
-
-
-                                                    /*if (membersDetailList.size() > 0)
-                                                    {
-                                                        for (int i = 0; i < membersDetailList.size(); i++) {
-
-                                                            if(membersDetailList.get(i).getMemberEmail().contains(memberDetail.getMemberEmail())) {
-                                                                membersDetailList.set(i,memberDetail);
-                                                            }
-                                                            else if(!membersDetailList.get(i).getMemberEmail().contains(memberDetail.getMemberEmail())) {
-                                                                membersDetailList.add(memberDetail);
-                                                            }
-
-
-                                                            *//*if (membersDetailList.get(i).getMemberEmail().contains(memberEmail)) {
-                                                                loopIndex = i;
-                                                                isMemberDataAdded = false;
-                                                            } else if (!membersDetailList.get(i).getMemberEmail().equals(memberEmail)) {
-                                                                isMemberDataAdded = true;
-                                                            }*//*
-
-                                                        }
-                                                    }
-                                                    else if (membersDetailList.size() == 0)
-                                                    {
-                                                        membersDetailList.add(memberDetail);
-                                                    }*/
-
-                                                    /*if (isMemberDataAdded) {
-                                                        membersDetailList.add(memberDetail);
-                                                    }
-                                                    else if (!isMemberDataAdded) {
-                                                        membersDetailList.set(loopIndex, memberDetail);
-                                                    }
-
                                                     // members recyclerview
-                                                    setBottomSheetMembersRecyclerView(membersDetailList);*/
+                                                    setBottomSheetMembersRecyclerView(hashMap);
                                                 });
-
                                     }
-
-
                                 }
                             }
                         }
@@ -655,9 +580,7 @@ public class LocationFragment extends Fragment implements OnMapReadyCallback, Ci
                         // setting the circle recyclerview
                         selectCircleRecyclerview();
                     }
-
                 });
-
     }
 
     private void loadAnimations() {
@@ -910,16 +833,23 @@ public class LocationFragment extends Fragment implements OnMapReadyCallback, Ci
         //binding.bottomSheetMembers.consPlaces.setOnClickListener(v -> Toast.makeText(getContext(), "Places", Toast.LENGTH_SHORT).show());
     }
 
-    private void setBottomSheetMembersRecyclerView(List<MemberDetail> memberDetailsList) {
+    private void setBottomSheetMembersRecyclerView(HashMap<String,MemberDetail> hashMap) {
 
         //purpose of this condition is to remove null pointer exception. (If you're in Safety Fragment & location changes)
         if (getContext() != null) {
+
+            // clearing the list first
+            membersDetailList.clear();
+
+            // converting the hashmap to list
+            membersDetailList.addAll(hashMap.values());
+
             LinearLayoutManager layoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
             binding.bottomSheetMembers.recyclerBottomSheetMember.setLayoutManager(layoutManager);
-            binding.bottomSheetMembers.recyclerBottomSheetMember.setAdapter(new BottomSheetMemberAdapter(requireContext(), memberDetailsList, this, this));
+            binding.bottomSheetMembers.recyclerBottomSheetMember.setAdapter(new BottomSheetMemberAdapter(requireContext(), membersDetailList, this, this));
 
             // set the markers on map
-            setMarkers(memberDetailsList);
+            setMarkers(membersDetailList);
         }
     }
 

@@ -2,13 +2,16 @@ package com.hammad.findmyfamily.OneTimeScreens;
 
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.util.Log;
 import android.view.View;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.hammad.findmyfamily.BuildConfig;
 import com.hammad.findmyfamily.Permission.Permissions;
 import com.hammad.findmyfamily.Util.Commons;
 import com.hammad.findmyfamily.Util.Constants;
@@ -61,7 +64,7 @@ public class RequestPermissionActivity extends AppCompatActivity {
                 Log.i(TAG, "location permission denied");
 
                 //navigate to app settings screen
-                Commons.locationPermissionDialog(this);
+                Commons.locationPermissionDialog(this, isSuccessful -> startActivity(new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS, Uri.parse("package:" + BuildConfig.APPLICATION_ID))));
             }
         }
 

@@ -97,6 +97,14 @@ public class SharedPreference {
         return sharedPreference.getString(Constants.CIRCLE_ID, NULL);
     }
 
+    public static void setCircleAdminId(String circleAdminId) {
+        sharedPreference.edit().putString(Constants.CIRCLE_ADMIN,circleAdminId).apply();
+    }
+
+    public static String getCircleAdminId() {
+        return sharedPreference.getString(Constants.CIRCLE_ADMIN, NULL);
+    }
+
     public static void setFullName(String fullName) {
         sharedPreference.edit().putString(Constants.FULL_NAME,fullName).apply();
     }

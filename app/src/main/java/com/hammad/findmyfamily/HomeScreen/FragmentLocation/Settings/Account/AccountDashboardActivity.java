@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -42,6 +43,10 @@ public class AccountDashboardActivity extends AppCompatActivity {
 
     Dialog progressDialog;
 
+    List<String> allCircleDocsIdList = new ArrayList<>();
+
+    List<String> allLocationDocsIdList = new ArrayList<>();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -74,6 +79,44 @@ public class AccountDashboardActivity extends AppCompatActivity {
 
         // delete account
         binding.textDeleteAccount.setOnClickListener(v -> deleteAccount());
+
+        // get all the document ids of 'Circle' sub-collection & 'Location' sub-collection
+        getAllDocsId();
+    }
+
+    private void getAllDocsId() {
+
+        String currentUserEmail = FirebaseAuth.getInstance().getCurrentUser().getEmail();
+
+        // all circle document ids
+        FirebaseFirestore.getInstance().collection(Constants.USERS_COLLECTION)
+                .document(currentUserEmail)
+                .collection(Constants.CIRCLE_COLLECTION)
+                .get()
+                .addOnSuccessListener(queryDocumentSnapshots -> {
+
+                    for(DocumentSnapshot doc: queryDocumentSnapshots) {
+                        allCircleDocsIdList.add(doc.getId());
+                    }
+                    Log.i(TAG, "circle docs list size: "+allCircleDocsIdList.size());
+
+                })
+                .addOnFailureListener(e -> Log.i(TAG, "circle docs list error: "+e.getMessage()));
+
+        // all location document ids
+        FirebaseFirestore.getInstance().collection(Constants.USERS_COLLECTION)
+                .document(currentUserEmail)
+                .collection(Constants.LOCATION_COLLECTION)
+                .get()
+                .addOnSuccessListener(queryDocumentSnapshots -> {
+
+                    for(DocumentSnapshot doc: queryDocumentSnapshots) {
+                        allLocationDocsIdList.add(doc.getId());
+                    }
+                    Log.i(TAG, "location docs list size: "+allLocationDocsIdList.size());
+
+                })
+                .addOnFailureListener(e -> Log.i(TAG, "location docs list error: "+e.getMessage()));
     }
 
     @Override
@@ -131,75 +174,53 @@ public class AccountDashboardActivity extends AppCompatActivity {
                 .setPositiveButton("Delete", (dialogInterface, i) -> {
 
                     // loads and show progress dialog
-                    //progressDialog = Commons.progressDialog(this);
+                    progressDialog = Commons.progressDialog(this);
 
+                    // deleting the profile image from storage (if any)
+                    if(!userDetail.getImagePath().equals(Constants.NULL))
+                    {
+                        FirebaseStorage firebaseStorage = FirebaseStorage.getInstance();
+                        StorageReference storageReference = firebaseStorage.getReferenceFromUrl(userDetail.getImagePath());
+                        storageReference.delete().addOnSuccessListener(unused -> Log.i(TAG, "image delete successful"))
+                        .addOnFailureListener(e -> Log.e(TAG, "error in image deletion: "+e.getMessage()));
+                    }
+
+                    // current user email
                     String currentUserEmail = FirebaseAuth.getInstance().getCurrentUser().getEmail();
 
-                    // code for deleting the value from any joined circle
+                    // circles returned where user is a member
                     FirebaseFirestore.getInstance().collectionGroup(Constants.CIRCLE_COLLECTION)
                             .whereArrayContains(Constants.CIRCLE_MEMBERS,currentUserEmail)
-                            .addSnapshotListener((value, error) ->
+                            .get()
+                            .addOnSuccessListener(queryDocumentSnapshots ->
                             {
-                                for(DocumentSnapshot doc: value)
+                                for(DocumentSnapshot doc: queryDocumentSnapshots)
                                 {
                                     circleModelList.add(new CircleModel(doc.getId(), Objects.requireNonNull(doc.get(Constants.CIRCLE_ADMIN)).toString(), doc.getString(Constants.CIRCLE_NAME),
                                             (List<String>) doc.get(Constants.CIRCLE_MEMBERS), doc.getString(Constants.CIRCLE_JOIN_CODE)));
                                 }
-                                Log.i(TAG, "circle list: "+circleModelList.size());
 
-                                List<CircleModel> filteredCircleList = new ArrayList<>();
-                                for(int j=0; j< circleModelList.size();j++) {
+                                // list of circle user has joined
+                                List<CircleModel> userIsMemberCircleList = new ArrayList<>();
 
-                                    if(!circleModelList.get(j).getCircleOwnerId().equals(currentUserEmail)) {
-                                        filteredCircleList.add(circleModelList.get(j));
+                                // list of circle which user has created
+                                List<CircleModel> userIsAdminCircleList = new ArrayList<>();
+
+                                for(int j=0; j < circleModelList.size(); j++)
+                                {
+                                    if(!circleModelList.get(j).getCircleOwnerId().equals(currentUserEmail))
+                                    {
+                                        userIsMemberCircleList.add(circleModelList.get(j));
                                     }
-                                    Log.i(TAG, "circle id: "+circleModelList.get(j).getCircleId());
-                                    Log.i(TAG, "circle name: "+circleModelList.get(j).getCircleName());
-                                    Log.i(TAG, "admin id: "+circleModelList.get(j).getCircleOwnerId());
-                                    Log.i(TAG, "join code: "+circleModelList.get(j).getCircleJoinCode());
-                                    Log.i(TAG, "members list "+j);
-
-                                    for(int k=0; k < circleModelList.get(j).getCircleMembersList().size(); k++) {
-                                        Log.i(TAG, "member: "+circleModelList.get(j).getCircleMembersList().get(k));
-                                    }
+                                    /*else if(circleModelList.get(j).getCircleOwnerId().equals(currentUserEmail))
+                                    {
+                                        userIsAdminCircleList.add(circleModelList.get(j));
+                                    }*/
                                 }
 
-                                deletIdFromCircles(filteredCircleList);
+                                deleteUserAccountInfo(userIsMemberCircleList/*,userIsAdminCircleList*/);
+
                             });
-
-                    // deleting the profile image from storage if any
-                    if(!userDetail.getImagePath().equals(Constants.NULL)) {
-                        FirebaseStorage firebaseStorage = FirebaseStorage.getInstance();
-                        StorageReference storageReference = firebaseStorage.getReferenceFromUrl(userDetail.getImagePath());
-                        storageReference.delete().addOnSuccessListener(unused -> Log.i(TAG, "image delete successful"))
-                        .addOnFailureListener(e ->Log.i(TAG, "error in image deletion: "+e.getMessage()));
-                    }
-
-
-
-                    // for deleting collection CollectionReference
-
-                    /*WriteBatch batch = FirebaseFirestore.getInstance().batch();
-
-                         DocumentReference cirlceDelete =  FirebaseFirestore.getInstance().collection(Constants.CIRCLE_COLLECTION)
-                            .document("fd");
-
-                         batch.delete(cirlceDelete);
-                         batch.commit().addOnSuccessListener(unused -> {
-
-                         });*/
-
-
-                    //delete 1st the sub collections and then the main collection
-
-                    // checks if the user has any joined circle and removes that values
-
-                    /*StorageReference storageReference = FirebaseStorage.getInstance().getReference(Constants.PROFILE_IMAGES);
-
-                    storageReference.child("filepath")
-                            .delete();*/
-
-                    // dismiss this dialog and then sign out
                 })
                 .setNegativeButton("Cancel", (dialogInterface, i) -> dialogInterface.dismiss());
 
@@ -207,18 +228,90 @@ public class AccountDashboardActivity extends AppCompatActivity {
 
     }
 
-    private void deletIdFromCircles(List<CircleModel> filteredCircleList) {
+    private void deleteUserAccountInfo(List<CircleModel> userIsMemberCircleList/*, List<CircleModel> userIsAdminCircleList*/) {
+
+        String currentUserEmail = FirebaseAuth.getInstance().getCurrentUser().getEmail();
+
+        // map for deleting the circle members array items
+       /* Map<String,Object> mapDeleteCircleMembers = new HashMap<>();
+        mapDeleteCircleMembers.put(Constants.CIRCLE_MEMBERS, FieldValue.delete());*/
+
+        // batch write object
         WriteBatch batch = FirebaseFirestore.getInstance().batch();
-        for(int i=0;  i< filteredCircleList.size(); i++) {
+
+        // removes the current user from any joined circle (circles other than created by current user himself)
+        for(int i=0;  i < userIsMemberCircleList.size(); i++)
+        {
             DocumentReference dr = FirebaseFirestore.getInstance().collection(Constants.USERS_COLLECTION)
-                    .document(filteredCircleList.get(i).getCircleOwnerId())
+                    .document(userIsMemberCircleList.get(i).getCircleOwnerId())
                     .collection(Constants.CIRCLE_COLLECTION)
-                    .document(filteredCircleList.get(i).getCircleId());
-            batch.update(dr,Constants.CIRCLE_MEMBERS,FieldValue.arrayRemove(FirebaseAuth.getInstance().getCurrentUser().getEmail()));
+                    .document(userIsMemberCircleList.get(i).getCircleId());
+
+            batch.update(dr,Constants.CIRCLE_MEMBERS,FieldValue.arrayRemove(currentUserEmail));
         }
 
+        /*// delete the circle member array from circles (circle created by current user)
+        for(int j=0; j < userIsAdminCircleList.size(); j++)
+        {
+            DocumentReference dr = FirebaseFirestore.getInstance().collection(Constants.USERS_COLLECTION)
+                    .document(currentUserEmail)
+                    .collection(Constants.CIRCLE_COLLECTION)
+                    .document(userIsAdminCircleList.get(j).getCircleId());
 
+            batch.update(dr,mapDeleteCircleMembers);
+        }*/
 
+        // delete current user all circles
+        for(int k=0; k < allCircleDocsIdList.size(); k++)
+        {
+            DocumentReference dr = FirebaseFirestore.getInstance()
+                                    .collection(Constants.USERS_COLLECTION)
+                                    .document(currentUserEmail)
+                                    .collection(Constants.CIRCLE_COLLECTION)
+                                    .document(allCircleDocsIdList.get(k));
 
+            batch.delete(dr);
+        }
+
+        // delete current user all locations
+        for(int l=0; l < allLocationDocsIdList.size(); l++)
+        {
+            DocumentReference dr = FirebaseFirestore.getInstance()
+                                    .collection(Constants.USERS_COLLECTION)
+                                    .document(currentUserEmail)
+                                    .collection(Constants.LOCATION_COLLECTION)
+                                    .document(allLocationDocsIdList.get(l));
+
+            batch.delete(dr);
+        }
+
+        // delete user info document
+        DocumentReference dr = FirebaseFirestore.getInstance()
+                                    .collection(Constants.USERS_COLLECTION)
+                                    .document(currentUserEmail);
+
+        // write batch
+        batch
+                .delete(dr)
+                .commit()
+                .addOnSuccessListener(unused -> {
+                    Log.i(TAG, "delete user account successful");
+
+                    // dismiss progress dialog
+                    progressDialog.dismiss();
+
+                    // signs out
+                    Commons.signOut(this);
+
+                    Toast.makeText(this, "Account Deleted Successfully", Toast.LENGTH_LONG).show();
+                })
+                .addOnFailureListener(e -> {
+                    Log.e(TAG, "error deleting user account: " + e.getMessage());
+
+                    // dismiss the progress dialog
+                    progressDialog.dismiss();
+
+                    Toast.makeText(this, "Error! Failed to Delete Account.", Toast.LENGTH_LONG).show();
+                });
     }
 }

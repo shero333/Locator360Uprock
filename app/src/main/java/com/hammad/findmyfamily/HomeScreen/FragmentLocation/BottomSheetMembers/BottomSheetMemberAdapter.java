@@ -55,7 +55,6 @@ public class BottomSheetMemberAdapter extends RecyclerView.Adapter<BottomSheetMe
     @Override
     public void onBindViewHolder(@NonNull BottomSheetMemberAdapter.MyViewHolder holder, int position) {
 
-
         if (getItemViewType(position) == Constants.VIEW_TYPE_ITEM) {
 
             MemberDetail memberItem = memberDetailList.get(holder.getAdapterPosition());

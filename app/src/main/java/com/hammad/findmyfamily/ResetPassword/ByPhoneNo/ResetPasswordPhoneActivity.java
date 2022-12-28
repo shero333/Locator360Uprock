@@ -136,11 +136,11 @@ public class ResetPasswordPhoneActivity extends AppCompatActivity {
             isPhoneNoValid = numberUtil.isValidNumber(phoneNumber);
             isMobile = numberUtil.getNumberType(phoneNumber);
 
-            Log.i("HELLO_123", "international format: "+numberUtil.format(phoneNumber, PhoneNumberUtil.PhoneNumberFormat.NATIONAL));
+            Log.i(TAG, "international format: "+numberUtil.format(phoneNumber, PhoneNumberUtil.PhoneNumberFormat.NATIONAL));
 
         } catch (NumberParseException e) {
             e.printStackTrace();
-            Log.e("ERROR_PHONE_SIGN_UP", "NumberParseException: " + e.getMessage());
+            Log.e(TAG, "NumberParseException: " + e.getMessage());
         }
     }
 

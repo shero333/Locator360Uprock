@@ -82,7 +82,7 @@ public class Commons {
         }
     }
 
-    @SuppressLint("SimpleDateFormat")
+    @SuppressLint({"SimpleDateFormat"})
     public static File bitmapToFile(Context context, String currentPicturePath) {
 
         //create a file to write bitmap data
@@ -188,7 +188,7 @@ public class Commons {
         context.startActivity(new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS, Uri.parse("package:" + BuildConfig.APPLICATION_ID)));
     }
 
-    public static void locationPermissionDialog(Activity activity) {
+    public static void locationPermissionDialog(Activity activity,OnSuccessListenerInterface onSuccessListenerInterface) {
 
         Dialog dialog = new Dialog(activity);
         dialog.setContentView(R.layout.layout_location_dialog);
@@ -207,7 +207,7 @@ public class Commons {
         AppCompatButton buttonSettings = dialog.findViewById(R.id.btn_settings_loc_dialog);
 
         buttonSettings.setOnClickListener(v -> {
-            navigateToAppSettings(activity);
+            onSuccessListenerInterface.onSuccess(true);
             dialog.dismiss();
         });
 
