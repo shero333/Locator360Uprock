@@ -79,6 +79,8 @@
         <entry key="..\:/Hammad/Locator360/app/src/main/res/layout/activity_create_circle_main.xml" value="0.22" />
         <entry key="..\:/Hammad/Locator360/app/src/main/res/layout/activity_create_new_password.xml" value="0.25" />
         <entry key="..\:/Hammad/Locator360/app/src/main/res/layout/activity_create_password.xml" value="0.22" />
+        <entry key="..\:/Hammad/Locator360/app/src/main/res/layout/activity_delete_circle_member.xml" value="0.25" />
+        <entry key="..\:/Hammad/Locator360/app/src/main/res/layout/activity_edit_circle_name.xml" value="0.22" />
         <entry key="..\:/Hammad/Locator360/app/src/main/res/layout/activity_email_sign_in.xml" value="0.2" />
         <entry key="..\:/Hammad/Locator360/app/src/main/res/layout/activity_email_sign_up.xml" value="0.18" />
         <entry key="..\:/Hammad/Locator360/app/src/main/res/layout/activity_emergency_contact_dashboard.xml" value="0.25" />
@@ -114,6 +116,7 @@
         <entry key="..\:/Hammad/Locator360/app/src/main/res/layout/activity_share_circle_code_main.xml" value="0.23796296296296296" />
         <entry key="..\:/Hammad/Locator360/app/src/main/res/layout/activity_start_screen.xml" value="0.18" />
         <entry key="..\:/Hammad/Locator360/app/src/main/res/layout/activity_update_phone_no.xml" value="0.25" />
+        <entry key="..\:/Hammad/Locator360/app/src/main/res/layout/activity_view_circle_member.xml" value="0.22" />
         <entry key="..\:/Hammad/Locator360/app/src/main/res/layout/activity_welcome_screen.xml" value="0.2046875" />
         <entry key="..\:/Hammad/Locator360/app/src/main/res/layout/add_contact_list_item.xml" value="0.25" />
         <entry key="..\:/Hammad/Locator360/app/src/main/res/layout/circle_list_item.xml" value="0.2046875" />
@@ -129,6 +132,7 @@
         <entry key="..\:/Hammad/Locator360/app/src/main/res/layout/layout_chat_image_dialog.xml" value="0.2230769230769231" />
         <entry key="..\:/Hammad/Locator360/app/src/main/res/layout/layout_chat_item.xml" value="0.25" />
         <entry key="..\:/Hammad/Locator360/app/src/main/res/layout/layout_circle_selection.xml" value="0.2" />
+        <entry key="..\:/Hammad/Locator360/app/src/main/res/layout/layout_delete_circle_member.xml" value="0.25" />
         <entry key="..\:/Hammad/Locator360/app/src/main/res/layout/layout_dialog_add_emergncy_contact.xml" value="0.25" />
         <entry key="..\:/Hammad/Locator360/app/src/main/res/layout/layout_gallery_dialog.xml" value="0.2046875" />
         <entry key="..\:/Hammad/Locator360/app/src/main/res/layout/layout_gps_dialog.xml" value="0.25" />
@@ -141,6 +145,7 @@
         <entry key="..\:/Hammad/Locator360/app/src/main/res/layout/layout_recycler_view_bottom_sheet.xml" value="0.25" />
         <entry key="..\:/Hammad/Locator360/app/src/main/res/layout/layout_send_sms_permission_dialog.xml" value="0.27291666666666664" />
         <entry key="..\:/Hammad/Locator360/app/src/main/res/layout/layout_toolbar.xml" value="0.22" />
+        <entry key="..\:/Hammad/Locator360/app/src/main/res/layout/layout_view_circle_member.xml" value="0.25" />
         <entry key="..\:/Hammad/Locator360/app/src/main/res/layout/sample.xml" value="0.2046875" />
         <entry key="..\:/Hammad/Locator360/app/src/main/res/layout/screen_welcome.xml" value="0.18333333333333332" />
         <entry key="..\:/Hammad/Locator360/app/src/main/res/layout/toolbar_list_item.xml" value="0.25" />

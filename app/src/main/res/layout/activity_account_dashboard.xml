@@ -124,9 +124,9 @@
         android:drawablePadding="@dimen/_10sdp"
         app:drawableStartCompat="@drawable/edit_phone_no"
         android:layout_marginTop="@dimen/_5sdp"
+        android:visibility="gone"
         app:layout_constraintStart_toStartOf="@id/text_account_details"
         app:layout_constraintTop_toBottomOf="@id/text_account_details"/>
-
 
     <TextView
         android:id="@+id/text_change_password"

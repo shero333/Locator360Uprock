@@ -21,6 +21,7 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.hammad.findmyfamily.HomeScreen.FragmentLocation.JoinCircle.CircleModel;
 import com.hammad.findmyfamily.ResetPassword.ByPhoneNo.ResetPasswordPhoneActivity;
+import com.hammad.findmyfamily.StartScreen.StartScreenActivity;
 import com.hammad.findmyfamily.Util.Commons;
 import com.hammad.findmyfamily.Util.Constants;
 import com.hammad.findmyfamily.databinding.ActivityAccountDashboardBinding;
@@ -203,22 +204,15 @@ public class AccountDashboardActivity extends AppCompatActivity {
                                 // list of circle user has joined
                                 List<CircleModel> userIsMemberCircleList = new ArrayList<>();
 
-                                // list of circle which user has created
-                                List<CircleModel> userIsAdminCircleList = new ArrayList<>();
-
                                 for(int j=0; j < circleModelList.size(); j++)
                                 {
                                     if(!circleModelList.get(j).getCircleOwnerId().equals(currentUserEmail))
                                     {
                                         userIsMemberCircleList.add(circleModelList.get(j));
                                     }
-                                    /*else if(circleModelList.get(j).getCircleOwnerId().equals(currentUserEmail))
-                                    {
-                                        userIsAdminCircleList.add(circleModelList.get(j));
-                                    }*/
                                 }
 
-                                deleteUserAccountInfo(userIsMemberCircleList/*,userIsAdminCircleList*/);
+                                deleteUserAccountInfo(userIsMemberCircleList);
 
                             });
                 })
@@ -228,13 +222,9 @@ public class AccountDashboardActivity extends AppCompatActivity {
 
     }
 
-    private void deleteUserAccountInfo(List<CircleModel> userIsMemberCircleList/*, List<CircleModel> userIsAdminCircleList*/) {
+    private void deleteUserAccountInfo(List<CircleModel> userIsMemberCircleList) {
 
         String currentUserEmail = FirebaseAuth.getInstance().getCurrentUser().getEmail();
-
-        // map for deleting the circle members array items
-       /* Map<String,Object> mapDeleteCircleMembers = new HashMap<>();
-        mapDeleteCircleMembers.put(Constants.CIRCLE_MEMBERS, FieldValue.delete());*/
 
         // batch write object
         WriteBatch batch = FirebaseFirestore.getInstance().batch();
@@ -249,17 +239,6 @@ public class AccountDashboardActivity extends AppCompatActivity {
 
             batch.update(dr,Constants.CIRCLE_MEMBERS,FieldValue.arrayRemove(currentUserEmail));
         }
-
-        /*// delete the circle member array from circles (circle created by current user)
-        for(int j=0; j < userIsAdminCircleList.size(); j++)
-        {
-            DocumentReference dr = FirebaseFirestore.getInstance().collection(Constants.USERS_COLLECTION)
-                    .document(currentUserEmail)
-                    .collection(Constants.CIRCLE_COLLECTION)
-                    .document(userIsAdminCircleList.get(j).getCircleId());
-
-            batch.update(dr,mapDeleteCircleMembers);
-        }*/
 
         // delete current user all circles
         for(int k=0; k < allCircleDocsIdList.size(); k++)
@@ -282,7 +261,11 @@ public class AccountDashboardActivity extends AppCompatActivity {
                                     .collection(Constants.LOCATION_COLLECTION)
                                     .document(allLocationDocsIdList.get(l));
 
-            batch.delete(dr);
+            WriteBatch locationBatch = FirebaseFirestore.getInstance().batch();
+
+            locationBatch.delete(dr).commit()
+                    .addOnSuccessListener(unused -> Log.i(TAG, "locations deleted successfully: "))
+                    .addOnFailureListener(e -> Log.i(TAG, "error deleting firebase location data: "+e.getMessage()));
         }
 
         // delete user info document
@@ -300,8 +283,10 @@ public class AccountDashboardActivity extends AppCompatActivity {
                     // dismiss progress dialog
                     progressDialog.dismiss();
 
-                    // signs out
-                    Commons.signOut(this);
+                    // signs out the current user
+                    FirebaseAuth.getInstance().signOut();
+
+                    startActivity(new Intent(this, StartScreenActivity.class));
 
                     Toast.makeText(this, "Account Deleted Successfully", Toast.LENGTH_LONG).show();
                 })

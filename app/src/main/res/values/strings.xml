@@ -1,5 +1,4 @@
-<resources xmlns:tools="http://schemas.android.com/tools"
-    tools:ignore="TypographyEllipsis">
+<resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="TypographyEllipsis">
     <string name="app_name">Find My Family</string>
     <string name="title_start_screen">Share your location with your \n friend and family</string>
     <string name="get_started">Get started</string>
@@ -180,6 +179,9 @@
     <string name="add_circle_members">Add Circle Members</string>
     <string name="view_members">View Members</string>
     <string name="leave_circle">Leave Circle</string>
-    <string name="delete_circle_members">Delete Circle Members</string>
+    <string name="remove_circle_members">Remove Circle Members</string>
     <string name="delete_circle">Delete Circle</string>
+    <string name="update_circle_name">update circle name</string>
+    <string name="member_name">Member name</string>
+    <string name="admin">Admin</string>
 </resources>

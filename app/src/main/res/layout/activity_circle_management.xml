@@ -34,7 +34,7 @@
         app:layout_constraintTop_toBottomOf="@id/toolbar_circle_management"/>
 
     <TextView
-        android:id="@+id/text_circle_name"
+        android:id="@+id/text_edit_circle_name"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         app:layout_constraintWidth_percent="0.9"
@@ -59,14 +59,14 @@
         android:layout_marginTop="@dimen/_5sdp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/text_circle_name"/>
+        app:layout_constraintTop_toBottomOf="@id/text_edit_circle_name"/>
 
     <androidx.constraintlayout.widget.Group
-        android:visibility="gone"
+        android:visibility="visible"
         android:id="@+id/group_circle_details"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:constraint_referenced_ids="text_circle_details,text_circle_name,text_bottom_line_1"/>
+        app:constraint_referenced_ids="text_circle_details,text_edit_circle_name,text_bottom_line_1"/>
 
     <TextView
         android:id="@+id/text_circle_management"
@@ -154,6 +154,7 @@
         app:layout_constraintTop_toBottomOf="@id/text_bottom_line_3"/>
 
     <androidx.constraintlayout.widget.Group
+        tools:visibility="gone"
         android:visibility="gone"
         android:id="@+id/group_not_admin"
         android:layout_width="wrap_content"
@@ -161,11 +162,11 @@
         app:constraint_referenced_ids="text_view_members,text_bottom_line_3, text_leave_circle"/>
 
     <TextView
-        android:id="@+id/text_delete_members"
+        android:id="@+id/text_remove_members"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         app:layout_constraintWidth_percent="0.9"
-        android:text="@string/delete_circle_members"
+        android:text="@string/remove_circle_members"
         android:textColor="@color/black"
         android:textSize="@dimen/_16ssp"
         android:paddingTop="@dimen/_8sdp"
@@ -186,7 +187,7 @@
         android:layout_marginTop="@dimen/_5sdp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/text_delete_members"/>
+        app:layout_constraintTop_toBottomOf="@id/text_remove_members"/>
 
     <TextView
         android:id="@+id/text_delete_circle"
@@ -205,10 +206,20 @@
         app:layout_constraintTop_toBottomOf="@id/text_bottom_line_4"/>
 
     <androidx.constraintlayout.widget.Group
-        android:visibility="gone"
+        android:visibility="visible"
         android:id="@+id/group_admin"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:constraint_referenced_ids="text_delete_members,text_bottom_line_4,text_delete_circle"/>
+        app:constraint_referenced_ids="text_remove_members,text_bottom_line_4,text_delete_circle"/>
+
+    <ProgressBar
+        android:id="@+id/progress_bar"
+        android:layout_width="@dimen/_50sdp"
+        android:layout_height="@dimen/_50sdp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:visibility="gone"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

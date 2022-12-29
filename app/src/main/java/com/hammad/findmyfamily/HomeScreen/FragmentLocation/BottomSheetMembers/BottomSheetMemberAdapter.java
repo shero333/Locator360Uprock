@@ -3,7 +3,6 @@ package com.hammad.findmyfamily.HomeScreen.FragmentLocation.BottomSheetMembers;
 import android.content.Context;
 import android.location.Location;
 import android.location.LocationManager;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -113,18 +112,25 @@ public class BottomSheetMemberAdapter extends RecyclerView.Adapter<BottomSheetMe
             // last known location address
             if(memberItem.getLocationAddress().equals(Constants.NULL)) {
 
-                Location location = new Location(LocationManager.GPS_PROVIDER);
-                location.setLatitude(Double.parseDouble(memberItem.getLocationLat()));
-                location.setLongitude(Double.parseDouble(memberItem.getLocationLng()));
+                double lat = Double.parseDouble(memberItem.getLocationLat());
+                double lng = Double.parseDouble(memberItem.getLocationLng());
 
-                recyclerViewItemBinding.txtViewLastKnownAddress.setText(Commons.getLocationAddress(context,location));
+                if(lat != 0 && lng != 0) {
+                    Location location = new Location(LocationManager.GPS_PROVIDER);
+                    location.setLatitude(lat);
+                    location.setLongitude(lng);
+
+                    recyclerViewItemBinding.txtViewLastKnownAddress.setText(Commons.getLocationAddress(context,location));
+                }
             }
             else if(!memberItem.getLocationAddress().equals(Constants.NULL)) {
-                recyclerViewItemBinding.txtViewLastKnownAddress.setText( memberItem.getLocationAddress());
+                recyclerViewItemBinding.txtViewLastKnownAddress.setText(memberItem.getLocationAddress());
             }
 
-            // time stamp
-            recyclerViewItemBinding.txtViewTimestamp.setText(context.getString(R.string.last_seen).concat(" ").concat(Commons.timeInMilliToDateFormat(memberItem.getLocationTimestamp())));
+            if(!memberItem.getLocationTimestamp().equals(Constants.NULL)) {
+                // time stamp
+                recyclerViewItemBinding.txtViewTimestamp.setText(context.getString(R.string.last_seen).concat(" ").concat(Commons.timeInMilliToDateFormat(memberItem.getLocationTimestamp())));
+            }
 
             // view click listener
             recyclerViewItemBinding.consMemberBottomSheet.setOnClickListener(v -> addedMemberInterface.onAddedMemberClicked(position));

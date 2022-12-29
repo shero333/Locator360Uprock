@@ -56,32 +56,41 @@ public class SettingsActivity extends AppCompatActivity {
                     setDataToViews(doc.getString(Constants.FIRST_NAME),doc.getString(Constants.LAST_NAME),doc.getString(Constants.PHONE_NO),doc.getString(Constants.IMAGE_PATH));
 
                 })
-                .addOnFailureListener(e -> Log.e(TAG, "getting user info error:" + e.getMessage()));
-        
+                .addOnFailureListener(e -> Log.i(TAG, "getting user info error:" + e.getMessage()));
     }
 
     private void setDataToViews(String firstName, String lastName, String phoneNo, String imagePath) {
 
-        // profile image (if any)
-        if(imagePath.equals(Constants.NULL)) {
-            binding.textUserNameLetters.setVisibility(View.VISIBLE);
-            binding.textUserNameLetters.setText(String.valueOf(firstName.charAt(0)));
-        }
-        else if(!imagePath.equals(Constants.NULL)) {
-            binding.textUserNameLetters.setVisibility(View.GONE);
+        if(imagePath != null)
+        {
+            // profile image (if any)
+            if(imagePath.equals(Constants.NULL)) {
+                binding.textUserNameLetters.setVisibility(View.VISIBLE);
+                binding.textUserNameLetters.setText(String.valueOf(firstName.charAt(0)));
+            }
+            else if(!imagePath.equals(Constants.NULL)) {
+                binding.textUserNameLetters.setVisibility(View.GONE);
 
-            //loading the image
-            Glide
-                    .with(this)
-                    .load(imagePath)
-                    .into(binding.profileImage);
+                //loading the image
+                Glide
+                        .with(this)
+                        .load(imagePath)
+                        .into(binding.profileImage);
+            }
         }
 
+        if(firstName != null && lastName != null) {
+            // user name
+            binding.textFullName.setText(firstName.concat(" ").concat(lastName));
+        }
         // user name
-        binding.textFullName.setText(firstName.concat(" ").concat(lastName));
+        //binding.textFullName.setText(firstName.concat(" ").concat(lastName));
 
+        if(phoneNo != null) {
+            binding.textPhoneNo.setText(phoneNo);
+        }
         // phone number
-        binding.textPhoneNo.setText(phoneNo);
+        //binding.textPhoneNo.setText(phoneNo);
 
     }
 

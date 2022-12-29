@@ -267,10 +267,13 @@ public class LocationFragment extends Fragment implements OnMapReadyCallback, Ci
 
     ActivityResultLauncher<IntentSenderRequest> gpsResultLauncher = registerForActivityResult(new ActivityResultContracts.StartIntentSenderForResult(), result -> {
 
-        if (result.getResultCode() == RESULT_OK) {
+        if (result.getResultCode() == RESULT_OK)
+        {
             Log.i(TAG, "gpsResultLauncher : gps permission allowed");
             //fetch the location
-        } else {
+            checkLocationPermission();
+        }
+        else {
             //show the dialog again
             Commons.isGpsEnabled(requireActivity(), isSuccessful -> {
 
@@ -336,7 +339,8 @@ public class LocationFragment extends Fragment implements OnMapReadyCallback, Ci
                     // saves the location update in firebase
                     saveLocationInFirebase(location);
 
-                } else {
+                }
+                else if(location == null) {
                     Log.i(TAG, "getLocationThroughLastKnownApproach() -> location == null");
 
                     /*
@@ -555,12 +559,21 @@ public class LocationFragment extends Fragment implements OnMapReadyCallback, Ci
                                                     memberDetail.setMemberImageUrl(valueUserInfo.getString(Constants.IMAGE_PATH));
                                                     memberDetail.setMemberEmail(valueUserInfo.getString(Constants.EMAIL));
 
-                                                    memberDetail.setLocationLat((valueUserInfo.getDouble(Constants.LAT).toString()));
+                                                    if(valueUserInfo.getDouble(Constants.LAT) != null  && valueUserInfo.getDouble(Constants.LNG) != null)
+                                                    {
+                                                        memberDetail.setLocationLat((valueUserInfo.getDouble(Constants.LAT).toString()));
+                                                        memberDetail.setLocationLng((valueUserInfo.getDouble(Constants.LNG).toString()));
+                                                        memberDetail.setLocationAddress(valueUserInfo.getString(Constants.LOC_ADDRESS));
+                                                        memberDetail.setLocationTimestamp(valueUserInfo.getString(Constants.LOC_TIMESTAMP));
+                                                        memberDetail.setBatteryPercentage(Math.toIntExact(valueUserInfo.getLong(Constants.BATTERY_PERCENTAGE)));
+                                                        memberDetail.setPhoneCharging(valueUserInfo.getBoolean(Constants.IS_PHONE_CHARGING));
+                                                    }
+                                                    /*memberDetail.setLocationLat((valueUserInfo.getDouble(Constants.LAT).toString()));
                                                     memberDetail.setLocationLng((valueUserInfo.getDouble(Constants.LNG).toString()));
                                                     memberDetail.setLocationAddress(valueUserInfo.getString(Constants.LOC_ADDRESS));
                                                     memberDetail.setLocationTimestamp(valueUserInfo.getString(Constants.LOC_TIMESTAMP));
                                                     memberDetail.setBatteryPercentage(Math.toIntExact(valueUserInfo.getLong(Constants.BATTERY_PERCENTAGE)));
-                                                    memberDetail.setPhoneCharging(valueUserInfo.getBoolean(Constants.IS_PHONE_CHARGING));
+                                                    memberDetail.setPhoneCharging(valueUserInfo.getBoolean(Constants.IS_PHONE_CHARGING));*/
 
                                                     if(hashMap.containsKey(memberEmail)) {
                                                         hashMap.replace(memberEmail,memberDetail);
@@ -888,7 +901,21 @@ public class LocationFragment extends Fragment implements OnMapReadyCallback, Ci
     
             for(MemberDetail item : memberDetailsList)
             {
-                LatLng latLng = new LatLng(Double.parseDouble(item.getLocationLat()) ,Double.parseDouble(item.getLocationLng()));
+                if(item.getLocationLat() != null && item.getLocationLng() != null) {
+
+                    LatLng latLng = new LatLng(Double.parseDouble(item.getLocationLat()) ,Double.parseDouble(item.getLocationLng()));
+
+                    CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(latLng, 15);
+                    mGoogleMap.moveCamera(cameraUpdate);
+                    mGoogleMap.animateCamera(cameraUpdate);
+
+                    mGoogleMap.addMarker(new MarkerOptions()
+                            .position(latLng)
+                            .icon(BitmapDescriptorFactory.fromBitmap(getMarkerBitmapFromView(String.valueOf(item.getMemberFirstName().charAt(0)))))
+                            .title(item.getMemberFirstName().concat(" ").concat(item.getMemberLastName()))
+                            .anchor((float) 0.5,(float) 0.5));
+                }
+                /*LatLng latLng = new LatLng(Double.parseDouble(item.getLocationLat()) ,Double.parseDouble(item.getLocationLng()));
 
                 CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(latLng, 15);
                 mGoogleMap.moveCamera(cameraUpdate);
@@ -898,7 +925,7 @@ public class LocationFragment extends Fragment implements OnMapReadyCallback, Ci
                         .position(latLng)
                         .icon(BitmapDescriptorFactory.fromBitmap(getMarkerBitmapFromView(String.valueOf(item.getMemberFirstName().charAt(0)))))
                         .title(item.getMemberFirstName().concat(" ").concat(item.getMemberLastName()))
-                        .anchor((float) 0.5,(float) 0.5));
+                        .anchor((float) 0.5,(float) 0.5));*/
             }
         }
 
