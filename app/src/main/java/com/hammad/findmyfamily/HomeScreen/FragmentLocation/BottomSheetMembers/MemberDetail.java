@@ -8,7 +8,7 @@ public class MemberDetail {
     private String locationLat;
     private String locationLng;
     private String locationAddress;
-    private String locationTimestamp;
+    private /*String*//*int*/long locationTimestamp;
     private boolean isPhoneCharging;
     private int batteryPercentage;
     private String memberEmail;
@@ -63,11 +63,11 @@ public class MemberDetail {
         this.locationAddress = locationAddress;
     }
 
-    public String getLocationTimestamp() {
+    public /*String*//*int*/long getLocationTimestamp() {
         return locationTimestamp;
     }
 
-    public void setLocationTimestamp(String locationTimestamp) {
+    public void setLocationTimestamp(/*String*//*int*/long locationTimestamp) {
         this.locationTimestamp = locationTimestamp;
     }
 

@@ -76,6 +76,7 @@ import com.hammad.findmyfamily.HomeScreen.FragmentLocation.JoinCircle.CircleMode
 import com.hammad.findmyfamily.HomeScreen.FragmentLocation.JoinCircle.CircleToolbarAdapter;
 import com.hammad.findmyfamily.HomeScreen.FragmentLocation.JoinCircle.JoinCircleMainActivity;
 import com.hammad.findmyfamily.HomeScreen.FragmentLocation.Settings.SettingsActivity;
+import com.hammad.findmyfamily.HomeScreen.FragmentLocation.BottomSheetMembers.MemberLocationActivity;
 import com.hammad.findmyfamily.Permission.Permissions;
 import com.hammad.findmyfamily.R;
 import com.hammad.findmyfamily.SharedPreference.SharedPreference;
@@ -429,7 +430,7 @@ public class LocationFragment extends Fragment implements OnMapReadyCallback, Ci
         locData.put(Constants.LOC_ADDRESS, Commons.getLocationAddress(context, location));
         locData.put(Constants.IS_PHONE_CHARGING, batteryStatus.isCharging());
         locData.put(Constants.BATTERY_PERCENTAGE, batteryStatus.getBatteryPercentage());
-        locData.put(Constants.LOC_TIMESTAMP, String.valueOf(System.currentTimeMillis()));
+        locData.put(Constants.LOC_TIMESTAMP, /*String.valueOf(*/System.currentTimeMillis()/*)*/);
 
         // the location info in LOCATION collection
         FirebaseFirestore.getInstance().collection(Constants.USERS_COLLECTION)
@@ -508,7 +509,7 @@ public class LocationFragment extends Fragment implements OnMapReadyCallback, Ci
                                             memberDetail.setLocationLat((valueUserInfo.getDouble(Constants.LAT).toString()));
                                             memberDetail.setLocationLng((valueUserInfo.getDouble(Constants.LNG).toString()));
                                             memberDetail.setLocationAddress(valueUserInfo.getString(Constants.LOC_ADDRESS));
-                                            memberDetail.setLocationTimestamp(valueUserInfo.getString(Constants.LOC_TIMESTAMP));
+                                            memberDetail.setLocationTimestamp(/*valueUserInfo.getString(Constants.LOC_TIMESTAMP)*//*Math.toIntExact(*/valueUserInfo.getLong(Constants.LOC_TIMESTAMP)/*)*/);
                                             memberDetail.setBatteryPercentage(Math.toIntExact(valueUserInfo.getLong(Constants.BATTERY_PERCENTAGE)));
                                             memberDetail.setPhoneCharging(valueUserInfo.getBoolean(Constants.IS_PHONE_CHARGING));
 
@@ -564,7 +565,7 @@ public class LocationFragment extends Fragment implements OnMapReadyCallback, Ci
                                                         memberDetail.setLocationLat((valueUserInfo.getDouble(Constants.LAT).toString()));
                                                         memberDetail.setLocationLng((valueUserInfo.getDouble(Constants.LNG).toString()));
                                                         memberDetail.setLocationAddress(valueUserInfo.getString(Constants.LOC_ADDRESS));
-                                                        memberDetail.setLocationTimestamp(valueUserInfo.getString(Constants.LOC_TIMESTAMP));
+                                                        memberDetail.setLocationTimestamp(/*valueUserInfo.getString(Constants.LOC_TIMESTAMP)*//*Math.toIntExact(*/valueUserInfo.getLong(Constants.LOC_TIMESTAMP)/*)*/);
                                                         memberDetail.setBatteryPercentage(Math.toIntExact(valueUserInfo.getLong(Constants.BATTERY_PERCENTAGE)));
                                                         memberDetail.setPhoneCharging(valueUserInfo.getBoolean(Constants.IS_PHONE_CHARGING));
                                                     }
@@ -954,7 +955,10 @@ public class LocationFragment extends Fragment implements OnMapReadyCallback, Ci
     // recyclerview bottom sheet member click listener
     @Override
     public void onAddedMemberClicked(int position) {
-        Toast.makeText(requireContext(), membersDetailList.get(position).getLocationLat() + "\n" + membersDetailList.get(position).getLocationLng(), Toast.LENGTH_SHORT).show();
+
+        Intent intent = new Intent(getActivity(), MemberLocationActivity.class);
+        intent.putExtra(Constants.EMAIL,membersDetailList.get(position).getMemberEmail());
+        startActivity(intent);
     }
 
     private void bottomSheetMapType() {

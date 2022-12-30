@@ -9,6 +9,7 @@ import android.widget.Toast;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -111,20 +112,29 @@ public class CircleManagementActivity extends AppCompatActivity {
                             .collection(Constants.CIRCLE_COLLECTION)
                             .document(SharedPreference.getCircleId())
                             .delete()
-                            .addOnSuccessListener(unused -> {
+                            .addOnSuccessListener(unused ->
+                            {
+                                // removes the circle id from 'USER' collection circle array as well
 
-                                // progress bar visibility
-                                binding.progressBar.setVisibility(View.GONE);
-                                Log.i(TAG, "circle deleted successfully");
+                                FirebaseFirestore.getInstance().collection(Constants.USERS_COLLECTION)
+                                        .document(SharedPreference.getCircleAdminId())
+                                        .update(Constants.CIRCLE_IDS,FieldValue.arrayRemove(SharedPreference.getCircleId()))
+                                        .addOnSuccessListener(success ->
+                                        {
+                                            // progress bar visibility
+                                            binding.progressBar.setVisibility(View.GONE);
+                                            Log.i(TAG, "circle deleted successfully");
 
-                                // setting the shared preference values
-                                SharedPreference.setCircleId(Constants.NULL);
-                                SharedPreference.setCircleAdminId(Constants.NULL);
-                                SharedPreference.setCircleName(Constants.NULL);
-                                SharedPreference.setCircleInviteCode(Constants.NULL);
+                                            // setting the shared preference values
+                                            SharedPreference.setCircleId(Constants.NULL);
+                                            SharedPreference.setCircleAdminId(Constants.NULL);
+                                            SharedPreference.setCircleName(Constants.NULL);
+                                            SharedPreference.setCircleInviteCode(Constants.NULL);
 
-                                Toast.makeText(this, "Circle deleted successfully", Toast.LENGTH_SHORT).show();
-                                finish();
+                                            Toast.makeText(this, "Circle deleted successfully", Toast.LENGTH_SHORT).show();
+                                            finish();
+                                        });
+
                             })
                             .addOnFailureListener(e -> {
 

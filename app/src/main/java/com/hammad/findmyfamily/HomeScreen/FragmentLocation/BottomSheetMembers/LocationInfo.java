@@ -1,0 +1,32 @@
+package com.hammad.findmyfamily.HomeScreen.FragmentLocation.BottomSheetMembers;
+
+public class LocationInfo {
+
+    private String lat;
+    private String lng;
+    private String locAddress;
+    private /*int*/long locTimestamp;
+
+    public LocationInfo(String lat, String lng, String locAddress, /*String*//*int*/long locTimestamp) {
+        this.lat = lat;
+        this.lng = lng;
+        this.locAddress = locAddress;
+        this.locTimestamp = locTimestamp;
+    }
+
+    public String getLat() {
+        return lat;
+    }
+
+    public String getLng() {
+        return lng;
+    }
+
+    public String getLocAddress() {
+        return locAddress;
+    }
+
+    public /*String*//*int*/long getLocTimestamp() {
+        return locTimestamp;
+    }
+}
