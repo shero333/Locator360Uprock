@@ -241,8 +241,8 @@ public class AccountDashboardActivity extends AppCompatActivity {
         }
 
         // delete current user all circles
-        for(int k=0; k < allCircleDocsIdList.size(); k++)
-        {
+        for(int k=0; k < allCircleDocsIdList.size(); k++) {
+
             DocumentReference dr = FirebaseFirestore.getInstance()
                                     .collection(Constants.USERS_COLLECTION)
                                     .document(currentUserEmail)
@@ -253,8 +253,8 @@ public class AccountDashboardActivity extends AppCompatActivity {
         }
 
         // delete current user all locations
-        for(int l=0; l < allLocationDocsIdList.size(); l++)
-        {
+        for(int l=0; l < allLocationDocsIdList.size(); l++) {
+
             DocumentReference dr = FirebaseFirestore.getInstance()
                                     .collection(Constants.USERS_COLLECTION)
                                     .document(currentUserEmail)
@@ -262,6 +262,8 @@ public class AccountDashboardActivity extends AppCompatActivity {
                                     .document(allLocationDocsIdList.get(l));
 
             WriteBatch locationBatch = FirebaseFirestore.getInstance().batch();
+
+
 
             locationBatch.delete(dr).commit()
                     .addOnSuccessListener(unused -> Log.i(TAG, "locations deleted successfully: "))
@@ -299,4 +301,5 @@ public class AccountDashboardActivity extends AppCompatActivity {
                     Toast.makeText(this, "Error! Failed to Delete Account.", Toast.LENGTH_LONG).show();
                 });
     }
+
 }

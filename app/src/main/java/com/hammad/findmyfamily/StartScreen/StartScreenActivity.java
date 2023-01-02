@@ -25,12 +25,14 @@ public class StartScreenActivity extends AppCompatActivity {
 
     private FirebaseFirestore fStore;
 
+    ActivityStartScreenBinding binding;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         //initializing binding
-        com.hammad.findmyfamily.databinding.ActivityStartScreenBinding binding = ActivityStartScreenBinding.inflate(getLayoutInflater());
+        binding = ActivityStartScreenBinding.inflate(getLayoutInflater());
         View view = binding.getRoot();
         setContentView(view);
 
@@ -62,6 +64,9 @@ public class StartScreenActivity extends AppCompatActivity {
         if(intent.getExtras() != null) {
             if (intent.getExtras().getString(Constants.FCM_LAT) != null && intent.getExtras().getString(Constants.FCM_LNG) != null)
             {
+                // setting the progress bar visibility to 'GONE'
+                binding.progressBar.setVisibility(View.GONE);
+
                 Intent sosEmergIntent = new Intent(this, EmergencyLocationActivity.class);
 
                 sosEmergIntent.putExtra(Constants.FCM_LAT,intent.getExtras().getString(Constants.FCM_LAT));
@@ -72,7 +77,6 @@ public class StartScreenActivity extends AppCompatActivity {
             }
             else if(intent.getExtras().getString(Constants.SENDER_ID) != null)
             {
-
                 FirebaseFirestore.getInstance().collection(Constants.USERS_COLLECTION)
                         .document(intent.getStringExtra(Constants.SENDER_ID))
                         .get()
@@ -81,6 +85,9 @@ public class StartScreenActivity extends AppCompatActivity {
                             String fullName = doc.getString(Constants.FIRST_NAME).concat(" ").concat(doc.getString(Constants.LAST_NAME));
 
                             UserInfo userInfo = new UserInfo(doc.getId(),doc.getString(Constants.FCM_TOKEN),fullName, doc.getString(Constants.IMAGE_PATH));
+
+                            // setting the progress bar visibility to 'GONE'
+                            binding.progressBar.setVisibility(View.GONE);
 
                             Intent chatIntent = new Intent(this, ChatDetailActivity.class);
                             chatIntent.putExtra(Constants.KEY_USER_INFO,userInfo);
@@ -95,12 +102,22 @@ public class StartScreenActivity extends AppCompatActivity {
                 {
                     checkCurrentLoginStatus(FirebaseAuth.getInstance().getCurrentUser().getEmail());
                 }
+                else if(FirebaseAuth.getInstance().getCurrentUser() == null)
+                {
+                    // setting the progress bar visibility to 'GONE'
+                    binding.progressBar.setVisibility(View.GONE);
+                }
             }
         }
         else {
             if(FirebaseAuth.getInstance().getCurrentUser() != null)
             {
                 checkCurrentLoginStatus(FirebaseAuth.getInstance().getCurrentUser().getEmail());
+            }
+            else if(FirebaseAuth.getInstance().getCurrentUser() == null)
+            {
+                // setting the progress bar visibility to 'GONE'
+                binding.progressBar.setVisibility(View.GONE);
             }
         }
     }
@@ -110,6 +127,9 @@ public class StartScreenActivity extends AppCompatActivity {
         DocumentReference documentReference=fStore.collection(USERS_COLLECTION).document(email);
 
         documentReference.get().addOnSuccessListener(documentSnapshot -> {
+
+            // setting the progress bar visibility to 'GONE'
+            binding.progressBar.setVisibility(View.GONE);
 
             startActivity(new Intent(StartScreenActivity.this, HomeActivity.class));
             finish();

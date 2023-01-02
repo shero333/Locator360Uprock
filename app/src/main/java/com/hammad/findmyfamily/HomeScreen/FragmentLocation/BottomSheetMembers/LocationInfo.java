@@ -5,9 +5,9 @@ public class LocationInfo {
     private String lat;
     private String lng;
     private String locAddress;
-    private /*int*/long locTimestamp;
+    private long locTimestamp;
 
-    public LocationInfo(String lat, String lng, String locAddress, /*String*//*int*/long locTimestamp) {
+    public LocationInfo(String lat, String lng, String locAddress, long locTimestamp) {
         this.lat = lat;
         this.lng = lng;
         this.locAddress = locAddress;
@@ -26,7 +26,7 @@ public class LocationInfo {
         return locAddress;
     }
 
-    public /*String*//*int*/long getLocTimestamp() {
+    public long getLocTimestamp() {
         return locTimestamp;
     }
 }

@@ -70,13 +70,13 @@ import com.hammad.findmyfamily.HomeScreen.FragmentLocation.AddMember.AddMemberAc
 import com.hammad.findmyfamily.HomeScreen.FragmentLocation.Battery.BatteryStatusModelClass;
 import com.hammad.findmyfamily.HomeScreen.FragmentLocation.BottomSheetMembers.BottomSheetMemberAdapter;
 import com.hammad.findmyfamily.HomeScreen.FragmentLocation.BottomSheetMembers.MemberDetail;
+import com.hammad.findmyfamily.HomeScreen.FragmentLocation.BottomSheetMembers.MemberLocationActivity;
 import com.hammad.findmyfamily.HomeScreen.FragmentLocation.Chat.ChatDashboardActivity;
 import com.hammad.findmyfamily.HomeScreen.FragmentLocation.CreateCircle.CreateCircleMainActivity;
 import com.hammad.findmyfamily.HomeScreen.FragmentLocation.JoinCircle.CircleModel;
 import com.hammad.findmyfamily.HomeScreen.FragmentLocation.JoinCircle.CircleToolbarAdapter;
 import com.hammad.findmyfamily.HomeScreen.FragmentLocation.JoinCircle.JoinCircleMainActivity;
 import com.hammad.findmyfamily.HomeScreen.FragmentLocation.Settings.SettingsActivity;
-import com.hammad.findmyfamily.HomeScreen.FragmentLocation.BottomSheetMembers.MemberLocationActivity;
 import com.hammad.findmyfamily.Permission.Permissions;
 import com.hammad.findmyfamily.R;
 import com.hammad.findmyfamily.SharedPreference.SharedPreference;
@@ -506,13 +506,15 @@ public class LocationFragment extends Fragment implements OnMapReadyCallback, Ci
                                             memberDetail.setMemberImageUrl(valueUserInfo.getString(Constants.IMAGE_PATH));
                                             memberDetail.setMemberEmail(valueUserInfo.getString(Constants.EMAIL));
 
-                                            memberDetail.setLocationLat((valueUserInfo.getDouble(Constants.LAT).toString()));
-                                            memberDetail.setLocationLng((valueUserInfo.getDouble(Constants.LNG).toString()));
-                                            memberDetail.setLocationAddress(valueUserInfo.getString(Constants.LOC_ADDRESS));
-                                            memberDetail.setLocationTimestamp(/*valueUserInfo.getString(Constants.LOC_TIMESTAMP)*//*Math.toIntExact(*/valueUserInfo.getLong(Constants.LOC_TIMESTAMP)/*)*/);
-                                            memberDetail.setBatteryPercentage(Math.toIntExact(valueUserInfo.getLong(Constants.BATTERY_PERCENTAGE)));
-                                            memberDetail.setPhoneCharging(valueUserInfo.getBoolean(Constants.IS_PHONE_CHARGING));
-
+                                            if(valueUserInfo.getDouble(Constants.LAT) != null  && valueUserInfo.getDouble(Constants.LNG) != null)
+                                            {
+                                                memberDetail.setLocationLat((valueUserInfo.getDouble(Constants.LAT).toString()));
+                                                memberDetail.setLocationLng((valueUserInfo.getDouble(Constants.LNG).toString()));
+                                                memberDetail.setLocationAddress(valueUserInfo.getString(Constants.LOC_ADDRESS));
+                                                memberDetail.setLocationTimestamp(Long.parseLong(String.valueOf(valueUserInfo.get(Constants.LOC_TIMESTAMP))));
+                                                memberDetail.setBatteryPercentage(Math.toIntExact(valueUserInfo.getLong(Constants.BATTERY_PERCENTAGE)));
+                                                memberDetail.setPhoneCharging(valueUserInfo.getBoolean(Constants.IS_PHONE_CHARGING));
+                                            }
                                             if(hashMap.containsKey(memberEmail)) {
                                                 hashMap.replace(memberEmail,memberDetail);
                                             }
@@ -565,16 +567,10 @@ public class LocationFragment extends Fragment implements OnMapReadyCallback, Ci
                                                         memberDetail.setLocationLat((valueUserInfo.getDouble(Constants.LAT).toString()));
                                                         memberDetail.setLocationLng((valueUserInfo.getDouble(Constants.LNG).toString()));
                                                         memberDetail.setLocationAddress(valueUserInfo.getString(Constants.LOC_ADDRESS));
-                                                        memberDetail.setLocationTimestamp(/*valueUserInfo.getString(Constants.LOC_TIMESTAMP)*//*Math.toIntExact(*/valueUserInfo.getLong(Constants.LOC_TIMESTAMP)/*)*/);
+                                                        memberDetail.setLocationTimestamp(Long.parseLong(String.valueOf(valueUserInfo.get(Constants.LOC_TIMESTAMP))));
                                                         memberDetail.setBatteryPercentage(Math.toIntExact(valueUserInfo.getLong(Constants.BATTERY_PERCENTAGE)));
                                                         memberDetail.setPhoneCharging(valueUserInfo.getBoolean(Constants.IS_PHONE_CHARGING));
                                                     }
-                                                    /*memberDetail.setLocationLat((valueUserInfo.getDouble(Constants.LAT).toString()));
-                                                    memberDetail.setLocationLng((valueUserInfo.getDouble(Constants.LNG).toString()));
-                                                    memberDetail.setLocationAddress(valueUserInfo.getString(Constants.LOC_ADDRESS));
-                                                    memberDetail.setLocationTimestamp(valueUserInfo.getString(Constants.LOC_TIMESTAMP));
-                                                    memberDetail.setBatteryPercentage(Math.toIntExact(valueUserInfo.getLong(Constants.BATTERY_PERCENTAGE)));
-                                                    memberDetail.setPhoneCharging(valueUserInfo.getBoolean(Constants.IS_PHONE_CHARGING));*/
 
                                                     if(hashMap.containsKey(memberEmail)) {
                                                         hashMap.replace(memberEmail,memberDetail);
@@ -916,17 +912,6 @@ public class LocationFragment extends Fragment implements OnMapReadyCallback, Ci
                             .title(item.getMemberFirstName().concat(" ").concat(item.getMemberLastName()))
                             .anchor((float) 0.5,(float) 0.5));
                 }
-                /*LatLng latLng = new LatLng(Double.parseDouble(item.getLocationLat()) ,Double.parseDouble(item.getLocationLng()));
-
-                CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(latLng, 15);
-                mGoogleMap.moveCamera(cameraUpdate);
-                mGoogleMap.animateCamera(cameraUpdate);
-
-                mGoogleMap.addMarker(new MarkerOptions()
-                        .position(latLng)
-                        .icon(BitmapDescriptorFactory.fromBitmap(getMarkerBitmapFromView(String.valueOf(item.getMemberFirstName().charAt(0)))))
-                        .title(item.getMemberFirstName().concat(" ").concat(item.getMemberLastName()))
-                        .anchor((float) 0.5,(float) 0.5));*/
             }
         }
 
@@ -958,6 +943,7 @@ public class LocationFragment extends Fragment implements OnMapReadyCallback, Ci
 
         Intent intent = new Intent(getActivity(), MemberLocationActivity.class);
         intent.putExtra(Constants.EMAIL,membersDetailList.get(position).getMemberEmail());
+        intent.putExtra(Constants.FIRST_NAME,membersDetailList.get(position).getMemberFirstName());
         startActivity(intent);
     }
 

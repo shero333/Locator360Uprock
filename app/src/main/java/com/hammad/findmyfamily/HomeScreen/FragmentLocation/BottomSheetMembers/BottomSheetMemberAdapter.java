@@ -127,7 +127,7 @@ public class BottomSheetMemberAdapter extends RecyclerView.Adapter<BottomSheetMe
                 recyclerViewItemBinding.txtViewLastKnownAddress.setText(memberItem.getLocationAddress());
             }
 
-            if(/*!*/memberItem.getLocationTimestamp()/*.equals(Constants.NULL)*/!= 0) {
+            if(memberItem.getLocationTimestamp()!= 0) {
                 // time stamp
                 recyclerViewItemBinding.txtViewTimestamp.setText(context.getString(R.string.last_seen).concat(" ").concat(Commons.timeInMilliToDateFormat(String.valueOf(memberItem.getLocationTimestamp()))));
             }
