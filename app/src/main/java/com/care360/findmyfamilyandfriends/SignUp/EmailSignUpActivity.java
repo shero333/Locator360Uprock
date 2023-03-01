@@ -1,4 +1,4 @@
-package com.kl360.findmyfamilyandfriends.SignUp;
+package com.care360.findmyfamilyandfriends.SignUp;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -12,11 +12,11 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.kl360.findmyfamilyandfriends.R;
-import com.kl360.findmyfamilyandfriends.SharedPreference.SharedPreference;
-import com.kl360.findmyfamilyandfriends.Util.Commons;
-import com.kl360.findmyfamilyandfriends.Util.Constants;
-import com.kl360.findmyfamilyandfriends.databinding.ActivityEmailSignUpBinding;
+import com.care360.findmyfamilyandfriends.R;
+import com.care360.findmyfamilyandfriends.SharedPreference.SharedPreference;
+import com.care360.findmyfamilyandfriends.Util.Commons;
+import com.care360.findmyfamilyandfriends.Util.Constants;
+import com.care360.findmyfamilyandfriends.databinding.ActivityEmailSignUpBinding;
 
 import java.util.ArrayList;
 import java.util.List;

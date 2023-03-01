@@ -1,4 +1,4 @@
-package com.kl360.findmyfamilyandfriends.HomeScreen.FragmentLocation.BottomSheetMembers;
+package com.care360.findmyfamilyandfriends.HomeScreen.FragmentLocation.BottomSheetMembers;
 
 import android.content.Context;
 import android.location.Location;
@@ -11,11 +11,11 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-import com.kl360.findmyfamilyandfriends.R;
-import com.kl360.findmyfamilyandfriends.Util.Commons;
-import com.kl360.findmyfamilyandfriends.Util.Constants;
-import com.kl360.findmyfamilyandfriends.databinding.LayoutAddNewMemberBinding;
-import com.kl360.findmyfamilyandfriends.databinding.LayoutRecyclerViewBottomSheetBinding;
+import com.care360.findmyfamilyandfriends.R;
+import com.care360.findmyfamilyandfriends.Util.Commons;
+import com.care360.findmyfamilyandfriends.Util.Constants;
+import com.care360.findmyfamilyandfriends.databinding.LayoutAddNewMemberBinding;
+import com.care360.findmyfamilyandfriends.databinding.LayoutRecyclerViewBottomSheetBinding;
 
 import java.util.List;
 

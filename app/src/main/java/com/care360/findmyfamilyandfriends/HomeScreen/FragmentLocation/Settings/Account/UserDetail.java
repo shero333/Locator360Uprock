@@ -1,4 +1,4 @@
-package com.kl360.findmyfamilyandfriends.HomeScreen.FragmentLocation.Settings.Account;
+package com.care360.findmyfamilyandfriends.HomeScreen.FragmentLocation.Settings.Account;
 
 import android.os.Parcel;
 import android.os.Parcelable;

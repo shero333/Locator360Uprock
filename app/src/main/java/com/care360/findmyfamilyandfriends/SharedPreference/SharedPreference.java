@@ -1,17 +1,17 @@
-package com.kl360.findmyfamilyandfriends.SharedPreference;
+package com.care360.findmyfamilyandfriends.SharedPreference;
 
-import static com.kl360.findmyfamilyandfriends.Util.Constants.EMAIL;
-import static com.kl360.findmyfamilyandfriends.Util.Constants.FIRST_NAME;
-import static com.kl360.findmyfamilyandfriends.Util.Constants.LAST_NAME;
-import static com.kl360.findmyfamilyandfriends.Util.Constants.NULL;
-import static com.kl360.findmyfamilyandfriends.Util.Constants.PASSWORD;
-import static com.kl360.findmyfamilyandfriends.Util.Constants.PHONE_NO;
+import static com.care360.findmyfamilyandfriends.Util.Constants.EMAIL;
+import static com.care360.findmyfamilyandfriends.Util.Constants.FIRST_NAME;
+import static com.care360.findmyfamilyandfriends.Util.Constants.LAST_NAME;
+import static com.care360.findmyfamilyandfriends.Util.Constants.NULL;
+import static com.care360.findmyfamilyandfriends.Util.Constants.PASSWORD;
+import static com.care360.findmyfamilyandfriends.Util.Constants.PHONE_NO;
 
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
-import com.kl360.findmyfamilyandfriends.Application.App;
-import com.kl360.findmyfamilyandfriends.Util.Constants;
+import com.care360.findmyfamilyandfriends.Application.App;
+import com.care360.findmyfamilyandfriends.Util.Constants;
 
 public class SharedPreference {
 

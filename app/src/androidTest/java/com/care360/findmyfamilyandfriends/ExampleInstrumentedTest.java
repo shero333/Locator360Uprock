@@ -1,4 +1,4 @@
-package com.kl360.findmyfamilyandfriends;
+package com.care360.findmyfamilyandfriends;
 
 import android.content.Context;
 
@@ -21,6 +21,6 @@ public class ExampleInstrumentedTest {
     public void useAppContext() {
         // Context of the app under test.
         Context appContext = InstrumentationRegistry.getInstrumentation().getTargetContext();
-        assertEquals("com.kl360.locator360", appContext.getPackageName());
+        assertEquals("com.care360.locator360", appContext.getPackageName());
     }
 }

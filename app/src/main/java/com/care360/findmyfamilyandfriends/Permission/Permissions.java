@@ -1,14 +1,14 @@
-package com.kl360.findmyfamilyandfriends.Permission;
+package com.care360.findmyfamilyandfriends.Permission;
 
-import static com.kl360.findmyfamilyandfriends.Util.Constants.REQUEST_CODE_CAMERA;
-import static com.kl360.findmyfamilyandfriends.Util.Constants.REQUEST_CODE_STORAGE;
+import static com.care360.findmyfamilyandfriends.Util.Constants.REQUEST_CODE_CAMERA;
+import static com.care360.findmyfamilyandfriends.Util.Constants.REQUEST_CODE_STORAGE;
 
 import android.Manifest;
 import android.app.Activity;
 import android.content.Context;
 import android.content.pm.PackageManager;
 
-import com.kl360.findmyfamilyandfriends.Util.Constants;
+import com.care360.findmyfamilyandfriends.Util.Constants;
 
 public class Permissions {
 

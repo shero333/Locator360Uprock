@@ -1,4 +1,4 @@
-package com.kl360.findmyfamilyandfriends.HomeScreen.FragmentLocation.Chat.Model;
+package com.care360.findmyfamilyandfriends.HomeScreen.FragmentLocation.Chat.Model;
 
 import android.os.Parcel;
 import android.os.Parcelable;

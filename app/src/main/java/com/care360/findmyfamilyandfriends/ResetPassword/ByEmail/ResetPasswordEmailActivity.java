@@ -1,4 +1,4 @@
-package com.kl360.findmyfamilyandfriends.ResetPassword.ByEmail;
+package com.care360.findmyfamilyandfriends.ResetPassword.ByEmail;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -12,10 +12,10 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.kl360.findmyfamilyandfriends.R;
-import com.kl360.findmyfamilyandfriends.Util.Commons;
-import com.kl360.findmyfamilyandfriends.Util.Constants;
-import com.kl360.findmyfamilyandfriends.databinding.ActivityResetPasswordEmailBinding;
+import com.care360.findmyfamilyandfriends.R;
+import com.care360.findmyfamilyandfriends.Util.Commons;
+import com.care360.findmyfamilyandfriends.Util.Constants;
+import com.care360.findmyfamilyandfriends.databinding.ActivityResetPasswordEmailBinding;
 
 public class ResetPasswordEmailActivity extends AppCompatActivity {
 

@@ -1,4 +1,4 @@
-package com.kl360.findmyfamilyandfriends.HomeScreen.FragmentLocation.Chat;
+package com.care360.findmyfamilyandfriends.HomeScreen.FragmentLocation.Chat;
 
 import android.content.Context;
 import android.content.res.ColorStateList;
@@ -12,13 +12,13 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.google.firebase.auth.FirebaseAuth;
-import com.kl360.findmyfamilyandfriends.HomeScreen.FragmentLocation.Chat.DB.MessageEntity;
-import com.kl360.findmyfamilyandfriends.HomeScreen.FragmentLocation.Chat.Model.UserInfo;
-import com.kl360.findmyfamilyandfriends.HomeScreen.FragmentSafety.EmergencyRoomDB.RoomDBHelper;
-import com.kl360.findmyfamilyandfriends.R;
-import com.kl360.findmyfamilyandfriends.Util.Commons;
-import com.kl360.findmyfamilyandfriends.Util.Constants;
-import com.kl360.findmyfamilyandfriends.databinding.LayoutChatItemBinding;
+import com.care360.findmyfamilyandfriends.HomeScreen.FragmentLocation.Chat.DB.MessageEntity;
+import com.care360.findmyfamilyandfriends.HomeScreen.FragmentLocation.Chat.Model.UserInfo;
+import com.care360.findmyfamilyandfriends.HomeScreen.FragmentSafety.EmergencyRoomDB.RoomDBHelper;
+import com.care360.findmyfamilyandfriends.R;
+import com.care360.findmyfamilyandfriends.Util.Commons;
+import com.care360.findmyfamilyandfriends.Util.Constants;
+import com.care360.findmyfamilyandfriends.databinding.LayoutChatItemBinding;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -1,4 +1,4 @@
-package com.kl360.findmyfamilyandfriends.HomeScreen.FragmentLocation;
+package com.care360.findmyfamilyandfriends.HomeScreen.FragmentLocation;
 
 import static android.app.Activity.RESULT_OK;
 
@@ -38,6 +38,10 @@ import androidx.work.NetworkType;
 import androidx.work.PeriodicWorkRequest;
 import androidx.work.WorkManager;
 
+import com.care360.findmyfamilyandfriends.R;
+import com.care360.findmyfamilyandfriends.databinding.CustomMarkerBinding;
+import com.care360.findmyfamilyandfriends.databinding.FragmentLocationBinding;
+import com.care360.findmyfamilyandfriends.databinding.LayoutBottomSheetMapTypeBinding;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.common.api.ResolvableApiException;
 import com.google.android.gms.location.CurrentLocationRequest;
@@ -61,32 +65,29 @@ import com.google.android.gms.tasks.OnTokenCanceledListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
+import com.google.firebase.BuildConfig;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.kl360.findmyfamilyandfriends.Application.App;
-import com.kl360.findmyfamilyandfriends.BuildConfig;
-import com.kl360.findmyfamilyandfriends.HomeScreen.FragmentLocation.AddMember.AddMemberActivity;
-import com.kl360.findmyfamilyandfriends.HomeScreen.FragmentLocation.Battery.BatteryStatusModelClass;
-import com.kl360.findmyfamilyandfriends.HomeScreen.FragmentLocation.BottomSheetMembers.BottomSheetMemberAdapter;
-import com.kl360.findmyfamilyandfriends.HomeScreen.FragmentLocation.BottomSheetMembers.MemberDetail;
-import com.kl360.findmyfamilyandfriends.HomeScreen.FragmentLocation.BottomSheetMembers.MemberLocationActivity;
-import com.kl360.findmyfamilyandfriends.HomeScreen.FragmentLocation.Chat.ChatDashboardActivity;
-import com.kl360.findmyfamilyandfriends.HomeScreen.FragmentLocation.CreateCircle.CreateCircleMainActivity;
-import com.kl360.findmyfamilyandfriends.HomeScreen.FragmentLocation.JoinCircle.CircleModel;
-import com.kl360.findmyfamilyandfriends.HomeScreen.FragmentLocation.JoinCircle.CircleToolbarAdapter;
-import com.kl360.findmyfamilyandfriends.HomeScreen.FragmentLocation.JoinCircle.JoinCircleMainActivity;
-import com.kl360.findmyfamilyandfriends.HomeScreen.FragmentLocation.Settings.SettingsActivity;
-import com.kl360.findmyfamilyandfriends.Permission.Permissions;
-import com.kl360.findmyfamilyandfriends.R;
-import com.kl360.findmyfamilyandfriends.SharedPreference.SharedPreference;
-import com.kl360.findmyfamilyandfriends.Util.Commons;
-import com.kl360.findmyfamilyandfriends.Util.Constants;
-import com.kl360.findmyfamilyandfriends.WorkManager.CircleExpiryDateWorker;
-import com.kl360.findmyfamilyandfriends.WorkManager.LocationUpdateWorker;
-import com.kl360.findmyfamilyandfriends.databinding.CustomMarkerBinding;
-import com.kl360.findmyfamilyandfriends.databinding.FragmentLocationBinding;
-import com.kl360.findmyfamilyandfriends.databinding.LayoutBottomSheetMapTypeBinding;
+import com.care360.findmyfamilyandfriends.Application.App;
+import com.care360.findmyfamilyandfriends.HomeScreen.FragmentLocation.AddMember.AddMemberActivity;
+import com.care360.findmyfamilyandfriends.HomeScreen.FragmentLocation.Battery.BatteryStatusModelClass;
+import com.care360.findmyfamilyandfriends.HomeScreen.FragmentLocation.BottomSheetMembers.BottomSheetMemberAdapter;
+import com.care360.findmyfamilyandfriends.HomeScreen.FragmentLocation.BottomSheetMembers.MemberDetail;
+import com.care360.findmyfamilyandfriends.HomeScreen.FragmentLocation.BottomSheetMembers.MemberLocationActivity;
+import com.care360.findmyfamilyandfriends.HomeScreen.FragmentLocation.Chat.ChatDashboardActivity;
+import com.care360.findmyfamilyandfriends.HomeScreen.FragmentLocation.CreateCircle.CreateCircleMainActivity;
+import com.care360.findmyfamilyandfriends.HomeScreen.FragmentLocation.JoinCircle.CircleModel;
+import com.care360.findmyfamilyandfriends.HomeScreen.FragmentLocation.JoinCircle.CircleToolbarAdapter;
+import com.care360.findmyfamilyandfriends.HomeScreen.FragmentLocation.JoinCircle.JoinCircleMainActivity;
+import com.care360.findmyfamilyandfriends.HomeScreen.FragmentLocation.Settings.SettingsActivity;
+import com.care360.findmyfamilyandfriends.Permission.Permissions;
+import com.care360.findmyfamilyandfriends.SharedPreference.SharedPreference;
+import com.care360.findmyfamilyandfriends.Util.Commons;
+import com.care360.findmyfamilyandfriends.Util.Constants;
+import com.care360.findmyfamilyandfriends.WorkManager.CircleExpiryDateWorker;
+import com.care360.findmyfamilyandfriends.WorkManager.LocationUpdateWorker;
+
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -96,9 +97,7 @@ import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
 public class LocationFragment extends Fragment implements OnMapReadyCallback, CircleToolbarAdapter.OnToolbarCircleClickListener, LocationListener, BottomSheetMemberAdapter.OnAddedMemberClickInterface, BottomSheetMemberAdapter.OnAddNewMemberInterface {
-
     private static final String TAG = "FRAG_LOCATION";
-
     private FragmentLocationBinding binding;
 
     //show and hide extended toolbar view animations
@@ -305,7 +304,8 @@ public class LocationFragment extends Fragment implements OnMapReadyCallback, Ci
 
                 //navigate to app settings screen to allow permission from settings
                 Commons.locationPermissionDialog(requireActivity(), isSuccessful -> {
-                    Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS, Uri.parse("package:" + BuildConfig.APPLICATION_ID));
+                    Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS, Uri.parse("package:"
+                            + BuildConfig.APPLICATION_ID));
                     locationResultLauncher.launch(intent);
                 });
             }

@@ -1,4 +1,4 @@
-package com.kl360.findmyfamilyandfriends.HomeScreen.FragmentLocation.Chat.DB;
+package com.care360.findmyfamilyandfriends.HomeScreen.FragmentLocation.Chat.DB;
 
 import static androidx.room.OnConflictStrategy.REPLACE;
 
@@ -7,7 +7,7 @@ import androidx.room.Dao;
 import androidx.room.Insert;
 import androidx.room.Query;
 
-import com.kl360.findmyfamilyandfriends.Util.Constants;
+import com.care360.findmyfamilyandfriends.Util.Constants;
 
 import java.util.List;
 

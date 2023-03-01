@@ -1,10 +1,10 @@
-package com.kl360.findmyfamilyandfriends.HomeScreen.FragmentLocation.Chat.DB;
+package com.care360.findmyfamilyandfriends.HomeScreen.FragmentLocation.Chat.DB;
 
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
-import com.kl360.findmyfamilyandfriends.Util.Constants;
+import com.care360.findmyfamilyandfriends.Util.Constants;
 
 import java.io.Serializable;
 

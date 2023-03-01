@@ -1,4 +1,4 @@
-package com.kl360.findmyfamilyandfriends.HomeScreen.FragmentLocation.Settings.CircleManagement.ViewMember;
+package com.care360.findmyfamilyandfriends.HomeScreen.FragmentLocation.Settings.CircleManagement.ViewMember;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -8,9 +8,9 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.kl360.findmyfamilyandfriends.HomeScreen.FragmentLocation.Settings.CircleManagement.RemoveMember.MemberModel;
-import com.kl360.findmyfamilyandfriends.SharedPreference.SharedPreference;
-import com.kl360.findmyfamilyandfriends.databinding.LayoutViewCircleMemberBinding;
+import com.care360.findmyfamilyandfriends.HomeScreen.FragmentLocation.Settings.CircleManagement.RemoveMember.MemberModel;
+import com.care360.findmyfamilyandfriends.SharedPreference.SharedPreference;
+import com.care360.findmyfamilyandfriends.databinding.LayoutViewCircleMemberBinding;
 
 import java.util.List;
 

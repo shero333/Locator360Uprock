@@ -1,4 +1,4 @@
-package com.kl360.findmyfamilyandfriends.CreateCircle;
+package com.care360.findmyfamilyandfriends.CreateCircle;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -8,9 +8,9 @@ import android.view.View;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.kl360.findmyfamilyandfriends.R;
-import com.kl360.findmyfamilyandfriends.SharedPreference.SharedPreference;
-import com.kl360.findmyfamilyandfriends.databinding.ActivityCreateCircleBinding;
+import com.care360.findmyfamilyandfriends.R;
+import com.care360.findmyfamilyandfriends.SharedPreference.SharedPreference;
+import com.care360.findmyfamilyandfriends.databinding.ActivityCreateCircleBinding;
 
 public class CreateCircleActivity extends AppCompatActivity {
 

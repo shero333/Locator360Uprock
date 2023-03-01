@@ -1,4 +1,4 @@
-package com.kl360.findmyfamilyandfriends.HomeScreen.FragmentLocation.Settings.Account;
+package com.care360.findmyfamilyandfriends.HomeScreen.FragmentLocation.Settings.Account;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -6,8 +6,8 @@ import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.i18n.phonenumbers.PhoneNumberUtil;
-import com.kl360.findmyfamilyandfriends.Util.Constants;
-import com.kl360.findmyfamilyandfriends.databinding.ActivityUpdatePhoneNoBinding;
+import com.care360.findmyfamilyandfriends.Util.Constants;
+import com.care360.findmyfamilyandfriends.databinding.ActivityUpdatePhoneNoBinding;
 
 public class UpdatePhoneNoActivity extends AppCompatActivity {
 

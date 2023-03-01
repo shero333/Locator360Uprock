@@ -1,4 +1,4 @@
-package com.kl360.findmyfamilyandfriends.OneTimeScreens;
+package com.care360.findmyfamilyandfriends.OneTimeScreens;
 
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -11,11 +11,11 @@ import android.view.View;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.kl360.findmyfamilyandfriends.BuildConfig;
-import com.kl360.findmyfamilyandfriends.Permission.Permissions;
-import com.kl360.findmyfamilyandfriends.Util.Commons;
-import com.kl360.findmyfamilyandfriends.Util.Constants;
-import com.kl360.findmyfamilyandfriends.databinding.ActivityRequestPermissionBinding;
+import com.care360.findmyfamilyandfriends.BuildConfig;
+import com.care360.findmyfamilyandfriends.Permission.Permissions;
+import com.care360.findmyfamilyandfriends.Util.Commons;
+import com.care360.findmyfamilyandfriends.Util.Constants;
+import com.care360.findmyfamilyandfriends.databinding.ActivityRequestPermissionBinding;
 
 public class RequestPermissionActivity extends AppCompatActivity {
 

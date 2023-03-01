@@ -1,4 +1,4 @@
-package com.kl360.findmyfamilyandfriends.SignIn.model;
+package com.care360.findmyfamilyandfriends.SignIn.model;
 
 public class User {
 

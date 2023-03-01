@@ -1,4 +1,4 @@
-package com.kl360.findmyfamilyandfriends.HomeScreen.FragmentLocation.Settings.CircleManagement.ViewMember;
+package com.care360.findmyfamilyandfriends.HomeScreen.FragmentLocation.Settings.CircleManagement.ViewMember;
 
 import android.os.Bundle;
 
@@ -6,10 +6,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.kl360.findmyfamilyandfriends.HomeScreen.FragmentLocation.Settings.CircleManagement.RemoveMember.MemberModel;
-import com.kl360.findmyfamilyandfriends.SharedPreference.SharedPreference;
-import com.kl360.findmyfamilyandfriends.Util.Constants;
-import com.kl360.findmyfamilyandfriends.databinding.ActivityViewCircleMemberBinding;
+import com.care360.findmyfamilyandfriends.HomeScreen.FragmentLocation.Settings.CircleManagement.RemoveMember.MemberModel;
+import com.care360.findmyfamilyandfriends.SharedPreference.SharedPreference;
+import com.care360.findmyfamilyandfriends.Util.Constants;
+import com.care360.findmyfamilyandfriends.databinding.ActivityViewCircleMemberBinding;
 
 import java.util.ArrayList;
 import java.util.List;

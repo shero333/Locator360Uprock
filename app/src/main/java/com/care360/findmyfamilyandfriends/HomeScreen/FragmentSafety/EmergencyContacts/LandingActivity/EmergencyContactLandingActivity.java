@@ -1,4 +1,4 @@
-package com.kl360.findmyfamilyandfriends.HomeScreen.FragmentSafety.EmergencyContacts.LandingActivity;
+package com.care360.findmyfamilyandfriends.HomeScreen.FragmentSafety.EmergencyContacts.LandingActivity;
 
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -10,11 +10,11 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.kl360.findmyfamilyandfriends.HomeScreen.FragmentSafety.EmergencyContacts.ContactsFromPhone.AddContactFromPhoneActivity;
-import com.kl360.findmyfamilyandfriends.Permission.Permissions;
-import com.kl360.findmyfamilyandfriends.Util.Commons;
-import com.kl360.findmyfamilyandfriends.Util.Constants;
-import com.kl360.findmyfamilyandfriends.databinding.ActivityEmergencyContactLandingBinding;
+import com.care360.findmyfamilyandfriends.HomeScreen.FragmentSafety.EmergencyContacts.ContactsFromPhone.AddContactFromPhoneActivity;
+import com.care360.findmyfamilyandfriends.Permission.Permissions;
+import com.care360.findmyfamilyandfriends.Util.Commons;
+import com.care360.findmyfamilyandfriends.Util.Constants;
+import com.care360.findmyfamilyandfriends.databinding.ActivityEmergencyContactLandingBinding;
 
 public class EmergencyContactLandingActivity extends AppCompatActivity {
 

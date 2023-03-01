@@ -1,6 +1,6 @@
-package com.kl360.findmyfamilyandfriends.StartScreen;
+package com.care360.findmyfamilyandfriends.StartScreen;
 
-import static com.kl360.findmyfamilyandfriends.Util.Constants.USERS_COLLECTION;
+import static com.care360.findmyfamilyandfriends.Util.Constants.USERS_COLLECTION;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -12,15 +12,15 @@ import androidx.appcompat.app.AppCompatDelegate;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.kl360.findmyfamilyandfriends.HomeScreen.FragmentLocation.Chat.ChatDetailActivity;
-import com.kl360.findmyfamilyandfriends.HomeScreen.FragmentLocation.Chat.Model.UserInfo;
-import com.kl360.findmyfamilyandfriends.HomeScreen.FragmentSafety.EmergencySOS.EmergencyLocationActivity;
-import com.kl360.findmyfamilyandfriends.HomeScreen.HomeActivity;
-import com.kl360.findmyfamilyandfriends.SignIn.PhoneNoSignInActivity;
-import com.kl360.findmyfamilyandfriends.SignUp.PhoneNoSignUpActivity;
-import com.kl360.findmyfamilyandfriends.Util.Commons;
-import com.kl360.findmyfamilyandfriends.Util.Constants;
-import com.kl360.findmyfamilyandfriends.databinding.ActivityStartScreenBinding;
+import com.care360.findmyfamilyandfriends.HomeScreen.FragmentLocation.Chat.ChatDetailActivity;
+import com.care360.findmyfamilyandfriends.HomeScreen.FragmentLocation.Chat.Model.UserInfo;
+import com.care360.findmyfamilyandfriends.HomeScreen.FragmentSafety.EmergencySOS.EmergencyLocationActivity;
+import com.care360.findmyfamilyandfriends.HomeScreen.HomeActivity;
+import com.care360.findmyfamilyandfriends.SignIn.PhoneNoSignInActivity;
+import com.care360.findmyfamilyandfriends.SignUp.PhoneNoSignUpActivity;
+import com.care360.findmyfamilyandfriends.Util.Commons;
+import com.care360.findmyfamilyandfriends.Util.Constants;
+import com.care360.findmyfamilyandfriends.databinding.ActivityStartScreenBinding;
 
 public class StartScreenActivity extends AppCompatActivity {
 

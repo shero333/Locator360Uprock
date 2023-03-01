@@ -1,4 +1,4 @@
-package com.kl360.findmyfamilyandfriends.HomeScreen.FragmentLocation.BottomSheetMembers;
+package com.care360.findmyfamilyandfriends.HomeScreen.FragmentLocation.BottomSheetMembers;
 
 public class MemberDetail {
 

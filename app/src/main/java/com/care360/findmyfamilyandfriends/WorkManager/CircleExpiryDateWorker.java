@@ -1,4 +1,4 @@
-package com.kl360.findmyfamilyandfriends.WorkManager;
+package com.care360.findmyfamilyandfriends.WorkManager;
 
 import android.content.Context;
 import android.util.Log;
@@ -10,8 +10,8 @@ import androidx.work.WorkerParameters;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
-import com.kl360.findmyfamilyandfriends.Util.Commons;
-import com.kl360.findmyfamilyandfriends.Util.Constants;
+import com.care360.findmyfamilyandfriends.Util.Commons;
+import com.care360.findmyfamilyandfriends.Util.Constants;
 
 import java.util.HashMap;
 import java.util.Map;

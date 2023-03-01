@@ -1,8 +1,8 @@
-package com.kl360.findmyfamilyandfriends.Util;
+package com.care360.findmyfamilyandfriends.Util;
 
 import static android.content.Context.BATTERY_SERVICE;
 import static android.content.Context.LOCATION_SERVICE;
-import static com.kl360.findmyfamilyandfriends.Util.Constants.USERS_COLLECTION;
+import static com.care360.findmyfamilyandfriends.Util.Constants.USERS_COLLECTION;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
@@ -37,17 +37,17 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.messaging.FirebaseMessaging;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
-import com.kl360.findmyfamilyandfriends.BuildConfig;
-import com.kl360.findmyfamilyandfriends.HomeScreen.FragmentLocation.Battery.BatteryStatusModelClass;
-import com.kl360.findmyfamilyandfriends.HomeScreen.FragmentLocation.JoinCircle.CircleModel;
-import com.kl360.findmyfamilyandfriends.HomeScreen.FragmentSafety.EmergencyContacts.ContactsManually.AddContactManuallyActivity;
-import com.kl360.findmyfamilyandfriends.R;
-import com.kl360.findmyfamilyandfriends.SharedPreference.SharedPreference;
-import com.kl360.findmyfamilyandfriends.StartScreen.StartScreenActivity;
-import com.kl360.findmyfamilyandfriends.databinding.LayoutCameraDialogBinding;
-import com.kl360.findmyfamilyandfriends.databinding.LayoutDialogAddEmergncyContactBinding;
-import com.kl360.findmyfamilyandfriends.databinding.LayoutGalleryDialogBinding;
-import com.kl360.findmyfamilyandfriends.databinding.LayoutProgressDialogBinding;
+import com.care360.findmyfamilyandfriends.BuildConfig;
+import com.care360.findmyfamilyandfriends.HomeScreen.FragmentLocation.Battery.BatteryStatusModelClass;
+import com.care360.findmyfamilyandfriends.HomeScreen.FragmentLocation.JoinCircle.CircleModel;
+import com.care360.findmyfamilyandfriends.HomeScreen.FragmentSafety.EmergencyContacts.ContactsManually.AddContactManuallyActivity;
+import com.care360.findmyfamilyandfriends.R;
+import com.care360.findmyfamilyandfriends.SharedPreference.SharedPreference;
+import com.care360.findmyfamilyandfriends.StartScreen.StartScreenActivity;
+import com.care360.findmyfamilyandfriends.databinding.LayoutCameraDialogBinding;
+import com.care360.findmyfamilyandfriends.databinding.LayoutDialogAddEmergncyContactBinding;
+import com.care360.findmyfamilyandfriends.databinding.LayoutGalleryDialogBinding;
+import com.care360.findmyfamilyandfriends.databinding.LayoutProgressDialogBinding;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;

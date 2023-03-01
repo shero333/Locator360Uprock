@@ -1,4 +1,4 @@
-package com.kl360.findmyfamilyandfriends.HomeScreen.FragmentLocation.Settings.CircleManagement;
+package com.care360.findmyfamilyandfriends.HomeScreen.FragmentLocation.Settings.CircleManagement;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -12,12 +12,12 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.kl360.findmyfamilyandfriends.HomeScreen.FragmentLocation.AddMember.AddMemberActivity;
-import com.kl360.findmyfamilyandfriends.HomeScreen.FragmentLocation.Settings.CircleManagement.RemoveMember.RemoveCircleMemberActivity;
-import com.kl360.findmyfamilyandfriends.HomeScreen.FragmentLocation.Settings.CircleManagement.ViewMember.ViewCircleMemberActivity;
-import com.kl360.findmyfamilyandfriends.SharedPreference.SharedPreference;
-import com.kl360.findmyfamilyandfriends.Util.Constants;
-import com.kl360.findmyfamilyandfriends.databinding.ActivityCircleManagementBinding;
+import com.care360.findmyfamilyandfriends.HomeScreen.FragmentLocation.AddMember.AddMemberActivity;
+import com.care360.findmyfamilyandfriends.HomeScreen.FragmentLocation.Settings.CircleManagement.RemoveMember.RemoveCircleMemberActivity;
+import com.care360.findmyfamilyandfriends.HomeScreen.FragmentLocation.Settings.CircleManagement.ViewMember.ViewCircleMemberActivity;
+import com.care360.findmyfamilyandfriends.SharedPreference.SharedPreference;
+import com.care360.findmyfamilyandfriends.Util.Constants;
+import com.care360.findmyfamilyandfriends.databinding.ActivityCircleManagementBinding;
 
 public class CircleManagementActivity extends AppCompatActivity {
 

@@ -1,4 +1,4 @@
-package com.kl360.findmyfamilyandfriends.HomeScreen.FragmentSafety.EmergencyContacts.Dashboard;
+package com.care360.findmyfamilyandfriends.HomeScreen.FragmentSafety.EmergencyContacts.Dashboard;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -7,9 +7,9 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.kl360.findmyfamilyandfriends.HomeScreen.FragmentSafety.EmergencyRoomDB.EmergencyContactEntity;
-import com.kl360.findmyfamilyandfriends.Util.Commons;
-import com.kl360.findmyfamilyandfriends.databinding.LayoutAddedContactItemBinding;
+import com.care360.findmyfamilyandfriends.HomeScreen.FragmentSafety.EmergencyRoomDB.EmergencyContactEntity;
+import com.care360.findmyfamilyandfriends.Util.Commons;
+import com.care360.findmyfamilyandfriends.databinding.LayoutAddedContactItemBinding;
 
 import java.util.List;
 

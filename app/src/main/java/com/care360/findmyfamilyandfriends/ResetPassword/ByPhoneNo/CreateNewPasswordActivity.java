@@ -1,4 +1,4 @@
-package com.kl360.findmyfamilyandfriends.ResetPassword.ByPhoneNo;
+package com.care360.findmyfamilyandfriends.ResetPassword.ByPhoneNo;
 
 import android.app.Dialog;
 import android.content.Intent;
@@ -15,11 +15,11 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.google.firebase.auth.FirebaseAuth;
-import com.kl360.findmyfamilyandfriends.HomeScreen.FragmentLocation.Settings.Account.AccountDashboardActivity;
-import com.kl360.findmyfamilyandfriends.R;
-import com.kl360.findmyfamilyandfriends.Util.Commons;
-import com.kl360.findmyfamilyandfriends.databinding.ActivityCreateNewPasswordBinding;
-import com.kl360.findmyfamilyandfriends.databinding.LayoutRecentAuthenticationBinding;
+import com.care360.findmyfamilyandfriends.HomeScreen.FragmentLocation.Settings.Account.AccountDashboardActivity;
+import com.care360.findmyfamilyandfriends.R;
+import com.care360.findmyfamilyandfriends.Util.Commons;
+import com.care360.findmyfamilyandfriends.databinding.ActivityCreateNewPasswordBinding;
+import com.care360.findmyfamilyandfriends.databinding.LayoutRecentAuthenticationBinding;
 
 public class CreateNewPasswordActivity extends AppCompatActivity {
 

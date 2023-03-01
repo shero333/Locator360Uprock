@@ -1,4 +1,4 @@
-package com.kl360.findmyfamilyandfriends.OneTimeScreens;
+package com.care360.findmyfamilyandfriends.OneTimeScreens;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -6,7 +6,7 @@ import android.view.View;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.kl360.findmyfamilyandfriends.databinding.ActivityGeneralScreenOneBinding;
+import com.care360.findmyfamilyandfriends.databinding.ActivityGeneralScreenOneBinding;
 
 public class GeneralScreenOneActivity extends AppCompatActivity {
 

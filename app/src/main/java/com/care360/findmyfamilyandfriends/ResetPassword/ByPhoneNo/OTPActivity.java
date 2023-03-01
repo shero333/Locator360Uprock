@@ -1,4 +1,4 @@
-package com.kl360.findmyfamilyandfriends.ResetPassword.ByPhoneNo;
+package com.care360.findmyfamilyandfriends.ResetPassword.ByPhoneNo;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
@@ -25,11 +25,11 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.PhoneAuthCredential;
 import com.google.firebase.auth.PhoneAuthOptions;
 import com.google.firebase.auth.PhoneAuthProvider;
-import com.kl360.findmyfamilyandfriends.R;
-import com.kl360.findmyfamilyandfriends.SharedPreference.SharedPreference;
-import com.kl360.findmyfamilyandfriends.SignUp.NameSignUpActivity;
-import com.kl360.findmyfamilyandfriends.Util.Constants;
-import com.kl360.findmyfamilyandfriends.databinding.ActivityOtpBinding;
+import com.care360.findmyfamilyandfriends.R;
+import com.care360.findmyfamilyandfriends.SharedPreference.SharedPreference;
+import com.care360.findmyfamilyandfriends.SignUp.NameSignUpActivity;
+import com.care360.findmyfamilyandfriends.Util.Constants;
+import com.care360.findmyfamilyandfriends.databinding.ActivityOtpBinding;
 
 import java.util.ArrayList;
 import java.util.List;

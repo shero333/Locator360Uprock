@@ -1,4 +1,4 @@
-package com.kl360.findmyfamilyandfriends.Util;
+package com.care360.findmyfamilyandfriends.Util;
 
 public interface Constants {
 

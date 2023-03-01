@@ -1,4 +1,4 @@
-package com.kl360.findmyfamilyandfriends.ResetPassword.ByEmail;
+package com.care360.findmyfamilyandfriends.ResetPassword.ByEmail;
 
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
@@ -19,9 +19,9 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.kl360.findmyfamilyandfriends.R;
-import com.kl360.findmyfamilyandfriends.StartScreen.StartScreenActivity;
-import com.kl360.findmyfamilyandfriends.databinding.ActivityCheckEmailBinding;
+import com.care360.findmyfamilyandfriends.R;
+import com.care360.findmyfamilyandfriends.StartScreen.StartScreenActivity;
+import com.care360.findmyfamilyandfriends.databinding.ActivityCheckEmailBinding;
 
 import java.util.ArrayList;
 import java.util.List;

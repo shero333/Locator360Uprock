@@ -1,4 +1,4 @@
-package com.kl360.findmyfamilyandfriends.OneTimeScreens;
+package com.care360.findmyfamilyandfriends.OneTimeScreens;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -9,11 +9,11 @@ import android.widget.EditText;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.kl360.findmyfamilyandfriends.CreateCircle.CreateCircleActivity;
-import com.kl360.findmyfamilyandfriends.R;
-import com.kl360.findmyfamilyandfriends.Util.Commons;
-import com.kl360.findmyfamilyandfriends.Util.Constants;
-import com.kl360.findmyfamilyandfriends.databinding.ActivityJoinCircleFirstScreenBinding;
+import com.care360.findmyfamilyandfriends.CreateCircle.CreateCircleActivity;
+import com.care360.findmyfamilyandfriends.R;
+import com.care360.findmyfamilyandfriends.Util.Commons;
+import com.care360.findmyfamilyandfriends.Util.Constants;
+import com.care360.findmyfamilyandfriends.databinding.ActivityJoinCircleFirstScreenBinding;
 
 import java.util.ArrayList;
 import java.util.List;

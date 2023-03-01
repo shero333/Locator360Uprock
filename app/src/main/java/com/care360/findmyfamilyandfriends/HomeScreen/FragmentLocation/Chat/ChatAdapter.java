@@ -1,4 +1,4 @@
-package com.kl360.findmyfamilyandfriends.HomeScreen.FragmentLocation.Chat;
+package com.care360.findmyfamilyandfriends.HomeScreen.FragmentLocation.Chat;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -9,9 +9,9 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.firebase.auth.FirebaseAuth;
-import com.kl360.findmyfamilyandfriends.HomeScreen.FragmentLocation.Chat.DB.MessageEntity;
-import com.kl360.findmyfamilyandfriends.Util.Commons;
-import com.kl360.findmyfamilyandfriends.databinding.LayoutMessagesItemBinding;
+import com.care360.findmyfamilyandfriends.HomeScreen.FragmentLocation.Chat.DB.MessageEntity;
+import com.care360.findmyfamilyandfriends.Util.Commons;
+import com.care360.findmyfamilyandfriends.databinding.LayoutMessagesItemBinding;
 
 import java.util.List;
 

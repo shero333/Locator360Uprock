@@ -1,4 +1,4 @@
-package com.kl360.findmyfamilyandfriends.HomeScreen;
+package com.care360.findmyfamilyandfriends.HomeScreen;
 
 import android.content.res.ColorStateList;
 import android.os.Bundle;
@@ -9,10 +9,10 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
-import com.kl360.findmyfamilyandfriends.HomeScreen.FragmentLocation.LocationFragment;
-import com.kl360.findmyfamilyandfriends.HomeScreen.FragmentSafety.FragmentSafety;
-import com.kl360.findmyfamilyandfriends.R;
-import com.kl360.findmyfamilyandfriends.databinding.ActivityHomeBinding;
+import com.care360.findmyfamilyandfriends.HomeScreen.FragmentLocation.LocationFragment;
+import com.care360.findmyfamilyandfriends.HomeScreen.FragmentSafety.FragmentSafety;
+import com.care360.findmyfamilyandfriends.R;
+import com.care360.findmyfamilyandfriends.databinding.ActivityHomeBinding;
 
 public class HomeActivity extends AppCompatActivity {
 

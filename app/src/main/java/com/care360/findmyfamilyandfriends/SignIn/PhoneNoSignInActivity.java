@@ -1,9 +1,9 @@
-package com.kl360.findmyfamilyandfriends.SignIn;
+package com.care360.findmyfamilyandfriends.SignIn;
 
-import static com.kl360.findmyfamilyandfriends.Util.Constants.EMAIL;
-import static com.kl360.findmyfamilyandfriends.Util.Constants.FIRST_NAME;
-import static com.kl360.findmyfamilyandfriends.Util.Constants.PHONE_NO;
-import static com.kl360.findmyfamilyandfriends.Util.Constants.USERS_COLLECTION;
+import static com.care360.findmyfamilyandfriends.Util.Constants.EMAIL;
+import static com.care360.findmyfamilyandfriends.Util.Constants.FIRST_NAME;
+import static com.care360.findmyfamilyandfriends.Util.Constants.PHONE_NO;
+import static com.care360.findmyfamilyandfriends.Util.Constants.USERS_COLLECTION;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -19,11 +19,11 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.i18n.phonenumbers.NumberParseException;
 import com.google.i18n.phonenumbers.PhoneNumberUtil;
 import com.google.i18n.phonenumbers.Phonenumber;
-import com.kl360.findmyfamilyandfriends.R;
-import com.kl360.findmyfamilyandfriends.SharedPreference.SharedPreference;
-import com.kl360.findmyfamilyandfriends.SignIn.model.User;
-import com.kl360.findmyfamilyandfriends.SignUp.PhoneNoSignUpActivity;
-import com.kl360.findmyfamilyandfriends.databinding.ActivityPhoneNoSignInBinding;
+import com.care360.findmyfamilyandfriends.R;
+import com.care360.findmyfamilyandfriends.SharedPreference.SharedPreference;
+import com.care360.findmyfamilyandfriends.SignIn.model.User;
+import com.care360.findmyfamilyandfriends.SignUp.PhoneNoSignUpActivity;
+import com.care360.findmyfamilyandfriends.databinding.ActivityPhoneNoSignInBinding;
 
 import java.util.ArrayList;
 import java.util.List;

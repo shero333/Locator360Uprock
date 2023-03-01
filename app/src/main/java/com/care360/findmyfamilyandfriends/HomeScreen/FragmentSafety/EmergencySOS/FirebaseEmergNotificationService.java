@@ -1,4 +1,4 @@
-package com.kl360.findmyfamilyandfriends.HomeScreen.FragmentSafety.EmergencySOS;
+package com.care360.findmyfamilyandfriends.HomeScreen.FragmentSafety.EmergencySOS;
 
 import android.annotation.SuppressLint;
 import android.app.Notification;
@@ -13,12 +13,12 @@ import androidx.annotation.NonNull;
 
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
-import com.kl360.findmyfamilyandfriends.HomeScreen.FragmentLocation.Chat.ChatDashboardActivity;
-import com.kl360.findmyfamilyandfriends.HomeScreen.FragmentLocation.Chat.ChatDetailActivity;
-import com.kl360.findmyfamilyandfriends.HomeScreen.FragmentLocation.Chat.DB.MessageEntity;
-import com.kl360.findmyfamilyandfriends.HomeScreen.FragmentSafety.EmergencyRoomDB.RoomDBHelper;
-import com.kl360.findmyfamilyandfriends.R;
-import com.kl360.findmyfamilyandfriends.Util.Constants;
+import com.care360.findmyfamilyandfriends.HomeScreen.FragmentLocation.Chat.ChatDashboardActivity;
+import com.care360.findmyfamilyandfriends.HomeScreen.FragmentLocation.Chat.ChatDetailActivity;
+import com.care360.findmyfamilyandfriends.HomeScreen.FragmentLocation.Chat.DB.MessageEntity;
+import com.care360.findmyfamilyandfriends.HomeScreen.FragmentSafety.EmergencyRoomDB.RoomDBHelper;
+import com.care360.findmyfamilyandfriends.R;
+import com.care360.findmyfamilyandfriends.Util.Constants;
 
 @SuppressLint({"MissingFirebaseInstanceTokenRefresh", "UnspecifiedImmutableFlag"})
 

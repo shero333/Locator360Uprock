@@ -4,13 +4,13 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".HomeScreen.HomeActivity">
+    tools:context="com.care360.findmyfamilyandfriends.HomeScreen">
 
     <FrameLayout
         android:id="@+id/frame_layout_home_screen"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_marginBottom="@dimen/_3sdp"
+        android:background="@color/white"
         app:layout_constraintBottom_toTopOf="@id/bottom_constraint_home_screen"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -18,7 +18,6 @@
         android:id="@+id/bottom_constraint_home_screen"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="@dimen/_10sdp"
         app:layout_constraintBottom_toBottomOf="parent">
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -26,11 +25,11 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:background="@drawable/drawable_grey_bottom"
+            android:layout_margin="5dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@id/cons_safety_home_screen"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintWidth_percent="0.5">
+            app:layout_constraintTop_toTopOf="parent">
 
             <com.google.android.material.imageview.ShapeableImageView
                 android:id="@+id/img_view_location"
@@ -61,6 +60,7 @@
             android:id="@+id/cons_safety_home_screen"
             android:layout_width="0dp"
             android:layout_height="match_parent"
+            android:layout_margin="5dp"
             android:background="@drawable/drawable_white_bottom"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"

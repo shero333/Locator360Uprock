@@ -1,4 +1,4 @@
-package com.kl360.findmyfamilyandfriends.SignUp;
+package com.care360.findmyfamilyandfriends.SignUp;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -8,9 +8,9 @@ import android.view.View;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.kl360.findmyfamilyandfriends.R;
-import com.kl360.findmyfamilyandfriends.SharedPreference.SharedPreference;
-import com.kl360.findmyfamilyandfriends.databinding.ActivityNameSignUpBinding;
+import com.care360.findmyfamilyandfriends.R;
+import com.care360.findmyfamilyandfriends.SharedPreference.SharedPreference;
+import com.care360.findmyfamilyandfriends.databinding.ActivityNameSignUpBinding;
 
 public class NameSignUpActivity extends AppCompatActivity {
 

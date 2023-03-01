@@ -1,4 +1,4 @@
-package com.kl360.findmyfamilyandfriends.SignIn;
+package com.care360.findmyfamilyandfriends.SignIn;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -8,11 +8,11 @@ import android.view.View;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.kl360.findmyfamilyandfriends.HomeScreen.HomeActivity;
-import com.kl360.findmyfamilyandfriends.R;
-import com.kl360.findmyfamilyandfriends.ResetPassword.ByEmail.ResetPasswordEmailActivity;
-import com.kl360.findmyfamilyandfriends.Util.Commons;
-import com.kl360.findmyfamilyandfriends.databinding.ActivityEnterPasswordSignInBinding;
+import com.care360.findmyfamilyandfriends.HomeScreen.HomeActivity;
+import com.care360.findmyfamilyandfriends.R;
+import com.care360.findmyfamilyandfriends.ResetPassword.ByEmail.ResetPasswordEmailActivity;
+import com.care360.findmyfamilyandfriends.Util.Commons;
+import com.care360.findmyfamilyandfriends.databinding.ActivityEnterPasswordSignInBinding;
 
 public class EnterPasswordSignInActivity extends AppCompatActivity {
 

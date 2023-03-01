@@ -1,4 +1,4 @@
-package com.kl360.findmyfamilyandfriends.HomeScreen.FragmentLocation.Settings.Account;
+package com.care360.findmyfamilyandfriends.HomeScreen.FragmentLocation.Settings.Account;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -19,12 +19,12 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.WriteBatch;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
-import com.kl360.findmyfamilyandfriends.HomeScreen.FragmentLocation.JoinCircle.CircleModel;
-import com.kl360.findmyfamilyandfriends.ResetPassword.ByPhoneNo.ResetPasswordPhoneActivity;
-import com.kl360.findmyfamilyandfriends.StartScreen.StartScreenActivity;
-import com.kl360.findmyfamilyandfriends.Util.Commons;
-import com.kl360.findmyfamilyandfriends.Util.Constants;
-import com.kl360.findmyfamilyandfriends.databinding.ActivityAccountDashboardBinding;
+import com.care360.findmyfamilyandfriends.HomeScreen.FragmentLocation.JoinCircle.CircleModel;
+import com.care360.findmyfamilyandfriends.ResetPassword.ByPhoneNo.ResetPasswordPhoneActivity;
+import com.care360.findmyfamilyandfriends.StartScreen.StartScreenActivity;
+import com.care360.findmyfamilyandfriends.Util.Commons;
+import com.care360.findmyfamilyandfriends.Util.Constants;
+import com.care360.findmyfamilyandfriends.databinding.ActivityAccountDashboardBinding;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -1,4 +1,4 @@
-package com.kl360.findmyfamilyandfriends.HomeScreen.FragmentSafety.EmergencySOS;
+package com.care360.findmyfamilyandfriends.HomeScreen.FragmentSafety.EmergencySOS;
 
 import android.content.Context;
 

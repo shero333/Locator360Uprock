@@ -1,6 +1,6 @@
-package com.kl360.findmyfamilyandfriends.HomeScreen.FragmentLocation.Chat;
+package com.care360.findmyfamilyandfriends.HomeScreen.FragmentLocation.Chat;
 
-import static com.kl360.findmyfamilyandfriends.Util.Constants.USERS_COLLECTION;
+import static com.care360.findmyfamilyandfriends.Util.Constants.USERS_COLLECTION;
 
 import android.app.Dialog;
 import android.content.Intent;
@@ -21,18 +21,18 @@ import com.bumptech.glide.Glide;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.kl360.findmyfamilyandfriends.HomeScreen.FragmentLocation.Chat.DB.MessageEntity;
-import com.kl360.findmyfamilyandfriends.HomeScreen.FragmentLocation.Chat.Model.UserInfo;
-import com.kl360.findmyfamilyandfriends.HomeScreen.FragmentSafety.EmergencyRoomDB.RoomDBHelper;
-import com.kl360.findmyfamilyandfriends.HomeScreen.FragmentSafety.EmergencySOS.VolleySingleton;
-import com.kl360.findmyfamilyandfriends.HomeScreen.HomeActivity;
-import com.kl360.findmyfamilyandfriends.R;
-import com.kl360.findmyfamilyandfriends.SharedPreference.SharedPreference;
-import com.kl360.findmyfamilyandfriends.StartScreen.StartScreenActivity;
-import com.kl360.findmyfamilyandfriends.Util.Commons;
-import com.kl360.findmyfamilyandfriends.Util.Constants;
-import com.kl360.findmyfamilyandfriends.databinding.ActivityChatDetailBinding;
-import com.kl360.findmyfamilyandfriends.databinding.LayoutChatImageDialogBinding;
+import com.care360.findmyfamilyandfriends.HomeScreen.FragmentLocation.Chat.DB.MessageEntity;
+import com.care360.findmyfamilyandfriends.HomeScreen.FragmentLocation.Chat.Model.UserInfo;
+import com.care360.findmyfamilyandfriends.HomeScreen.FragmentSafety.EmergencyRoomDB.RoomDBHelper;
+import com.care360.findmyfamilyandfriends.HomeScreen.FragmentSafety.EmergencySOS.VolleySingleton;
+import com.care360.findmyfamilyandfriends.HomeScreen.HomeActivity;
+import com.care360.findmyfamilyandfriends.R;
+import com.care360.findmyfamilyandfriends.SharedPreference.SharedPreference;
+import com.care360.findmyfamilyandfriends.StartScreen.StartScreenActivity;
+import com.care360.findmyfamilyandfriends.Util.Commons;
+import com.care360.findmyfamilyandfriends.Util.Constants;
+import com.care360.findmyfamilyandfriends.databinding.ActivityChatDetailBinding;
+import com.care360.findmyfamilyandfriends.databinding.LayoutChatImageDialogBinding;
 
 import org.json.JSONException;
 import org.json.JSONObject;

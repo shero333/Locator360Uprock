@@ -1,6 +1,6 @@
-package com.kl360.findmyfamilyandfriends.CreateCircle;
+package com.care360.findmyfamilyandfriends.CreateCircle;
 
-import static com.kl360.findmyfamilyandfriends.Util.Constants.USERS_COLLECTION;
+import static com.care360.findmyfamilyandfriends.Util.Constants.USERS_COLLECTION;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -9,16 +9,16 @@ import android.view.View;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.care360.findmyfamilyandfriends.databinding.ActivityShareCircleCodeBinding;
+import com.google.firebase.BuildConfig;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.kl360.findmyfamilyandfriends.BuildConfig;
-import com.kl360.findmyfamilyandfriends.OneTimeScreens.AddProfilePictureActivity;
-import com.kl360.findmyfamilyandfriends.SharedPreference.SharedPreference;
-import com.kl360.findmyfamilyandfriends.Util.Commons;
-import com.kl360.findmyfamilyandfriends.Util.Constants;
-import com.kl360.findmyfamilyandfriends.databinding.ActivityShareCircleCodeBinding;
+import com.care360.findmyfamilyandfriends.OneTimeScreens.AddProfilePictureActivity;
+import com.care360.findmyfamilyandfriends.SharedPreference.SharedPreference;
+import com.care360.findmyfamilyandfriends.Util.Commons;
+import com.care360.findmyfamilyandfriends.Util.Constants;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -70,8 +70,10 @@ public class ShareCircleCodeActivity extends AppCompatActivity {
         Intent intent = new Intent(Intent.ACTION_SEND);
         intent.setType("text/plain");
         String body = "You're invited to join circle on Find My Family.\nCircle Name: "+SharedPreference.getCircleName()+"\nJoin Code: "+SharedPreference.getCircleInviteCode()
+
                 +"\n\nHaven't download this application yet? Download now from:\n\n"+
                 "https://play.google.com/store/apps/details?id=" + BuildConfig.APPLICATION_ID;
+
         intent.putExtra(Intent.EXTRA_TEXT, body);
         startActivity(Intent.createChooser(intent, "Share via"));
     }

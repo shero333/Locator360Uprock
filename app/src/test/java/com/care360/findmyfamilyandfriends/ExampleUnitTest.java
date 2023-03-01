@@ -1,4 +1,4 @@
-package com.kl360.findmyfamilyandfriends;
+package com.care360.findmyfamilyandfriends;
 
 import org.junit.Test;
 

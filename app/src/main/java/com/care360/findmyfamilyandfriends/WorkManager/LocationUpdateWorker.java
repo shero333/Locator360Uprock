@@ -1,4 +1,4 @@
-package com.kl360.findmyfamilyandfriends.WorkManager;
+package com.care360.findmyfamilyandfriends.WorkManager;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -15,9 +15,9 @@ import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.kl360.findmyfamilyandfriends.HomeScreen.FragmentLocation.Battery.BatteryStatusModelClass;
-import com.kl360.findmyfamilyandfriends.Util.Commons;
-import com.kl360.findmyfamilyandfriends.Util.Constants;
+import com.care360.findmyfamilyandfriends.HomeScreen.FragmentLocation.Battery.BatteryStatusModelClass;
+import com.care360.findmyfamilyandfriends.Util.Commons;
+import com.care360.findmyfamilyandfriends.Util.Constants;
 
 import java.io.IOException;
 import java.util.HashMap;

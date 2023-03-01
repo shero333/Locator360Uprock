@@ -1,4 +1,4 @@
-package com.kl360.findmyfamilyandfriends.HomeScreen.FragmentLocation.JoinCircle;
+package com.care360.findmyfamilyandfriends.HomeScreen.FragmentLocation.JoinCircle;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -12,11 +12,11 @@ import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.kl360.findmyfamilyandfriends.OneTimeScreens.JoinCircleActivity;
-import com.kl360.findmyfamilyandfriends.R;
-import com.kl360.findmyfamilyandfriends.Util.Commons;
-import com.kl360.findmyfamilyandfriends.Util.Constants;
-import com.kl360.findmyfamilyandfriends.databinding.ActivityJoinCircleMainBinding;
+import com.care360.findmyfamilyandfriends.OneTimeScreens.JoinCircleActivity;
+import com.care360.findmyfamilyandfriends.R;
+import com.care360.findmyfamilyandfriends.Util.Commons;
+import com.care360.findmyfamilyandfriends.Util.Constants;
+import com.care360.findmyfamilyandfriends.databinding.ActivityJoinCircleMainBinding;
 
 import java.util.ArrayList;
 import java.util.List;

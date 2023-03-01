@@ -1,6 +1,6 @@
-package com.kl360.findmyfamilyandfriends.HomeScreen.FragmentSafety.EmergencySOS;
+package com.care360.findmyfamilyandfriends.HomeScreen.FragmentSafety.EmergencySOS;
 
-import static com.kl360.findmyfamilyandfriends.Util.Constants.USERS_COLLECTION;
+import static com.care360.findmyfamilyandfriends.Util.Constants.USERS_COLLECTION;
 
 import android.content.Intent;
 import android.location.Location;
@@ -22,12 +22,12 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.kl360.findmyfamilyandfriends.HomeScreen.HomeActivity;
-import com.kl360.findmyfamilyandfriends.R;
-import com.kl360.findmyfamilyandfriends.StartScreen.StartScreenActivity;
-import com.kl360.findmyfamilyandfriends.Util.Commons;
-import com.kl360.findmyfamilyandfriends.Util.Constants;
-import com.kl360.findmyfamilyandfriends.databinding.ActivityEmergencyLocationBinding;
+import com.care360.findmyfamilyandfriends.HomeScreen.HomeActivity;
+import com.care360.findmyfamilyandfriends.R;
+import com.care360.findmyfamilyandfriends.StartScreen.StartScreenActivity;
+import com.care360.findmyfamilyandfriends.Util.Commons;
+import com.care360.findmyfamilyandfriends.Util.Constants;
+import com.care360.findmyfamilyandfriends.databinding.ActivityEmergencyLocationBinding;
 
 public class EmergencyLocationActivity extends AppCompatActivity implements OnMapReadyCallback {
 

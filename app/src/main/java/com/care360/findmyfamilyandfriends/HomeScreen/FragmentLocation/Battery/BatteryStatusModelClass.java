@@ -1,4 +1,4 @@
-package com.kl360.findmyfamilyandfriends.HomeScreen.FragmentLocation.Battery;
+package com.care360.findmyfamilyandfriends.HomeScreen.FragmentLocation.Battery;
 
 public class BatteryStatusModelClass {
 

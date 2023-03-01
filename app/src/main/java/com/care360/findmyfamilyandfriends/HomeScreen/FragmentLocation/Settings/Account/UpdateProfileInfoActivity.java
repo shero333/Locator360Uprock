@@ -1,8 +1,8 @@
-package com.kl360.findmyfamilyandfriends.HomeScreen.FragmentLocation.Settings.Account;
+package com.care360.findmyfamilyandfriends.HomeScreen.FragmentLocation.Settings.Account;
 
-import static com.kl360.findmyfamilyandfriends.Util.Constants.REQUEST_CODE_CAMERA;
-import static com.kl360.findmyfamilyandfriends.Util.Constants.REQUEST_CODE_STORAGE;
-import static com.kl360.findmyfamilyandfriends.Util.Constants.USERS_COLLECTION;
+import static com.care360.findmyfamilyandfriends.Util.Constants.REQUEST_CODE_CAMERA;
+import static com.care360.findmyfamilyandfriends.Util.Constants.REQUEST_CODE_STORAGE;
+import static com.care360.findmyfamilyandfriends.Util.Constants.USERS_COLLECTION;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
@@ -34,12 +34,12 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
-import com.kl360.findmyfamilyandfriends.Permission.Permissions;
-import com.kl360.findmyfamilyandfriends.R;
-import com.kl360.findmyfamilyandfriends.SharedPreference.SharedPreference;
-import com.kl360.findmyfamilyandfriends.Util.Commons;
-import com.kl360.findmyfamilyandfriends.Util.Constants;
-import com.kl360.findmyfamilyandfriends.databinding.ActivityProfileInfoUpdateBinding;
+import com.care360.findmyfamilyandfriends.Permission.Permissions;
+import com.care360.findmyfamilyandfriends.R;
+import com.care360.findmyfamilyandfriends.SharedPreference.SharedPreference;
+import com.care360.findmyfamilyandfriends.Util.Commons;
+import com.care360.findmyfamilyandfriends.Util.Constants;
+import com.care360.findmyfamilyandfriends.databinding.ActivityProfileInfoUpdateBinding;
 
 import java.io.File;
 import java.io.IOException;
@@ -407,7 +407,7 @@ public class UpdateProfileInfoActivity extends AppCompatActivity {
             // Continue only if the File was successfully created
             if (photoFile != null) {
                 Uri photoURI = FileProvider.getUriForFile(this,
-                        "com.kl360.android.findmyfamilyandfriends",
+                        "com.care360.android.findmyfamilyandfriends",
                         photoFile);
 
                 Log.i(TAG, "uri: " + photoURI);

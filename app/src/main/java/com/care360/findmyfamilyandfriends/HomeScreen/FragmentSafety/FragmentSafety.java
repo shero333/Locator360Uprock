@@ -1,4 +1,4 @@
-package com.kl360.findmyfamilyandfriends.HomeScreen.FragmentSafety;
+package com.care360.findmyfamilyandfriends.HomeScreen.FragmentSafety;
 
 import android.Manifest;
 import android.app.Dialog;
@@ -18,14 +18,14 @@ import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 
-import com.kl360.findmyfamilyandfriends.HomeScreen.FragmentSafety.EmergencyContacts.Dashboard.EmergencyContactDashboardActivity;
-import com.kl360.findmyfamilyandfriends.HomeScreen.FragmentSafety.EmergencyContacts.LandingActivity.EmergencyContactLandingActivity;
-import com.kl360.findmyfamilyandfriends.HomeScreen.FragmentSafety.EmergencySOS.EmergencySOSActivity;
-import com.kl360.findmyfamilyandfriends.Permission.Permissions;
-import com.kl360.findmyfamilyandfriends.SharedPreference.SharedPreference;
-import com.kl360.findmyfamilyandfriends.Util.Commons;
-import com.kl360.findmyfamilyandfriends.databinding.FragmentSafetyBinding;
-import com.kl360.findmyfamilyandfriends.databinding.LayoutSendSmsPermissionDialogBinding;
+import com.care360.findmyfamilyandfriends.HomeScreen.FragmentSafety.EmergencyContacts.Dashboard.EmergencyContactDashboardActivity;
+import com.care360.findmyfamilyandfriends.HomeScreen.FragmentSafety.EmergencyContacts.LandingActivity.EmergencyContactLandingActivity;
+import com.care360.findmyfamilyandfriends.HomeScreen.FragmentSafety.EmergencySOS.EmergencySOSActivity;
+import com.care360.findmyfamilyandfriends.Permission.Permissions;
+import com.care360.findmyfamilyandfriends.SharedPreference.SharedPreference;
+import com.care360.findmyfamilyandfriends.Util.Commons;
+import com.care360.findmyfamilyandfriends.databinding.FragmentSafetyBinding;
+import com.care360.findmyfamilyandfriends.databinding.LayoutSendSmsPermissionDialogBinding;
 
 public class FragmentSafety extends Fragment {
 

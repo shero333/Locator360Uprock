@@ -1,4 +1,4 @@
-package com.kl360.findmyfamilyandfriends.SignUp;
+package com.care360.findmyfamilyandfriends.SignUp;
 
 import android.content.Intent;
 import android.graphics.Color;
@@ -23,11 +23,11 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.i18n.phonenumbers.NumberParseException;
 import com.google.i18n.phonenumbers.PhoneNumberUtil;
 import com.google.i18n.phonenumbers.Phonenumber;
-import com.kl360.findmyfamilyandfriends.R;
-import com.kl360.findmyfamilyandfriends.ResetPassword.ByPhoneNo.OTPActivity;
-import com.kl360.findmyfamilyandfriends.SharedPreference.SharedPreference;
-import com.kl360.findmyfamilyandfriends.Util.Constants;
-import com.kl360.findmyfamilyandfriends.databinding.ActivityPhoneNoSignUpBinding;
+import com.care360.findmyfamilyandfriends.R;
+import com.care360.findmyfamilyandfriends.ResetPassword.ByPhoneNo.OTPActivity;
+import com.care360.findmyfamilyandfriends.SharedPreference.SharedPreference;
+import com.care360.findmyfamilyandfriends.Util.Constants;
+import com.care360.findmyfamilyandfriends.databinding.ActivityPhoneNoSignUpBinding;
 
 import java.util.ArrayList;
 import java.util.List;

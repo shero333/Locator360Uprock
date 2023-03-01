@@ -1,4 +1,4 @@
-package com.kl360.findmyfamilyandfriends.Application;
+package com.care360.findmyfamilyandfriends.Application;
 
 import android.app.Application;
 

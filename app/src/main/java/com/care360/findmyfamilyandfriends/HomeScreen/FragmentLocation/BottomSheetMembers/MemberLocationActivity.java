@@ -1,4 +1,4 @@
-package com.kl360.findmyfamilyandfriends.HomeScreen.FragmentLocation.BottomSheetMembers;
+package com.care360.findmyfamilyandfriends.HomeScreen.FragmentLocation.BottomSheetMembers;
 
 import android.app.Dialog;
 import android.content.Intent;
@@ -24,12 +24,12 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.kl360.findmyfamilyandfriends.SharedPreference.SharedPreference;
-import com.kl360.findmyfamilyandfriends.Util.Commons;
-import com.kl360.findmyfamilyandfriends.Util.Constants;
-import com.kl360.findmyfamilyandfriends.databinding.ActivityMemberLocationBinding;
-import com.kl360.findmyfamilyandfriends.databinding.CustomMarkerBinding;
-import com.kl360.findmyfamilyandfriends.databinding.LayoutCalendarViewBinding;
+import com.care360.findmyfamilyandfriends.SharedPreference.SharedPreference;
+import com.care360.findmyfamilyandfriends.Util.Commons;
+import com.care360.findmyfamilyandfriends.Util.Constants;
+import com.care360.findmyfamilyandfriends.databinding.ActivityMemberLocationBinding;
+import com.care360.findmyfamilyandfriends.databinding.CustomMarkerBinding;
+import com.care360.findmyfamilyandfriends.databinding.LayoutCalendarViewBinding;
 
 import java.util.ArrayList;
 import java.util.Calendar;

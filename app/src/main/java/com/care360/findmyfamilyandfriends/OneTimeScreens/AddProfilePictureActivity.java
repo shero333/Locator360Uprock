@@ -1,7 +1,7 @@
-package com.kl360.findmyfamilyandfriends.OneTimeScreens;
+package com.care360.findmyfamilyandfriends.OneTimeScreens;
 
-import static com.kl360.findmyfamilyandfriends.Util.Constants.REQUEST_CODE_CAMERA;
-import static com.kl360.findmyfamilyandfriends.Util.Constants.REQUEST_CODE_STORAGE;
+import static com.care360.findmyfamilyandfriends.Util.Constants.REQUEST_CODE_CAMERA;
+import static com.care360.findmyfamilyandfriends.Util.Constants.REQUEST_CODE_STORAGE;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
@@ -26,11 +26,11 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.FileProvider;
 
 import com.bumptech.glide.Glide;
-import com.kl360.findmyfamilyandfriends.Permission.Permissions;
-import com.kl360.findmyfamilyandfriends.R;
-import com.kl360.findmyfamilyandfriends.SharedPreference.SharedPreference;
-import com.kl360.findmyfamilyandfriends.Util.Commons;
-import com.kl360.findmyfamilyandfriends.databinding.ActivityAddProfilePictureBinding;
+import com.care360.findmyfamilyandfriends.Permission.Permissions;
+import com.care360.findmyfamilyandfriends.R;
+import com.care360.findmyfamilyandfriends.SharedPreference.SharedPreference;
+import com.care360.findmyfamilyandfriends.Util.Commons;
+import com.care360.findmyfamilyandfriends.databinding.ActivityAddProfilePictureBinding;
 
 import java.io.File;
 import java.io.IOException;
@@ -202,7 +202,7 @@ public class AddProfilePictureActivity extends AppCompatActivity {
             // Continue only if the File was successfully created
             if (photoFile != null) {
                 Uri photoURI = FileProvider.getUriForFile(this,
-                        "com.kl360.android.findmyfamilyandfriends",
+                        "com.care360.android.findmyfamilyandfriends",
                         photoFile);
 
                 Log.i(TAG, "uri: " + photoURI);

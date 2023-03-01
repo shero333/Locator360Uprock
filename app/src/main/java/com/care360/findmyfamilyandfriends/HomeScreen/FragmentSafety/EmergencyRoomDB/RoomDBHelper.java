@@ -1,4 +1,4 @@
-package com.kl360.findmyfamilyandfriends.HomeScreen.FragmentSafety.EmergencyRoomDB;
+package com.care360.findmyfamilyandfriends.HomeScreen.FragmentSafety.EmergencyRoomDB;
 
 import android.content.Context;
 
@@ -9,9 +9,9 @@ import androidx.room.RoomDatabase;
 import androidx.room.migration.Migration;
 import androidx.sqlite.db.SupportSQLiteDatabase;
 
-import com.kl360.findmyfamilyandfriends.HomeScreen.FragmentLocation.Chat.DB.MessageDao;
-import com.kl360.findmyfamilyandfriends.HomeScreen.FragmentLocation.Chat.DB.MessageEntity;
-import com.kl360.findmyfamilyandfriends.Util.Constants;
+import com.care360.findmyfamilyandfriends.HomeScreen.FragmentLocation.Chat.DB.MessageDao;
+import com.care360.findmyfamilyandfriends.HomeScreen.FragmentLocation.Chat.DB.MessageEntity;
+import com.care360.findmyfamilyandfriends.Util.Constants;
 
 @Database(entities = {EmergencyContactEntity.class, MessageEntity.class},version = 3,exportSchema = false)
 public abstract class RoomDBHelper extends RoomDatabase {
