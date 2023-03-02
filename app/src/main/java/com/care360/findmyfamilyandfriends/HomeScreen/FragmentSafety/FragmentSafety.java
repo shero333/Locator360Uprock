@@ -7,6 +7,7 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,10 +27,27 @@ import com.care360.findmyfamilyandfriends.SharedPreference.SharedPreference;
 import com.care360.findmyfamilyandfriends.Util.Commons;
 import com.care360.findmyfamilyandfriends.databinding.FragmentSafetyBinding;
 import com.care360.findmyfamilyandfriends.databinding.LayoutSendSmsPermissionDialogBinding;
+import com.google.android.ads.nativetemplates.NativeTemplateStyle;
+import com.google.android.gms.ads.AdLoader;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.FullScreenContentCallback;
+import com.google.android.gms.ads.LoadAdError;
+import com.google.android.gms.ads.MobileAds;
+import com.google.android.gms.ads.interstitial.InterstitialAd;
+import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback;
+import com.google.android.gms.ads.nativead.NativeAd;
+
+import java.util.Objects;
 
 public class FragmentSafety extends Fragment {
 
     private FragmentSafetyBinding binding;
+
+    private InterstitialAd mInterstitialAd;
+    private AdRequest adRequest;
+
+    private AdLoader adloader;
+
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -38,16 +56,36 @@ public class FragmentSafety extends Fragment {
         binding = FragmentSafetyBinding.inflate(inflater,container,false);
         View view = binding.getRoot();
 
+        MobileAds.initialize(requireContext());
+
+        //banner
+        adRequest = new AdRequest.Builder().build();
+
+        binding.bannerAd.loadAd(adRequest);
+        setAd();
+
+        adloader = new AdLoader.Builder(requireContext(), "ca-app-pub-3940256099942544/2247696110")
+                .forNativeAd(nativeAd -> {
+
+                    binding.adTemplate.setStyles(new NativeTemplateStyle.Builder().build());
+                    binding.adTemplate.setNativeAd(nativeAd);
+
+                })
+                        .build();
+
+        adloader.loadAd(new AdRequest.Builder().build());
+
         //help alert click listener
         binding.consHelpAlert.setOnClickListener(v -> {
 
-            if(Permissions.hasSmsPermission(getContext())) {
+            if(Permissions.hasSmsPermission(requireContext())) {
                 //navigate to emergency SOS activity
                 navigateToEmergencySOSActivity();
             }
             else {
                 sendSMSPermission();
             }
+
         });
 
         //add emergency contact click listener
@@ -126,4 +164,27 @@ public class FragmentSafety extends Fragment {
         super.onDestroyView();
         binding = null;
     }
+
+    private void setAd() {
+
+        InterstitialAd.load(
+                requireContext(),
+                "ca-app-pub-3940256099942544/1033173712",
+                adRequest,
+                new InterstitialAdLoadCallback() {
+                    @Override
+                    public void onAdFailedToLoad(@NonNull LoadAdError adError) {
+
+                        Log.d("AdError", adError.toString());
+                        mInterstitialAd = null;
+                    }
+
+                    @Override
+                    public void onAdLoaded(@NonNull InterstitialAd interstitialAd) {
+                        Log.d("AdError", "Ad was loaded.");
+                        mInterstitialAd = interstitialAd;
+                    }
+                });
+    }
+
 }

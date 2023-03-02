@@ -23,7 +23,7 @@
 
     <style name="Search_View" parent="Widget.AppCompat.SearchView">
 
-        <!-- Query Text color -->
+         Query Text color
         <item name="android:textColorPrimary">@color/white</item>
         <!-- Changing the icon tint, hint icon tint, and remove text (cross) tint-->
         <item name="android:textColorSecondary">@color/white</item>

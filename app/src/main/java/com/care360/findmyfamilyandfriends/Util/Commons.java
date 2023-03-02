@@ -30,6 +30,7 @@ import android.widget.Toast;
 import androidx.appcompat.widget.AppCompatButton;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
+import com.google.android.gms.ads.FullScreenContentCallback;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -426,6 +427,7 @@ public class Commons {
                 })
                 .addOnFailureListener(e -> Log.e(TAG, "deleteFCMToken failed: " + e.getMessage()));
     }
+
 
     // interface for handling the success scenarios in sign up, sign in, and FCM token deletion
     public interface OnSuccessListenerInterface {

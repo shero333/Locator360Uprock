@@ -12,8 +12,15 @@ import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.FullScreenContentCallback;
+import com.google.android.gms.ads.LoadAdError;
+import com.google.android.gms.ads.MobileAds;
+import com.google.android.gms.ads.interstitial.InterstitialAd;
+import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.i18n.phonenumbers.NumberParseException;
@@ -31,6 +38,9 @@ import java.util.List;
 public class PhoneNoSignInActivity extends AppCompatActivity {
 
     private ActivityPhoneNoSignInBinding binding;
+
+    private InterstitialAd mInterstitialAd;
+    private AdRequest adRequest;
 
     private String countryCode;
 
@@ -52,6 +62,14 @@ public class PhoneNoSignInActivity extends AppCompatActivity {
         View view = binding.getRoot();
         setContentView(view);
 
+        MobileAds.initialize(this);
+
+        //banner
+        adRequest = new AdRequest.Builder().build();
+
+        binding.bannerAd.loadAd(adRequest);
+        setAd();
+
         //initialize Firestore
         fStore = FirebaseFirestore.getInstance();
 
@@ -62,12 +80,38 @@ public class PhoneNoSignInActivity extends AppCompatActivity {
         binding.edtPhoneSignIn.addTextChangedListener(numberTextWatcher);
 
         //button continue click listener
-        binding.btnContPhoneSignIn.setOnClickListener(v -> buttonCLickListener());
+        binding.btnContPhoneSignIn.setOnClickListener(v -> {
+
+            mInterstitialAd.show(this);
+
+            mInterstitialAd.setFullScreenContentCallback(new FullScreenContentCallback() {
+                @Override
+                public void onAdDismissedFullScreenContent() {
+                    super.onAdDismissedFullScreenContent();
+
+                    setAd();
+                    buttonCLickListener();
+
+                }
+            });
+        });
 
         //Textview login with email click listener
         binding.txtSignInWithEmail.setOnClickListener(v -> {
-            startActivity(new Intent(this,EmailSignInActivity.class));
-            finish();
+
+            mInterstitialAd.show(this);
+
+            mInterstitialAd.setFullScreenContentCallback(new FullScreenContentCallback() {
+                @Override
+                public void onAdDismissedFullScreenContent() {
+                    super.onAdDismissedFullScreenContent();
+
+                    setAd();
+                    startActivity(new Intent(PhoneNoSignInActivity.this,EmailSignInActivity.class));
+                    finish();
+
+                }
+            });
         });
 
     }
@@ -198,6 +242,29 @@ public class PhoneNoSignInActivity extends AppCompatActivity {
                   }
                 });
     }
+
+    private void setAd() {
+
+        InterstitialAd.load(
+                this,
+                "ca-app-pub-3940256099942544/1033173712",
+                adRequest,
+                new InterstitialAdLoadCallback() {
+                    @Override
+                    public void onAdFailedToLoad(@NonNull LoadAdError adError) {
+
+                        Log.d("AdError", adError.toString());
+                        mInterstitialAd = null;
+                    }
+
+                    @Override
+                    public void onAdLoaded(@NonNull InterstitialAd interstitialAd) {
+                        Log.d("AdError", "Ad was loaded.");
+                        mInterstitialAd = interstitialAd;
+                    }
+                });
+    }
+
 
 
 }

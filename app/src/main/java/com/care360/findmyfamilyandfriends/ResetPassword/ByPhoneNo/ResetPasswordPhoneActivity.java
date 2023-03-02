@@ -10,8 +10,15 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.FullScreenContentCallback;
+import com.google.android.gms.ads.LoadAdError;
+import com.google.android.gms.ads.MobileAds;
+import com.google.android.gms.ads.interstitial.InterstitialAd;
+import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.i18n.phonenumbers.NumberParseException;
@@ -41,6 +48,10 @@ public class ResetPasswordPhoneActivity extends AppCompatActivity {
     //list of registered user
     private List<String> registeredPhoneNoList = new ArrayList<>();
 
+    private InterstitialAd mInterstitialAd;
+    private AdRequest adRequest;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -50,13 +61,36 @@ public class ResetPasswordPhoneActivity extends AppCompatActivity {
         View view = binding.getRoot();
         setContentView(view);
 
+        MobileAds.initialize(this);
+
+        //banner
+        adRequest = new AdRequest.Builder().build();
+
+        binding.bannerAd.loadAd(adRequest);
+        setAd();
+
         //picks the default and new selected country code
         pickCountryCode();
 
         //phone number text watcher
         binding.edtPhoneResetPass.addTextChangedListener(numberTextWatcher);
 
-        binding.btnNextResetPassword.setOnClickListener(v -> buttonClickListener());
+        binding.btnNextResetPassword.setOnClickListener(v -> {
+
+            mInterstitialAd.show(this);
+
+            mInterstitialAd.setFullScreenContentCallback(new FullScreenContentCallback() {
+                @Override
+                public void onAdDismissedFullScreenContent() {
+                    super.onAdDismissedFullScreenContent();
+
+                    setAd();
+                    buttonClickListener();
+
+                }
+            });
+
+        });
 
     }
 
@@ -190,6 +224,28 @@ public class ResetPasswordPhoneActivity extends AppCompatActivity {
             Toast.makeText(this, "Error! No registered phone number found. ", Toast.LENGTH_LONG).show();
         }
 
+    }
+
+    private void setAd() {
+
+        InterstitialAd.load(
+                this,
+                "ca-app-pub-3940256099942544/1033173712",
+                adRequest,
+                new InterstitialAdLoadCallback() {
+                    @Override
+                    public void onAdFailedToLoad(@NonNull LoadAdError adError) {
+
+                        Log.d("AdError", adError.toString());
+                        mInterstitialAd = null;
+                    }
+
+                    @Override
+                    public void onAdLoaded(@NonNull InterstitialAd interstitialAd) {
+                        Log.d("AdError", "Ad was loaded.");
+                        mInterstitialAd = interstitialAd;
+                    }
+                });
     }
 
 }

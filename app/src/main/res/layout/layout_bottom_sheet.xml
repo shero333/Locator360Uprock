@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/cons_bottom_sheet"
@@ -7,7 +8,7 @@
     android:layout_height="wrap_content"
     android:background="@drawable/drawable_top_radius"
     app:behavior_hideable="false"
-    app:behavior_peekHeight="@dimen/_60sdp"
+    app:behavior_peekHeight="@dimen/_80sdp"
     app:layout_behavior="@string/bottom_sheet_behavior">
 
     <TextView
@@ -79,13 +80,16 @@
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycler_bottom_sheet_member"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/_10sdp"
         android:overScrollMode="never"
         android:paddingBottom="@dimen/_70sdp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/cons_places"
         tools:itemCount="3"
         tools:listitem="@layout/layout_recycler_view_bottom_sheet" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

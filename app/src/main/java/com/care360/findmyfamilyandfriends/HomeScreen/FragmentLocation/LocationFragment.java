@@ -42,6 +42,12 @@ import com.care360.findmyfamilyandfriends.R;
 import com.care360.findmyfamilyandfriends.databinding.CustomMarkerBinding;
 import com.care360.findmyfamilyandfriends.databinding.FragmentLocationBinding;
 import com.care360.findmyfamilyandfriends.databinding.LayoutBottomSheetMapTypeBinding;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.FullScreenContentCallback;
+import com.google.android.gms.ads.LoadAdError;
+import com.google.android.gms.ads.MobileAds;
+import com.google.android.gms.ads.interstitial.InterstitialAd;
+import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.common.api.ResolvableApiException;
 import com.google.android.gms.location.CurrentLocationRequest;
@@ -118,12 +124,23 @@ public class LocationFragment extends Fragment implements OnMapReadyCallback, Ci
     //recyclerview of extended toolbar
     private RecyclerView circleSelectionRecyclerView;
 
+    private InterstitialAd mInterstitialAd = null;
+    private AdRequest adRequest;
+
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         //initializing view binding
         binding = FragmentLocationBinding.inflate(inflater, container, false);
         View view = binding.getRoot();
+
+        MobileAds.initialize(requireContext());
+
+        //banner
+        adRequest = new AdRequest.Builder().build();
+
+        binding.bannerAd.loadAd(adRequest);
+        setAd();
 
         //initializing map
         initializeMap();
@@ -617,7 +634,21 @@ public class LocationFragment extends Fragment implements OnMapReadyCallback, Ci
         binding.consCheckIn.setOnClickListener(v -> Toast.makeText(getContext(), "Check In", Toast.LENGTH_SHORT).show());
 
         //map type click listener
-        binding.consMapType.setOnClickListener(v -> bottomSheetMapType());
+        binding.consMapType.setOnClickListener(v -> {
+
+            mInterstitialAd.show(requireActivity());
+            mInterstitialAd.setFullScreenContentCallback(new FullScreenContentCallback() {
+                @Override
+                public void onAdDismissedFullScreenContent() {
+                    super.onAdDismissedFullScreenContent();
+
+                    setAd();
+                    bottomSheetMapType();
+
+                }
+            });
+
+        });
 
         //navigate to live location
         binding.consLiveLoc.setOnClickListener(v -> {
@@ -637,14 +668,36 @@ public class LocationFragment extends Fragment implements OnMapReadyCallback, Ci
     }
 
     private void toolbarSettings() {
-        startActivity(new Intent(getActivity(), SettingsActivity.class));
 
-        //slide up animation of Settings activity
-        getActivity().overridePendingTransition(R.anim.slide_up, R.anim.no_animation);
+        mInterstitialAd.show(requireActivity());
+        mInterstitialAd.setFullScreenContentCallback(new FullScreenContentCallback() {
+            @Override
+            public void onAdDismissedFullScreenContent() {
+                super.onAdDismissedFullScreenContent();
+
+                setAd();
+
+                startActivity(new Intent(getActivity(), SettingsActivity.class));
+
+                //slide up animation of Settings activity
+                Objects.requireNonNull(requireActivity()).overridePendingTransition(R.anim.slide_up, R.anim.no_animation);
+            }
+        });
+
     }
 
     private void toolbarChat() {
-        startActivity(new Intent(getActivity(), ChatDashboardActivity.class));
+        mInterstitialAd.show(requireActivity());
+        mInterstitialAd.setFullScreenContentCallback(new FullScreenContentCallback() {
+            @Override
+            public void onAdDismissedFullScreenContent() {
+                super.onAdDismissedFullScreenContent();
+
+                setAd();
+                startActivity(new Intent(getActivity(), ChatDashboardActivity.class));
+
+            }
+        });
     }
 
     private void extendedToolbarViewClickListeners() {
@@ -856,7 +909,7 @@ public class LocationFragment extends Fragment implements OnMapReadyCallback, Ci
 
             LinearLayoutManager layoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
             binding.bottomSheetMembers.recyclerBottomSheetMember.setLayoutManager(layoutManager);
-            binding.bottomSheetMembers.recyclerBottomSheetMember.setAdapter(new BottomSheetMemberAdapter(requireContext(), membersDetailList, this, this));
+            binding.bottomSheetMembers.recyclerBottomSheetMember.setAdapter(new BottomSheetMemberAdapter(requireContext(), membersDetailList,adRequest, this, this));
 
             // set the markers on map
             setMarkers(membersDetailList);
@@ -934,7 +987,17 @@ public class LocationFragment extends Fragment implements OnMapReadyCallback, Ci
     // recyclerview bottom sheet member 'Add new member' click listener
     @Override
     public void onAddNewMemberClicked() {
-        addCircleMember(false);
+        mInterstitialAd.show(requireActivity());
+        mInterstitialAd.setFullScreenContentCallback(new FullScreenContentCallback() {
+            @Override
+            public void onAdDismissedFullScreenContent() {
+                super.onAdDismissedFullScreenContent();
+
+                setAd();
+                addCircleMember(false);
+
+            }
+        });
     }
 
     // recyclerview bottom sheet member click listener
@@ -1104,5 +1167,28 @@ public class LocationFragment extends Fragment implements OnMapReadyCallback, Ci
         super.onDestroyView();
         binding = null;
     }
+
+    private void setAd() {
+
+        InterstitialAd.load(
+                requireContext(),
+                "ca-app-pub-3940256099942544/1033173712",
+                adRequest,
+                new InterstitialAdLoadCallback() {
+                    @Override
+                    public void onAdFailedToLoad(@NonNull LoadAdError adError) {
+
+                        Log.d("AdError", adError.toString());
+                        mInterstitialAd = null;
+                    }
+
+                    @Override
+                    public void onAdLoaded(@NonNull InterstitialAd interstitialAd) {
+                        Log.d("AdError", "Ad was loaded.");
+                        mInterstitialAd = interstitialAd;
+                    }
+                });
+    }
+
 
 }

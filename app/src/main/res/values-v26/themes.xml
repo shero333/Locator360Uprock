@@ -4,4 +4,17 @@
     <style name="AutoFillHintStyle">
         <item name="android:autofilledHighlight">@color/white</item>
     </style>
+
+    <style name="Search_View" parent="Widget.AppCompat.SearchView">
+
+<!--         Query Text color -->
+                <item name="android:textColorPrimary">@color/white</item>
+                <!-- Changing the icon tint, hint icon tint, and remove text (cross) tint-->
+                <item name="android:textColorSecondary">@color/white</item>
+        <!-- Query hint -->
+        <item name="queryHint">Search Contact</item>
+        <!-- Query hint color -->
+        <item name="android:textColorHint">@color/white</item>
+
+    </style>
 </resources>

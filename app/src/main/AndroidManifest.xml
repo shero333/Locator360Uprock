@@ -249,6 +249,11 @@
         <!--
         https://console.cloud.google.com/apis/credentials?project=find-my-family-1c0c1
         -->
+
+        <meta-data
+            android:name="com.google.android.gms.ads.APPLICATION_ID"
+            android:value="ca-app-pub-3940256099942544~3347511713" />
+
     </application>
 
 </manifest>

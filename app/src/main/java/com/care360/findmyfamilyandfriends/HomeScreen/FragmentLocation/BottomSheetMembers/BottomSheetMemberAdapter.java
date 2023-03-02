@@ -16,6 +16,7 @@ import com.care360.findmyfamilyandfriends.Util.Commons;
 import com.care360.findmyfamilyandfriends.Util.Constants;
 import com.care360.findmyfamilyandfriends.databinding.LayoutAddNewMemberBinding;
 import com.care360.findmyfamilyandfriends.databinding.LayoutRecyclerViewBottomSheetBinding;
+import com.google.android.gms.ads.AdRequest;
 
 import java.util.List;
 
@@ -32,11 +33,15 @@ public class BottomSheetMemberAdapter extends RecyclerView.Adapter<BottomSheetMe
     OnAddedMemberClickInterface addedMemberInterface;
     OnAddNewMemberInterface addNewMemberInterface;
 
-    public BottomSheetMemberAdapter(Context context, List<MemberDetail> memberDetailList, OnAddedMemberClickInterface onAddedMemberClickInterface, OnAddNewMemberInterface onAddNewMemberInterface) {
+    AdRequest adRequest;
+
+    public BottomSheetMemberAdapter(Context context, List<MemberDetail> memberDetailList, AdRequest adRequest, OnAddedMemberClickInterface onAddedMemberClickInterface, OnAddNewMemberInterface onAddNewMemberInterface) {
         this.context = context;
         this.memberDetailList = memberDetailList;
         this.addedMemberInterface = onAddedMemberClickInterface;
         this.addNewMemberInterface = onAddNewMemberInterface;
+        this.adRequest = adRequest;
+
     }
 
     @NonNull
@@ -53,6 +58,7 @@ public class BottomSheetMemberAdapter extends RecyclerView.Adapter<BottomSheetMe
 
     @Override
     public void onBindViewHolder(@NonNull BottomSheetMemberAdapter.MyViewHolder holder, int position) {
+
 
         if (getItemViewType(position) == Constants.VIEW_TYPE_ITEM) {
 
@@ -138,8 +144,9 @@ public class BottomSheetMemberAdapter extends RecyclerView.Adapter<BottomSheetMe
         }
         else if (getItemViewType(position) == Constants.VIEW_TYPE_BUTTON) {
             addNewMemberBinding.consAddNewMember.setOnClickListener(v -> addNewMemberInterface.onAddNewMemberClicked());
-        }
+            addNewMemberBinding.bannerAd1.loadAd(adRequest);
 
+        }
     }
 
     @Override

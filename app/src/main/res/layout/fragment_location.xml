@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -9,13 +10,35 @@
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/map"
         android:name="com.google.android.gms.maps.SupportMapFragment"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
-    <include
-        android:id="@+id/toolbar"
-        layout="@layout/layout_toolbar"
-        android:visibility="visible" />
+    <LinearLayout
+        android:id="@+id/linearLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <com.google.android.gms.ads.AdView
+            android:id="@+id/banner_ad"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:adSize="BANNER"
+            app:adUnitId="ca-app-pub-3940256099942544/6300978111" />
+
+        <include
+            android:id="@+id/toolbar"
+            layout="@layout/layout_toolbar"
+            android:visibility="visible" />
+    </LinearLayout>
+
 
     <include
         android:id="@+id/toolbar_extended_view"
@@ -31,7 +54,9 @@
         android:id="@+id/coordinator_layout"
         android:layout_width="match_parent"
         android:layout_height="@dimen/_300sdp"
-        app:layout_constraintBottom_toBottomOf="parent">
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/cons_check_in"
@@ -43,9 +68,9 @@
             android:background="@drawable/white_rounded_button"
             android:padding="@dimen/_5sdp"
             android:translationY="-10dp"
+            android:visibility="gone"
             app:layout_anchor="@id/bottom_sheet_members"
-            app:layout_anchorGravity="start"
-            android:visibility="gone">
+            app:layout_anchorGravity="start">
 
             <ImageView
                 android:id="@+id/img_check_in"
@@ -77,8 +102,8 @@
             android:layout_width="@dimen/_35sdp"
             android:layout_height="@dimen/_35sdp"
             android:layout_gravity="top"
-            android:layout_marginEnd="@dimen/_10sdp"
             android:layout_marginTop="@dimen/_10sdp"
+            android:layout_marginEnd="@dimen/_10sdp"
             android:background="@drawable/drawable_white_toolbar"
             android:translationY="-10dp"
             app:layout_anchor="@id/bottom_sheet_members"
@@ -101,13 +126,13 @@
             android:layout_width="@dimen/_35sdp"
             android:layout_height="@dimen/_35sdp"
             android:layout_gravity="top"
-            android:layout_marginEnd="@dimen/_10sdp"
             android:layout_marginTop="@dimen/_10sdp"
+            android:layout_marginEnd="@dimen/_10sdp"
             android:background="@drawable/drawable_white_toolbar"
             android:translationY="-10dp"
+            android:visibility="gone"
             app:layout_anchor="@id/cons_map_type"
-            app:layout_anchorGravity="top|end"
-            android:visibility="gone">
+            app:layout_anchorGravity="top|end">
 
             <com.google.android.material.imageview.ShapeableImageView
                 android:layout_width="@dimen/_20sdp"

@@ -3,14 +3,21 @@ package com.care360.findmyfamilyandfriends.HomeScreen.FragmentLocation.AddMember
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.care360.findmyfamilyandfriends.BuildConfig;
 import com.care360.findmyfamilyandfriends.SharedPreference.SharedPreference;
 import com.care360.findmyfamilyandfriends.Util.Constants;
 import com.care360.findmyfamilyandfriends.databinding.ActivityAddMemberBinding;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.LoadAdError;
+import com.google.android.gms.ads.MobileAds;
+import com.google.android.gms.ads.interstitial.InterstitialAd;
+import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback;
 
 public class AddMemberActivity extends AppCompatActivity {
 
@@ -18,6 +25,11 @@ public class AddMemberActivity extends AppCompatActivity {
 
     //boolean for saving the view type clicked from Location Fragment
     boolean isToolbarAddMemberButtonClicked;
+
+
+    private InterstitialAd mInterstitialAd = null;
+    private AdRequest adRequest;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,6 +39,15 @@ public class AddMemberActivity extends AppCompatActivity {
         binding = ActivityAddMemberBinding.inflate(getLayoutInflater());
         View view = binding.getRoot();
         setContentView(view);
+
+        MobileAds.initialize(this);
+
+        //banner
+        adRequest = new AdRequest.Builder().build();
+
+        binding.bannerAd.loadAd(adRequest);
+
+        setAd();
 
         //getting the intent data from Location Fragment
         getIntentData();
@@ -85,4 +106,27 @@ public class AddMemberActivity extends AppCompatActivity {
         intent.putExtra(Intent.EXTRA_TEXT, body);
         startActivity(Intent.createChooser(intent, "Share via"));
     }
+
+    private void setAd() {
+
+        InterstitialAd.load(
+                this,
+                "ca-app-pub-3940256099942544/1033173712",
+                adRequest,
+                new InterstitialAdLoadCallback() {
+                    @Override
+                    public void onAdFailedToLoad(@NonNull LoadAdError adError) {
+
+                        Log.d("AdError", adError.toString());
+                        mInterstitialAd = null;
+                    }
+
+                    @Override
+                    public void onAdLoaded(@NonNull InterstitialAd interstitialAd) {
+                        Log.d("AdError", "Ad was loaded.");
+                        mInterstitialAd = interstitialAd;
+                    }
+                });
+    }
+
 }

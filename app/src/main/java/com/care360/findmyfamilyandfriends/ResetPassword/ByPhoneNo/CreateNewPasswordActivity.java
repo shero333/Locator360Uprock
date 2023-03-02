@@ -11,9 +11,16 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.FullScreenContentCallback;
+import com.google.android.gms.ads.LoadAdError;
+import com.google.android.gms.ads.MobileAds;
+import com.google.android.gms.ads.interstitial.InterstitialAd;
+import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback;
 import com.google.firebase.auth.FirebaseAuth;
 import com.care360.findmyfamilyandfriends.HomeScreen.FragmentLocation.Settings.Account.AccountDashboardActivity;
 import com.care360.findmyfamilyandfriends.R;
@@ -24,6 +31,9 @@ import com.care360.findmyfamilyandfriends.databinding.LayoutRecentAuthentication
 public class CreateNewPasswordActivity extends AppCompatActivity {
 
     private static final String TAG = "ACT_NEW_PASS";
+
+    private InterstitialAd mInterstitialAd;
+    private AdRequest adRequest;
 
     private ActivityCreateNewPasswordBinding binding;
 
@@ -42,13 +52,34 @@ public class CreateNewPasswordActivity extends AppCompatActivity {
         View view = binding.getRoot();
         setContentView(view);
 
+        MobileAds.initialize(this);
+
+        //banner
+        adRequest = new AdRequest.Builder().build();
+
+        binding.bannerAd.loadAd(adRequest);
+        setAd();
+
         //adding text watchers
         binding.edtPassword.addTextChangedListener(passwordTextWatcher);
 
         binding.edtConfirmPassword.addTextChangedListener(confirmPasswordTextWatcher);
 
         // button reset password click listener
-        binding.btnResetPassword.setOnClickListener(v -> updatePasswordClickListener());
+        binding.btnResetPassword.setOnClickListener(v -> {
+
+            mInterstitialAd.show(this);
+            mInterstitialAd.setFullScreenContentCallback(new FullScreenContentCallback() {
+                @Override
+                public void onAdDismissedFullScreenContent() {
+                    super.onAdDismissedFullScreenContent();
+
+                    setAd();
+                    updatePasswordClickListener();
+
+                }
+            });
+        });
 
         // re-authenticate dialog (if scenario)
         reAuthenticateDialog();
@@ -223,4 +254,27 @@ public class CreateNewPasswordActivity extends AppCompatActivity {
         dialog.setCancelable(true);
         dialog.create();
     }
+
+    private void setAd() {
+
+        InterstitialAd.load(
+                this,
+                "ca-app-pub-3940256099942544/1033173712",
+                adRequest,
+                new InterstitialAdLoadCallback() {
+                    @Override
+                    public void onAdFailedToLoad(@NonNull LoadAdError adError) {
+
+                        Log.d("AdError", adError.toString());
+                        mInterstitialAd = null;
+                    }
+
+                    @Override
+                    public void onAdLoaded(@NonNull InterstitialAd interstitialAd) {
+                        Log.d("AdError", "Ad was loaded.");
+                        mInterstitialAd = interstitialAd;
+                    }
+                });
+    }
+
 }

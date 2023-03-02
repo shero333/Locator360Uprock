@@ -41,6 +41,7 @@
         app:ccpDialog_fastScroller_handleColor="@color/orange"
         app:ccp_areaCodeDetectedCountry="true"
         android:layout_marginTop="@dimen/_35sdp"
+        app:ccp_textSize="14sp"
         app:layout_constraintHorizontal_bias="0.1"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -48,24 +49,24 @@
 
     <EditText
         android:id="@+id/edt_phone_sign_up"
+        style="@style/AutoFillHintStyle"
         android:layout_width="@dimen/_180sdp"
         android:layout_height="0dp"
         android:backgroundTint="@color/orange"
+        android:cursorVisible="true"
         android:hint="@string/enter_number"
         android:imeOptions="actionDone"
+        android:importantForAutofill="no"
         android:inputType="number"
-        android:cursorVisible="true"
-        android:textCursorDrawable="@drawable/edit_text_cursor_white"
-        android:layout_marginStart="@dimen/_5sdp"
-        android:textColorHint="#CCFFFFFF"
         android:textColor="@color/white"
-        android:textSize="@dimen/_14ssp"
-        style="@style/AutoFillHintStyle"
+        android:textColorHint="#CCFFFFFF"
+        android:textCursorDrawable="@drawable/edit_text_cursor_white"
+        android:textSize="14sp"
+        app:layout_constraintBottom_toBottomOf="@id/country_code_picker"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/country_code_picker"
         app:layout_constraintTop_toTopOf="@id/country_code_picker"
-        app:layout_constraintBottom_toBottomOf="@id/country_code_picker"
-        tools:ignore="TextFields"
-        android:importantForAutofill="no" />
+        tools:ignore="TextFields" />
 
     <TextView
         android:id="@+id/txt_privacy_policy"
@@ -84,15 +85,24 @@
         android:id="@+id/btn_cont_phone_sign_up"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        app:layout_constraintWidth_percent="0.8"
-        android:text="@string/txt_continue"
-        android:textColor="@color/orange"
         android:background="@drawable/disabled_round_button"
         android:enabled="false"
-        app:layout_constraintVertical_bias="0.8"
-        app:layout_constraintStart_toStartOf="parent"
+        android:text="@string/txt_continue"
+        android:textColor="@color/orange"
+        app:layout_constraintBottom_toTopOf="@+id/banner_ad"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"/>
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/country_code_picker"
+        app:layout_constraintWidth_percent="0.8" />
+
+    <com.google.android.gms.ads.AdView
+        android:id="@+id/banner_ad"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:adSize="BANNER"
+        app:adUnitId="ca-app-pub-3940256099942544/6300978111"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
