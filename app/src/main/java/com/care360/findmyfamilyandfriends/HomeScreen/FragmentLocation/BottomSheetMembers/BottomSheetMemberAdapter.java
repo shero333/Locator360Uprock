@@ -144,7 +144,7 @@ public class BottomSheetMemberAdapter extends RecyclerView.Adapter<BottomSheetMe
         }
         else if (getItemViewType(position) == Constants.VIEW_TYPE_BUTTON) {
             addNewMemberBinding.consAddNewMember.setOnClickListener(v -> addNewMemberInterface.onAddNewMemberClicked());
-            addNewMemberBinding.bannerAd1.loadAd(adRequest);
+//            addNewMemberBinding.bannerAd1.loadAd(adRequest);
 
         }
     }

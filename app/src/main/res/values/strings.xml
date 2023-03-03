@@ -185,4 +185,5 @@
     <string name="member_name">Member name</string>
     <string name="admin">Admin</string>
     <string name="calendar">Calendar</string>
+    <string name="member_ship">Apply membership</string>
 </resources>

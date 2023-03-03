@@ -104,4 +104,9 @@ dependencies {
 
     implementation project(":nativetemplates")
 
+    implementation "com.android.billingclient:billing:5.1.0"
+    implementation 'com.google.guava:listenablefuture:9999.0-empty-to-avoid-conflict-with-guava'
+    implementation 'com.google.guava:guava:24.1-jre'
+
+
 }

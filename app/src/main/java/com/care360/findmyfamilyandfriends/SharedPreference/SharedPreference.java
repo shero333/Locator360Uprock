@@ -113,4 +113,12 @@ public class SharedPreference {
         return sharedPreference.getString(Constants.FULL_NAME, NULL);
     }
 
+    public static void setPremiumState(int premiumState){
+        sharedPreference.edit().putInt("premium",premiumState).apply();
+    }
+
+    public static int getPremiumState(){
+        return sharedPreference.getInt("premium",0);
+    }
+
 }

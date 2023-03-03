@@ -37,7 +37,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@id/cons_places" />
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <RelativeLayout
         android:id="@+id/cons_places"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -51,32 +51,29 @@
         <ImageView
             android:id="@+id/img_places"
             android:layout_width="@dimen/_20sdp"
-            android:layout_height="@dimen/_20sdp"
-            android:layout_marginStart="@dimen/_10sdp"
-            android:layout_marginTop="@dimen/_5sdp"
-            android:layout_marginBottom="@dimen/_5sdp"
+            android:layout_height="@dimen/_16sdp"
             android:contentDescription="@null"
-            android:src="@drawable/ic_places"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            android:src="@drawable/membership_icon"
+            android:layout_centerVertical="true"
+            android:layout_marginStart="10dp"
+            />
 
         <TextView
+            android:id="@+id/text_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/_5sdp"
-            android:layout_marginEnd="@dimen/_10sdp"
-            android:text="@string/places"
+            android:layout_centerVertical="true"
+            android:layout_marginStart="5dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="10dp"
+            android:layout_marginBottom="10dp"
+            android:layout_toEndOf="@+id/img_places"
+            android:text="@string/member_ship"
             android:textAlignment="center"
             android:textColor="@color/white"
-            android:textSize="@dimen/_13ssp"
-            android:textStyle="bold"
-            app:layout_constraintBottom_toBottomOf="@id/img_places"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@id/img_places"
-            app:layout_constraintTop_toTopOf="@id/img_places" />
+            android:textSize="@dimen/_13ssp" />
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+    </RelativeLayout>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycler_bottom_sheet_member"

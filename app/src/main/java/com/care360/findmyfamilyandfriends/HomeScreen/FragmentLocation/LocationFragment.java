@@ -42,6 +42,7 @@ import com.care360.findmyfamilyandfriends.R;
 import com.care360.findmyfamilyandfriends.databinding.CustomMarkerBinding;
 import com.care360.findmyfamilyandfriends.databinding.FragmentLocationBinding;
 import com.care360.findmyfamilyandfriends.databinding.LayoutBottomSheetMapTypeBinding;
+import com.care360.findmyfamilyandfriends.subscription.SubscriptionActivity;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.FullScreenContentCallback;
 import com.google.android.gms.ads.LoadAdError;
@@ -518,6 +519,7 @@ public class LocationFragment extends Fragment implements OnMapReadyCallback, Ci
 
                                             MemberDetail memberDetail = new MemberDetail();
 
+                                            assert valueUserInfo != null;
                                             memberDetail.setMemberFirstName(valueUserInfo.getString(Constants.FIRST_NAME));
                                             memberDetail.setMemberLastName(valueUserInfo.getString(Constants.LAST_NAME));
                                             memberDetail.setMemberImageUrl(valueUserInfo.getString(Constants.IMAGE_PATH));
@@ -893,7 +895,20 @@ public class LocationFragment extends Fragment implements OnMapReadyCallback, Ci
 
     private void bottomSheetMembers() {
 
-        //binding.bottomSheetMembers.consPlaces.setOnClickListener(v -> Toast.makeText(getContext(), "Places", Toast.LENGTH_SHORT).show());
+        binding.bottomSheetMembers.consPlaces.setOnClickListener(v -> {
+
+            mInterstitialAd.show(requireActivity());
+            mInterstitialAd.setFullScreenContentCallback(new FullScreenContentCallback() {
+                @Override
+                public void onAdDismissedFullScreenContent() {
+                    super.onAdDismissedFullScreenContent();
+
+                    setAd();
+                    startActivity(new Intent(requireActivity(), SubscriptionActivity.class));
+
+                }
+            });
+        });
     }
 
     private void setBottomSheetMembersRecyclerView(HashMap<String,MemberDetail> hashMap) {
