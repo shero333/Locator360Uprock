@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".HomeScreen.FragmentLocation.Chat.ChatDetailActivity"
+    tools:context=".HomeScreen.ui.FragmentLocation.Chat.ChatDetailActivity"
     tools:ignore="LabelFor,RtlSymmetry"
     android:background="#4DE4E4E4">
 

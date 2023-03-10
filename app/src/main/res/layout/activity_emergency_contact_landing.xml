@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".HomeScreen.FragmentSafety.EmergencyContacts.LandingActivity.EmergencyContactLandingActivity">
+    tools:context=".HomeScreen.ui.FragmentSafety.EmergencyContacts.LandingActivity.EmergencyContactLandingActivity">
 
     <com.google.android.material.imageview.ShapeableImageView
         android:id="@+id/img"

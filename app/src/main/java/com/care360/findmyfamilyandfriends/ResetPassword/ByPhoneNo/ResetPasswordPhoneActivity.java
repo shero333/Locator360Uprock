@@ -13,6 +13,9 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.android.ads.nativetemplates.NativeTemplateStyle;
+import com.google.android.ads.nativetemplates.TemplateView;
+import com.google.android.gms.ads.AdLoader;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.FullScreenContentCallback;
 import com.google.android.gms.ads.LoadAdError;
@@ -50,6 +53,8 @@ public class ResetPasswordPhoneActivity extends AppCompatActivity {
 
     private InterstitialAd mInterstitialAd;
     private AdRequest adRequest;
+    private TemplateView template;
+    private AdLoader adloader;
 
 
     @Override
@@ -64,9 +69,24 @@ public class ResetPasswordPhoneActivity extends AppCompatActivity {
         MobileAds.initialize(this);
 
         //banner
+        template = binding.adTemplate;
+
         adRequest = new AdRequest.Builder().build();
 
-        binding.bannerAd.loadAd(adRequest);
+        adloader = new AdLoader.Builder(this, "ca-app-pub-3940256099942544/2247696110")
+                .forNativeAd(nativeAd -> {
+
+                    template.setStyles(new NativeTemplateStyle.Builder().build());
+                    template.setNativeAd(nativeAd);
+
+                })
+                .build();
+
+        adloader.loadAd(new AdRequest.Builder().build());
+
+//        binding.bannerAd.loadAd(adRequest);
+
+
         setAd();
 
         //picks the default and new selected country code

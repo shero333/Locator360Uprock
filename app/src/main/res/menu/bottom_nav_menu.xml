@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/navigation_location"
+        android:icon="@drawable/location_icon_states"
+        android:title="@string/location" />
+
+    <item
+        android:id="@+id/navigation_safety"
+        android:icon="@drawable/safety_icon_state"
+        android:title="@string/safety" />
+
+    <item
+        android:id="@+id/navigation_driving"
+        android:icon="@drawable/driving_icon_state"
+        android:title="@string/driving" />
+
+    <item
+        android:id="@+id/navigation_subscription"
+        android:icon="@drawable/membership_icon_state"
+        android:title="@string/member_ship" />
+
+</menu>

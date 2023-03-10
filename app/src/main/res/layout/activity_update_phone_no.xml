@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".HomeScreen.FragmentLocation.Settings.Account.UpdatePhoneNoActivity">
+    tools:context=".HomeScreen.ui.FragmentLocation.Settings.Account.UpdatePhoneNoActivity">
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar_update_phone_no"
@@ -66,15 +66,25 @@
         android:id="@+id/btn_update_phone_no"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        app:layout_constraintWidth_percent="0.8"
-        android:text="@string/update"
-        android:textColor="@color/orange"
         android:background="@drawable/disabled_round_button"
         android:enabled="false"
-        app:layout_constraintVertical_bias="0.8"
-        app:layout_constraintStart_toStartOf="parent"
+        android:text="@string/update"
+        android:textColor="@color/orange"
+        android:layout_marginTop="40dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"/>
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/ccp_update_phone_no"
+        app:layout_constraintWidth_percent="0.8" />
+
+    <com.google.android.ads.nativetemplates.TemplateView
+        android:id="@+id/ad_template"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:gnt_template_type="@layout/gnt_medium_template_view"
+        android:layout_marginTop="40dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btn_update_phone_no" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/screen_navigation"
+    app:startDestination="@+id/navigation_location">
+
+    <fragment
+        android:id="@+id/navigation_location"
+        android:name="com.care360.findmyfamilyandfriends.HomeScreen.ui.FragmentLocation.LocationFragment"
+        android:label="@string/location"
+        tools:layout="@layout/fragment_location" />
+
+    <fragment
+        android:id="@+id/navigation_safety"
+        android:name="com.care360.findmyfamilyandfriends.HomeScreen.ui.FragmentSafety.FragmentSafety"
+        android:label="@string/safety"
+        tools:layout="@layout/fragment_safety" />
+
+    <fragment
+        android:id="@+id/navigation_driving"
+        android:name="com.care360.findmyfamilyandfriends.HomeScreen.ui.Driving.DrivingFragment"
+        android:label="@string/driving"
+        tools:layout="@layout/fragment_driving" />
+
+    <fragment
+        android:id="@+id/navigation_subscription"
+        android:name="com.care360.findmyfamilyandfriends.HomeScreen.ui.subscription.SubscriptionFragment"
+        android:label="@string/member_ship"
+        tools:layout="@layout/fragment_subscription" />
+</navigation>

@@ -1,4 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="member_ship">Apply membership</string>
+    <string name="member_ship">Membership</string>
+    <string name="driving">Drive Tracker</string>
+    <string name="then_rs_3_075_month_cancel_anytime">Then Rs 3,075/month. \n Cancel anytime.</string>
+
 </resources>

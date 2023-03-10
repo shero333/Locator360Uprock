@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<transitionManager xmlns:android="http://schemas.android.com/apk/res/android">
+    <transition
+        android:fromScene="@color/white"
+        android:transition="@anim/slide_down"/>
+    <transition
+        android:toScene="@color/orange"
+        android:transition="@anim/slide_up"/>
+</transitionManager>

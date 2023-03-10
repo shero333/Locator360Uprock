@@ -13,20 +13,16 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 
-import com.android.billingclient.api.BillingClient;
-import com.android.billingclient.api.BillingClientStateListener;
-import com.android.billingclient.api.BillingResult;
-import com.android.billingclient.api.Purchase;
-import com.android.billingclient.api.QueryPurchasesParams;
-import com.care360.findmyfamilyandfriends.HomeScreen.FragmentLocation.Chat.ChatDetailActivity;
-import com.care360.findmyfamilyandfriends.HomeScreen.FragmentLocation.Chat.Model.UserInfo;
-import com.care360.findmyfamilyandfriends.HomeScreen.FragmentSafety.EmergencySOS.EmergencyLocationActivity;
+import com.care360.findmyfamilyandfriends.HomeScreen.ui.FragmentLocation.Chat.ChatDetailActivity;
+import com.care360.findmyfamilyandfriends.HomeScreen.ui.FragmentLocation.Chat.Model.UserInfo;
+import com.care360.findmyfamilyandfriends.HomeScreen.ui.FragmentSafety.EmergencySOS.EmergencyLocationActivity;
 import com.care360.findmyfamilyandfriends.HomeScreen.HomeActivity;
 import com.care360.findmyfamilyandfriends.SignIn.PhoneNoSignInActivity;
 import com.care360.findmyfamilyandfriends.SignUp.PhoneNoSignUpActivity;
 import com.care360.findmyfamilyandfriends.Util.Commons;
 import com.care360.findmyfamilyandfriends.Util.Constants;
 import com.care360.findmyfamilyandfriends.databinding.ActivityStartScreenBinding;
+import com.care360.findmyfamilyandfriends.update_manager.UpdateManager;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.LoadAdError;
 import com.google.android.gms.ads.MobileAds;
@@ -154,6 +150,7 @@ public class StartScreenActivity extends AppCompatActivity {
                 try {
                     sleep(3500);
 
+                    startActivity(new Intent(StartScreenActivity.this,UpdateManager.class));
 
                     startActivity(new Intent(StartScreenActivity.this, HomeActivity.class));
                     finish();
@@ -189,45 +186,5 @@ public class StartScreenActivity extends AppCompatActivity {
                     }
                 });
     }
-
-//    void checkSubscription(){
-//
-//        billingClient = BillingClient.newBuilder(this).enablePendingPurchases().setListener((billingResult, list) -> {}).build();
-//        final BillingClient finalBillingClient = billingClient;
-//        billingClient.startConnection(new BillingClientStateListener() {
-//            @Override
-//            public void onBillingServiceDisconnected() {
-//
-//            }
-//
-//            @Override
-//            public void onBillingSetupFinished(@NonNull BillingResult billingResult) {
-//
-//                if(billingResult.getResponseCode() == BillingClient.BillingResponseCode.OK){
-//                    finalBillingClient.queryPurchasesAsync(
-//                            QueryPurchasesParams.newBuilder().setProductType(BillingClient.ProductType.SUBS).build(), (billingResult1, list) -> {
-//                                if (billingResult1.getResponseCode() == BillingClient.BillingResponseCode.OK){
-//                                    Log.d("testOffer",list.size() +" size");
-//                                    if(list.size()>0){
-//                                        prefs.setPremium(1); // set 1 to activate premium feature
-//                                        int i = 0;
-//                                        for (Purchase purchase: list){
-//                                            //Here you can manage each product, if you have multiple subscription
-//                                            Log.d("testOffer",purchase.getOriginalJson()); // Get to see the order information
-//                                            Log.d("testOffer", " index" + i);
-//                                            i++;
-//                                        }
-//                                    }else {
-//                                        prefs.setPremium(0); // set 0 to de-activate premium feature
-//                                    }
-//                                }
-//                            });
-//
-//                }
-//
-//            }
-//        });
-//    }
-
 
 }

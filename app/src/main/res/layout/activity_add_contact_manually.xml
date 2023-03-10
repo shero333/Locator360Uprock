@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:ignore="RtlSymmetry"
-    tools:context=".HomeScreen.FragmentSafety.EmergencyContacts.ContactsManually.AddContactManuallyActivity">
+    tools:context=".HomeScreen.ui.FragmentSafety.EmergencyContacts.ContactsManually.AddContactManuallyActivity">
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar_add_contact_manually"

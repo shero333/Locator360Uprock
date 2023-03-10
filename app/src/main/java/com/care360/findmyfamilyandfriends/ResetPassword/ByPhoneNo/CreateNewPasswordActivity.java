@@ -22,7 +22,7 @@ import com.google.android.gms.ads.MobileAds;
 import com.google.android.gms.ads.interstitial.InterstitialAd;
 import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback;
 import com.google.firebase.auth.FirebaseAuth;
-import com.care360.findmyfamilyandfriends.HomeScreen.FragmentLocation.Settings.Account.AccountDashboardActivity;
+import com.care360.findmyfamilyandfriends.HomeScreen.ui.FragmentLocation.Settings.Account.AccountDashboardActivity;
 import com.care360.findmyfamilyandfriends.R;
 import com.care360.findmyfamilyandfriends.Util.Commons;
 import com.care360.findmyfamilyandfriends.databinding.ActivityCreateNewPasswordBinding;

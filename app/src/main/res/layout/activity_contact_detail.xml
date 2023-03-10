@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".HomeScreen.FragmentSafety.EmergencyContacts.Dashboard.ContactDetailActivity">
+    tools:context=".HomeScreen.ui.FragmentSafety.EmergencyContacts.Dashboard.ContactDetailActivity">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/cons_contact"

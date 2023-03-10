@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".HomeScreen.FragmentSafety.EmergencyContacts.Dashboard.EmergencyContactDashboardActivity">
+    tools:context=".HomeScreen.ui.FragmentSafety.EmergencyContacts.Dashboard.EmergencyContactDashboardActivity">
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar_contact_dashboard"

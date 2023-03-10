@@ -9,13 +9,13 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.care360.findmyfamilyandfriends.databinding.ActivityJoinCircleBinding;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.care360.findmyfamilyandfriends.HomeScreen.FragmentLocation.JoinCircle.CircleModel;
+import com.care360.findmyfamilyandfriends.HomeScreen.ui.FragmentLocation.JoinCircle.CircleModel;
 import com.care360.findmyfamilyandfriends.SharedPreference.SharedPreference;
 import com.care360.findmyfamilyandfriends.Util.Constants;
-import com.care360.findmyfamilyandfriends.databinding.ActivityJoinCircleBinding;
 
 import java.util.Objects;
 

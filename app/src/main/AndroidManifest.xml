@@ -9,14 +9,15 @@
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission
         android:name="android.permission.WRITE_EXTERNAL_STORAGE"
         tools:ignore="ScopedStorage" />
     <uses-permission android:name="android.permission.READ_CONTACTS" />
-    <uses-permission android:name="android.permission.SEND_SMS" />
-
-
+<!--    <uses-permission android:name="android.permission.SEND_SMS" />-->
     <uses-permission android:name="com.android.vending.BILLING" />
+    <uses-permission android:name="android.permission.BIND_NOTIFICATION_LISTENER_SERVICE"/>
+    <uses-permission android:name="android.permission.ACCESS_NOTIFICATION_POLICY"/>
 
     <uses-feature
         android:name="android.hardware.location.gps"
@@ -60,88 +61,89 @@
         android:theme="@style/Theme.Locator360"
         tools:targetApi="31">
         <activity
-            android:name=".subscription.SubscriptionActivity"
+            android:name=".update_manager.UpdateManager"
             android:exported="false" />
         <activity
-            android:name="com.care360.findmyfamilyandfriends.HomeScreen.FragmentLocation.BottomSheetMembers.MemberLocationActivity"
+            android:name="com.care360.findmyfamilyandfriends.HomeScreen.ui.FragmentLocation.BottomSheetMembers.MemberLocationActivity"
             android:exported="false" />
         <activity
-            android:name="com.care360.findmyfamilyandfriends.HomeScreen.FragmentLocation.Settings.CircleManagement.ViewMember.ViewCircleMemberActivity"
+            android:name="com.care360.findmyfamilyandfriends.HomeScreen.ui.FragmentLocation.Settings.CircleManagement.ViewMember.ViewCircleMemberActivity"
             android:exported="false" />
         <activity
-            android:name="com.care360.findmyfamilyandfriends.HomeScreen.FragmentLocation.Settings.CircleManagement.RemoveMember.RemoveCircleMemberActivity"
+            android:name="com.care360.findmyfamilyandfriends.HomeScreen.ui.FragmentLocation.Settings.CircleManagement.RemoveMember.RemoveCircleMemberActivity"
             android:exported="false" />
         <activity
-            android:name="com.care360.findmyfamilyandfriends.HomeScreen.FragmentLocation.Settings.CircleManagement.EditCircleNameActivity"
+            android:name="com.care360.findmyfamilyandfriends.HomeScreen.ui.FragmentLocation.Settings.CircleManagement.EditCircleNameActivity"
             android:exported="false" />
         <activity
-            android:name="com.care360.findmyfamilyandfriends.HomeScreen.FragmentLocation.Settings.Account.UpdatePhoneNoActivity"
+            android:name="com.care360.findmyfamilyandfriends.HomeScreen.ui.FragmentLocation.Settings.Account.UpdatePhoneNoActivity"
+            android:exported="false" />
+
+        <activity
+            android:name="com.care360.findmyfamilyandfriends.HomeScreen.ui.FragmentLocation.Settings.Account.UpdateProfileInfoActivity"
             android:exported="false" />
         <activity
-            android:name="com.care360.findmyfamilyandfriends.HomeScreen.FragmentLocation.Settings.Account.UpdateProfileInfoActivity"
-            android:exported="false" />
-        <activity
-            android:name="com.care360.findmyfamilyandfriends.HomeScreen.FragmentLocation.Settings.CircleManagement.CircleManagementActivity"
+            android:name="com.care360.findmyfamilyandfriends.HomeScreen.ui.FragmentLocation.Settings.CircleManagement.CircleManagementActivity"
             android:exported="false">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
         <activity
-            android:name="com.care360.findmyfamilyandfriends.HomeScreen.FragmentLocation.Settings.Account.AccountDashboardActivity"
+            android:name="com.care360.findmyfamilyandfriends.HomeScreen.ui.FragmentLocation.Settings.Account.AccountDashboardActivity"
             android:exported="false">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
         <activity
-            android:name="com.care360.findmyfamilyandfriends.HomeScreen.FragmentLocation.Settings.SettingsActivity"
+            android:name="com.care360.findmyfamilyandfriends.HomeScreen.ui.FragmentLocation.Settings.SettingsActivity"
             android:exported="false" />
         <activity
-            android:name="com.care360.findmyfamilyandfriends.HomeScreen.FragmentLocation.Chat.ChatDetailActivity"
+            android:name="com.care360.findmyfamilyandfriends.HomeScreen.ui.FragmentLocation.Chat.ChatDetailActivity"
             android:exported="false"
             android:windowSoftInputMode="adjustResize" />
         <activity
-            android:name="com.care360.findmyfamilyandfriends.HomeScreen.FragmentLocation.Chat.ChatDashboardActivity"
+            android:name="com.care360.findmyfamilyandfriends.HomeScreen.ui.FragmentLocation.Chat.ChatDashboardActivity"
             android:exported="false" />
         <activity
-            android:name="com.care360.findmyfamilyandfriends.HomeScreen.FragmentSafety.EmergencyContacts.Dashboard.ContactDetailActivity"
+            android:name="com.care360.findmyfamilyandfriends.HomeScreen.ui.FragmentSafety.EmergencyContacts.Dashboard.ContactDetailActivity"
             android:exported="false">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
         <activity
-            android:name="com.care360.findmyfamilyandfriends.HomeScreen.FragmentSafety.EmergencySOS.EmergencyLocationActivity"
+            android:name="com.care360.findmyfamilyandfriends.HomeScreen.ui.FragmentSafety.EmergencySOS.EmergencyLocationActivity"
             android:exported="false" />
         <activity
-            android:name="com.care360.findmyfamilyandfriends.HomeScreen.FragmentSafety.EmergencySOS.EmergencySOSActivity"
+            android:name="com.care360.findmyfamilyandfriends.HomeScreen.ui.FragmentSafety.EmergencySOS.EmergencySOSActivity"
             android:exported="false" />
         <activity
-            android:name="com.care360.findmyfamilyandfriends.HomeScreen.FragmentSafety.EmergencyContacts.Dashboard.EmergencyContactDashboardActivity"
+            android:name="com.care360.findmyfamilyandfriends.HomeScreen.ui.FragmentSafety.EmergencyContacts.Dashboard.EmergencyContactDashboardActivity"
             android:exported="false"
             android:launchMode="singleTask" />
         <activity
-            android:name="com.care360.findmyfamilyandfriends.HomeScreen.FragmentLocation.AddMember.AddMemberActivity"
+            android:name="com.care360.findmyfamilyandfriends.HomeScreen.ui.FragmentLocation.AddMember.AddMemberActivity"
             android:exported="false" />
         <activity
-            android:name="com.care360.findmyfamilyandfriends.HomeScreen.FragmentLocation.CreateCircle.CreateCircleMainActivity"
+            android:name="com.care360.findmyfamilyandfriends.HomeScreen.ui.FragmentLocation.CreateCircle.CreateCircleMainActivity"
             android:exported="false"
             android:windowSoftInputMode="adjustResize" />
         <activity
-            android:name="com.care360.findmyfamilyandfriends.HomeScreen.FragmentLocation.JoinCircle.JoinCircleMainActivity"
+            android:name="com.care360.findmyfamilyandfriends.HomeScreen.ui.FragmentLocation.JoinCircle.JoinCircleMainActivity"
             android:exported="false" />
         <activity
-            android:name="com.care360.findmyfamilyandfriends.HomeScreen.FragmentSafety.EmergencyContacts.ContactsManually.AddContactManuallyActivity"
+            android:name="com.care360.findmyfamilyandfriends.HomeScreen.ui.FragmentSafety.EmergencyContacts.ContactsManually.AddContactManuallyActivity"
             android:exported="false" />
         <activity
-            android:name="com.care360.findmyfamilyandfriends.HomeScreen.FragmentSafety.EmergencyContacts.ContactsFromPhone.AddContactFromPhoneActivity"
+            android:name="com.care360.findmyfamilyandfriends.HomeScreen.ui.FragmentSafety.EmergencyContacts.ContactsFromPhone.AddContactFromPhoneActivity"
             android:exported="false" />
         <activity
             android:name="com.care360.findmyfamilyandfriends.ResetPassword.ByEmail.CheckEmailActivity"
             android:exported="false" />
         <activity
-            android:name="com.care360.findmyfamilyandfriends.HomeScreen.FragmentSafety.EmergencyContacts.LandingActivity.EmergencyContactLandingActivity"
+            android:name="com.care360.findmyfamilyandfriends.HomeScreen.ui.FragmentSafety.EmergencyContacts.LandingActivity.EmergencyContactLandingActivity"
             android:exported="false" />
         <activity
             android:name="com.care360.findmyfamilyandfriends.ResetPassword.ByPhoneNo.CreateNewPasswordActivity"
@@ -238,7 +240,7 @@
         </provider>
 
         <service
-            android:name="com.care360.findmyfamilyandfriends.HomeScreen.FragmentSafety.EmergencySOS.FirebaseEmergNotificationService"
+            android:name="com.care360.findmyfamilyandfriends.HomeScreen.ui.FragmentSafety.EmergencySOS.FirebaseEmergNotificationService"
             android:exported="false">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
@@ -251,8 +253,7 @@
         -->
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="AIzaSyBE9d03i-pCJMyNCOgwL298fVvJeeCetOw" />
-        <!--         https://console.cloud.google.com/apis/credentials?project=find-my-family-1c0c1 -->
+            android:value="AIzaSyBE9d03i-pCJMyNCOgwL298fVvJeeCetOw" /> <!-- https://console.cloud.google.com/apis/credentials?project=find-my-family-1c0c1 -->
         <meta-data
             android:name="com.google.android.gms.ads.APPLICATION_ID"
             android:value="ca-app-pub-3940256099942544~3347511713" />

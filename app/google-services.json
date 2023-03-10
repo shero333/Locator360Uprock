@@ -7,9 +7,38 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:1088376565277:android:e9c80da68bafab67f3e0f4",
+        "mobilesdk_app_id": "1:1088376565277:android:09efd0028e7c6b60f3e0f4",
         "android_client_info": {
           "package_name": "com.care360.findmyfamilyandfriends"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1088376565277-s55ml835sdrkl7vu11psc6fvcoar2csd.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCi5NGNagwjPeaQQ2XGodhBqPRNEL8sM84"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1088376565277-s55ml835sdrkl7vu11psc6fvcoar2csd.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1088376565277:android:e9c80da68bafab67f3e0f4",
+        "android_client_info": {
+          "package_name": "com.hammad.findmyfamily"
         }
       },
       "oauth_client": [
@@ -17,7 +46,7 @@
           "client_id": "1088376565277-42ct0ab4f1dak27rlg97cnoi45q5ucda.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "com.care360.findmyfamilyandfriends",
+            "package_name": "com.hammad.findmyfamily",
             "certificate_hash": "c72d2a7d1b5a7618e69f3f9c7e2f801ea9e0379a"
           }
         },

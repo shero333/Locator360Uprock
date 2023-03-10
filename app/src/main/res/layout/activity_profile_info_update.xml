@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".HomeScreen.FragmentLocation.Settings.Account.UpdateProfileInfoActivity"
+    tools:context=".HomeScreen.ui.FragmentLocation.Settings.Account.UpdateProfileInfoActivity"
     tools:ignore="RtlSymmetry">
 
     <androidx.appcompat.widget.Toolbar
@@ -23,8 +23,8 @@
 
     <androidx.constraintlayout.utils.widget.ImageFilterView
         android:id="@+id/image_profile"
-        android:layout_width="@dimen/_110sdp"
-        android:layout_height="@dimen/_110sdp"
+        android:layout_width="110dp"
+        android:layout_height="110dp"
         app:roundPercent="1"
         android:scaleType="centerCrop"
         android:layout_marginTop="@dimen/_20sdp"
@@ -72,7 +72,7 @@
         android:paddingStart="@dimen/_15sdp"
         android:hint="@string/first_name"
         android:textColor="@color/black"
-        android:layout_marginTop="@dimen/_25sdp"
+        android:layout_marginTop="10dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/image_profile">
@@ -100,7 +100,7 @@
         android:paddingStart="@dimen/_15sdp"
         android:hint="@string/last_name"
         android:textColor="@color/black"
-        android:layout_marginTop="@dimen/_15sdp"
+        android:layout_marginTop="10dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/edt_txt_first_name"/>
@@ -109,15 +109,25 @@
         android:id="@+id/btn_update"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        app:layout_constraintWidth_percent="0.8"
         android:background="@drawable/disabled_round_button"
+        android:enabled="false"
         android:text="@string/update"
         android:textColor="@color/orange"
-        android:enabled="false"
-        app:layout_constraintVertical_bias="0.8"
-        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginTop="30dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"/>
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/edt_txt_last_name"
+        app:layout_constraintWidth_percent="0.8" />
+
+    <com.google.android.ads.nativetemplates.TemplateView
+        android:id="@+id/ad_template"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:gnt_template_type="@layout/gnt_medium_template_view"
+        android:layout_marginTop="40dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btn_update" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

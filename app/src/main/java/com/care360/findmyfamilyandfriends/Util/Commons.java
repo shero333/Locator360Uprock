@@ -30,7 +30,10 @@ import android.widget.Toast;
 import androidx.appcompat.widget.AppCompatButton;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
-import com.google.android.gms.ads.FullScreenContentCallback;
+import com.care360.findmyfamilyandfriends.databinding.LayoutCameraDialogBinding;
+import com.care360.findmyfamilyandfriends.databinding.LayoutDialogAddEmergncyContactBinding;
+import com.care360.findmyfamilyandfriends.databinding.LayoutGalleryDialogBinding;
+import com.care360.findmyfamilyandfriends.databinding.LayoutProgressDialogBinding;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -39,16 +42,12 @@ import com.google.firebase.messaging.FirebaseMessaging;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.care360.findmyfamilyandfriends.BuildConfig;
-import com.care360.findmyfamilyandfriends.HomeScreen.FragmentLocation.Battery.BatteryStatusModelClass;
-import com.care360.findmyfamilyandfriends.HomeScreen.FragmentLocation.JoinCircle.CircleModel;
-import com.care360.findmyfamilyandfriends.HomeScreen.FragmentSafety.EmergencyContacts.ContactsManually.AddContactManuallyActivity;
+import com.care360.findmyfamilyandfriends.HomeScreen.ui.FragmentLocation.Battery.BatteryStatusModelClass;
+import com.care360.findmyfamilyandfriends.HomeScreen.ui.FragmentLocation.JoinCircle.CircleModel;
+import com.care360.findmyfamilyandfriends.HomeScreen.ui.FragmentSafety.EmergencyContacts.ContactsManually.AddContactManuallyActivity;
 import com.care360.findmyfamilyandfriends.R;
 import com.care360.findmyfamilyandfriends.SharedPreference.SharedPreference;
 import com.care360.findmyfamilyandfriends.StartScreen.StartScreenActivity;
-import com.care360.findmyfamilyandfriends.databinding.LayoutCameraDialogBinding;
-import com.care360.findmyfamilyandfriends.databinding.LayoutDialogAddEmergncyContactBinding;
-import com.care360.findmyfamilyandfriends.databinding.LayoutGalleryDialogBinding;
-import com.care360.findmyfamilyandfriends.databinding.LayoutProgressDialogBinding;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -60,6 +59,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Random;
 
 public class Commons {
@@ -74,13 +74,9 @@ public class Commons {
 
     public static boolean validateEmailAddress(String input) {
 
-        if (!input.isEmpty() && Patterns.EMAIL_ADDRESS.matcher(input).matches()) {
-            //enable the continue button
-            return true;
-        } else {
-            //disables the continue button
-            return false;
-        }
+        //enable the continue button
+        //disables the continue button
+        return !input.isEmpty() && Patterns.EMAIL_ADDRESS.matcher(input).matches();
     }
 
     @SuppressLint({"SimpleDateFormat"})
@@ -638,11 +634,11 @@ public class Commons {
 
     public static void currentUserFullName() {
          FirebaseFirestore.getInstance().collection(USERS_COLLECTION)
-                .document(FirebaseAuth.getInstance().getCurrentUser().getEmail())
+                .document(Objects.requireNonNull(Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getEmail()))
                 .get()
                 .addOnSuccessListener(doc -> {
                     //saving full name in shared preference
-                    SharedPreference.setFullName(doc.getString(Constants.FIRST_NAME).concat(" ".concat(doc.getString(Constants.LAST_NAME))));
+                    SharedPreference.setFullName(Objects.requireNonNull(doc.getString(Constants.FIRST_NAME)).concat(" ".concat(Objects.requireNonNull(doc.getString(Constants.LAST_NAME)))));
                 });
     }
 

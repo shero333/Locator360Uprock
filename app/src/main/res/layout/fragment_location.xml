@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".HomeScreen.FragmentLocation.LocationFragment">
+    tools:context=".HomeScreen.ui.FragmentLocation.LocationFragment">
 
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/map"
@@ -151,5 +151,4 @@
             layout="@layout/layout_bottom_sheet" />
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
-
 </androidx.constraintlayout.widget.ConstraintLayout>

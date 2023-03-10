@@ -11,8 +11,8 @@ public class App extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-        app = this;
 
+        app = this;
         IS_LOCATION_UPDATE_SAVED_TO_FIREBASE = false;
     }
 

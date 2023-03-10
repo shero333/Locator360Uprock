@@ -12,6 +12,14 @@
         <!-- Status bar color. -->
         <item name="android:statusBarColor" >?attr/colorPrimaryVariant</item>
         <!-- Customize your theme here. -->
+
+        <!-- enable window content transitions -->
+        <item name="android:windowActivityTransitions">true</item>
+
+<!--        &lt;!&ndash; specify enter and exit transitions &ndash;&gt;-->
+        <item name="android:windowEnterTransition">@android:transition/explode</item>
+        <item name="android:windowExitTransition">@android:transition/fade</item>
+
     </style>
     
     <style name="Style_Round_Dialog_Corner" parent="Theme.AppCompat.Light.Dialog.Alert">

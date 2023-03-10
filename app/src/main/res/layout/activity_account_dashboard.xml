@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".HomeScreen.FragmentLocation.Settings.Account.AccountDashboardActivity">
+    tools:context=".HomeScreen.ui.FragmentLocation.Settings.Account.AccountDashboardActivity">
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar_account"
@@ -184,6 +184,14 @@
         app:layout_constraintStart_toStartOf="@id/text_account_details"
         app:layout_constraintTop_toBottomOf="@id/text_account_management"/>
 
-
+    <com.google.android.ads.nativetemplates.TemplateView
+        android:id="@+id/ad_template"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:gnt_template_type="@layout/gnt_medium_template_view"
+        android:layout_marginTop="10dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
