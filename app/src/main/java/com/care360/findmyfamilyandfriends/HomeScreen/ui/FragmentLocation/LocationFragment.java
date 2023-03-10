@@ -145,6 +145,9 @@ public class LocationFragment extends Fragment implements OnMapReadyCallback, Ci
     private InterstitialAd mInterstitialAd = null;
     private AdRequest adRequest;
 
+    private NotificationManager nMN;
+    private NotificationChannel channel;
+
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
@@ -188,6 +191,9 @@ public class LocationFragment extends Fragment implements OnMapReadyCallback, Ci
 
         //work manager for checking circle code expiry date every 8 hours
         periodicCircleCodeChecker();
+
+        nMN = (NotificationManager) requireActivity().getSystemService(NOTIFICATION_SERVICE);
+        channel = new NotificationChannel("com.care360.findmyfamilyandfriends","updated location!",NotificationManager.IMPORTANCE_HIGH);
 
         return view;
     }
@@ -1260,8 +1266,6 @@ public class LocationFragment extends Fragment implements OnMapReadyCallback, Ci
         addresses = geocoder.getFromLocation(location.getLatitude(),location.getLongitude(),1);
 
         Uri alarmSound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
-        NotificationManager nMN = (NotificationManager) requireActivity().getSystemService(NOTIFICATION_SERVICE);
-        NotificationChannel channel = new NotificationChannel("com.care360.findmyfamilyandfriends","updated location!",NotificationManager.IMPORTANCE_HIGH);
         Intent resultIntent = new Intent(requireActivity(), StartScreenActivity.class);
         PendingIntent pendingIntent = PendingIntent.getActivity(requireContext(),1,resultIntent,PendingIntent.FLAG_UPDATE_CURRENT);
 

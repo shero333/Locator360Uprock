@@ -117,9 +117,9 @@ public class LocationUpdateWorker extends Worker {
                             .addOnFailureListener(e -> Log.e(TAG, "error. updating location data in USER collection: " + e.getMessage()));
 
                     //notify
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                        showNotification(locationAddress);
-                    }
+//                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+//                        showNotification(locationAddress);
+//                    }
                 }
             }
         });
